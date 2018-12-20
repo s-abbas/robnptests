@@ -2,12 +2,11 @@
 % Please edit documentation in R/medTest.R
 \name{med_test}
 \alias{med_test}
-\title{Two-sample tests based on the difference of the one-sample Hodges-Lehmann
-estimator.}
+\title{Two-sample tests based on the median.}
 \usage{
-med_test(x, y, alternative = c("two.sided", "greater", "less"), delta = 0,
-  method = c("asymptotic", "exact", "sampled"), scale = c("S3", "S4"),
-  n.rep = 10000, na.rm = FALSE)
+med_test(x, y, alternative = c("two.sided", "greater", "less"),
+  delta = 0, method = c("asymptotic", "exact", "sampled"),
+  scale = c("S3", "S4"), n.rep = 10000, na.rm = FALSE)
 }
 \arguments{
 \item{x}{a numeric vector of observations.}
@@ -25,7 +24,7 @@ permutation test uses all data permutations while the randomized test draws \cod
 with replacement.}
 
 \item{scale}{a character string specifying the scale estimator used for standardization of the test statistic,
-must be one of \code{"S3"} and \code{"S4"}. Default is \code{"S3"}. 
+must be one of \code{"S3"} and \code{"S4"}. Default is \code{"S3"}.
 Ignored if \code{method = "asymptotic"}. See details for definition of the scale estimators.}
 
 \item{n.rep}{an integer value specifying the number of random permutations used to calculate 
@@ -53,10 +52,10 @@ If the number of replications to determine the permutation distribution is drawn
 Smyth & Phipson (2010) to calculate the p-value.
 The test statistics and the asymptotic distribution are taken from Fried & Dehling (2011).
 
-The test statistics for the exact and sampled version of the test is standardized using a robust scale estimator. 
+The test statistics for the exact and sampled version of the test is standardized using a robust scale estimator.
 \code{scale = "S3"} represents use of
 
-\deqn{S = 2 * ( |X_1 - med(X)|,...,|X_m - med(X)|, |Y_1 - med(Y)|,...,|Y_n - med(Y)| ),} 
+\deqn{S = 2 * ( |X_1 - med(X)|,...,|X_m - med(X)|, |Y_1 - med(Y)|,...,|Y_n - med(Y)| ),}
 
 \code{scale = "S4"} uses
 

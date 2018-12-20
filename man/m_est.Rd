@@ -4,7 +4,8 @@
 \alias{m_est}
 \title{M-estimator of location}
 \usage{
-m_est(x, psi, k = .Mpsi.tuning.default(psi), tol = 1e-06, max.it = 15)
+m_est(x, psi, k = .Mpsi.tuning.default(psi), tol = 1e-06,
+  max.it = 15)
 }
 \arguments{
 \item{x}{numeric vector of observations.}

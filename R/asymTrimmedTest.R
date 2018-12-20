@@ -2,17 +2,12 @@
 ## Asymmetrically trimmed test based on Q2 skewness-selector statistic
 ## ----------------------------------------------------------------------------
 
-####
-#### Warum nur Q2? Funktioniert der nicht mit allen drei Skewness selector statistics?
-#### Hier ist noch irgendwas merkwürdig!
-####
-
 #' Two-sample location tests based on the difference of the Q2 skewness-selector
 #' statistic.
 #'
 #' @description
-#' \code{q2_test} performs a two-sample test for the location shift based on
-#' the difference of the asymmetrically trimmed means based on the Q2 skewness-
+#' \code{asym_trimmed_test()} performs a two-sample test for the location shift based on
+#' the difference of the asymmetrically trimmed means based on different skewness-
 #' selector statistic for both samples.
 #'
 #'
@@ -35,6 +30,7 @@
 
 #' @references
 #' \insertRef{SmyPhi10perm}{robTests}
+#' \insertRef{ReeSta04robu}{robTests}
 
 #'
 #' @import utils

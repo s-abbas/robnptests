@@ -5,9 +5,9 @@
 \title{Two-sample location tests based on the difference of the one-sample Hodges-Lehmann
 estimators of the two samples.}
 \usage{
-hl1_test(x, y, alternative = c("two.sided", "greater", "less"), delta = 0,
-  method = c("asymptotic", "exact", "sampled"), scale = c("S1", "S2"),
-  n.rep = 10000, na.rm = FALSE)
+hl1_test(x, y, alternative = c("two.sided", "greater", "less"),
+  delta = 0, method = c("asymptotic", "exact", "sampled"),
+  scale = c("S1", "S2"), n.rep = 10000, na.rm = FALSE)
 }
 \arguments{
 \item{x}{a numeric vector of observations.}

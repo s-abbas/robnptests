@@ -4,8 +4,8 @@
 \alias{min_t_test}
 \title{Hybrid permutation test based on the t- and trimmed t-test}
 \usage{
-min_t_test(x, y, alternative = c("two.sided", "greater", "less"), delta = 0,
-  na.rm = FALSE, n.rep = 1000)
+min_t_test(x, y, alternative = c("two.sided", "greater", "less"),
+  delta = 0, na.rm = FALSE, n.rep = 1000)
 }
 \arguments{
 \item{x}{a numeric vector of observations.}

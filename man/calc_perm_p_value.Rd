@@ -4,7 +4,8 @@
 \alias{calc_perm_p_value}
 \title{Calculation of permutation p-value}
 \usage{
-calc_perm_p_value(statistic, distribution, m, n, sampled, n.rep, alternative)
+calc_perm_p_value(statistic, distribution, m, n, sampled, n.rep,
+  alternative)
 }
 \arguments{
 \item{statistic}{observed value of the test statistic.}

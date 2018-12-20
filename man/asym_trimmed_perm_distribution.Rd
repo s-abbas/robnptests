@@ -4,14 +4,15 @@
 \alias{asym_trimmed_perm_distribution}
 \title{Permutation distribution for M-statistics}
 \usage{
-asym_trimmed_perm_distribution(x, y, type, sampled = FALSE, n.rep = NULL)
+asym_trimmed_perm_distribution(x, y, type, sampled = FALSE,
+  n.rep = NULL)
 }
 \arguments{
 \item{x}{a numeric vector of observations.}
 
 \item{y}{a numeric vector of observations.}
 
-\item{type}{specifies the skewness selector statistic used for trimming, must be in 
+\item{type}{specifies the skewness selector statistic used for trimming, must be in
 \code{"Q2", "SK2"} and \code{"SK5"}. Default is \code{"Q2"}.}
 
 \item{sampled}{logical value indicating if the exact permutation distribution (\code{FALSE})
