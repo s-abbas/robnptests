@@ -46,7 +46,7 @@ For details and references see the documentation of the different functions.
 ### Perform two sample tests for location shift
 
 ``` r
-x <- rnorm(50); y <- rnorm(20)
+x <- rnorm(50); y <- rnorm(50)
 
 ## Perform a trimmed two sample test:
 trimmed_test(x, y, gamma = 0.1)
