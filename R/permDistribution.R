@@ -83,10 +83,10 @@ mest_perm_distribution <- function(x, y, psi, k1, sampled = FALSE, n.rep = NULL)
   return(distribution)
 }
 
-#' @title Permutation distribution for M-statistics
+#' @title Permutation distribution for asymmetrically trimmed statistics
 #'
-#' @description \code{mest_perm_distribution} calculates the permutation distribution for M-statistics from
-#'              \code{m_test_statistic}.
+#' @description \code{asym_trimmed_perm_distribution} calculates the permutation distribution for the asymmetrically
+#' trimmed statistics from \code{asym_trimmed_test}.
 #'
 #' @inheritParams asym_trimmed_test
 #' @param sampled logical value indicating if the exact permutation distribution (\code{FALSE})

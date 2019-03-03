@@ -16,8 +16,6 @@
 #'        \code{"Q2", "SK2"} and \code{"SK5"}. Default is \code{"Q2"}.
 #'
 #'
-#' @details
-#'
 #' @return
 #' A list with class "\code{htest}" containing the following components:
 #' \item{statistic}{the value of the test statistic.}
@@ -34,8 +32,6 @@
 
 #'
 #' @import utils
-#'
-#' @examples
 #'
 #' @export
 
