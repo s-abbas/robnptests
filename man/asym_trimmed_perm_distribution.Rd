@@ -2,7 +2,7 @@
 % Please edit documentation in R/permDistribution.R
 \name{asym_trimmed_perm_distribution}
 \alias{asym_trimmed_perm_distribution}
-\title{Permutation distribution for M-statistics}
+\title{Permutation distribution for asymmetrically trimmed statistics}
 \usage{
 asym_trimmed_perm_distribution(x, y, type, sampled = FALSE,
   n.rep = NULL)
@@ -26,6 +26,6 @@ sample to approximate the permutation distribution.}
 Vector with permutation distribution.
 }
 \description{
-\code{mest_perm_distribution} calculates the permutation distribution for M-statistics from
-             \code{m_test_statistic}.
+\code{asym_trimmed_perm_distribution} calculates the permutation distribution for the asymmetrically
+trimmed statistics from \code{asym_trimmed_test}.
 }

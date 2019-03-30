@@ -2,13 +2,12 @@
 ## Asymmetrically trimmed test based on Q2 skewness-selector statistic
 ## ----------------------------------------------------------------------------
 
-#' Two-sample location tests based on the difference of the Q2 skewness-selector
-#' statistic.
+#' Two-sample location tests based on asymmetrically trimmed means
 #'
 #' @description
-#' \code{asym_trimmed_test()} performs a two-sample test for the location shift based on
-#' the difference of the asymmetrically trimmed means based on different skewness-
-#' selector statistic for both samples.
+#' \code{asym_trimmed_test()} performs a two-sample location test by using
+#' asymmetrically trimmed means based on different skewness-
+#' selector statistics for both samples.
 #'
 #'
 #' @inheritParams hl2_test

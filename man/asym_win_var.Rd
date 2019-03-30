@@ -17,7 +17,7 @@ must be in \code{"Q2", "SK2"} and \code{"SK5"}. Default is \code{"Q2"}.}
 \value{
 A list containing the following items:
 \item{var}{The asymmetrically trimmed variance, and}
-\item{h}{the degrees of freedom used for tests based on  asymmetrically trimmed means and the 
+\item{h}{the degrees of freedom used for tests based on  asymmetrically trimmed means and the
 asymmetrically winsorized variance.}
 }
 \description{

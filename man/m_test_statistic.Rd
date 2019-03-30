@@ -17,7 +17,7 @@ m_test_statistic(x, y, psi, k = .Mpsi.tuning.default(psi))
 \code{robustbase} package.}
 }
 \value{
-A list containing 
+A list containing
         \item{statistic}{the standardized test statistic, and}
         \item{estimates}{the M-estimates of location for both \code{x} and \code{y}}
 }

@@ -2,12 +2,13 @@
 ## Minimum-C-Test
 ## ----------------------------------------------------------------------------
 
-#' @title Hybrid permutation test based on the t- and Huber-test
+#' @title Hybrid permutation test for location difference based on the t- and Huber-test
+#'
 #' @description \code{min_c_test()} performs a hybrid test based on the t-
-#'              and Huber-statistic. The significance level is achieved by permutation.
+#'              and Huber-statistic.
 #'
 #' @inheritParams hl2_test
-#' @param k tuning parameter for Huber's M-estimate, default is \code{k = 1.8}.
+#' @param k tuning parameter for Huber's M-estimator, default is \code{k = 1.8}.
 #' @param n.rep an integer value specifying the number of random permutations used to calculate
 #'              the permutation distribution of the minimum p-value; default is \code{n.rep = 1000}.
 #'
@@ -17,11 +18,12 @@
 #' \item{p.value}{the p-value for the test.}
 #' \item{null.value}{the specified hypothesized value of the mean difference.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
-#' \item{method}{a character string indicating what type of trimmed t-test was performed.}
+#' \item{method}{a character string indicating what type of test was performed.}
 #' \item{data.name}{a character string giving the names of the data.}
 #'
 #' @details The test is introduced in Weichert & Hothorn (2002) and uses the minumum p-value of the t- and the Huber-test as a test statistic.
 #' The permutation distribution of the minimum p-value is achieved using the permutation principle according to Efron & Tibshirani (1998).
+#'
 #' @examples
 #' x <- rnorm(10); y <- rnorm(10)
 #' min_c_test(x, y, k = 1.8)

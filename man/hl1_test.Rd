@@ -2,8 +2,7 @@
 % Please edit documentation in R/hl1Test.R
 \name{hl1_test}
 \alias{hl1_test}
-\title{Two-sample location tests based on the difference of the one-sample Hodges-Lehmann
-estimators of the two samples.}
+\title{Two-sample location tests based on one-sample Hodges-Lehmann estimator}
 \usage{
 hl1_test(x, y, alternative = c("two.sided", "greater", "less"),
   delta = 0, method = c("asymptotic", "exact", "sampled"),
@@ -25,7 +24,7 @@ permutation test uses all data permutations while the randomized test draws \cod
 with replacement.}
 
 \item{scale}{a character string specifying the scale estimator used for standardization of the test statistic,
-must be one of \code{"S1"} and \code{"S2"}. Default is \code{"S1"}. 
+must be one of \code{"S1"} and \code{"S2"}. Default is \code{"S1"}.
 Ignored if \code{method = "asymptotic"}. See details for definition of the scale estimators.}
 
 \item{n.rep}{an integer value specifying the number of random permutations used to calculate 
@@ -45,23 +44,23 @@ A list with class "\code{htest}" containing the following components:
 \item{data.name}{a character string giving the names of the data.}
 }
 \description{
-\code{hl1_test} performs a two-sample test for the location shift based on
+\code{hl1_test} performs a two-sample location test based on
 the difference of the one-sample Hodges-Lehmann estimators for both samples.
 }
 \details{
 If the number of replications to determine the permutation distribution is drawn with replacement, we use the results of
 Smyth & Phipson (2010) to calculate the p-value. The test statistics and the asymptotic distribution are taken from Fried & Dehling (2011).
 
-The test statistics for the exact and sampled version of the test is standardized using a robust scale estimator. 
+The test statistics for the exact and sampled version of the test is standardized using a robust scale estimator.
 \code{scale = "S1"} represents use of
 
-\deqn{S = med(|X_i - X_j|: 1 \le i < j \le m, |Y_i - Y_j|, 1 <= i < j <= n),} 
+\deqn{S = med(|X_i - X_j|: 1 \le i < j \le m, |Y_i - Y_j|, 1 <= i < j <= n),}
 
-\code{scale = "S2"} uses 
+\code{scale = "S2"} uses
 
 \deqn{S = med(|Z_i - Z_j|: 1 \le i < j \le m+n) }
 
-where \eqn{ Z = ( X_1 - med(X),...,X_m - med(X), Y_1 - med(Y),...,Y_n - med(Y) )'} 
+where \eqn{ Z = ( X_1 - med(X),...,X_m - med(X), Y_1 - med(Y),...,Y_n - med(Y) )'}
 is the median corrected sample. For more details see Fried & Dehling (2011).
 }
 \examples{

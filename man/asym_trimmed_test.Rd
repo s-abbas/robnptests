@@ -2,8 +2,7 @@
 % Please edit documentation in R/asymTrimmedTest.R
 \name{asym_trimmed_test}
 \alias{asym_trimmed_test}
-\title{Two-sample location tests based on the difference of the Q2 skewness-selector
-statistic.}
+\title{Two-sample location tests based on asymmetrically trimmed means}
 \usage{
 asym_trimmed_test(x, y, type = c("Q2", "SK2", "SK5"),
   alternative = c("two.sided", "greater", "less"), delta = 0,
@@ -45,15 +44,9 @@ A list with class "\code{htest}" containing the following components:
 \item{data.name}{a character string giving the names of the data.}
 }
 \description{
-\code{asym_trimmed_test()} performs a two-sample test for the location shift based on
-the difference of the asymmetrically trimmed means based on different skewness-
-selector statistic for both samples.
-}
-\details{
-
-}
-\examples{
-
+\code{asym_trimmed_test()} performs a two-sample location test by using
+asymmetrically trimmed means based on different skewness-
+selector statistics for both samples.
 }
 \references{
 \insertRef{SmyPhi10perm}{robTests}

@@ -8,7 +8,7 @@
 #' several test statistics.
 #'
 #' @inheritParams rob_perm_statistic
-#' @param sampled logical value indicating whether all permutations should be
+#' @param sampled logical value indicating whether all splits should be
 #' considered or only a random sample.
 #' @param n.rep integer specifying the sample size in case of taking a random
 #' sample to approximate the permutation distribution.

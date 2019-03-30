@@ -14,7 +14,7 @@ huber_2sample(x, y, k)
 \item{k}{tuning parameter.}
 }
 \value{
-Named list containing the following objects 
+Named list containing the following objects
         \item{mu.x}{Location estimate of x}
         \item{mu.y}{Location estimate of y}
         \item{s}{Scale estimate for the joined sample}

@@ -16,8 +16,6 @@ trimmed_t(x, y, gamma = 0.2, delta = 0, na.rm = FALSE)
 \item{delta}{numeric indicating the true difference in means, default is \code{delta = 0}.}
 
 \item{na.rm}{a logical value indicating whether NA values in \code{x} should be stripped before the computation proceeds.}
-
-\item{alternative}{character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default), "\code{greater}" or "\code{less}".}
 }
 \value{
 A list containing the following components:

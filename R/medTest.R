@@ -2,10 +2,10 @@
 ## Two sample test based on median differences
 ## ----------------------------------------------------------------------------
 
-#' Two-sample tests based on the median.
+#' Two-sample location tests based on the sample median
 #'
 #' @description
-#' \code{med_test} performs a two-sample test for the location shift based on
+#' \code{med_test} performs a two-sample location test based on
 #' the difference of the sample medians for both samples.
 #'
 #' @param scale a character string specifying the scale estimator used for standardization of the test statistic,
@@ -15,9 +15,8 @@
 #' @inheritParams hl2_test
 #'
 #' @details
-#' If the number of replications to determine the permutation distribution is drawn with replacement, we use the results of
-#' Smyth & Phipson (2010) to calculate the p-value.
-#' The test statistics and the asymptotic distribution are taken from Fried & Dehling (2011).
+#' When computing a randomization distribution based on randomly drawn splits with replacement, the results of
+#' Smyth & Phipson (2010) to calculate the p-value are used. The test statistics and the asymptotic distribution are taken from Fried & Dehling (2011).
 #'
 #' The test statistics for the exact and sampled version of the test is standardized using a robust scale estimator.
 #' \code{scale = "S3"} represents use of
@@ -37,7 +36,7 @@
 #' \item{estimate}{the sample medians of \code{x} and \code{y}.}
 #' \item{null.value}{the specified hypothesized value of the mean difference.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
-#' \item{method}{a character string indicating what type of trimmed t-test was performed.}
+#' \item{method}{a character string indicating what type of test was performed.}
 #' \item{data.name}{a character string giving the names of the data.}
 #'
 #' @references

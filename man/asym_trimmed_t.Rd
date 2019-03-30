@@ -2,7 +2,7 @@
 % Please edit documentation in R/testStatistics.R
 \name{asym_trimmed_t}
 \alias{asym_trimmed_t}
-\title{Test statistic for the two-sample Yuen t-test}
+\title{Test statistic for the asymmetrically trimmed test}
 \usage{
 asym_trimmed_t(x, y, type, delta = 0, na.rm = FALSE)
 }
@@ -11,22 +11,20 @@ asym_trimmed_t(x, y, type, delta = 0, na.rm = FALSE)
 
 \item{y}{numeric vector of observations.}
 
+\item{type}{specifies the skewness selector statistics, must be in \code{"SK2", "SK5", "Q2"}.}
+
 \item{delta}{numeric indicating the true difference in means, default is \code{delta = 0}.}
 
 \item{na.rm}{a logical value indicating whether NA values in \code{x} should be stripped before the computation proceeds.}
-
-\item{gamma}{numeric value in [0, 0.5] specifying the fraction of observations to be trimmed from each end of the sample before calculating the mean. Values of trim outside that range are taken as the nearest endpoint.}
-
-\item{alternative}{character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default), "\code{greater}" or "\code{less}".}
 }
 \value{
 A list containing the following components:
 \item{statistic}{the value of the test statistic.}
-\item{estimates}{the trimmed means for both samples.}
+\item{estimates}{the asymmetrically trimmed means for both samples.}
 \item{df}{the degrees of freedom for the test statistic.}
 }
 \description{
-\code{trimmed_t} calculates the test statistic of the two-sample Yuen test.
+\code{asym_trimmed_t} calculates the test statistic of the asymmetrically trimmed test with a given skewness selector statistic
 }
 \references{
 \insertRef{YueDix73appr}{robTests}
