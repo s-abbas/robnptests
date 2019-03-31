@@ -199,6 +199,7 @@ rob_perm_statistic <- function(x, y,
 
 
 #' @title Calculate the M-test-statistic
+#'
 #' @description \code{m_test_statistic} calculates the test statistics for randomization tests based on M-estimators
 #'
 #' @param y numeric vector of observations.
@@ -242,7 +243,6 @@ m_test_statistic <- function(x, y, psi, k = .Mpsi.tuning.default(psi)) {
 #'         \item{s}{Scale estimate for the joined sample}
 #' @import robustbase
 #' @export
-
 
 huber_2sample <- function(x, y, k) {
   m <- length(x)

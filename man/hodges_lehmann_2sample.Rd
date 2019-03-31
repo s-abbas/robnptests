@@ -11,7 +11,7 @@ hodges_lehmann_2sample(x, y, na.rm = FALSE)
 
 \item{y}{numeric vector of observations.}
 
-\item{na.rm}{a logical value indicating whether NA values in \code{x} and \code{y} 
+\item{na.rm}{a logical value indicating whether NA values in \code{x} and \code{y}
 should be stripped before the computation proceeds.}
 }
 \value{

@@ -14,24 +14,23 @@ m_estimator_test(x, y, alternative = c("two.sided", "greater", "less"),
 
 \item{y}{a numeric vector of observations.}
 
-\item{alternative}{a character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default), 
+\item{alternative}{a character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default),
 "\code{greater}" or "\code{less}".}
 
 \item{delta}{a numeric value indicating the true difference in the location parameter, default is \code{delta = 0}.}
 
 \item{method}{a character string specifying the test method used: \code{"exact"} for an exact and \code{"sampled"}
-for a randomized permutation test. The exact 
-permutation test uses all data permutations while the randomized test draws \code{n.rep} random permutations
+for a randomized permutation test. The exact permutation test uses all data splits into two samples while the randomized test draws \code{n.rep} random splits
 with replacement.}
 
 \item{psi}{kernel used for optimization, must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"},
 defaults to \code{"huber"}.}
 
-\item{k}{tuning parameter(s) for the respective kernel function, defaults to parameters implemented in .Mpsi.tuning.default(psi) from 
+\item{k}{tuning parameter(s) for the respective kernel function, defaults to parameters implemented in .Mpsi.tuning.default(psi) from
 \code{robustbase} package.}
 
 \item{n.rep}{an integer value specifying the number of random permutations used to calculate
-the permutation distribution if \code{method = "sampled"}, 
+the permutation distribution if \code{method = "sampled"},
 ignored if \code{method = "exact"}. Default is 10000.}
 
 \item{na.rm}{a logical value indicating whether NA values in \code{x} and \code{y} should be stripped before the computation proceeds.}
@@ -43,7 +42,7 @@ A list with class "\code{htest}" containing the following components:
 \item{estimate}{the estimated difference in means.}
 \item{null.value}{the specified hypothesized value of the mean difference.}
 \item{alternative}{a character string describing the alternative hypothesis.}
-\item{method}{a character string indicating what type of trimmed t-test was performed.}
+\item{method}{a character string indicating what type of test was performed.}
 \item{data.name}{a character string giving the names of the data.}
 }
 \description{

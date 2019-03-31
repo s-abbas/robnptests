@@ -23,7 +23,7 @@ An estimate of the pooled variance of the two samples.
 \code{rob_var} calculates a variance estimate based on median differences
 }
 \details{
-For definitions of the scale estimators see Fried and Dehling (2008).
+For definitions of the scale estimators see Fried and Dehling (2011).
 }
 \references{
 \insertRef{FriDeh11robu}{robTests}

@@ -2,8 +2,7 @@
 % Please edit documentation in R/hl2Test.R
 \name{hl2_test}
 \alias{hl2_test}
-\title{Two-sample location tests based on the difference of the two-sample Hodges-Lehmann
-estimator.}
+\title{Two-sample location tests based on two-sample Hodges-Lehmann estimator.}
 \usage{
 hl2_test(x, y, alternative = c("two.sided", "greater", "less"),
   delta = 0, method = c("asymptotic", "exact", "sampled"),
@@ -14,22 +13,22 @@ hl2_test(x, y, alternative = c("two.sided", "greater", "less"),
 
 \item{y}{a numeric vector of observations.}
 
-\item{alternative}{a character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default), 
+\item{alternative}{a character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default),
 "\code{greater}" or "\code{less}".}
 
 \item{delta}{a numeric value indicating the true difference in the location parameter, default is \code{delta = 0}.}
 
-\item{method}{a character string specifying the test method used, \code{"asymptotic"} for an asymptotic test based on the 
-normal distribution, \code{"exact"} for an exact and \code{"sampled"} for a randomized permutation test. The exact 
-permutation test uses all data permutations while the randomized test draws \code{n.rep} random permutations
+\item{method}{a character string specifying the test method used, \code{"asymptotic"} for an asymptotic test based on the
+normal distribution, \code{"exact"} for an exact and \code{"sampled"} for a randomized permutation test. The exact
+permutation test uses all data splits into two samples while the randomized test draws \code{n.rep} random splits
 with replacement.}
 
 \item{scale}{a character string specifying the scale estimator used for standardization of the test statistic,
-must be one of \code{"S1"} and \code{"S2"}. Default is \code{"S1"}. 
+must be one of \code{"S1"} and \code{"S2"}. Default is \code{"S1"}.
 Ignored if \code{method = "asymptotic"}. See details for definition of the scale estimators.}
 
-\item{n.rep}{an integer value specifying the number of random permutations used to calculate 
-the permutation distribution if \code{method = "sampled"}, 
+\item{n.rep}{an integer value specifying the number of random splits used to calculate
+the permutation distribution if \code{method = "sampled"},
 ignored if \code{method = "exact"} or \code{method = "asymptotic"}. Default is \code{n.rep = 10000}.}
 
 \item{na.rm}{a logical value indicating whether NA values in \code{x} and \code{y} should be stripped before the computation proceeds.}
@@ -41,27 +40,27 @@ A list with class "\code{htest}" containing the following components:
 \item{estimate}{the estimated difference in means.}
 \item{null.value}{the specified hypothesized value of the mean difference.}
 \item{alternative}{a character string describing the alternative hypothesis.}
-\item{method}{a character string indicating what type of trimmed t-test was performed.}
+\item{method}{a character string indicating what type of test was performed.}
 \item{data.name}{a character string giving the names of the data.}
 }
 \description{
-\code{hl2_test} performs a two-sample test for the location shift based on
-the two-sample Hodges-Lehmann estimators for both samples.
+\code{hl2_test} performs a two-sample location test based on
+the two-sample Hodges-Lehmann estimator for shift.
 }
 \details{
-If the number of replications to determine the permutation distribution is drawn with replacement, we use the results of
-Smyth & Phipson (2010) to calculate the p-value. The test statistics and the asymptotic distribution are taken from Fried & Dehling (2011).
+When computing a randomization distribution based on randomly drawn splits with replacement, the results of
+Smyth & Phipson (2010) to calculate the p-value are used. The test statistics and the asymptotic distribution are taken from Fried & Dehling (2011).
 
- The test statistics for the exact and sampled version of the test is standardized using a robust scale estimator. 
+ The test statistics for the exact and sampled version of the test is standardized using a robust scale estimator.
 \code{scale = "S1"} represents use of
 
-\deqn{S = med(|X_i - X_j|: 1 \le i < j \le m, |Y_i - Y_j|, 1 <= i < j <= n),} 
+\deqn{S = med(|X_i - X_j|: 1 \le i < j \le m, |Y_i - Y_j|, 1 <= i < j <= n),}
 
-\code{scale = "S2"} uses 
+\code{scale = "S2"} uses
 
 \deqn{S = med(|Z_i - Z_j|: 1 \le i < j \le m+n) }
 
-where \eqn{ Z = ( X_1 - med(X),...,X_m - med(X), Y_1 - med(Y),...,Y_n - med(Y) )'} 
+where \eqn{ Z = ( X_1 - med(X),...,X_m - med(X), Y_1 - med(Y),...,Y_n - med(Y) )'}
 is the median corrected sample. For more details see Fried & Dehling (2011).
 }
 \examples{

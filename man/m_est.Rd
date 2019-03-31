@@ -12,7 +12,7 @@ m_est(x, psi, k = .Mpsi.tuning.default(psi), tol = 1e-06,
 
 \item{psi}{kernel used for optimization, must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"}}
 
-\item{k}{tuning parameter(s) for the respective kernel function, defaults to parameters implemented in .Mpsi.tuning.default(psi) from 
+\item{k}{tuning parameter(s) for the respective kernel function, defaults to parameters implemented in .Mpsi.tuning.default(psi) from
 \code{robustbase} package.}
 
 \item{tol}{tolerance for convergence, defaults to 1e-06.}

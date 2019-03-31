@@ -15,7 +15,7 @@ perm_distribution(x, y, type, sampled = FALSE, n.rep = NULL)
 where "D1" to "D3" mark different estimators for the location shift and
 "S1" to "S4" are estimates for the scale of the samples; defaults to \code{"D1S1"}.}
 
-\item{sampled}{logical value indicating whether all permutations should be
+\item{sampled}{logical value indicating whether all splits should be
 considered or only a random sample.}
 
 \item{n.rep}{integer specifying the sample size in case of taking a random

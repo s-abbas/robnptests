@@ -2,7 +2,7 @@
 % Please edit documentation in R/huberTest.R
 \name{huber_test}
 \alias{huber_test}
-\title{Huber 2-sample test}
+\title{Two-sample location tests based on Huber's M-estimator}
 \usage{
 huber_test(x, y, delta = 0, k = 1.8, alternative = c("two.sided",
   "greater", "less"))
@@ -14,9 +14,9 @@ huber_test(x, y, delta = 0, k = 1.8, alternative = c("two.sided",
 
 \item{delta}{a numeric value indicating the true difference in the location parameter, default is \code{delta = 0}.}
 
-\item{k}{Tuning parameter for Huber-M-estimate.}
+\item{k}{Tuning parameter for Huber's M-estimator.}
 
-\item{alternative}{a character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default), 
+\item{alternative}{a character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default),
 "\code{greater}" or "\code{less}".}
 }
 \value{
@@ -27,11 +27,11 @@ A list with class "\code{htest}" containing the following components:
 \item{estimate}{the Huber M-estimates of \code{x} and \code{y}.}
 \item{null.value}{the specified hypothesized value of the mean difference.}
 \item{alternative}{a character string describing the alternative hypothesis.}
-\item{method}{a character string indicating what type of trimmed t-test was performed.}
+\item{method}{a character string indicating what type of test was performed.}
 \item{data.name}{a character string giving the names of the data.}
 }
 \description{
-Performs a 2-sample location test based on Huber's M-estimate
+Performs a 2-sample location test based on Huber's M-estimator
 }
 \details{
 The test is introduced in the context of the hybrid tests in Weichert & Hothorn (2002).

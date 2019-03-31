@@ -147,7 +147,7 @@ asym_win_var <- function(x, type = c("Q2", "SK2", "SK5"), na.rm = FALSE) {
 #' @param na.rm a logical value indicating whether NA values in x and y should be stripped before the computation proceeds.
 #'
 #' @details
-#' For definitions of the scale estimators see Fried and Dehling (2008).
+#' For definitions of the scale estimators see Fried and Dehling (2011).
 #'
 #' @return
 #' An estimate of the pooled variance of the two samples.
