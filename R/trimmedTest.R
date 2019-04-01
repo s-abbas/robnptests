@@ -22,6 +22,7 @@
 #' \item{estimate}{the estimated difference in means.}
 #' \item{null.value}{the specified hypothesized value of the mean difference.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
+#' \item{method}{a character string indicating what type of test was performed.}
 #' \item{data.name}{a character string giving the names of the data.}
 #'
 #' @examples

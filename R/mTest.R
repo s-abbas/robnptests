@@ -71,12 +71,12 @@ m_estimator_test <- function(x, y, alternative = c("two.sided", "greater", "less
     p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y),
                                  sampled = sampled, n.rep = n.rep, alternative = alternative)
 
-    names(estimates) <- c("M-est. of x", "M-est. of y") ## y - delta?
+    names(estimates) <- c("M-est. of x", "M-est. of y")
     names(delta) <- "location shift"
     names(statistic) <- "D"
 
     if (method == "sampled") {
-      method = paste("Randomization test based on the ", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator") # ist das okay so mit den Kleinbuchstaben?
+      method = paste("Randomization test based on the ", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
     } else method = paste("Exact permutation test based on the", psi, "M-estimator")
 
 

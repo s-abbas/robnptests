@@ -55,7 +55,6 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' @param na.rm a logical value indicating whether NA values in \code{x} should be stripped before the computation proceeds.
 #'
 #' @details
-#'
 #' For the definition of the skewness selector statistics see Reed and Stark (1996).
 #'
 #' @return

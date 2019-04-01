@@ -5,7 +5,7 @@ Type: Package
 Title: Robust tests for the two-sample location problem
 Authors@R: c(person("Sermad", "Abbas", 
     email = "abbas@statistik.tu-dortmund.de", role = c("aut", "cre")),
-    person("Barbara", "Brune", role = "aut"))
+    person("Barbara", "Brune", email = "bbrune@statistik.tu-dortmund.de", role = "aut"))
 Description: Implementation of several robust and non-parametric alternatives to
     the ordinary two-sample t-test for the location problem under
     homoscedasticity. The tests follow the construction idea of the t-test and
@@ -15,7 +15,7 @@ Description: Implementation of several robust and non-parametric alternatives to
     principle is used. In addition, some hybrid tests are implemented that 
     combine several tests to derive a test decision.
 License: GPL (>= 2)
-Depends: R (>= 3.4.3)
+Depends: R (>= 3.4.0)
 URL: https://github.com/s-abbas/robTests
 Encoding: UTF-8
 LazyData: true
