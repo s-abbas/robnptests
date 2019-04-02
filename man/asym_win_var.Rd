@@ -7,12 +7,12 @@
 asym_win_var(x, type = c("Q2", "SK2", "SK5"), na.rm = FALSE)
 }
 \arguments{
-\item{x}{numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
 \item{type}{specifies the skewness selector statistic used for trimming/winsorizing,
 must be in \code{"Q2", "SK2"} and \code{"SK5"}. Default is \code{"Q2"}.}
 
-\item{na.rm}{a logical value indicating whether NA values in \code{x} should be stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 }
 \value{
 A list containing the following items:

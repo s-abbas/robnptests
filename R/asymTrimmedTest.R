@@ -1,5 +1,5 @@
 ## ----------------------------------------------------------------------------
-## Asymmetrically trimmed test based on Q2 skewness-selector statistic
+## Asymmetrically trimmed tests
 ## ----------------------------------------------------------------------------
 
 #' Two-sample location tests based on asymmetrically trimmed means
@@ -10,9 +10,34 @@
 #' selector statistics for both samples.
 #'
 #'
-#' @inheritParams hl2_test
-#' @param  type specifies the skewness selector statistic used for trimming, must be in
-#'        \code{"Q2", "SK2"} and \code{"SK5"}. Default is \code{"Q2"}.
+#' @template x
+#' @template y
+#' @template type
+#' @template alternative
+#' @template delta
+#' @template method
+#' @template n_rep
+#' @template na_rm
+#'
+#'
+#' @details
+#' The test statistic is an analogue to the one of the ordinary t-test, where
+#' the difference of the sample means is replaced by the difference of asymmetrically trimmed means
+#' and the pooled empirical standard deviation is replaced by a pooled winsorized standard deviation
+#' which uses the asymmetrically trimmed means.
+#'
+#' The number of observations trimmed from the lower and the upper end of the sample
+#' depends on the skewness. Reed & Stark (2004) suggest three possible skewness-selector statistics.
+#' The argument \code{type} specifies which one is used.
+#'
+#' \describe{
+#' \item{"Q2"}{This skewness-selector statistic compares the difference between the upper and the lower 5\% of
+#'             the observations to the difference between the upper and lower 50\%.}
+#' \item{"SK2"}{This skewness-selector statistic compares the difference between the sample minimum and
+#'              median to the difference between the median and the maximum.}
+#' \item{"SK5"}{This skewness-selector statistic compares the difference between the sample minimum and
+#'              mean to the difference between the mean and the maximum.}
+#' }
 #'
 #'
 #' @return
@@ -22,15 +47,19 @@
 #' \item{estimate}{the estimated sample means of \code{x} and \code{y}.}
 #' \item{null.value}{the specified hypothesized value of the mean difference.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
-#' \item{method}{a character string indicating what type of trimmed t-test was performed.}
+#' \item{method}{a character string indicating what type of test was performed.}
 #' \item{data.name}{a character string giving the names of the data.}
-
-#' @references
-#' \insertRef{SmyPhi10perm}{robTests}
-#' \insertRef{ReeSta04robu}{robTests}
-
 #'
-#' @import utils
+#' @references
+#' \insertRef{ReeSta04robu}{robTests}
+#'
+#' @examples
+#' x <- rnorm(20); y <- rnorm(20)
+#' asym_trimmed_test(x, y, type = "Q2", method = "asymptotic")
+#' asym_trimmed_test(x, y, type = "SK2", method = "asymptotic")
+#' asym_trimmed_test(x, y, type = "SK5", method = "asymptotic")
+#'
+#' asym_trimmed_test(x, y, type = "SK5", method = "sampled")
 #'
 #' @export
 

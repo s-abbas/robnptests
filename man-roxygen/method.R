@@ -1,0 +1,1 @@
+#' @param method a character string specifying the test method used, "asymptotic" for an asymptotic test based on the normal distribution, "exact" for an exact and "sampled" for a randomized permutation test. The exact permutation test uses all data splits into two samples while the randomized test draws n.rep random splits with replacement.

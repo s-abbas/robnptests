@@ -38,7 +38,7 @@ A list with class "\code{htest}" containing the following components:
 \details{
 The test is introduced in Weichert & Hothorn (2002) and uses the minumum p-value of the t-, the 10%-
 and the 20%- trimmed t-test as a test statistic.
-The permutation distribution of the minimum p-value is achieved using the permutation principle according to ???.
+The permutation distribution of the minimum p-value is achieved using the permutation principle according to Smyth & Phipson (2010).
 }
 \examples{
 x <- rnorm(10); y <- rnorm(10)
@@ -46,6 +46,7 @@ min_t_test(x, y)
 
 }
 \references{
+\insertRef{SmyPhi10perm}{robTests}
 \insertRef{WeiHot02robu}{robTests}
 }
 \seealso{

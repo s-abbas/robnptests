@@ -7,7 +7,7 @@
 mest_perm_distribution(x, y, psi, k1, sampled = FALSE, n.rep = NULL)
 }
 \arguments{
-\item{x}{numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
 \item{y}{numeric vector of observations.}
 

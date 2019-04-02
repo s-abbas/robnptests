@@ -7,25 +7,43 @@
 asym_trimmed_mean(x, type = c("Q2", "SK2", "SK5"), na.rm = FALSE)
 }
 \arguments{
-\item{x}{numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
 \item{type}{specifies the skewness selector statistic used for trimming, must be in
 \code{"Q2", "SK2"} and \code{"SK5"}. Default is \code{"Q2"}.}
 
-\item{na.rm}{a logical value indicating whether NA values in \code{x} should be stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 }
 \value{
 The asymmetrically trimmed mean.
 }
 \description{
 \code{asym_trim_mean} calculates an asymmetrically trimmed mean of a sample.
+In contrast to an ordinary trimmed mean, the numbers of observations removed from
+the lower and the upper end of the sample do not need to be equal.
 }
 \details{
-For the definition of the skewness selector statistics see Reed and Stark (1996).
+The number of observations trimmed from the lower and the upper end of the sample
+depends on the skewness.
+
+Three skewness-selector statistics suggested by Reed and Stark (1996) have been
+implemented. The argument \code{type} specifies which one is used.
+
+\describe{
+\item{"Q2"}{This skewness-selector statistic compares the difference between the upper and the lower 5\% of
+            the observations to the difference between the upper and lower 50\%.}
+\item{"SK2"}{This skewness-selector statistic compares the difference between the sample minimum and
+             median to the difference between the median and the maximum.}
+\item{"SK5"}{This skewness-selector statistic compares the difference between the sample minimum and
+             mean to the difference between the mean and the maximum.}
+}
 }
 \examples{
+set.seed(108)
 x <- rnorm(10)
-trim_mean(x, gamma = 0.2)
+asym_trim_mean(x, type = "Q2")
+asym_trim_mean(x, type = "SK2")
+asym_trim_mean(x, type = "SK5")
 
 }
 \references{

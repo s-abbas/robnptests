@@ -1,6 +1,6 @@
 ## ----------------------------------------------------------------------------
 ## Location estimators for univariate samples and
-## estimators for the location difference of two samples
+## estimators for the location difference between two samples
 ## ----------------------------------------------------------------------------
 
 #' @title Trimmed mean
@@ -8,20 +8,18 @@
 #' @description
 #' \code{trim_mean} calculates a trimmed mean of a sample.
 #'
-#' @param x numeric vector of observations.
-#' @param gamma numeric value in [0, 0.5] specifying the fraction of observations to be trimmed
-#'              from each end of the sample before calculating the mean.
-#' @param na.rm a logical value indicating whether NA values in \code{x} should be stripped before the computation proceeds.
+#' @template x
+#' @template gamma
+#' @template na_rm
 #'
 #' @details
+#' This is a wrapper function for the function \code{\link[base]{mean}}.
 #'
 #' @return
 #' The trimmed mean.
 #'
-#' @references
-#' \insertRef{ReeSta96hing}{robTests}
-#'
 #' @examples
+#' set.seed(108)
 #' x <- rnorm(10)
 #' trim_mean(x, gamma = 0.2)
 #'
@@ -48,14 +46,28 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #'
 #' @description
 #' \code{asym_trim_mean} calculates an asymmetrically trimmed mean of a sample.
+#' In contrast to an ordinary trimmed mean, the numbers of observations removed from
+#' the lower and the upper end of the sample do not need to be equal.
 #'
-#' @param x numeric vector of observations.
-#' @param type specifies the skewness selector statistic used for trimming, must be in
-#'        \code{"Q2", "SK2"} and \code{"SK5"}. Default is \code{"Q2"}.
-#' @param na.rm a logical value indicating whether NA values in \code{x} should be stripped before the computation proceeds.
+#' @template x
+#' @template type
+#' @template na_rm
 #'
 #' @details
-#' For the definition of the skewness selector statistics see Reed and Stark (1996).
+#' The number of observations trimmed from the lower and the upper end of the sample
+#' depends on the skewness.
+#'
+#' Three skewness-selector statistics suggested by Reed and Stark (1996) have been
+#' implemented. The argument \code{type} specifies which one is used.
+#'
+#' \describe{
+#' \item{"Q2"}{This skewness-selector statistic compares the difference between the upper and the lower 5\% of
+#'             the observations to the difference between the upper and lower 50\%.}
+#' \item{"SK2"}{This skewness-selector statistic compares the difference between the sample minimum and
+#'              median to the difference between the median and the maximum.}
+#' \item{"SK5"}{This skewness-selector statistic compares the difference between the sample minimum and
+#'              mean to the difference between the mean and the maximum.}
+#' }
 #'
 #' @return
 #' The asymmetrically trimmed mean.
@@ -64,8 +76,11 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' \insertRef{ReeSta96hing}{robTests}
 #'
 #' @examples
+#' set.seed(108)
 #' x <- rnorm(10)
-#' trim_mean(x, gamma = 0.2)
+#' asym_trim_mean(x, type = "Q2")
+#' asym_trim_mean(x, type = "SK2")
+#' asym_trim_mean(x, type = "SK5")
 #'
 #' @export
 
@@ -126,12 +141,16 @@ asym_trimmed_mean <- function(x, type = c("Q2", "SK2", "SK5"), na.rm = FALSE) {
 #'
 #' @description \code{win_mean} calculates the winsorized mean of a sample.
 #'
-#' @inheritParams trim_mean
+#' @template x
+#' @param gamma numeric value in [0, 0.5] specifying the fraction of observations to be replaced
+#'              at each end of the sample before calculating the mean.
+#' @template na_rm
 #'
 #' @return
 #' The winsorized mean.
 #'
 #' @examples
+#' set.seed(108)
 #' x <- rnorm(10)
 #' win_mean(x, gamma = 0.2)
 #'
@@ -171,7 +190,8 @@ win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' @description \code{hodges_lehmann} calculates the one-sample Hodges-Lehmann estimator
 #' of a sample.
 #'
-#' @inheritParams trim_mean
+#' @template x
+#' @template na_rm
 #'
 #' @return
 #' The one-sample Hodges-Lehmann estimator.
@@ -180,6 +200,7 @@ win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' \insertRef{HodLeh63esti}{robTests}
 #'
 #' @examples
+#' set.seed(108)
 #' x <- rnorm(10)
 #' hodges_lehmann(x)
 #'
@@ -211,10 +232,9 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
 #' @description \code{hodges_lehmann_2sample} calculates the two-sample Hodges-Lehmann estimator for the location difference
 #' of two samples x and y.
 #'
-#' @param x numeric vector of observations.
-#' @param y numeric vector of observations.
-#' @param na.rm a logical value indicating whether NA values in \code{x} and \code{y}
-#'              should be stripped before the computation proceeds.
+#' @template x
+#' @template y
+#' @template na_rm
 #'
 #' @return
 #' The two-sample Hodges-Lehmann estimator.
@@ -223,6 +243,7 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
 #' \insertRef{HodLeh63esti}{robTests}
 #'
 #' @examples
+#' set.seed(108)
 #' x <- rnorm(10); y <- rnorm(10)
 #' hodges_lehmann_2sample(x, y)
 #'
@@ -245,25 +266,39 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 
 #' @title M-estimator of location
 #'
-#' @description \code{m_est} calculates the M-estimate of location and its variance using different tuning functions
+#' @description \code{m_est} calculates an M-estimate of location and its variance using different tuning functions.
 #'
-#' @param x numeric vector of observations.
-#' @param psi kernel used for optimization, must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"}
-#' @param k tuning parameter(s) for the respective kernel function, defaults to parameters implemented in .Mpsi.tuning.default(psi) from
-#'          \code{robustbase} package.
-#' @param tol tolerance for convergence, defaults to 1e-06.
-#' @param max.it the maximum number of iterations, defaults to 15.
+#' @template x
+#' @template psi
+#' @template k
+#' @template tol
+#' @template max_it
+#'
+#' @details
+#' To compute the M-estimate, the iterative algorithm described in Maronna et al. (2006, p. 39) is used.
+#' The variance is estimated according to Huber (1981, p. 150).
+#'
 #'
 #' @return A list containing the items:
 #'         \item{est}{estimated mean, and}
 #'         \item{var}{estimated variance.}
 #'
-#' @examples
 #'
-#' @import robustbase
+#' @references
+#' \insertRef{MarMarYoh06robu}{robTests}
+#'
+#' \insertRef{Hub81robu}{robTests}
+#'
+#'
+#' @examples
+#' set.seed(108)
+#' x <- rnorm(10)
+#'
+#' m_est(x, psi = "huber")
+#'
 #' @export
 
-m_est <- function(x, psi, k = .Mpsi.tuning.default(psi), tol = 1e-6, max.it = 15) {
+m_est <- function(x, psi, k = robustbase::.Mpsi.tuning.default(psi), tol = 1e-6, max.it = 15) {
   ## Initial estimators
   est.old <- stats::median(x)
   S <- stats::mad(x)

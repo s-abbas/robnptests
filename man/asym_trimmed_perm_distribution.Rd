@@ -8,9 +8,9 @@ asym_trimmed_perm_distribution(x, y, type, sampled = FALSE,
   n.rep = NULL)
 }
 \arguments{
-\item{x}{a numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
-\item{y}{a numeric vector of observations.}
+\item{y}{a (non-empty) numeric vector of data values.}
 
 \item{type}{specifies the skewness selector statistic used for trimming, must be in
 \code{"Q2", "SK2"} and \code{"SK5"}. Default is \code{"Q2"}.}

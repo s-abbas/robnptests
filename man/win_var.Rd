@@ -7,12 +7,12 @@
 win_var(x, gamma = 0, na.rm = FALSE)
 }
 \arguments{
-\item{x}{numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
 \item{gamma}{numeric value in [0, 0.5] specifying the fraction of observations to be trimmed
 from each end of the sample before calculating the mean.}
 
-\item{na.rm}{a logical value indicating whether NA values in \code{x} should be stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 }
 \value{
 A list containing the following items:

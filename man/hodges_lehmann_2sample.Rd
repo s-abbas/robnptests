@@ -7,12 +7,11 @@
 hodges_lehmann_2sample(x, y, na.rm = FALSE)
 }
 \arguments{
-\item{x}{numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
-\item{y}{numeric vector of observations.}
+\item{y}{a (non-empty) numeric vector of data values.}
 
-\item{na.rm}{a logical value indicating whether NA values in \code{x} and \code{y}
-should be stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 }
 \value{
 The two-sample Hodges-Lehmann estimator.
@@ -22,6 +21,7 @@ The two-sample Hodges-Lehmann estimator.
 of two samples x and y.
 }
 \examples{
+set.seed(108)
 x <- rnorm(10); y <- rnorm(10)
 hodges_lehmann_2sample(x, y)
 

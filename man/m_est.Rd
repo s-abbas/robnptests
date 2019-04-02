@@ -4,16 +4,15 @@
 \alias{m_est}
 \title{M-estimator of location}
 \usage{
-m_est(x, psi, k = .Mpsi.tuning.default(psi), tol = 1e-06,
+m_est(x, psi, k = robustbase::.Mpsi.tuning.default(psi), tol = 1e-06,
   max.it = 15)
 }
 \arguments{
-\item{x}{numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
-\item{psi}{kernel used for optimization, must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"}}
+\item{psi}{kernel used for optimization, must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"}.}
 
-\item{k}{tuning parameter(s) for the respective kernel function, defaults to parameters implemented in .Mpsi.tuning.default(psi) from
-\code{robustbase} package.}
+\item{k}{tuning parameter(s) for the respective kernel function, defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}} in the package \pkg{robustbase}.}
 
 \item{tol}{tolerance for convergence, defaults to 1e-06.}
 
@@ -25,8 +24,21 @@ A list containing the items:
         \item{var}{estimated variance.}
 }
 \description{
-\code{m_est} calculates the M-estimate of location and its variance using different tuning functions
+\code{m_est} calculates an M-estimate of location and its variance using different tuning functions.
+}
+\details{
+To compute the M-estimate, the iterative algorithm described in Maronna et al. (2006, p. 39) is used.
+The variance is estimated according to Huber (1981, p. 150).
 }
 \examples{
+set.seed(108)
+x <- rnorm(10)
 
+m_est(x, psi = "huber")
+
+}
+\references{
+\insertRef{MarMarYoh06robu}{robTests}
+
+\insertRef{Hub81robu}{robTests}
 }
