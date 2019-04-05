@@ -2,28 +2,30 @@
 % Please edit documentation in R/scaleEstimators.R
 \name{rob_var}
 \alias{rob_var}
-\title{Robust 2 sample variance estimates based on medians}
+\title{Robust scale estimators based on median absolute deviation}
 \usage{
 rob_var(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4"))
 }
 \arguments{
-\item{x}{numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
-\item{y}{numeric vector of observations.}
+\item{y}{a (non-empty) numeric vector of data values.}
 
-\item{na.rm}{a logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 
-\item{type}{in \code{"S1"}, \code{"S2"}, \code{"S3"} and \code{"S4"} for
-respective variance estimator, see details for description of the scale estimators.}
+\item{type}{character that specifies the estimator for the variance, can be
+\code{"S1"}, \code{"S2"}, \code{"S3"} and \code{"S4"} for;
+see details for description of the scale estimators.}
 }
 \value{
 An estimate of the pooled variance of the two samples.
 }
 \description{
-\code{rob_var} calculates a variance estimate based on median differences
+\code{rob_var} calculates a variance estimator for the within-sample variance
+based on two samples.
 }
 \details{
-For definitions of the scale estimators see Fried and Dehling (2011).
+For definitions of the scale estimators see Fried and Dehling (2011). Here,
 }
 \references{
 \insertRef{FriDeh11robu}{robTests}

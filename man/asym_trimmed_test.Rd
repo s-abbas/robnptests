@@ -25,7 +25,7 @@ asym_trimmed_test(x, y, type = c("Q2", "SK2", "SK5"),
 
 \item{n.rep}{an integer value specifying the number of random splits used to calculate the permutation distribution if method = "sampled", ignored if method = "exact" or method = "asymptotic". Default is n.rep = 10000.}
 
-\item{na.rm}{a logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:

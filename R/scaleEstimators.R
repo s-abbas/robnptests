@@ -7,18 +7,23 @@
 #' @description
 #' \code{win_var} calculates the winsorized variance of a sample.
 #'
-#' @inheritParams trim_mean
+#'
+#' @template x
+#' @template gamma
+#' @template na_rm
+#'
 #'
 #' @return A list containing the following items:
 #' \item{var}{The winsorized variance, and}
 #' \item{h}{the degrees of freedom used for tests based on trimmed means and the
 #' winsorized variance.}
 #'
-#' @details
 #'
 #' @examples
+#' set.seed(108)
 #' x <- rnorm(10)
 #' win_var(x, gamma = 0.2)
+#'
 #'
 #' @export
 
@@ -54,22 +59,28 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
 
 #' @title Asymmetrically trimmed variance
 #'
+#'
 #' @description
 #' \code{asym_win_var} calculates the asymmetrically trimmed variance using different
 #' skewness selector statistics.
 #'
-#' @inheritParams trim_mean
-#' @param type specifies the skewness selector statistic used for trimming/winsorizing,
-#'  must be in \code{"Q2", "SK2"} and \code{"SK5"}. Default is \code{"Q2"}.
+#'
+#' @template x
+#' @template type
+#' @template na_rm
+#'
 #'
 #' @return A list containing the following items:
 #' \item{var}{The asymmetrically trimmed variance, and}
 #' \item{h}{the degrees of freedom used for tests based on  asymmetrically trimmed means and the
 #' asymmetrically winsorized variance.}
 #'
+#'
 #' @examples
+#' set.seed(108)
 #' x <- rnorm(10)
 #' asym_win_var(x, type = "SK5")
+#'
 #'
 #' @export
 
@@ -135,26 +146,30 @@ asym_win_var <- function(x, type = c("Q2", "SK2", "SK5"), na.rm = FALSE) {
 }
 
 
-#' @title Robust 2 sample variance estimates based on medians
+#' @title Robust scale estimators based on median absolute deviation
 #'
 #' @description
-#' \code{rob_var} calculates a variance estimate based on median differences
+#' \code{rob_var} calculates a variance estimator for the within-sample variance
+#' based on two samples.
 #'
-#' @param x numeric vector of observations.
-#' @param y numeric vector of observations.
-#' @param type in \code{"S1"}, \code{"S2"}, \code{"S3"} and \code{"S4"} for
-#' respective variance estimator, see details for description of the scale estimators.
-#' @param na.rm a logical value indicating whether NA values in x and y should be stripped before the computation proceeds.
+#' @template x
+#' @template y
+#' @template scale_type
+#' @template na_rm
+#'
 #'
 #' @details
-#' For definitions of the scale estimators see Fried and Dehling (2011).
+#' For definitions of the scale estimators see Fried and Dehling (2011). Here,
+#'
 #'
 #' @return
 #' An estimate of the pooled variance of the two samples.
 #'
+#'
 #' @references
 #' \insertRef{FriDeh11robu}{robTests}
-#' @import utils
+#'
+#'
 #' @export
 
 rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
@@ -196,4 +211,3 @@ rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
     return(stats::median(abs(x - stats::median(x)) + stats::median(abs(y - stats::median(y)))))
   }
 }
-

@@ -12,7 +12,7 @@ trim_mean(x, gamma = 0.2, na.rm = FALSE)
 \item{gamma}{numeric value in [0, 0.5] specifying the fraction of observations to be trimmed
 from each end of the sample before calculating the mean.}
 
-\item{na.rm}{a logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 }
 \value{
 The trimmed mean.
