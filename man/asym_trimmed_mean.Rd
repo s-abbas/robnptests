@@ -41,9 +41,9 @@ implemented. The argument \code{type} specifies which one is used.
 \examples{
 set.seed(108)
 x <- rnorm(10)
-asym_trim_mean(x, type = "Q2")
-asym_trim_mean(x, type = "SK2")
-asym_trim_mean(x, type = "SK5")
+asym_trimmed_mean(x, type = "Q2")
+asym_trimmed_mean(x, type = "SK2")
+asym_trimmed_mean(x, type = "SK5")
 
 }
 \references{

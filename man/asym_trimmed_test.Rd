@@ -61,15 +61,6 @@ The argument \code{type} specifies which one is used.
              mean to the difference between the mean and the maximum.}
 }
 }
-\examples{
-x <- rnorm(20); y <- rnorm(20)
-asym_trimmed_test(x, y, type = "Q2", method = "asymptotic")
-asym_trimmed_test(x, y, type = "SK2", method = "asymptotic")
-asym_trimmed_test(x, y, type = "SK5", method = "asymptotic")
-
-asym_trimmed_test(x, y, type = "SK5", method = "sampled")
-
-}
 \references{
 \insertRef{ReeSta04robu}{robTests}
 }

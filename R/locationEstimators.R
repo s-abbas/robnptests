@@ -78,9 +78,9 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' @examples
 #' set.seed(108)
 #' x <- rnorm(10)
-#' asym_trim_mean(x, type = "Q2")
-#' asym_trim_mean(x, type = "SK2")
-#' asym_trim_mean(x, type = "SK5")
+#' asym_trimmed_mean(x, type = "Q2")
+#' asym_trimmed_mean(x, type = "SK2")
+#' asym_trimmed_mean(x, type = "SK5")
 #'
 #' @export
 

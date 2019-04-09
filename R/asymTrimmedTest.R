@@ -54,6 +54,7 @@
 #' \insertRef{ReeSta04robu}{robTests}
 #'
 #' @examples
+#' set.seed(108)
 #' x <- rnorm(20); y <- rnorm(20)
 #' asym_trimmed_test(x, y, type = "Q2", method = "asymptotic")
 #' asym_trimmed_test(x, y, type = "SK2", method = "asymptotic")
