@@ -29,6 +29,8 @@
 #' x <- rnorm(20); y <- rnorm(20)
 #' trimmed_test(x, y, gamma = 0.1)
 #'
+#' @importFrom Rdpack reprompt
+#'
 #' @references
 #' \insertRef{YueDix73appr}{robTests}
 #'

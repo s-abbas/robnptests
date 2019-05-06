@@ -6,6 +6,9 @@ Title: Robust tests for the two-sample location problem
 Authors@R: c(person("Sermad", "Abbas", 
     email = "abbas@statistik.tu-dortmund.de", role = c("aut", "cre")),
     person("Barbara", "Brune", email = "bbrune@statistik.tu-dortmund.de", role = "aut"))
+Author: Sermad Abbas [aut, cre],
+  Barbara Brune [aut]
+Maintainer: Sermad Abbas <abbas@statistik.tu-dortmund.de>
 Description: Implementation of several robust and non-parametric alternatives to
     the ordinary two-sample t-test for the location problem under
     homoscedasticity. The tests follow the construction idea of the t-test and

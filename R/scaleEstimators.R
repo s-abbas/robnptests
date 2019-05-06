@@ -165,6 +165,7 @@ asym_win_var <- function(x, type = c("Q2", "SK2", "SK5"), na.rm = FALSE) {
 #' @return
 #' An estimate of the pooled variance of the two samples.
 #'
+#' @importFrom Rdpack reprompt
 #'
 #' @references
 #' \insertRef{FriDeh11robu}{robTests}

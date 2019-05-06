@@ -50,6 +50,8 @@
 #' \item{method}{a character string indicating what type of test was performed.}
 #' \item{data.name}{a character string giving the names of the data.}
 #'
+#' @importFrom Rdpack reprompt
+#'
 #' @references
 #' \insertRef{ReeSta04robu}{robTests}
 #'

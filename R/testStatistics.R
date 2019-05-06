@@ -19,6 +19,8 @@
 #' \item{estimates}{the trimmed means for both samples.}
 #' \item{df}{the degrees of freedom for the test statistic.}
 #'
+#' @importFrom Rdpack reprompt
+#'
 #' @references
 #' \insertRef{YueDix73appr}{robTests}
 #'

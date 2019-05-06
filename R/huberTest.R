@@ -31,6 +31,8 @@
 #' \code{\link[robTests]{min_tc_test}}
 #' \code{\link[robTests]{min_t_test}}
 #'
+#' @importFrom Rdpack reprompt
+#'
 #' @references \insertRef{WeiHot02robu}{robTests}
 #'
 #' @export

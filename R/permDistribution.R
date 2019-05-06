@@ -18,8 +18,6 @@
 #' @details see documentation of \code{rob_perm_statistic()} for a description of
 #' the \code{type}-parameter
 #'
-#' @import gtools
-#'
 #' @export
 
 perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = NULL) {
@@ -59,8 +57,6 @@ perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = NULL) {
 #'
 #' @return Vector with permutation distribution.
 #'
-#' @import gtools
-#'
 #' @export
 
 mest_perm_distribution <- function(x, y, psi, k1, sampled = FALSE, n.rep = NULL) {
@@ -89,6 +85,7 @@ mest_perm_distribution <- function(x, y, psi, k1, sampled = FALSE, n.rep = NULL)
 #' trimmed statistics from \code{asym_trimmed_test}.
 #'
 #' @inheritParams asym_trimmed_test
+#'
 #' @param sampled logical value indicating if the exact permutation distribution (\code{FALSE})
 #'                or only \code{n.rep} samples drawn with replacement (\code{TRUE})
 #'                should be used. Default is FALSE.
@@ -96,8 +93,6 @@ mest_perm_distribution <- function(x, y, psi, k1, sampled = FALSE, n.rep = NULL)
 #'              sample to approximate the permutation distribution.
 #'
 #' @return Vector with permutation distribution.
-#'
-#' @import gtools
 #'
 #' @export
 
@@ -149,8 +144,6 @@ asym_trimmed_perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = 
 #'
 #' @references
 #' \insertRef{SmyPhi10perm}{robTests}
-#'
-#' @import statmod
 #'
 #' @export
 

@@ -72,6 +72,8 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' @return
 #' The asymmetrically trimmed mean.
 #'
+#' @importFrom Rdpack reprompt
+#'
 #' @references
 #' \insertRef{ReeSta96hing}{robTests}
 #'
@@ -239,6 +241,8 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
 #' @return
 #' The two-sample Hodges-Lehmann estimator.
 #'
+#' @importFrom Rdpack reprompt
+#'
 #' @references
 #' \insertRef{HodLeh63esti}{robTests}
 #'
@@ -283,6 +287,7 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 #'         \item{est}{estimated mean, and}
 #'         \item{var}{estimated variance.}
 #'
+#' @importFrom Rdpack reprompt
 #'
 #' @references
 #' \insertRef{MarMarYoh06robu}{robTests}

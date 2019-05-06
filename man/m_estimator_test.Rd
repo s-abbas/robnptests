@@ -56,6 +56,7 @@ Details on the tests implemented here can be found in Aboukalam (1992).
 x <- rnorm(20); y <- rnorm(20)
 m_estimator_test(x, y, psi = "huber", method = "sampled", n.rep = 1000)
 m_estimator_test(x, y, psi = "bisquare", method = "sampled", n.rep = 1000)
+
 }
 \references{
 \insertRef{Abo92robu}{robTests}

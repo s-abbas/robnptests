@@ -28,15 +28,17 @@
 #' x <- rnorm(10); y <- rnorm(10)
 #' min_t_test(x, y)
 #'
+#' @importFrom Rdpack reprompt
+#'
 #' @references
 #' \insertRef{SmyPhi10perm}{robTests}
 #' \insertRef{WeiHot02robu}{robTests}
+#'
 #' @seealso
 #'  \code{\link[stats]{t.test}}
 #'  \code{\link[robTests]{trimmed_test}}
+#'
 #' @export
-#' @importFrom stats t.test
-
 
 min_t_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delta = 0,
                        na.rm = FALSE, n.rep = 1000) {

@@ -31,14 +31,17 @@
 #' \item{data.name}{a character string giving the names of the data.}
 #'
 #' @details Details on the tests implemented here can be found in Aboukalam (1992).
+#'
+#' @importFrom Rdpack reprompt
+#'
 #' @references
 #' \insertRef{Abo92robu}{robTests}
 #'
-#' @import robustbase
 #' @examples
 #' x <- rnorm(20); y <- rnorm(20)
 #' m_estimator_test(x, y, psi = "huber", method = "sampled", n.rep = 1000)
 #' m_estimator_test(x, y, psi = "bisquare", method = "sampled", n.rep = 1000)
+#'
 #' @export
 
 

@@ -45,6 +45,7 @@ The permutation distribution of the minimum p-value is achieved using the permut
 \examples{
 x <- rnorm(10); y <- rnorm(10)
 min_tc_test(x, y)
+
 }
 \references{
 \insertRef{WeiHot02robu}{robTests}

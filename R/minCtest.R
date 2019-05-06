@@ -36,9 +36,8 @@
 #' @seealso
 #'  \code{\link[stats]{t.test}}
 #'  \code{\link[robTests]{huber_test}}
+#'
 #' @export
-#' @importFrom stats t.test
-
 
 min_c_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delta = 0,
                        k = 1.8,

@@ -28,6 +28,9 @@
 #' @examples
 #' x <- rnorm(10); y <- rnorm(10)
 #' min_tc_test(x, y)
+#'
+#' @importFrom Rdpack reprompt
+#'
 #' @references
 #' \insertRef{WeiHot02robu}{robTests}
 #'
