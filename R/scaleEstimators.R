@@ -37,7 +37,7 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
   if (!na.rm & any(is.na(x))) {
     return(NA)
   } else if (na.rm & any(is.na(x))) {
-    x <- stats::na.omit(x)
+    x <- as.vector(stats::na.omit(x))
   }
 
   ## Calculate winsorized variance
@@ -89,7 +89,7 @@ asym_win_var <- function(x, type = c("Q2", "SK2", "SK5"), na.rm = FALSE) {
   if (!na.rm & any(is.na(x))) {
     return(NA)
   } else if (na.rm & any(is.na(x))) {
-    x <- stats::na.omit(x)
+    x <- as.vector(stats::na.omit(x))
   }
 
   ## Sample size and ordered sample
@@ -189,8 +189,8 @@ rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
   if (!na.rm & any(is.na(x)) || any(is.na(y))) {
     return(NA)
   } else if (na.rm & any(is.na(x)) || is.na(y)) {
-    x <- stats::na.omit(x)
-    y <- stats::na.omit(y)
+    x <- as.vector(stats::na.omit(x))
+    y <- as.vector(stats::na.omit(y))
   }
 
   if (type == "S1") {

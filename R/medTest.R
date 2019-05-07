@@ -58,6 +58,13 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
                      scale = c("S3", "S4"), n.rep = 10000,
                      na.rm = FALSE) {
 
+  if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
+    return(NA)
+  } else if (na.rm & (any(is.na(x)) | any(is.na(y)))) {
+    x <- as.numeric(stats::na.omit(x))
+    y <- as.numeric(stats::na.omit(y))
+  }
+
   alternative <- match.arg(alternative)
   scale <- match.arg(scale)
 

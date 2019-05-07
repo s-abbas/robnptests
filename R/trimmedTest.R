@@ -47,10 +47,11 @@ trimmed_test <- function(x, y, gamma = 0.2, alternative = c("two.sided", "less",
   names(delta) <- "difference in means" ### BB: Ist das hier überflüssig?
 
   ## NA handling
-  if (!na.rm & any(is.na(x))) {
+  if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
     return(NA)
-  } else if (na.rm & any(is.na(x))) {
-    x <- stats::na.omit(x)
+  } else if (na.rm & (any(is.na(x)) | any(is.na(y)))) {
+    x <- as.numeric(stats::na.omit(x))
+    y <- as.numeric(stats::na.omit(y))
   }
 
   alternative <- match.arg(alternative)

@@ -64,6 +64,13 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
 
   scale <- match.arg(scale)
 
+  if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
+    return(NA)
+  } else if (na.rm & (any(is.na(x)) | any(is.na(y)))) {
+    x <- as.numeric(stats::na.omit(x))
+    y <- as.numeric(stats::na.omit(y))
+  }
+
   if (scale == "S1") {
     type <- "D1S1"
   } else if (scale == "S2") {

@@ -35,7 +35,7 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
   if (!na.rm & any(is.na(x))) {
     return(NA)
   } else if (na.rm & any(is.na(x))) {
-    x <- stats::na.omit(x)
+    x <- as.vector(stats::na.omit(x))
   }
 
   ## Calculate trimmed mean
@@ -91,7 +91,7 @@ asym_trimmed_mean <- function(x, type = c("Q2", "SK2", "SK5"), na.rm = FALSE) {
   if (!na.rm & any(is.na(x))) {
     return(NA)
   } else if (na.rm & any(is.na(x))) {
-    x <- stats::na.omit(x)
+    x <- as.vector(stats::na.omit(x))
   }
 
   type <- match.arg(type)
@@ -168,7 +168,7 @@ win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
   if (!na.rm & any(is.na(x))) {
     return(NA)
   } else if (na.rm & any(is.na(x))) {
-    x <- stats::na.omit(x)
+    x <- as.vector(stats::na.omit(x))
   }
 
   n <- length(x)
@@ -214,7 +214,7 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
   if (!na.rm & any(is.na(x))) {
     return(NA)
   } else if (na.rm & any(is.na(x))) {
-    x <- stats::na.omit(x)
+    x <- as.vector(stats::na.omit(x))
   }
 
   ## Pairwise means
@@ -258,8 +258,8 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
   if (!na.rm & (any(is.na(x)) || any(is.na(y)))) {
     return(NA)
   } else if (na.rm & (any(is.na(x)) || any(is.na(y)))) {
-    x <- stats::na.omit(x)
-    y <- stats::na.omit(y)
+    x <- as.vector(stats::na.omit(x))
+    y <- as.vector(stats::na.omit(y))
   }
 
   diff <- expand.grid(x, y)
@@ -303,7 +303,15 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 #'
 #' @export
 
-m_est <- function(x, psi, k = robustbase::.Mpsi.tuning.default(psi), tol = 1e-6, max.it = 15) {
+m_est <- function(x, psi, k = robustbase::.Mpsi.tuning.default(psi), tol = 1e-6, max.it = 15, na.rm = TRUE) {
+
+  ## NA handling
+  if (!na.rm & any(is.na(x))) {
+    return(NA)
+  } else if (na.rm & any(is.na(x))) {
+    x <- as.vector(stats::na.omit(x))
+  }
+
   ## Initial estimators
   est.old <- stats::median(x)
   S <- stats::mad(x)

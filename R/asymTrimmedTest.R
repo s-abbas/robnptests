@@ -72,6 +72,13 @@ asym_trimmed_test <- function(x, y, type = c("Q2", "SK2", "SK5"),
                               method = c("asymptotic", "exact", "sampled"),
                               n.rep = 10000, na.rm = FALSE) {
 
+  if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
+    return(NA)
+  } else if (na.rm & (any(is.na(x)) | any(is.na(y)))) {
+    x <- as.numeric(stats::na.omit(x))
+    y <- as.numeric(stats::na.omit(y))
+  }
+
   alternative <- match.arg(alternative)
   method <- match.arg(method)
   type <- match.arg(type)
