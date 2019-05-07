@@ -277,6 +277,7 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 #' @template k
 #' @template tol
 #' @template max_it
+#' @template na_rm
 #'
 #' @details
 #' To compute the M-estimate, the iterative algorithm described in Maronna et al. (2006, p. 39) is used.

@@ -5,7 +5,7 @@
 #' @inheritParams hl2_test
 #' @param type a character string specifying the type of hybrid test used, must be one of \code{"min1"}, \code{"min2"} and
 #' \code{"min3"}. See details for information on the three types.
-#' @param k tuning parameter for Huber's M-estimator, default is \code{k = 1.8}, only needed if \code{type %in% c("min2", "min3")}.
+#' @param k tuning parameter for Huber's M-estimator, default is \code{k = 1.8}, only needed if \code{type \%in\% c("min2", "min3")}
 #' @param n.rep an integer value specifying the number of random permutations used to calculate
 #'              the permutation distribution of the minimum p-value; default is \code{n.rep = 1000}.
 #'
@@ -21,9 +21,11 @@
 #' @details The tests implemented here are introduced in Weichert & Hothorn (2002). They are based on
 #' the minimum p-values from different test statistics. The test statistics used are specified in the
 #' \code{type}-argument. We have three different types:
-#' \item{min1}{test based on the t-statistic and the 10% and 20% trimmed t-statistics}
+#' \describe{
+#' \item{min1}{test based on the t-statistic and the 10\% and 20\% trimmed t-statistics}
 #' \item{min2}{test based on the t-statistic and a test statistic based on Huber's M-estimator}
-#' \item{min3}{test based on the t-statistic, the 20% trimmed t-statistic and the test based on Huber's M-estimator}
+#' \item{min3}{test based on the t-statistic, the 20\% trimmed t-statistic and the test based on Huber's M-estimator}
+#' }
 #'
 #' The test statistic is the minumum p-value of the different test statistics.
 #' The permutation distribution of the minimum p-value is achieved using the
@@ -33,6 +35,8 @@
 #' x <- rnorm(10); y <- rnorm(10)
 #' hybrid_test(x, y, type = "min1")
 #'
+#' @importFrom Rdpack reprompt
+#'
 #' @references
 #' \insertRef{WeiHot02robu}{robTests}
 #'
@@ -41,8 +45,6 @@
 #' @seealso
 #'  \code{\link[stats]{t.test}}
 #'  \code{\link[robTests]{huber_test}}
-#'
-#' @importFrom stats t.test
 #'
 #' @export
 

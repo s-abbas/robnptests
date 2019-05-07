@@ -5,7 +5,7 @@
 \title{M-estimator of location}
 \usage{
 m_est(x, psi, k = robustbase::.Mpsi.tuning.default(psi), tol = 1e-06,
-  max.it = 15)
+  max.it = 15, na.rm = TRUE)
 }
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
@@ -17,6 +17,8 @@ m_est(x, psi, k = robustbase::.Mpsi.tuning.default(psi), tol = 1e-06,
 \item{tol}{tolerance for convergence, defaults to 1e-06.}
 
 \item{max.it}{the maximum number of iterations, defaults to 15.}
+
+\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 }
 \value{
 A list containing the items:
