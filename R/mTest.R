@@ -48,13 +48,20 @@
 m_estimator_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delta = 0,
                              method = c("sampled", "exact"),
                              psi = c("huber", "hampel", "bisquare"), k = .Mpsi.tuning.default(psi),
-                             n.rep = 10000, na.rm = FALSE) {
+                             n.rep = 10000, na.rm = FALSE, var.test = FALSE) {
 
   if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
     return(NA)
   } else if (na.rm & (any(is.na(x)) | any(is.na(y)))) {
     x <- as.numeric(stats::na.omit(x))
     y <- as.numeric(stats::na.omit(y))
+  }
+
+  ## If necessary: Transformation to test for difference in scale
+  if (var.test) {
+    x <- log(x^2)
+    y <- log(y^2)
+    delta <- log(delta^2)
   }
 
   alternative <- match.arg(alternative)

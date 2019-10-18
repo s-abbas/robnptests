@@ -8,6 +8,7 @@
 #' @param k tuning parameter for Huber's M-estimator, default is \code{k = 1.8}, only needed if \code{type \%in\% c("min2", "min3")}
 #' @param n.rep an integer value specifying the number of random permutations used to calculate
 #'              the permutation distribution of the minimum p-value; default is \code{n.rep = 1000}.
+#' @template var_test
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:
@@ -50,7 +51,7 @@
 
 hybrid_test <- function(x, y, type = c("min1", "min2", "min3"),
                         alternative = c("two.sided", "greater", "less"), delta = 0,
-                        k = 1.8, na.rm = FALSE, n.rep = 1000) {
+                        k = 1.8, na.rm = FALSE, n.rep = 1000, var.test = FALSE) {
 
   if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
     return(NA)
@@ -61,6 +62,13 @@ hybrid_test <- function(x, y, type = c("min1", "min2", "min3"),
 
   if (!missing(delta) && (length(delta) != 1 || is.na(delta))) {
     stop ("'delta' must be a single number.")
+  }
+
+  ## If necessary: Transformation to test for difference in scale
+  if (var.test) {
+    x <- log(x^2)
+    y <- log(y^2)
+    delta <- log(delta^2)
   }
 
   type <- match.arg(type)

@@ -39,7 +39,7 @@
 #' @export
 
 trimmed_test <- function(x, y, gamma = 0.2, alternative = c("two.sided", "less", "greater"),
-                                 delta = 0, na.rm = FALSE) {
+                                 delta = 0, na.rm = FALSE, var.test = FALSE) {
   ## Error handling
   if (!missing(delta) && (length(delta) != 1 || is.na(delta))) {
     stop ("'delta' must be a single number.")
@@ -52,6 +52,13 @@ trimmed_test <- function(x, y, gamma = 0.2, alternative = c("two.sided", "less",
   } else if (na.rm & (any(is.na(x)) | any(is.na(y)))) {
     x <- as.numeric(stats::na.omit(x))
     y <- as.numeric(stats::na.omit(y))
+  }
+
+  ## If necessary: Transformation to test for difference in scale
+  if (var.test) {
+    x <- log(x^2)
+    y <- log(y^2)
+    delta <- log(delta^2)
   }
 
   alternative <- match.arg(alternative)

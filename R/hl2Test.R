@@ -25,6 +25,7 @@
 #'              the permutation distribution if \code{method = "sampled"},
 #'              ignored if \code{method = "exact"} or \code{method = "asymptotic"}. Default is \code{n.rep = 10000}.
 #' @param na.rm a logical value indicating whether NA values in \code{x} and \code{y} should be stripped before the computation proceeds.
+#' @template var_test
 #'
 #' @details
 #' When computing a randomization distribution based on randomly drawn splits with replacement, the results of
@@ -68,7 +69,8 @@
 
 hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
                      delta = 0, method = c("asymptotic", "exact", "sampled"),
-                     scale = c("S1", "S2"), n.rep = 10000,  na.rm = FALSE) {
+                     scale = c("S1", "S2"), n.rep = 10000,  na.rm = FALSE,
+                     var.test = FALSE) {
 
   stopifnot(is.numeric(x),
             is.numeric(y))
@@ -78,6 +80,13 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   } else if (na.rm & (any(is.na(x)) | any(is.na(y)))) {
     x <- as.numeric(stats::na.omit(x))
     y <- as.numeric(stats::na.omit(y))
+  }
+
+  ## If necessary: Transformation to test for difference in scale
+  if (var.test) {
+    x <- log(x^2)
+    y <- log(y^2)
+    delta <- log(delta^2)
   }
 
   alternative <- match.arg(alternative)

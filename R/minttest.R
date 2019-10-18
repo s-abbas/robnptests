@@ -41,9 +41,16 @@
 #' @export
 
 min_t_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delta = 0,
-                       na.rm = FALSE, n.rep = 1000) {
+                       na.rm = FALSE, n.rep = 1000, var.test = FALSE) {
 
   alternative <- match.arg(alternative)
+
+  ## If necessary: Transformation to test for difference in scale
+  if (var.test) {
+    x <- log(x^2)
+    y <- log(y^2)
+    delta <- log(delta^2)
+  }
 
   z <- c(x, y)
   m <- length(x)

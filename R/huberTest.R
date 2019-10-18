@@ -37,7 +37,15 @@
 #'
 #' @export
 
-huber_test <- function(x, y, delta = 0, k = 1.8, alternative = c("two.sided", "greater", "less")) {
+huber_test <- function(x, y, delta = 0, k = 1.8, alternative = c("two.sided", "greater", "less"),
+                       var.test = FALSE) {
+
+  ## If necessary: Transformation to test for difference in scale
+  if (var.test) {
+    x <- log(x^2)
+    y <- log(y^2)
+    delta <- log(delta^2)
+  }
 
   alternative <- match.arg(alternative)
 
