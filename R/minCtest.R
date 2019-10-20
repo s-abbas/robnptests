@@ -7,10 +7,15 @@
 #' @description \code{min_c_test()} performs a hybrid test based on the t-
 #'              and Huber-statistic.
 #'
-#' @inheritParams hl2_test
-#' @param k tuning parameter for Huber's M-estimator, default is \code{k = 1.8}.
-#' @param n.rep an integer value specifying the number of random permutations used to calculate
-#'              the permutation distribution of the minimum p-value; default is \code{n.rep = 1000}.
+#' @template x
+#' @template y
+#' @template alternative
+#' @template delta
+#' @template k_minc
+#' @template n_rep_hybrid
+#' @template na_rm
+#' @template n_rep_hybrid
+#' @template var_test
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:

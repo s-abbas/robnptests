@@ -8,23 +8,14 @@
 #' \code{hl2_test} performs a two-sample location test based on
 #' the two-sample Hodges-Lehmann estimator for shift.
 #'
-#' @param x a numeric vector of observations.
-#' @param y a numeric vector of observations.
-#' @param alternative a character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default),
-#'                    "\code{greater}" or "\code{less}".
-#' @param delta a numeric value indicating the true difference in the location parameter, default is \code{delta = 0}.
-#' @param method a character string specifying the test method used, \code{"asymptotic"} for an asymptotic test based on the
-#'               normal distribution, \code{"exact"} for an exact and \code{"sampled"} for a randomized permutation test. The exact
-#'               permutation test uses all data splits into two samples while the randomized test draws \code{n.rep} random splits
-#'               with replacement.
-#' @param scale a character string specifying the scale estimator used for standardization of the test statistic,
-#'              must be one of \code{"S1"} and \code{"S2"}. Default is \code{"S1"}.
-#'              Ignored if \code{method = "asymptotic"}. See details for definition of the scale estimators.
-#'
-#' @param n.rep an integer value specifying the number of random splits used to calculate
-#'              the permutation distribution if \code{method = "sampled"},
-#'              ignored if \code{method = "exact"} or \code{method = "asymptotic"}. Default is \code{n.rep = 10000}.
-#' @param na.rm a logical value indicating whether NA values in \code{x} and \code{y} should be stripped before the computation proceeds.
+#' @template x
+#' @template y
+#' @template alternative
+#' @template delta
+#' @template method
+#' @template scale_hl
+#' @template n_rep
+#' @template na_rm
 #' @template var_test
 #'
 #' @details

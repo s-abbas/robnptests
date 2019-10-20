@@ -6,8 +6,12 @@
 #'
 #' @description Performs a 2-sample location test based on Huber's M-estimator
 #'
-#' @inheritParams hl2_test
-#' @param k Tuning parameter for Huber's M-estimator.
+#' @template x
+#' @template y
+#' @template delta
+#' @template k
+#' @template alternative
+#' @template var_test
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:

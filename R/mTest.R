@@ -7,18 +7,16 @@
 #' @description \code{m_estimator_test} performs a two-sample permutation or randomization test
 #'              based on M-estimators of location and respective variances
 #'
-#' @inheritParams hl2_test
-#' @param method a character string specifying the test method used: \code{"exact"} for an exact and \code{"sampled"}
-#'               for a randomized permutation test. The exact permutation test uses all data splits into two samples while the randomized test draws \code{n.rep} random splits
-#'               with replacement.
-#' @param psi kernel used for optimization, must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"},
-#'            defaults to \code{"huber"}.
-#' @param k tuning parameter(s) for the respective kernel function, defaults to parameters implemented in .Mpsi.tuning.default(psi) from
-#'          \code{robustbase} package.
-#'
-#' @param n.rep an integer value specifying the number of random permutations used to calculate
-#'              the permutation distribution if \code{method = "sampled"},
-#'              ignored if \code{method = "exact"}. Default is 10000.
+#' @template x
+#' @template y
+#' @template alternative
+#' @template delta
+#' @template method_m_test
+#' @template psi
+#' @template k_mest
+#' @template n_rep_m_test
+#' @template na_rm
+#' @template var_test
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:

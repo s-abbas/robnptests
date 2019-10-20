@@ -9,7 +9,7 @@
 #' \code{trim_mean} calculates a trimmed mean of a sample.
 #'
 #' @template x
-#' @template gamma
+#' @template gamma_trimmed_mean
 #' @template na_rm
 #'
 #' @details
@@ -50,7 +50,7 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' the lower and the upper end of the sample do not need to be equal.
 #'
 #' @template x
-#' @template type
+#' @template type_skewness
 #' @template na_rm
 #'
 #' @details
@@ -144,8 +144,7 @@ asym_trimmed_mean <- function(x, type = c("Q2", "SK2", "SK5"), na.rm = FALSE) {
 #' @description \code{win_mean} calculates the winsorized mean of a sample.
 #'
 #' @template x
-#' @param gamma numeric value in [0, 0.5] specifying the fraction of observations to be replaced
-#'              at each end of the sample before calculating the mean.
+#' @template gamma_winsorized_mean
 #' @template na_rm
 #'
 #' @return
@@ -274,7 +273,7 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 #'
 #' @template x
 #' @template psi
-#' @template k
+#' @template k_mest
 #' @template tol
 #' @template max_it
 #' @template na_rm

@@ -7,11 +7,11 @@
 #' \code{perm_distribution()} calculates the permutation distribution for
 #' several test statistics.
 #'
-#' @inheritParams rob_perm_statistic
-#' @param sampled logical value indicating whether all splits should be
-#' considered or only a random sample.
-#' @param n.rep integer specifying the sample size in case of taking a random
-#' sample to approximate the permutation distribution.
+#' @template x
+#' @template y
+#' @template type
+#' @template sampled
+#' @template n_rep
 #'
 #' @return Vector with permutation distribution.
 #'
@@ -20,7 +20,7 @@
 #'
 #' @export
 
-perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = NULL) {
+perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = 10000) {
   ## Sample sizes
   h <- length(x)
   k <- length(y)
@@ -46,14 +46,12 @@ perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = NULL) {
 #' @description \code{mest_perm_distribution} calculates the permutation distribution for M-statistics from
 #'              \code{m_test_statistic}.
 #'
-#' @inheritParams m_test_statistic
-#' @param psi kernel used for optimization.
-#' @param k1 tuning parameter(s) for the respective kernel function.
-#' @param sampled logical value indicating if the exact permutation distribution (\code{FALSE})
-#'                or only \code{n.rep} samples drawn with replacement (\code{TRUE})
-#'                should be used. Default is FALSE.
-#' @param n.rep integer specifying the sample size in case of taking a random
-#'              sample to approximate the permutation distribution.
+#' @template x
+#' @template y
+#' @template psi
+#' @template k_mest
+#' @template sampled
+#' @template n_rep_m_test
 #'
 #' @return Vector with permutation distribution.
 #'
@@ -86,11 +84,11 @@ mest_perm_distribution <- function(x, y, psi, k1, sampled = FALSE, n.rep = NULL)
 #'
 #' @inheritParams asym_trimmed_test
 #'
-#' @param sampled logical value indicating if the exact permutation distribution (\code{FALSE})
-#'                or only \code{n.rep} samples drawn with replacement (\code{TRUE})
-#'                should be used. Default is FALSE.
-#' @param n.rep integer specifying the sample size in case of taking a random
-#'              sample to approximate the permutation distribution.
+#' @template x
+#' @template y
+#' @template type_skewness
+#' @template sampled
+#' @template n_rep
 #'
 #' @return Vector with permutation distribution.
 #'
@@ -127,17 +125,13 @@ asym_trimmed_perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = 
 #' @description
 #' \code{calc_perm_p_value} calculates the permutation p-value following Smyth & Phipson (2010).
 #'
-#' @param statistic observed value of the test statistic.
-#' @param distribution numeric vector with permutation distribution.
-#' @param m integer value giving size of first sample.
-#' @param n integer value giving size of second sample.
-#' @param sampled logical value specifying whether the distribution consists of
-#'                all permutations or only a random subset drawn with replacement.
-#' @param n.rep integer value giving the number of replications
-#'              (only needed if \code{sampled = TRUE}).
-#' @param alternative character string specifying the alternative hypothesis,
-#'                    must be one of "\code{two.sided}" (default),
-#'                    "\code{greater}" or "\code{less}".
+#' @template statistic
+#' @template distribution
+#' @template m
+#' @template n
+#' @template sampled
+#' @template n_rep
+#' @template alternative
 #'
 #' @return
 #' p.value for the specified alternative.

@@ -8,11 +8,15 @@
 #' \code{hl1_test} performs a two-sample location test based on
 #' the difference of the one-sample Hodges-Lehmann estimators for both samples.
 #'
-#' @param scale a character string specifying the scale estimator used for standardization of the test statistic,
-#'              must be one of \code{"S1"} and \code{"S2"}. Default is \code{"S1"}.
-#'              Ignored if \code{method = "asymptotic"}. See details for definition of the scale estimators.
-#'
-#' @inheritParams hl2_test
+#' @template x
+#' @template y
+#' @template alternative
+#' @template delta
+#' @template method
+#' @template scale_hl
+#' @template n_rep
+#' @template na_rm
+#' @template var_test
 #'
 #' @details
 #' When computing a randomization distribution based on randomly drawn splits with replacement, the results of

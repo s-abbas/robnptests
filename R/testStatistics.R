@@ -7,11 +7,11 @@
 #' @description
 #' \code{trimmed_t} calculates the test statistic of the two-sample Yuen test.
 #'
-#' @param x numeric vector of observations.
-#' @param y numeric vector of observations.
-#' @param gamma numeric value in [0, 0.5] specifying the fraction of observations to be trimmed from each end of the sample before calculating the mean. Values of trim outside that range are taken as the nearest endpoint.
-#' @param delta numeric indicating the true difference in means, default is \code{delta = 0}.
-#' @param na.rm a logical value indicating whether NA values in \code{x} should be stripped before the computation proceeds.
+#' @template x
+#' @template y
+#' @template gamma_trimed_test
+#' @template delta
+#' @template na_rm
 #'
 #' @return
 #' A list containing the following components:
@@ -64,11 +64,11 @@ trimmed_t <- function(x, y, gamma = 0.2, delta = 0, na.rm = FALSE) {
 #' @description
 #' \code{asym_trimmed_t} calculates the test statistic of the asymmetrically trimmed test with a given skewness selector statistic
 #'
-#' @param x numeric vector of observations.
-#' @param y numeric vector of observations.
-#' @param type specifies the skewness selector statistics, must be in \code{"SK2", "SK5", "Q2"}.
-#' @param delta numeric indicating the true difference in means, default is \code{delta = 0}.
-#' @param na.rm a logical value indicating whether NA values in \code{x} should be stripped before the computation proceeds.
+#' @template x
+#' @template y
+#' @template type_skewness
+#' @template delta
+#' @template na_rm
 #'
 #' @return
 #' A list containing the following components:
@@ -117,15 +117,12 @@ asym_trimmed_t <- function(x, y, type, delta = 0, na.rm = FALSE) {
 
 #' @title Robust permutation statistics based on medians
 #'
-#' @description \code{rob_perm_statistic()} calculates test statistics for robust permutation tests based on medians
+#' @description \code{rob_perm_statistic()} calculates test statistics for robust permutation tests based on medians.
 #'
-#' @param x numeric vector of observations.
-#' @param y numeric vector of observations.
-#' @param type desired test statistic, in \code{"D1S1"} (default), \code{"D2S1", "D2S1", "D2S2", "D3S3", "D3S4"},
-#'        where "D1" to "D3" mark different estimators for the location shift and
-#'        "S1" to "S4" are estimates for the scale of the samples; defaults to \code{"D1S1"}.
-#' @param na.rm a logical value indicating whether NA values in \code{x} should be stripped before the computation proceeds;
-#'        defaults to \code{FALSE}.
+#' @template x
+#' @template y
+#' @template type_rob_perm
+#' @template na_rm
 #'
 #' @return A list containing the following components:
 #'         \item{statistic}{the selected test statistic}
@@ -204,8 +201,9 @@ rob_perm_statistic <- function(x, y,
 #'
 #' @description \code{m_test_statistic} calculates the test statistics for randomization tests based on M-estimators
 #'
-#' @param y numeric vector of observations.
-#' @inheritParams m_est
+#' @template x
+#' @template y
+#' @template k_mest
 #'
 #' @return A list containing
 #'         \item{statistic}{the standardized test statistic, and}
@@ -235,10 +233,13 @@ m_test_statistic <- function(x, y, psi, k = .Mpsi.tuning.default(psi)) {
 
 
 #' @title Simultaneous Huber-M-estimates of scale and location
+#'
 #' @description Calculates M-estimates of location and the joined scale of two samples
-#' @param x numeric vector of observations.
-#' @param y numeric vector of observations.
-#' @param k tuning parameter.
+#'
+#' @template x
+#' @template y
+#' @template k_mest
+#'
 #' @return Named list containing the following objects
 #'         \item{mu.x}{Location estimate of x}
 #'         \item{mu.y}{Location estimate of y}

@@ -1,1 +1,4 @@
-#' @param n.rep an integer value specifying the number of random splits used to calculate the permutation distribution if method = "sampled", ignored if method = "exact" or method = "asymptotic". Default is n.rep = 10000.
+#' @param n.rep an integer value specifying the number of random splits used to
+#'        calculate the permutation distribution if \code{method = "sampled"},
+#'        ignored if \code{method = "exact"} or \code{method = "asymptotic"};
+#'        default is \code{n.rep = 10000}.

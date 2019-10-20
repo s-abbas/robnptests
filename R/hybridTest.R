@@ -2,12 +2,14 @@
 #'
 #' @description \code{hybrid_test()} performs a hybrid test based on the p-values of different test statistics
 #'
-#' @inheritParams hl2_test
-#' @param type a character string specifying the type of hybrid test used, must be one of \code{"min1"}, \code{"min2"} and
-#' \code{"min3"}. See details for information on the three types.
-#' @param k tuning parameter for Huber's M-estimator, default is \code{k = 1.8}, only needed if \code{type \%in\% c("min2", "min3")}
-#' @param n.rep an integer value specifying the number of random permutations used to calculate
-#'              the permutation distribution of the minimum p-value; default is \code{n.rep = 1000}.
+#' @template x
+#' @template y
+#' @template type_hybrid
+#' @template alternative
+#' @template delta
+#' @template k_hybrid
+#' @template na_rm
+#' @template n_rep_hybrid
 #' @template var_test
 #'
 #' @return

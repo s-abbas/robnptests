@@ -7,12 +7,12 @@
 #' @description
 #' \code{trimmed_test} performs the two-sample Yuen t-test.
 #'
-#' @param x numeric vector of observations.
-#' @param y numeric vector of observations.
-#' @param gamma numeric value in [0, 0.5] specifying the fraction of observations to be trimmed from each end of the sample before calculating the mean. Values of trim outside that range are taken as the nearest endpoint.
-#' @param alternative character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default), "\code{greater}" or "\code{less}".
-#' @param delta numeric indicating the true difference in means
-#' @param na.rm a logical value indicating whether NA values in \code{x} should be stripped before the computation proceeds.
+#' @template x
+#' @template y
+#' @template gamma_trimmed_test
+#' @template alternative
+#' @template delta
+#' @template na_rm
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:
