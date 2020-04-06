@@ -2,7 +2,7 @@
 ## Add random noise if too many values in the samples are equal
 ## ----------------------------------------------------------------------------
 
-wobble <- function(x, y) {
+wobble <- function(x, y, partially = FALSE) {
   ## Determine number of different values in both samples and in joint sample
   no.values.x <- length(unique(x))
   no.values.y <- length(unique(y))
@@ -12,7 +12,7 @@ wobble <- function(x, y) {
   if (no.values.x == length(x) & no.values.y == length(y) & no.values.xy == length(c(x, y))) {
     ## If all values are distinct, return original observations
     return(list(x = x, y = y))
-  } else {
+  } else if (!partially) {
     z <- c(x, y)
 
     ## Maximal number of digits after decimal point:
@@ -30,9 +30,20 @@ wobble <- function(x, y) {
                           -0.5*10^(-max(digits)), 0.5*10^(-max(digits)))
 
     #z.wobble <- z + runif(length(z), min = -10^(-(max.digits + 1)), max = 10^(-(max.digits + 1)))
+  } else {
+    ind <- which(duplicated(c(x, y)))
+    z.wobble <- c(x, y)
+    z1 <- z.wobble[ind]
 
-    return(list(x = z.wobble[1:length(x)], y = z.wobble[(length(x) + 1):length(y)]))
+    digits <- sapply(as.character(z1), function(x) nchar(unlist(strsplit(x, "\\."))[2]))
+    digits[is.na(digits)] <- 0
+
+    z1.wobble <- z1 + runif(length(z1),
+                          -0.5*10^(-max(digits)), 0.5*10^(-max(digits)))
+
+    z.wobble[ind] <- z1.wobble
   }
+    return(list(x = z.wobble[1:length(x)], y = z.wobble[(length(x) + 1):length(c(x, y))]))
 }
 
 
