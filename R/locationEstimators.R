@@ -45,9 +45,9 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' @title Asymmetrically trimmed mean
 #'
 #' @description
-#' \code{asym_trim_mean} calculates an asymmetrically trimmed mean of a sample.
-#' In contrast to an ordinary trimmed mean, the numbers of observations removed from
-#' the lower and the upper end of the sample do not need to be equal.
+#' \code{asym_trimmed_mean} calculates an asymmetrically trimmed mean of a sample.
+#' In contrast to an ordinary trimmed mean, the numbers of observations removed
+#' from the lower and the upper end of the sample do not need to be equal.
 #'
 #' @template x
 #' @template type_skewness
@@ -230,8 +230,8 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
 
 #' @title Two-sample Hodges-Lehmann estimator
 #'
-#' @description \code{hodges_lehmann_2sample} calculates the two-sample Hodges-Lehmann estimator for the location difference
-#' of two samples x and y.
+#' @description \code{hodges_lehmann_2sample} calculates the two-sample Hodges-Lehmann
+#' estimator for the location difference of two samples x and y.
 #'
 #' @template x
 #' @template y
@@ -262,7 +262,7 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
   }
 
   diff <- expand.grid(x, y)
-  res <- diff[, 1] - diff[, 2]
+  res <- diff[, 2] - diff[, 1]
 
   return(stats::median(res))
 }
