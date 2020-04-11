@@ -25,3 +25,5 @@ LazyData: true
 RoxygenNote: 6.1.1
 Imports: Rdpack, gtools, robustbase, statmod, stats, utils
 RdMacros: Rdpack
+Suggests: 
+    testthat
