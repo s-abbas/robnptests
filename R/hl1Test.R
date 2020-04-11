@@ -146,8 +146,8 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
                        less = stats::pnorm(statistic, lower.tail = TRUE)
     )
   }
-  ## Assign names to results
 
+  ## Assign names to results
   names(estimates) <- c("HL1 of x", "HL1 of y")
   names(delta) <- "location shift"
   names(statistic) <- "D"
