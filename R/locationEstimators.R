@@ -262,7 +262,7 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
   }
 
   diff <- expand.grid(x, y)
-  res <- diff[, 2] - diff[, 1]
+  res <- diff[, 1] - diff[, 2]
 
   return(stats::median(res))
 }
