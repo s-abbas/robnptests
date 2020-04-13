@@ -9,7 +9,7 @@
 #'
 #' @template x
 #' @template y
-#' @template type
+#' @template type_rob_perm
 #' @template sampled
 #' @template n_rep
 #'
@@ -24,6 +24,11 @@ perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = 10000) {
   ## Sample sizes
   h <- length(x)
   k <- length(y)
+
+  ## Error handling
+  if (sampled & n.rep > choose(h + k, h)) {
+    stop (paste0("'n.rep' must not be larger than ", choose(h + k, h), ", the number of all splits."))
+  }
 
   ## Splits in two samples
   if (!sampled) {
