@@ -66,7 +66,6 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
                      var.test = FALSE) {
 
   alternative <- match.arg(alternative)
-
   scale <- match.arg(scale)
 
   if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
@@ -94,14 +93,17 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
     stop ("'delta' must be a single number.")
   }
 
+  if (!all((method %in% c("asymptotic", "exact", "sampled")))) {
+    stop (" 'method' must be one of 'asymptotic', 'exact' or 'sampled'. ")
+  }
+
+  ## If no choice is made regarding the computation of the p-value, the method
+  ## is automatically selected based on the sample sizes
   if (length(method) > 1 & identical(method, c("asymptotic", "exact", "sampled"))) {
     if (length(x) >= 30 & length(y) >= 30) method <- "asymptotic"
     else method <- "sampled"
   }
 
-  if (!(method %in% c("asymptotic", "exact", "sampled"))) {
-    stop (" 'method' must be one of 'asymptotic', 'exact' or 'sampled' ")
-  }
 
   if (method %in% c("exact", "sampled")) {
     ## Results of rob_perm_statistic
@@ -136,7 +138,7 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
     int <- dens(0)
 
     estimates <- c(hodges_lehmann(x), hodges_lehmann(y - delta))
-    statistic <- sqrt(12*m*n/(m+n)) * int * (estimates[2] - estimates[1])
+    statistic <- sqrt(12*m*n/(m+n)) * int * (estimates[1] - estimates[2])
 
     if (delta != 0) estimates[2] <- hodges_lehmann(y)
 
