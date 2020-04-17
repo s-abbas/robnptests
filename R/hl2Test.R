@@ -84,6 +84,8 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
 
   scale <- match.arg(scale)
 
+
+
   if (scale == "S1") {
     type <- "D2S1"
   } else if (scale == "S2") {
@@ -96,7 +98,7 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     stop ("'delta' must be a single number.")
   }
 
-  if (!(method %in% c("asymptotic", "exact", "sampled"))) {
+  if (!all(method %in% c("asymptotic", "exact", "sampled"))) {
     stop (" 'method' must be one of 'asymptotic', 'exact' or 'sampled' ")
   }
 
