@@ -9,18 +9,22 @@ mest_perm_distribution(x, y, psi, k1, sampled = FALSE, n.rep = NULL)
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
 
-\item{y}{numeric vector of observations.}
+\item{y}{a (non-empty) numeric vector of data values.}
 
-\item{psi}{kernel used for optimization.}
+\item{psi}{kernel used for optimization.
+Must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"};
+defaults to \code{"huber"}.}
 
-\item{k1}{tuning parameter(s) for the respective kernel function.}
+\item{sampled}{logical value indicating whether all splits should be
+considered or only a random sample, where the observations
+are drawn with replacement.}
 
-\item{sampled}{logical value indicating if the exact permutation distribution (\code{FALSE})
-or only \code{n.rep} samples drawn with replacement (\code{TRUE})
-should be used. Default is FALSE.}
+\item{n.rep}{an integer value specifying the number of random permutations used to calculate
+the permutation distribution if \code{method = "sampled"},
+ignored if \code{method = "exact"}. Default is 10000.}
 
-\item{n.rep}{integer specifying the sample size in case of taking a random
-sample to approximate the permutation distribution.}
+\item{k}{tuning parameter(s) for the respective kernel function,
+defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}} in the package \pkg{robustbase}.}
 }
 \value{
 Vector with permutation distribution.

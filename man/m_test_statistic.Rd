@@ -9,11 +9,10 @@ m_test_statistic(x, y, psi, k = .Mpsi.tuning.default(psi))
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
 
-\item{y}{numeric vector of observations.}
+\item{y}{a (non-empty) numeric vector of data values.}
 
-\item{psi}{kernel used for optimization, must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"}.}
-
-\item{k}{tuning parameter(s) for the respective kernel function, defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}} in the package \pkg{robustbase}.}
+\item{k}{tuning parameter(s) for the respective kernel function,
+defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}} in the package \pkg{robustbase}.}
 }
 \value{
 A list containing

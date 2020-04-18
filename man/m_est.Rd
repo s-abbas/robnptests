@@ -4,15 +4,24 @@
 \alias{m_est}
 \title{M-estimator of location}
 \usage{
-m_est(x, psi, k = robustbase::.Mpsi.tuning.default(psi), tol = 1e-06,
-  max.it = 15, na.rm = TRUE)
+m_est(
+  x,
+  psi,
+  k = robustbase::.Mpsi.tuning.default(psi),
+  tol = 1e-06,
+  max.it = 15,
+  na.rm = TRUE
+)
 }
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
 
-\item{psi}{kernel used for optimization, must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"}.}
+\item{psi}{kernel used for optimization.
+Must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"};
+defaults to \code{"huber"}.}
 
-\item{k}{tuning parameter(s) for the respective kernel function, defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}} in the package \pkg{robustbase}.}
+\item{k}{tuning parameter(s) for the respective kernel function,
+defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}} in the package \pkg{robustbase}.}
 
 \item{tol}{tolerance for convergence, defaults to 1e-06.}
 

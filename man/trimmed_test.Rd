@@ -4,21 +4,33 @@
 \alias{trimmed_test}
 \title{Two-sample Trimmed t-test (Yuen's t-Test)}
 \usage{
-trimmed_test(x, y, gamma = 0.2, alternative = c("two.sided", "less",
-  "greater"), delta = 0, na.rm = FALSE)
+trimmed_test(
+  x,
+  y,
+  gamma = 0.2,
+  alternative = c("two.sided", "less", "greater"),
+  delta = 0,
+  na.rm = FALSE,
+  var.test = FALSE
+)
 }
 \arguments{
-\item{x}{numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
-\item{y}{numeric vector of observations.}
+\item{y}{a (non-empty) numeric vector of data values.}
 
-\item{gamma}{numeric value in [0, 0.5] specifying the fraction of observations to be trimmed from each end of the sample before calculating the mean. Values of trim outside that range are taken as the nearest endpoint.}
+\item{alternative}{a character string specifying the alternative hypothesis,
+must be one of "two.sided" (default), "greater" or "less".}
 
-\item{alternative}{character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default), "\code{greater}" or "\code{less}".}
+\item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
+on whether the test should be performed for a difference in location or in scale, default is
+\code{delta = 0} for location test and \code{delta = 1} for scale test.}
 
-\item{delta}{numeric indicating the true difference in means}
+\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 
-\item{na.rm}{a logical value indicating whether NA values in \code{x} should be stripped before the computation proceeds.}
+\item{numeric}{value in [0, 0.5] specifying the fraction of observations to be
+trimmed from each end of the sample before calculating the mean. Values
+of trim outside that range are taken as the nearest endpoint.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:

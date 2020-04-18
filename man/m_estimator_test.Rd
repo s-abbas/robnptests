@@ -4,36 +4,51 @@
 \alias{m_estimator_test}
 \title{Two sample location test based on M-estimators}
 \usage{
-m_estimator_test(x, y, alternative = c("two.sided", "greater", "less"),
-  delta = 0, method = c("sampled", "exact"), psi = c("huber",
-  "hampel", "bisquare"), k = .Mpsi.tuning.default(psi), n.rep = 10000,
-  na.rm = FALSE)
+m_estimator_test(
+  x,
+  y,
+  alternative = c("two.sided", "greater", "less"),
+  delta = 0,
+  method = c("sampled", "exact"),
+  psi = c("huber", "hampel", "bisquare"),
+  k = .Mpsi.tuning.default(psi),
+  n.rep = 10000,
+  na.rm = FALSE,
+  var.test = FALSE
+)
 }
 \arguments{
-\item{x}{a numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
-\item{y}{a numeric vector of observations.}
+\item{y}{a (non-empty) numeric vector of data values.}
 
-\item{alternative}{a character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default),
-"\code{greater}" or "\code{less}".}
+\item{alternative}{a character string specifying the alternative hypothesis,
+must be one of "two.sided" (default), "greater" or "less".}
 
-\item{delta}{a numeric value indicating the true difference in the location parameter, default is \code{delta = 0}.}
+\item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
+on whether the test should be performed for a difference in location or in scale, default is
+\code{delta = 0} for location test and \code{delta = 1} for scale test.}
 
-\item{method}{a character string specifying the test method used: \code{"exact"} for an exact and \code{"sampled"}
-for a randomized permutation test. The exact permutation test uses all data splits into two samples while the randomized test draws \code{n.rep} random splits
+\item{method}{a character string specifying the test method used: \code{"exact"}
+for an exact and \code{"sampled"} for a randomized permutation test.
+The exact permutation test uses all data splits into two samples,
+while the randomized test draws \code{n.rep} random splits
 with replacement.}
 
-\item{psi}{kernel used for optimization, must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"},
+\item{psi}{kernel used for optimization.
+Must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"};
 defaults to \code{"huber"}.}
 
-\item{k}{tuning parameter(s) for the respective kernel function, defaults to parameters implemented in .Mpsi.tuning.default(psi) from
-\code{robustbase} package.}
+\item{k}{tuning parameter(s) for the respective kernel function,
+defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}} in the package \pkg{robustbase}.}
 
 \item{n.rep}{an integer value specifying the number of random permutations used to calculate
 the permutation distribution if \code{method = "sampled"},
 ignored if \code{method = "exact"}. Default is 10000.}
 
-\item{na.rm}{a logical value indicating whether NA values in \code{x} and \code{y} should be stripped before the computation proceeds.}
+\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+
+\item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:

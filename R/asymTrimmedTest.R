@@ -12,7 +12,7 @@
 #'
 #' @template x
 #' @template y
-#' @template type
+#' @template type_skewness
 #' @template alternative
 #' @template delta
 #' @template method

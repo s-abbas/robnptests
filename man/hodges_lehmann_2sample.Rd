@@ -17,8 +17,8 @@ hodges_lehmann_2sample(x, y, na.rm = FALSE)
 The two-sample Hodges-Lehmann estimator.
 }
 \description{
-\code{hodges_lehmann_2sample} calculates the two-sample Hodges-Lehmann estimator for the location difference
-of two samples x and y.
+\code{hodges_lehmann_2sample} calculates the two-sample Hodges-Lehmann
+estimator for the location difference of two samples x and y.
 }
 \examples{
 set.seed(108)

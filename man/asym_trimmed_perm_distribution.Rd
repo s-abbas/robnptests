@@ -4,8 +4,7 @@
 \alias{asym_trimmed_perm_distribution}
 \title{Permutation distribution for asymmetrically trimmed statistics}
 \usage{
-asym_trimmed_perm_distribution(x, y, type, sampled = FALSE,
-  n.rep = NULL)
+asym_trimmed_perm_distribution(x, y, type, sampled = FALSE, n.rep = NULL)
 }
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
@@ -15,12 +14,14 @@ asym_trimmed_perm_distribution(x, y, type, sampled = FALSE,
 \item{type}{specifies the skewness selector statistic used for trimming, must be in
 \code{"Q2", "SK2"} and \code{"SK5"}. Default is \code{"Q2"}.}
 
-\item{sampled}{logical value indicating if the exact permutation distribution (\code{FALSE})
-or only \code{n.rep} samples drawn with replacement (\code{TRUE})
-should be used. Default is FALSE.}
+\item{sampled}{logical value indicating whether all splits should be
+considered or only a random sample, where the observations
+are drawn with replacement.}
 
-\item{n.rep}{integer specifying the sample size in case of taking a random
-sample to approximate the permutation distribution.}
+\item{n.rep}{an integer value specifying the number of random splits used to
+calculate the permutation distribution if \code{method = "sampled"},
+ignored if \code{method = "exact"} or \code{method = "asymptotic"};
+default is \code{n.rep = 10000}.}
 }
 \value{
 Vector with permutation distribution.

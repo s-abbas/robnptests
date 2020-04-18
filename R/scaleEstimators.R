@@ -9,7 +9,7 @@
 #'
 #'
 #' @template x
-#' @template gamma
+#' @template gamma_winsorized_variance
 #' @template na_rm
 #'
 #'
@@ -66,7 +66,7 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
 #'
 #'
 #' @template x
-#' @template type
+#' @template type_skewness
 #' @template na_rm
 #'
 #'

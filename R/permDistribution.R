@@ -87,8 +87,6 @@ mest_perm_distribution <- function(x, y, psi, k1, sampled = FALSE, n.rep = NULL)
 #' @description \code{asym_trimmed_perm_distribution} calculates the permutation distribution for the asymmetrically
 #' trimmed statistics from \code{asym_trimmed_test}.
 #'
-#' @inheritParams asym_trimmed_test
-#'
 #' @template x
 #' @template y
 #' @template type_skewness

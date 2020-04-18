@@ -9,7 +9,7 @@
 #' @template x
 #' @template y
 #' @template delta
-#' @template k
+#' @template k_huber
 #' @template alternative
 #' @template var_test
 #'

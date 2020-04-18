@@ -4,25 +4,38 @@
 \alias{min_tc_test}
 \title{Hybrid permutation test for location difference based on the t-, trimmed-t- and Huber-test}
 \usage{
-min_tc_test(x, y, alternative = c("two.sided", "greater", "less"),
-  delta = 0, k = 1.8, na.rm = FALSE, n.rep = 1000)
+min_tc_test(
+  x,
+  y,
+  alternative = c("two.sided", "greater", "less"),
+  delta = 0,
+  k = 1.8,
+  na.rm = FALSE,
+  n.rep = 1000,
+  var.test = FALSE
+)
 }
 \arguments{
-\item{x}{a numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
-\item{y}{a numeric vector of observations.}
+\item{y}{a (non-empty) numeric vector of data values.}
 
-\item{alternative}{a character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default),
-"\code{greater}" or "\code{less}".}
+\item{alternative}{a character string specifying the alternative hypothesis,
+must be one of "two.sided" (default), "greater" or "less".}
 
-\item{delta}{a numeric value indicating the true difference in the location parameter, default is \code{delta = 0}.}
+\item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
+on whether the test should be performed for a difference in location or in scale, default is
+\code{delta = 0} for location test and \code{delta = 1} for scale test.}
 
-\item{k}{tuning parameter for Huber's M-estimate, default is \code{k = 1.8}.}
+\item{k}{tuning parameter for Huber's M-estimator, default is \code{k = 1.8}.}
 
-\item{na.rm}{a logical value indicating whether NA values in \code{x} and \code{y} should be stripped before the computation proceeds.}
+\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 
 \item{n.rep}{an integer value specifying the number of random permutations used to calculate
-the permutation distribution of the minimum p-value; default is \code{n.rep = 1000}.}
+the permutation distribution of the minimum p-value;
+default is \code{n.rep = 1000}.}
+
+\item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:

@@ -4,34 +4,51 @@
 \alias{med_test}
 \title{Two-sample location tests based on the sample median}
 \usage{
-med_test(x, y, alternative = c("two.sided", "greater", "less"),
-  delta = 0, method = c("asymptotic", "exact", "sampled"),
-  scale = c("S3", "S4"), n.rep = 10000, na.rm = FALSE)
+med_test(
+  x,
+  y,
+  alternative = c("two.sided", "greater", "less"),
+  delta = 0,
+  method = c("asymptotic", "exact", "sampled"),
+  scale = c("S3", "S4"),
+  n.rep = 10000,
+  na.rm = FALSE,
+  var.test = FALSE
+)
 }
 \arguments{
-\item{x}{a numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
-\item{y}{a numeric vector of observations.}
+\item{y}{a (non-empty) numeric vector of data values.}
 
-\item{alternative}{a character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default),
-"\code{greater}" or "\code{less}".}
+\item{alternative}{a character string specifying the alternative hypothesis,
+must be one of "two.sided" (default), "greater" or "less".}
 
-\item{delta}{a numeric value indicating the true difference in the location parameter, default is \code{delta = 0}.}
+\item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
+on whether the test should be performed for a difference in location or in scale, default is
+\code{delta = 0} for location test and \code{delta = 1} for scale test.}
 
-\item{method}{a character string specifying the test method used, \code{"asymptotic"} for an asymptotic test based on the
-normal distribution, \code{"exact"} for an exact and \code{"sampled"} for a randomized permutation test. The exact
-permutation test uses all data splits into two samples while the randomized test draws \code{n.rep} random splits
+\item{method}{a character string specifying the test method used,
+\code{"asymptotic"} for an asymptotic test based on the
+normal distribution, \code{"exact"} for an exact and
+\code{"sampled"} for a randomized permutation test.
+The exact permutation test uses all data splits into two samples,
+while the randomized test draws \code{n.rep} random splits
 with replacement.}
 
-\item{scale}{a character string specifying the scale estimator used for standardization of the test statistic,
-must be one of \code{"S3"} and \code{"S4"}. Default is \code{"S3"}.
-Ignored if \code{method = "asymptotic"}. See details for definition of the scale estimators.}
+\item{scale}{a character string specifying the scale estimator used for standardization
+of the test statistic, must be one of \code{"S3"} and \code{"S4"}.
+Default is \code{"S3"}. Ignored if \code{method = "asymptotic"};
+see details for definition of the scale estimators.}
 
-\item{n.rep}{an integer value specifying the number of random splits used to calculate
-the permutation distribution if \code{method = "sampled"},
-ignored if \code{method = "exact"} or \code{method = "asymptotic"}. Default is \code{n.rep = 10000}.}
+\item{n.rep}{an integer value specifying the number of random splits used to
+calculate the permutation distribution if \code{method = "sampled"},
+ignored if \code{method = "exact"} or \code{method = "asymptotic"};
+default is \code{n.rep = 10000}.}
 
-\item{na.rm}{a logical value indicating whether NA values in \code{x} and \code{y} should be stripped before the computation proceeds.}
+\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+
+\item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:

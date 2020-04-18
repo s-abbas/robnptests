@@ -4,8 +4,7 @@
 \alias{calc_perm_p_value}
 \title{Calculation of permutation p-value}
 \usage{
-calc_perm_p_value(statistic, distribution, m, n, sampled, n.rep,
-  alternative)
+calc_perm_p_value(statistic, distribution, m, n, sampled, n.rep, alternative)
 }
 \arguments{
 \item{statistic}{observed value of the test statistic.}
@@ -16,15 +15,17 @@ calc_perm_p_value(statistic, distribution, m, n, sampled, n.rep,
 
 \item{n}{integer value giving size of second sample.}
 
-\item{sampled}{logical value specifying whether the distribution consists of
-all permutations or only a random subset drawn with replacement.}
+\item{sampled}{logical value indicating whether all splits should be
+considered or only a random sample, where the observations
+are drawn with replacement.}
 
-\item{n.rep}{integer value giving the number of replications
-(only needed if \code{sampled = TRUE}).}
+\item{n.rep}{an integer value specifying the number of random splits used to
+calculate the permutation distribution if \code{method = "sampled"},
+ignored if \code{method = "exact"} or \code{method = "asymptotic"};
+default is \code{n.rep = 10000}.}
 
-\item{alternative}{character string specifying the alternative hypothesis,
-must be one of "\code{two.sided}" (default),
-"\code{greater}" or "\code{less}".}
+\item{alternative}{a character string specifying the alternative hypothesis,
+must be one of "two.sided" (default), "greater" or "less".}
 }
 \value{
 p.value for the specified alternative.

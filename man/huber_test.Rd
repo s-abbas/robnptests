@@ -4,20 +4,30 @@
 \alias{huber_test}
 \title{Two-sample location tests based on Huber's M-estimator}
 \usage{
-huber_test(x, y, delta = 0, k = 1.8, alternative = c("two.sided",
-  "greater", "less"))
+huber_test(
+  x,
+  y,
+  delta = 0,
+  k = 1.8,
+  alternative = c("two.sided", "greater", "less"),
+  var.test = FALSE
+)
 }
 \arguments{
-\item{x}{a numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
-\item{y}{a numeric vector of observations.}
+\item{y}{a (non-empty) numeric vector of data values.}
 
-\item{delta}{a numeric value indicating the true difference in the location parameter, default is \code{delta = 0}.}
+\item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
+on whether the test should be performed for a difference in location or in scale, default is
+\code{delta = 0} for location test and \code{delta = 1} for scale test.}
 
-\item{k}{Tuning parameter for Huber's M-estimator.}
+\item{k}{tuning parameter for Huber's M-estimator, default is \code{k = 1.8}.}
 
-\item{alternative}{a character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default),
-"\code{greater}" or "\code{less}".}
+\item{alternative}{a character string specifying the alternative hypothesis,
+must be one of "two.sided" (default), "greater" or "less".}
+
+\item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:

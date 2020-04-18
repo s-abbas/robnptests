@@ -7,15 +7,18 @@
 asym_trimmed_t(x, y, type, delta = 0, na.rm = FALSE)
 }
 \arguments{
-\item{x}{numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
-\item{y}{numeric vector of observations.}
+\item{y}{a (non-empty) numeric vector of data values.}
 
-\item{type}{specifies the skewness selector statistics, must be in \code{"SK2", "SK5", "Q2"}.}
+\item{type}{specifies the skewness selector statistic used for trimming, must be in
+\code{"Q2", "SK2"} and \code{"SK5"}. Default is \code{"Q2"}.}
 
-\item{delta}{numeric indicating the true difference in means, default is \code{delta = 0}.}
+\item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
+on whether the test should be performed for a difference in location or in scale, default is
+\code{delta = 0} for location test and \code{delta = 1} for scale test.}
 
-\item{na.rm}{a logical value indicating whether NA values in \code{x} should be stripped before the computation proceeds.}
+\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 }
 \value{
 A list containing the following components:

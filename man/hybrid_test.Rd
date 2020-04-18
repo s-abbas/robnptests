@@ -4,29 +4,43 @@
 \alias{hybrid_test}
 \title{Hybrid permutation test for location differences}
 \usage{
-hybrid_test(x, y, type = c("min1", "min2", "min3"),
-  alternative = c("two.sided", "greater", "less"), delta = 0,
-  k = 1.8, na.rm = FALSE, n.rep = 1000)
+hybrid_test(
+  x,
+  y,
+  type = c("min1", "min2", "min3"),
+  alternative = c("two.sided", "greater", "less"),
+  delta = 0,
+  k = 1.8,
+  na.rm = FALSE,
+  n.rep = 1000,
+  var.test = FALSE
+)
 }
 \arguments{
-\item{x}{a numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
-\item{y}{a numeric vector of observations.}
+\item{y}{a (non-empty) numeric vector of data values.}
 
 \item{type}{a character string specifying the type of hybrid test used, must be one of \code{"min1"}, \code{"min2"} and
 \code{"min3"}. See details for information on the three types.}
 
-\item{alternative}{a character string specifying the alternative hypothesis, must be one of "\code{two.sided}" (default),
-"\code{greater}" or "\code{less}".}
+\item{alternative}{a character string specifying the alternative hypothesis,
+must be one of "two.sided" (default), "greater" or "less".}
 
-\item{delta}{a numeric value indicating the true difference in the location parameter, default is \code{delta = 0}.}
+\item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
+on whether the test should be performed for a difference in location or in scale, default is
+\code{delta = 0} for location test and \code{delta = 1} for scale test.}
 
-\item{k}{tuning parameter for Huber's M-estimator, default is \code{k = 1.8}, only needed if \code{type \%in\% c("min2", "min3")}}
+\item{k}{tuning parameter for Huber's M-estimator, default is \code{k = 1.8},
+only needed if \code{type \%in\% c("min2", "min3")}.}
 
-\item{na.rm}{a logical value indicating whether NA values in \code{x} and \code{y} should be stripped before the computation proceeds.}
+\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 
 \item{n.rep}{an integer value specifying the number of random permutations used to calculate
-the permutation distribution of the minimum p-value; default is \code{n.rep = 1000}.}
+the permutation distribution of the minimum p-value;
+default is \code{n.rep = 1000}.}
+
+\item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:

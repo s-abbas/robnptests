@@ -7,11 +7,12 @@
 huber_2sample(x, y, k)
 }
 \arguments{
-\item{x}{numeric vector of observations.}
+\item{x}{a (non-empty) numeric vector of data values.}
 
-\item{y}{numeric vector of observations.}
+\item{y}{a (non-empty) numeric vector of data values.}
 
-\item{k}{tuning parameter.}
+\item{k}{tuning parameter(s) for the respective kernel function,
+defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}} in the package \pkg{robustbase}.}
 }
 \value{
 Named list containing the following objects

@@ -18,9 +18,9 @@ asym_trimmed_mean(x, type = c("Q2", "SK2", "SK5"), na.rm = FALSE)
 The asymmetrically trimmed mean.
 }
 \description{
-\code{asym_trim_mean} calculates an asymmetrically trimmed mean of a sample.
-In contrast to an ordinary trimmed mean, the numbers of observations removed from
-the lower and the upper end of the sample do not need to be equal.
+\code{asym_trimmed_mean} calculates an asymmetrically trimmed mean of a sample.
+In contrast to an ordinary trimmed mean, the numbers of observations removed
+from the lower and the upper end of the sample do not need to be equal.
 }
 \details{
 The number of observations trimmed from the lower and the upper end of the sample

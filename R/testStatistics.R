@@ -9,7 +9,7 @@
 #'
 #' @template x
 #' @template y
-#' @template gamma_trimed_test
+#' @template gamma_trimmed_test
 #' @template delta
 #' @template na_rm
 #'
