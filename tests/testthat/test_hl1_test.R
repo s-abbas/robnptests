@@ -25,9 +25,7 @@ testthat::test_that("hl1_test works correctly", {
   x <- rnorm(30)
   y <- rnorm(30)
 
-
-  ##### THERE'S A DELTA MISSING HERE?
-
+  delta <- 0
   estimates <- c(hodges_lehmann(x), hodges_lehmann(y - delta))
 
   m <- length(x)

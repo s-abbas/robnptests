@@ -34,6 +34,11 @@
 #' where \eqn{ Z = ( X_1 - med(X),...,X_m - med(X), Y_1 - med(Y),...,Y_n - med(Y) )'}
 #' is the median corrected sample. For more details see Fried & Dehling (2011).
 #'
+#' For \code{var.test = TRUE}, the test compares two sample for a difference in scale.
+#' This is achieved by log-transforming the original observations so that a potential
+#' scale difference appears as a location difference between the transformed samples;
+#' see Fried (2012).
+#'
 #' @return
 #' A list with class "\code{htest}" containing the following components:
 #' \item{statistic}{the value of the test statistic.}
@@ -51,6 +56,8 @@
 #'
 #' \insertRef{FriDeh11robu}{robTests}
 #'
+#' \insertRef{Fri12onli}{robTests}
+#'
 #' @import utils
 #'
 #' @examples
@@ -60,13 +67,16 @@
 #'
 #' @export
 
-hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delta = 0,
+hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delta = ifelse(var.test, 1, 0),
                      method = c("asymptotic", "exact", "sampled"), scale = c("S1", "S2"),
                      n.rep = 10000, na.rm = FALSE,
                      var.test = FALSE) {
 
   alternative <- match.arg(alternative)
   scale <- match.arg(scale)
+
+  ## Names of data sets
+    dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
   if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
     return(NA)
@@ -151,17 +161,14 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
 
   ## Assign names to results
   names(estimates) <- c("HL1 of x", "HL1 of y")
-  names(delta) <- "location shift"
+  names(delta) <- ifelse(var.test, "ratio of variances", "location shift")
   names(statistic) <- "D"
 
   if (method == "sampled") {
-    method = "Randomization test based on the Hodges-Lehmann estimator"
+    method = "Randomization test based on the one-sample Hodges-Lehmann estimator"
   } else if (method == "exact") {
-    method = "Exact permutation test based on the Hodges-Lehmann estimator"
-  } else method = "Asymptotic test based on the Hodges-Lehmann estimator"
-
-
-  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
+    method = "Exact permutation test based on the one-sample Hodges-Lehmann estimator"
+  } else method = "Asymptotic test based on the one-sample Hodges-Lehmann estimator"
 
   res <- list(statistic = statistic, parameter = NULL, p.value = p.value,
               estimate = estimates, null.value = delta, alternative = alternative,
