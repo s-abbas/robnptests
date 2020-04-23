@@ -12,7 +12,7 @@
 #' @template k_huber
 #' @template alternative
 #' @template var_test
-#' @template na.rm
+#' @template na_rm
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:
