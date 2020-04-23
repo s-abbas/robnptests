@@ -38,13 +38,16 @@
 #'
 #' @export
 
-trimmed_test <- function(x, y, gamma = 0.2, alternative = c("two.sided", "less", "greater"),
-                                 delta = 0, na.rm = FALSE, var.test = FALSE) {
+trimmed_test <- function(x, y, gamma = 0.2,
+                         alternative = c("two.sided", "less", "greater"),
+                         delta = ifelse(var.test, 1, 0),
+                         na.rm = FALSE, var.test = FALSE) {
   ## Error handling
   if (!missing(delta) && (length(delta) != 1 || is.na(delta))) {
     stop ("'delta' must be a single number.")
   }
-  names(delta) <- "difference in means" ### BB: Ist das hier überflüssig?
+
+  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
   ## NA handling
   if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
@@ -78,14 +81,21 @@ trimmed_test <- function(x, y, gamma = 0.2, alternative = c("two.sided", "less",
   )
 
   ## Assign names to results
+
+  if (var.test) {
+    names(estimates) <- c("Trimmed mean of log(x^2)", "Trimmed mean of log(y^2)")
+    names(delta) <- "ratio of variances"
+    delta <- exp(delta)
+  } else {
+    names(estimates) <- c("Trimmed mean of x", "Trimmed mean of y")
+    names(delta) <- "location shift"
+  }
+
   names(statistic) <- "trimmed t"
-  names(estimates) <- c("Trimmed mean of x", "Trimmed mean of y")
-  names(delta) <- "difference in means"
   names(df) <- "df"
 
   method <- "Trimmed two-sample t-test"
 
-  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
   res <- list(statistic = statistic, parameter = df, p.value = p.value,
               estimate = estimates, null.value = delta, alternative = alternative,

@@ -12,6 +12,7 @@
 #' @template k_huber
 #' @template alternative
 #' @template var_test
+#' @template na.rm
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:
@@ -41,8 +42,19 @@
 #'
 #' @export
 
-huber_test <- function(x, y, delta = 0, k = 1.8, alternative = c("two.sided", "greater", "less"),
-                       var.test = FALSE) {
+huber_test <- function(x, y, delta = ifelse(var.test, 1, 0), k = 1.8,
+                       alternative = c("two.sided", "greater", "less"),
+                       var.test = FALSE, na.rm=FALSE) {
+
+  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
+
+  ## NA handling
+  if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
+    return(NA)
+  } else if (na.rm & (any(is.na(x)) | any(is.na(y)))) {
+    x <- as.numeric(stats::na.omit(x))
+    y <- as.numeric(stats::na.omit(y))
+  }
 
   ## If necessary: Transformation to test for difference in scale
   if (var.test) {
@@ -76,16 +88,24 @@ huber_test <- function(x, y, delta = 0, k = 1.8, alternative = c("two.sided", "g
                      less = stats::pt(statistic, df = m + n - 2, lower.tail = TRUE)
   )
 
-  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
-  names(estimates) <- c("Huber-M of x", "Huber-M of y")
-  names(delta) <- "location shift"
+
+  if (var.test) {
+    names(estimates) <- c("Huber-M of log(x^2)", "Huber-M of log(y^2)")
+    names(delta) <- "ratio of variances"
+    delta <- exp(delta)
+  } else {
+    names(estimates) <- c("Huber-M of x", "Huber-M of y")
+    names(delta) <- "location shift"
+  }
+
   names(statistic) <- "D"
   method <- "Huber-Test"
   parameter <- m + n - 2
   names(parameter) <- "df"
 
   res <- list(statistic = statistic, parameter = parameter, p.value = p.value,
-              estimate = estimates, null.value = delta, alternative = alternative,
+              estimate = estimates, null.value = delta,
+              alternative = alternative,
               method = method, data.name = dname)
 
   class(res) <- "htest"

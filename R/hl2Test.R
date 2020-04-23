@@ -59,12 +59,14 @@
 #' @export
 
 hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
-                     delta = 0, method = c("asymptotic", "exact", "sampled"),
+                     delta = ifelse(var.test, 1, 0), method = c("asymptotic", "exact", "sampled"),
                      scale = c("S1", "S2"), n.rep = 10000,  na.rm = FALSE,
                      var.test = FALSE) {
 
   stopifnot(is.numeric(x),
             is.numeric(y))
+
+  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
   if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
     return(NA)
@@ -156,9 +158,15 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   }
 
   ## Assign names to results
+  if (var.test) {
+    names(estimates) <- c("HL2 of log(x^2) and log(y^2)")
+    names(delta) <- "ratio of variances"
+    delta <- exp(delta)
+  } else {
+    names(estimates) <- c("HL2 of x and y")
+    names(delta) <- "location shift"
+  }
 
-  names(delta) <- "location shift"
-  names(estimates) <- c("HL2 of x and y")
   names(statistic) <- "D"
 
   if (method == "sampled") {
@@ -167,8 +175,6 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     method = "Exact permutation test based on the Two-Sample Hodges-Lehmann estimator"
   } else method = "Asymptotic test based on the Two-Sample Hodges-Lehmann estimator"
 
-
-  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
   res <- list(statistic = statistic, parameter = NULL, p.value = p.value,
               estimate = estimates, null.value = delta, alternative = alternative,

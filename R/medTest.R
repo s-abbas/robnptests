@@ -57,10 +57,13 @@
 #'
 #' @export
 
-med_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delta = 0,
+med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
+                     delta = ifelse(var.test, 1, 0),
                      method = c("asymptotic", "exact", "sampled"),
                      scale = c("S3", "S4"), n.rep = 10000,
                      na.rm = FALSE, var.test = FALSE) {
+
+  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
   if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
     return(NA)
@@ -68,6 +71,7 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
     x <- as.numeric(stats::na.omit(x))
     y <- as.numeric(stats::na.omit(y))
   }
+
 
   ## If necessary: Transformation to test for difference in scale
   if (var.test) {
@@ -149,8 +153,15 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
 
   ## Assign names to results
 
-  names(estimates) <- c("Median of x", "Median of y")
-  names(delta) <- "location shift"
+  if (var.test) {
+    names(estimates) <- c("Median of log(x^2)", "Median of log(y^2)")
+    names(delta) <- "ratio of variances"
+    delta <- exp(delta)
+  } else {
+    names(estimates) <- c("Median of x", "Median of y")
+    names(delta) <- "location shift"
+  }
+
   names(statistic) <- "D"
 
   if (method == "sampled") {
@@ -159,7 +170,6 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
     method = "Exact permutation test based on sample medians"
   } else method = "Asymptotic test based on sample medians"
 
-  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
   res <- list(statistic = statistic, parameter = NULL, p.value = p.value,
               estimate = estimates, null.value = delta, alternative = alternative,
@@ -169,3 +179,4 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
 
   return(res)
 }
+

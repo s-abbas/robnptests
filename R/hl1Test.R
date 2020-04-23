@@ -76,7 +76,7 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
   scale <- match.arg(scale)
 
   ## Names of data sets
-    dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
+  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
   if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
     return(NA)
@@ -160,8 +160,15 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
   }
 
   ## Assign names to results
-  names(estimates) <- c("HL1 of x", "HL1 of y")
-  names(delta) <- ifelse(var.test, "ratio of variances", "location shift")
+  if (var.test) {
+    names(estimates) <- c("HL1 of log(x^2)", "HL1 of log(y^2)")
+    names(delta) <- "ratio of variances"
+    delta <- exp(delta)
+  } else {
+    names(estimates) <- c("HL1 of x", "HL1 of y")
+    names(delta) <- "location shift"
+  }
+
   names(statistic) <- "D"
 
   if (method == "sampled") {

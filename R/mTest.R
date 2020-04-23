@@ -43,10 +43,13 @@
 #' @export
 
 
-m_estimator_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delta = 0,
+m_estimator_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
+                             delta = ifelse(var.test, 1, 0),
                              method = c("sampled", "exact"),
                              psi = c("huber", "hampel", "bisquare"), k = .Mpsi.tuning.default(psi),
                              n.rep = 10000, na.rm = FALSE, var.test = FALSE) {
+
+  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
   if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
     return(NA)
@@ -86,16 +89,19 @@ m_estimator_test <- function(x, y, alternative = c("two.sided", "greater", "less
     p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y),
                                  sampled = sampled, n.rep = n.rep, alternative = alternative)
 
-    names(estimates) <- c("M-est. of x", "M-est. of y")
-    names(delta) <- "location shift"
+    if (var.test) {
+      names(estimates) <- c("M-est. of log(x^2)", "M-est. of log(y^2)")
+      names(delta) <- "ratio of variances"
+      delta <- exp(delta)
+    } else {
+      names(estimates) <- c("M-est. of x", "M-est. of y")
+      names(delta) <- "location shift"
+    }
     names(statistic) <- "D"
 
     if (method == "sampled") {
       method = paste("Randomization test based on the ", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
     } else method = paste("Exact permutation test based on the", psi, "M-estimator")
-
-
-    dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
     res <- list(statistic = statistic, parameter = NULL, p.value = p.value,
                 estimate = estimates, null.value = delta, alternative = alternative,

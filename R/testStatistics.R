@@ -211,7 +211,7 @@ rob_perm_statistic <- function(x, y,
 #'
 #' @export
 
-m_test_statistic <- function(x, y, psi, k = .Mpsi.tuning.default(psi)) {
+m_test_statistic <- function(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi)) {
   ## Sample sizes
   m <- length(x)
   n <- length(y)
