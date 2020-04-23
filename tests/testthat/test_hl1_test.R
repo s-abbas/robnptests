@@ -45,7 +45,7 @@ testthat::test_that("hl1_test works correctly", {
   res.method <- res.asymptotic$method
 
   testthat::expect_equal(res.statistic, sqrt(12*m*n/(m+n)) * int * (estimates[1] - estimates[2]))
-  testthat::expect_equal(res.method, "Asymptotic test based on the Hodges-Lehmann estimator")
+  testthat::expect_equal(res.method, "Asymptotic test based on the one-sample Hodges-Lehmann estimator")
 
   ## ___________________________________________________________________________
   ## If not method is given, the randomized test should be performed automatically
@@ -59,7 +59,7 @@ testthat::test_that("hl1_test works correctly", {
   res.randomized <- hl1_test(x, y)
   res.method <- res.randomized$method
 
-  testthat::expect_equal(res.method, "Randomization test based on the Hodges-Lehmann estimator")
+  testthat::expect_equal(res.method, "Randomization test based on the one-sample Hodges-Lehmann estimator")
 
 
   ##
