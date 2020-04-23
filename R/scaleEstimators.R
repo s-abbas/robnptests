@@ -185,6 +185,10 @@ rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
     is.numeric(y)
   )
 
+  if (length(unique(x)) == 1 | length(unique(y)) == 1) {
+    warning("At least one of the input vectors is constant.")
+  }
+
   ## NA handling
   if (!na.rm & any(is.na(x)) || any(is.na(y))) {
     return(NA)
@@ -193,22 +197,48 @@ rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
     y <- as.vector(stats::na.omit(y))
   }
 
+  # if (type == "S1") {
+  #   xcomb <- utils::combn(x, 2)
+  #   ycomb <- utils::combn(y, 2)
+  #   xabs <- abs(xcomb[1, ] - xcomb[2, ])
+  #   yabs <- abs(ycomb[1, ] - ycomb[2, ])
+  #   return(stats::median(c(xabs, yabs)))
+  #
+  # } else if (type == "S2") {
+  #   z <- c(x - stats::median(x), y - stats::median(y))
+  #   zcomb <- utils::combn(z, 2)
+  #   return(stats::median(abs(zcomb[1, ] - zcomb[2, ])))
+  #
+  # } else  if (type == "S3") {
+  #   return(2 * stats::median(c(abs(x - stats::median(x)), abs(y - stats::median(y)))))
+  #
+  # } else if (type == "S4") {
+  #   return(stats::median(abs(x - stats::median(x)) + stats::median(abs(y - stats::median(y)))))
+  # }
+
   if (type == "S1") {
     xcomb <- utils::combn(x, 2)
     ycomb <- utils::combn(y, 2)
     xabs <- abs(xcomb[1, ] - xcomb[2, ])
     yabs <- abs(ycomb[1, ] - ycomb[2, ])
-    return(stats::median(c(xabs, yabs)))
+    est <- stats::median(c(xabs, yabs))
 
   } else if (type == "S2") {
     z <- c(x - stats::median(x), y - stats::median(y))
     zcomb <- utils::combn(z, 2)
-    return(stats::median(abs(zcomb[1, ] - zcomb[2, ])))
+    est <- stats::median(abs(zcomb[1, ] - zcomb[2, ]))
 
   } else  if (type == "S3") {
-    return(2 * stats::median(c(abs(x - stats::median(x)), abs(y - stats::median(y)))))
+    est <- 2 * stats::median(c(abs(x - stats::median(x)), abs(y - stats::median(y))))
 
   } else if (type == "S4") {
-    return(stats::median(abs(x - stats::median(x)) + stats::median(abs(y - stats::median(y)))))
+    est <- stats::median(abs(x - stats::median(x)) + stats::median(abs(y - stats::median(y))))
   }
+
+  if (est == 0 & length(unique(x)) > 1 & length(unique(y)) > 1) {
+    warning("Estimate is 0 although the data is not constant. Consider using a
+            different location estimator")
+  }
+
+  return(est)
 }
