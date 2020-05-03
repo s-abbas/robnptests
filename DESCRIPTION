@@ -1,22 +1,23 @@
 Package: robTests
 Version: 0.1.0
-Date: 2019-03-31
+Date: 2020-05-03
 Type: Package
 Title: Robust tests for the two-sample location problem
 Authors@R: c(person("Sermad", "Abbas", 
     email = "abbas@statistik.tu-dortmund.de", role = c("aut", "cre")),
-    person("Barbara", "Brune", email = "bbrune@statistik.tu-dortmund.de", role = "aut"))
+    person("Barbara", "Brune", email = "bbrune@statistik.tu-dortmund.de", role = "aut"),
+    person("Roland", "Fried", email = "fried@statistik.tu-dortmund.de", role = "aut"))
 Author: Sermad Abbas [aut, cre],
-  Barbara Brune [aut]
+  Barbara Brune [aut],
+  Roland Fried [aut]
 Maintainer: Sermad Abbas <abbas@statistik.tu-dortmund.de>
-Description: Implementation of several robust and non-parametric alternatives to
-    the ordinary two-sample t-test for the location problem under
-    homoscedasticity. The tests follow the construction idea of the t-test and
-    use test statistics that consist of a robust estimator for the location
-    difference which is standardized by a robust scale estimator. To achieve
-    a non-parametric behaviour under the null hypothesis, a permutation
-    principle is used. In addition, some hybrid tests are implemented that 
-    combine several tests to derive a test decision.
+Description: Implementations of several robust and non-parametric two-sample tests
+    for the location problem under homoscedasticity as described in Fried & Dehling (2011) <doi:0.1007/s10260-011-0164-1>.
+    The test statistics are based on robust location estimators to achieve robustness. 
+    The p-values can be computed by the permutation principle, the randomization principle or, for large samples, by using
+    the asymptotic distributions of the test statistics under the null hypothesis, which ensures
+    (approximate) distribution independence of the test decision. Besides location shifts, the tests can also be used to test for scale changes
+    between the underlying populations by a data transformation; see Fried (2012) <doi:10.1016/j.csda.2011.02.012>.
 License: GPL (>= 2)
 Depends: R (>= 3.4.0)
 URL: https://github.com/s-abbas/robTests
