@@ -73,6 +73,7 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
                      var.test = FALSE) {
 
   alternative <- match.arg(alternative)
+  method <- match.arg(method)
   scale <- match.arg(scale)
 
   ## Names of data sets
@@ -83,6 +84,11 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
   } else if (na.rm & (any(is.na(x)) | any(is.na(y)))) {
     x <- as.numeric(stats::na.omit(x))
     y <- as.numeric(stats::na.omit(y))
+  }
+
+  ## Check sample sizes
+  if (length(x) < 5 || length(y) < 5) {
+    stop("Both samples need at least 5 non-missing values.")
   }
 
   ## If necessary: Transformation to test for difference in scale

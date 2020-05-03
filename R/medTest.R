@@ -81,6 +81,7 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   }
 
   alternative <- match.arg(alternative)
+  method <- match.arg(method)
   scale <- match.arg(scale)
 
   if (scale == "S3") {
