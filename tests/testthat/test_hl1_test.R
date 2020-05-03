@@ -61,6 +61,23 @@ testthat::test_that("hl1_test works correctly", {
 
   testthat::expect_equal(res.method, "Randomization test based on the one-sample Hodges-Lehmann estimator")
 
+  ## ___________________________________________________________________________
+  ## Throw error when one or both samples consist of less than five observations
+  ## ___________________________________________________________________________
+
+  ## One sample is too small
+  set.seed(108)
+
+  x <- rnorm(4)
+  y <- rnorm(20)
+
+  testthat::expect_error(hl1_test(x, y))
+
+  ## Many missing values
+  x <- c(x, rep(NA, 5))
+
+  testthat::expect_error(hl1_test(x, y, na.rm = TRUE))
+
 
   ##
   ## Return errors if the wrong methods/alternative are handed over
