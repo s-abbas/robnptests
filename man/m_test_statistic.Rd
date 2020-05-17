@@ -4,7 +4,7 @@
 \alias{m_test_statistic}
 \title{Calculate the M-test-statistic}
 \usage{
-m_test_statistic(x, y, psi, k = .Mpsi.tuning.default(psi))
+m_test_statistic(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi))
 }
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}

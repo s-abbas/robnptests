@@ -8,7 +8,7 @@ hl2_test(
   x,
   y,
   alternative = c("two.sided", "greater", "less"),
-  delta = 0,
+  delta = ifelse(var.test, 1, 0),
   method = c("asymptotic", "exact", "sampled"),
   scale = c("S1", "S2"),
   n.rep = 10000,

@@ -7,10 +7,11 @@
 huber_test(
   x,
   y,
-  delta = 0,
+  delta = ifelse(var.test, 1, 0),
   k = 1.8,
   alternative = c("two.sided", "greater", "less"),
-  var.test = FALSE
+  var.test = FALSE,
+  na.rm = FALSE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ on whether the test should be performed for a difference in location or in scale
 must be one of "two.sided" (default), "greater" or "less".}
 
 \item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
+
+\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:

@@ -159,7 +159,7 @@ asym_win_var <- function(x, type = c("Q2", "SK2", "SK5"), na.rm = FALSE) {
 #'
 #'
 #' @details
-#' For definitions of the scale estimators see Fried and Dehling (2011). Here,
+#' For definitions of the scale estimators see Fried and Dehling (2011).
 #'
 #'
 #' @return
@@ -196,25 +196,6 @@ rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
     x <- as.vector(stats::na.omit(x))
     y <- as.vector(stats::na.omit(y))
   }
-
-  # if (type == "S1") {
-  #   xcomb <- utils::combn(x, 2)
-  #   ycomb <- utils::combn(y, 2)
-  #   xabs <- abs(xcomb[1, ] - xcomb[2, ])
-  #   yabs <- abs(ycomb[1, ] - ycomb[2, ])
-  #   return(stats::median(c(xabs, yabs)))
-  #
-  # } else if (type == "S2") {
-  #   z <- c(x - stats::median(x), y - stats::median(y))
-  #   zcomb <- utils::combn(z, 2)
-  #   return(stats::median(abs(zcomb[1, ] - zcomb[2, ])))
-  #
-  # } else  if (type == "S3") {
-  #   return(2 * stats::median(c(abs(x - stats::median(x)), abs(y - stats::median(y)))))
-  #
-  # } else if (type == "S4") {
-  #   return(stats::median(abs(x - stats::median(x)) + stats::median(abs(y - stats::median(y)))))
-  # }
 
   if (type == "S1") {
     xcomb <- utils::combn(x, 2)

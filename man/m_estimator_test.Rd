@@ -8,7 +8,7 @@ m_estimator_test(
   x,
   y,
   alternative = c("two.sided", "greater", "less"),
-  delta = 0,
+  delta = ifelse(var.test, 1, 0),
   method = c("sampled", "exact"),
   psi = c("huber", "hampel", "bisquare"),
   k = .Mpsi.tuning.default(psi),
