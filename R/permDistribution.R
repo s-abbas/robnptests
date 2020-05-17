@@ -54,7 +54,7 @@ perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = 10000) {
 #' @template x
 #' @template y
 #' @template psi
-#' @template k_mest
+#' @template k1_mest
 #' @template sampled
 #' @template n_rep_m_test
 #'

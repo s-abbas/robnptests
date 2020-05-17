@@ -1,6 +1,32 @@
 ## ----------------------------------------------------------------------------
 ## Add random noise if too many values in the samples are equal
 ## ----------------------------------------------------------------------------
+#'
+#' @description
+#' \code{wobble} makes a discrete sample continuous by adding uniform noise to the
+#' discrete observations
+#'
+#' @template x
+#' @template y
+#' @param partially logical, indicates whether the complete sample should be treated or only the
+#'                  values that are duplicated, default is \code{FALSE}
+#'
+#' @details
+
+#' @return
+#' A list of length two containing the modified \code{x} and \code{y}
+#'
+#' @references
+#' \insertRef{Fri12onli}{robTests}
+#'
+#'
+#'
+#' @examples
+#' x <- rnorm(20); y <- rnorm(20); x <- round(x)
+#' wobble(x, y)
+#' wobble(x, y, partially=TRUE)
+#'
+
 
 wobble <- function(x, y, partially = FALSE) {
   ## Determine number of different values in both samples and in joint sample
