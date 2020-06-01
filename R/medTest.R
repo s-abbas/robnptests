@@ -22,6 +22,8 @@
 #' When computing a randomization distribution based on randomly drawn splits with replacement, the results of
 #' Smyth & Phipson (2010) to calculate the p-value are used. The test statistics and the asymptotic distribution are taken from Fried & Dehling (2011).
 #'
+#' The estimator of the location shift is the difference of the medians of \texttt{x} and \texttt{y}.
+#'
 #' The test statistics for the exact and sampled version of the test is standardized using a robust scale estimator.
 #' \code{scale = "S3"} represents use of
 #'
