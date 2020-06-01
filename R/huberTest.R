@@ -98,7 +98,7 @@ huber_test <- function(x, y, delta = ifelse(var.test, 1, 0), k = 1.8,
     names(delta) <- "location shift"
   }
 
-  names(statistic) <- "D"
+  names(statistic) <- ifelse(var.test, "S", "D")
   method <- "Huber-Test"
   parameter <- m + n - 2
   names(parameter) <- "df"

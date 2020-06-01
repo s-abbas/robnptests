@@ -10,7 +10,7 @@
 #' @template x
 #' @template y
 #' @template type_rob_perm
-#' @template sampled
+#' @template randomization
 #' @template n_rep
 #'
 #' @return Vector with permutation distribution.
@@ -20,25 +20,25 @@
 #'
 #' @export
 
-perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = 10000) {
+perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) {
   ## Sample sizes
   m <- length(x)
   n <- length(y)
 
   ## Error handling
-  if (sampled & n.rep > choose(m + n, m)) {
+  if (randomization & n.rep > choose(m + n, m)) {
     stop (paste0("'n.rep' must not be larger than ", choose(m + n, m), ", the number of all splits."))
   }
 
   ## Splits in two samples
-  if (!sampled) {
+  if (!randomization) {
     ## Computation of permutation distribution
 
     complete <- c(x, y)
     splits <- gtools::combinations((m + n), m, 1:(m + n))
 
     distribution <- apply(splits, 1, function(s) rob_perm_statistic(x = complete[s], y = complete[-s], type)$statistic)
-  } else if (sampled) {
+  } else if (randomization) {
     ## Computation of randomization distribution
 
     splits <- replicate(n.rep, sample(c(x, y)))
@@ -58,25 +58,25 @@ perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = 10000) {
 #' @template y
 #' @template psi
 #' @template k1_mest
-#' @template sampled
+#' @template randomization
 #' @template n_rep_m_test
 #'
 #' @return Vector with permutation distribution.
 #'
 #' @export
 
-mest_perm_distribution <- function(x, y, psi, k1, sampled = FALSE, n.rep = NULL) {
+mest_perm_distribution <- function(x, y, psi, k1, randomization = FALSE, n.rep = NULL) {
   m <- length(x)
   n <- length(y)
 
-  if (!sampled) {
+  if (!randomization) {
     complete <- c(x, y)
     splits <- gtools::combinations((m + n), h, 1:(m + n))
 
     distribution <- apply(splits, 1, function(s) m_test_statistic(x = complete[s], y = complete[-s],
                                                                   psi = psi, k = k1)$statistic)
   }
-  else if (sampled) {
+  else if (randomization) {
     splits <- replicate(n.rep, sample(c(x, y)))
 
     distribution <- apply(splits, 2, function(s) m_test_statistic(x = s[1:m], y = s[(m + 1):(m + n)], psi = psi, k = k1)$statistic)
@@ -93,26 +93,26 @@ mest_perm_distribution <- function(x, y, psi, k1, sampled = FALSE, n.rep = NULL)
 #' @template x
 #' @template y
 #' @template type_skewness
-#' @template sampled
+#' @template randomization
 #' @template n_rep
 #'
 #' @return Vector with permutation distribution.
 #'
 #' @export
 
-asym_trimmed_perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = NULL) {
+asym_trimmed_perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = NULL) {
   ## Sample sizes
   m <- length(x)
   n <- length(y)
 
   ## Splits in two samples
-  if (!sampled) {
+  if (!randomization) {
     complete <- c(x, y)
     splits <- gtools::combinations((m + n), m, 1:(m + n))
 
     distribution <- apply(splits, 1, function(s) asym_trimmed_t(x = complete[s], y = complete[-s], type)$statistic)
 
-  } else if (sampled) {
+  } else if (randomization) {
     splits <- replicate(n.rep, sample(c(x, y)))
 
     distribution <- apply(splits, 2, function(s) asym_trimmed_t(x = s[1:m], y = s[(m + 1):(m + n)], type)$statistic)
@@ -135,7 +135,7 @@ asym_trimmed_perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = 
 #' @template distribution
 #' @template m
 #' @template n
-#' @template sampled
+#' @template randomization
 #' @template n_rep
 #' @template alternative
 #'
@@ -147,7 +147,7 @@ asym_trimmed_perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = 
 #'
 #' @export
 
-calc_perm_p_value <- function(statistic, distribution, m, n, sampled, n.rep, alternative) {
+calc_perm_p_value <- function(statistic, distribution, m, n, randomization, n.rep, alternative) {
 
   ## Number of permutations leading to test statistic at least as extreme
   ## as observed
@@ -158,10 +158,10 @@ calc_perm_p_value <- function(statistic, distribution, m, n, sampled, n.rep, alt
   )
 
   ## Computation of p-value
-  if (sampled) {
+  if (randomization) {
     ## Randomization distribution
     p.value <- statmod::permp(A, nperm = n.rep, n1 = m, n2 = n, twosided = (alternative == "two.sided"), method = "auto")
-  } else if (!sampled) {
+  } else if (!randomization) {
     ## Permutation distribution
     p.value <- A / choose(m + n, m)
   }

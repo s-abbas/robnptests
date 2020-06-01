@@ -45,7 +45,7 @@
 #' A list with class "\code{htest}" containing the following components:
 #' \item{statistic}{the value of the test statistic.}
 #' \item{p.value}{the p-value for the test.}
-#' \item{estimate}{the estimated sample means of \code{x} and \code{y}.}
+#' \item{estimate}{the asymmetrically trimmed means of \code{x} and \code{y}.}
 #' \item{null.value}{the specified hypothesized value of the mean difference.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
 #' \item{method}{a character string indicating what type of test was performed.}
@@ -63,14 +63,14 @@
 #' asym_trimmed_test(x, y, type = "SK2", method = "asymptotic")
 #' asym_trimmed_test(x, y, type = "SK5", method = "asymptotic")
 #'
-#' asym_trimmed_test(x, y, type = "SK5", method = "sampled")
+#' asym_trimmed_test(x, y, type = "SK5", method = "randomization")
 #'
 #' @export
 
 asym_trimmed_test <- function(x, y, type = c("Q2", "SK2", "SK5"),
                               alternative = c("two.sided", "greater", "less"),
                               delta = 0,
-                              method = c("asymptotic", "exact", "sampled"),
+                              method = c("asymptotic", "permutation", "randomization"),
                               n.rep = 10000, na.rm = FALSE,
                               var.test = FALSE) {
 
@@ -97,13 +97,8 @@ asym_trimmed_test <- function(x, y, type = c("Q2", "SK2", "SK5"),
     stop ("'delta' must be a single number.")
   }
 
-  # if (length(method) > 1 & identical(method, c("asymptotic", "exact", "sampled"))) {
-  #   if (length(x) >= 30 & length(y) >= 30) method <- "asymptotic"
-  #   else method <- "sampled"
-  # }
-
-  if (!(method %in% c("asymptotic", "exact", "sampled"))) {
-    stop (" 'method' must be one of 'asymptotic', 'exact' or 'sampled' ")
+  if (!(method %in% c("asymptotic", "permutation", "randomizatoin"))) {
+    stop (" 'method' must be one of 'asymptotic', 'permutation' or 'randomization'. ")
   }
 
   ## Test statistic
@@ -113,16 +108,20 @@ asym_trimmed_test <- function(x, y, type = c("Q2", "SK2", "SK5"),
   estimates <- t.stat$estimates
   df <- t.stat$df
 
-  if (method %in% c("exact", "sampled")) {
+  if (method %in% c("permutation", "randomization")) {
     ## Calculate permutation distribution
-    if (method == "sampled") sampled <- TRUE else sampled <- FALSE
+    if (method == "randomization") {
+      randomization <- TRUE
+    } else {
+      randomization <- FALSE
+    }
 
     distribution <- asym_trimmed_perm_distribution(x = x, y = y - delta, type = type,
-                                      sampled = sampled, n.rep = n.rep)
+                                                   randomization = randomization, n.rep = n.rep)
 
     ## p-value
     p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y),
-                                 sampled = sampled, n.rep = n.rep, alternative = alternative)
+                                 randomization = randomization, n.rep = n.rep, alternative = alternative)
 
   } else if (method == "asymptotic") {
       p.value <- switch (alternative,
@@ -133,13 +132,13 @@ asym_trimmed_test <- function(x, y, type = c("Q2", "SK2", "SK5"),
   }
 
   ## Assign names to results
-  names(estimates) <- c("Trimmed mean of x", "Trimmed mean of y")
+  names(estimates) <- c("Asymmetrically trimmed mean of x", "Asymmetrically trimmed mean of y")
   names(delta) <- "location shift"
-  names(statistic) <- "D"
+  names(statistic) <- ifelse(var.test, "S", "D")
 
-  if (method == "sampled") {
+  if (method == "randomization") {
     method = paste("Randomization test based on the", type, "selector statistic")
-  } else if (method == "exact") {
+  } else if (method == "permutation") {
     method = paste("Exact permutation test based on the", type, "selector statistic")
   } else method = paste("Asymptotic test based on the", type, "selector statistic")
 

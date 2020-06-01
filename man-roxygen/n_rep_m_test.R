@@ -1,3 +1,3 @@
 #' @param n.rep an integer value specifying the number of random permutations used to calculate
-#'              the permutation distribution if \code{method = "sampled"},
-#'              ignored if \code{method = "exact"}. Default is 10000.
+#'              the randomization distribution if \code{method = "randomization"},
+#'              ignored if \code{method = "permutation"}; default is 10000.

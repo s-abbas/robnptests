@@ -22,7 +22,7 @@
 #' When computing a randomization distribution based on randomly drawn splits with replacement, the results of
 #' Smyth & Phipson (2010) to calculate the p-value are used. The test statistics and the asymptotic distribution are taken from Fried & Dehling (2011).
 #'
-#' The test statistics for the exact and sampled version of the test is standardized using a robust scale estimator.
+#' The test statistics for the permutation and randomization version of the test is standardized using a robust scale estimator.
 #' \code{scale = "S1"} represents use of
 #'
 #' \deqn{S = med(|X_i - X_j|: 1 \le i < j \le m, |Y_i - Y_j|, 1 <= i < j <= n),}
@@ -43,7 +43,7 @@
 #' A list with class "\code{htest}" containing the following components:
 #' \item{statistic}{the value of the test statistic.}
 #' \item{p.value}{the p-value for the test.}
-#' \item{estimate}{the estimated sample means of \code{x} and \code{y}.}
+#' \item{estimate}{the one-sample Hodges-Lehmann estimates of \code{x} and \code{y}.}
 #' \item{null.value}{the specified hypothesized value of the mean difference.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
 #' \item{method}{a character string indicating what type of test was performed.}
@@ -63,12 +63,12 @@
 #' @examples
 #' x <- rnorm(20); y <- rnorm(20)
 #' hl1_test(x, y, method = "asymptotic", scale = "S1")
-#' hl1_test(x, y, method = "sampled", n.rep = 1000, scale = "S2")
+#' hl1_test(x, y, method = "randomization", n.rep = 1000, scale = "S2")
 #'
 #' @export
 
 hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delta = ifelse(var.test, 1, 0),
-                     method = c("asymptotic", "exact", "sampled"), scale = c("S1", "S2"),
+                     method = c("asymptotic", "permutation", "randomization"), scale = c("S1", "S2"),
                      n.rep = 10000, na.rm = FALSE,
                      var.test = FALSE) {
 
@@ -100,9 +100,9 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
   }
 
   if (scale == "S1") {
-    type <- "D1S1"
+    type <- "HL11"
   } else if (scale == "S2") {
-    type <- "D1S2"
+    type <- "HL12"
   } else stop(" 'scale' must one of 'S1' and 'S2'.")
 
   ## Error handling
@@ -110,24 +110,24 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
     stop ("'delta' must be a single number.")
   }
 
-  if (!all((method %in% c("asymptotic", "exact", "sampled")))) {
-    stop (" 'method' must be one of 'asymptotic', 'exact' or 'sampled'. ")
+  if (!all((method %in% c("asymptotic", "permutation", "randomization")))) {
+    stop (" 'method' must be one of 'asymptotic', 'permutation' or 'randomization'. ")
   }
 
   ## If no choice is made regarding the computation of the p-value, the method
   ## is automatically selected based on the sample sizes
-  if (length(method) > 1 & identical(method, c("asymptotic", "exact", "sampled"))) {
+  if (length(method) > 1 & identical(method, c("asymptotic", "permutation", "randomization"))) {
     if (length(x) >= 30 & length(y) >= 30) {
       method <- "asymptotic"
     }
     else {
-      method <- "sampled"
+      method <- "randomization"
       n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
     }
   }
 
 
-  if (method %in% c("exact", "sampled")) {
+  if (method %in% c("permutation", "randomization")) {
     ## Results of rob_perm_statistic
     perm.stats <- rob_perm_statistic(x, y - delta, type = type, na.rm = na.rm)
 
@@ -137,19 +137,19 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
       estimates[2] <- hodges_lehmann(y)
     }
 
-    # ## Calculate permutation distribution
-    # if (method == "sampled") {
-    #   sampled <- TRUE
-    # } else {
-    #   sampled <- FALSE
-    # }
+    ## Calculate permutation distribution
+    if (method == "randomization") {
+      randomization <- TRUE
+    } else {
+      randomization <- FALSE
+    }
 
     distribution <- perm_distribution(x = x, y = y - delta, type = type,
-                                      sampled = (method == sampled), n.rep = n.rep)
+                                      randomization = (method == randomization), n.rep = n.rep)
 
     ## p-value
     p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y),
-                                 sampled = sampled, n.rep = n.rep, alternative = alternative)
+                                 randomization = randomization, n.rep = n.rep, alternative = alternative)
 
   } else if (method == "asymptotic") {
 
@@ -189,11 +189,11 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
     names(delta) <- "location shift"
   }
 
-  names(statistic) <- "D"
+  names(statistic) <- ifelse(var.test, "S", "D")
 
-  if (method == "sampled") {
+  if (method == "randomization") {
     method = "Randomization test based on the one-sample Hodges-Lehmann estimator"
-  } else if (method == "exact") {
+  } else if (method == "permutation") {
     method = "Exact permutation test based on the one-sample Hodges-Lehmann estimator"
   } else method = "Asymptotic test based on the one-sample Hodges-Lehmann estimator"
 

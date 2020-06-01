@@ -24,7 +24,7 @@
 #'
 #' The estimator of the location shift is the difference of the medians of \texttt{x} and \texttt{y}.
 #'
-#' The test statistics for the exact and sampled version of the test is standardized using a robust scale estimator.
+#' The test statistics for the permutation and randomization version of the test is standardized using a robust scale estimator.
 #' \code{scale = "S3"} represents use of
 #'
 #' \deqn{S = 2 * ( |X_1 - med(X)|,...,|X_m - med(X)|, |Y_1 - med(Y)|,...,|Y_n - med(Y)| ),}
@@ -55,13 +55,13 @@
 #' @examples
 #' x <- rnorm(20); y <- rnorm(20)
 #' med_test(x, y, method = "asymptotic", scale = "S3")
-#' med_test(x, y, method = "sampled", n.rep = 1000, scale = "S4")
+#' med_test(x, y, method = "randomization", n.rep = 1000, scale = "S4")
 #'
 #' @export
 
 med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
                      delta = ifelse(var.test, 1, 0),
-                     method = c("asymptotic", "exact", "sampled"),
+                     method = c("asymptotic", "permutation", "randomization"),
                      scale = c("S3", "S4"), n.rep = 10000,
                      na.rm = FALSE, var.test = FALSE) {
 
@@ -87,9 +87,9 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   scale <- match.arg(scale)
 
   if (scale == "S3") {
-    type <- "D3S3"
+    type <- "MD1"
   } else if (scale == "S4") {
-    type <- "D3S4"
+    type <- "MD2"
     } else stop(" 'scale' must one of 'S3' and 'S4' ")
 
   ## Error handling
@@ -97,16 +97,16 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     stop ("'delta' must be a single number.")
   }
 
-  if (length(method) > 1 & identical(method, c("asymptotic", "exact", "sampled"))) {
+  if (length(method) > 1 & identical(method, c("asymptotic", "permutation", "randomization"))) {
     if (length(x) >= 30 & length(y) >= 30) method <- "asymptotic"
-    else method <- "sampled"
+    else method <- "randomization"
   }
 
-  if (!(method %in% c("asymptotic", "exact", "sampled"))) {
-    stop (" 'method' must be one of 'asymptotic', 'exact' or 'sampled' ")
+  if (!(method %in% c("asymptotic", "permutation", "randomization"))) {
+    stop (" 'method' must be one of 'asymptotic', 'permutation' or 'randomization'. ")
   }
 
-  if (method %in% c("exact", "sampled")) {
+  if (method %in% c("permutation", "randomization")) {
 
     ## Results of rob_perm_statistic
     perm.stats <- rob_perm_statistic(x, y - delta, type = type, na.rm = na.rm)
@@ -117,15 +117,18 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     if (delta != 0) estimates[2] <- stats::median(y)
 
     ## Calculate permutation distribution
+    if (method == "randomization") {
+      randomization <- TRUE
+    } else {
+      randomization <- FALSE
+    }
 
-    if (method == "sampled") sampled <- TRUE else sampled <- FALSE
-
-    distribution <- perm_distribution(x = x, y = y - delta, type = type, sampled = sampled,
+    distribution <- perm_distribution(x = x, y = y - delta, type = type, randomization = randomization,
                                       n.rep = n.rep)
 
     ## p-value
     p.value <- calc_perm_p_value(statistic, distribution, m = length(x),
-                                 n = length(y), sampled = sampled, n.rep = n.rep,
+                                 n = length(y), randomization = randomization, n.rep = n.rep,
                                  alternative = alternative)
 
   } else if (method == "asymptotic") {
@@ -165,11 +168,11 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     names(delta) <- "location shift"
   }
 
-  names(statistic) <- "D"
+  names(statistic) <- ifelse(var.test, "S", "D")
 
-  if (method == "sampled") {
+  if (method == "randomization") {
     method = "Randomization test based on sample medians"
-  } else if (method == "exact") {
+  } else if (method == "permutation") {
     method = "Exact permutation test based on sample medians"
   } else method = "Asymptotic test based on sample medians"
 

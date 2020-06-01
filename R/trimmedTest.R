@@ -19,7 +19,7 @@
 #' \item{statistic}{the value of the test statistic.}
 #' \item{parameter}{the degrees of freedom for the test statistic.}
 #' \item{p.value}{the p-value for the test.}
-#' \item{estimate}{the estimated difference in means.}
+#' \item{estimate}{the trimmed means of \code{x} and \code{y}.}
 #' \item{null.value}{the specified hypothesized value of the mean difference.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
 #' \item{method}{a character string indicating what type of test was performed.}

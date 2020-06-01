@@ -135,7 +135,7 @@ asym_trimmed_t <- function(x, y, type, delta = 0, na.rm = FALSE) {
 #'
 #' @examples
 #' x <- rnorm(20); y <- rnorm(20)
-#' rob_perm_statistic(x, y, type = "D2S1")
+#' rob_perm_statistic(x, y, type = "HL21")
 #'
 #' @references
 #' \insertRef{FriDeh11robu}{robTests}
@@ -143,49 +143,49 @@ asym_trimmed_t <- function(x, y, type, delta = 0, na.rm = FALSE) {
 #' @export
 
 rob_perm_statistic <- function(x, y,
-                          type = c("D1S1", "D1S2", "D2S1", "D2S2", "D3S3", "D3S4"),
+                          type = c("HL11", "HL12", "HL21", "HL22", "MD1", "MD2"),
                           na.rm = FALSE) {
   type <- match.arg(type)
 
-  if(!(type %in% c("D1S1", "D1S2", "D2S1", "D2S2", "D3S3", "D3S4"))) {
-    stop("type needs to be one of 'D1S1', 'D1S2', 'D2S1', 'D2S2', 'D3S3', 'D3S4'.")
+  if(!(type %in% c("HL11", "HL12", "HL21", "HL22", "MD1", "MD2"))) {
+    stop("type needs to be one of 'HL11', 'HL12', 'HL21', 'HL22', 'MD1', 'MD2'.")
   }
 
   switch(type,
-         D1S1 = {
+         HL11 = {
             est.x <- hodges_lehmann(x, na.rm = na.rm)
             est.y <- hodges_lehmann(y, na.rm = na.rm)
             loc <- est.x - est.y
             sd <- rob_var(x, y, na.rm = na.rm, type = "S1")
             res <- loc/sd
          },
-         D1S2 = {
+         HL12 = {
             est.x <- hodges_lehmann(x, na.rm = na.rm)
             est.y <- hodges_lehmann(y, na.rm = na.rm)
             loc <- est.x - est.y
             sd <- rob_var(x, y, na.rm = na.rm, type = "S2")
             res <- loc/sd
          },
-         D2S1 = {
+         HL21 = {
             est.x <- est.y <- NULL
             loc <- hodges_lehmann_2sample(x, y, na.rm = na.rm)
             sd <- rob_var(x, y, na.rm = na.rm, type = "S1")
             res <- loc/sd
          },
-         D2S2 = {
+         HL22 = {
             est.x <- est.y <- NULL
             loc <- hodges_lehmann_2sample(x, y, na.rm = na.rm)
             sd <- rob_var(x, y, na.rm = na.rm, type = "S2")
             res <- loc/sd
          },
-         D3S3 = {
+         MD1 = {
             est.x <- stats::median(x, na.rm = na.rm)
             est.y <- stats::median(y, na.rm = na.rm)
             loc <- est.x - est.y
             sd <- rob_var(x, y, na.rm = na.rm, type = "S3")
             res <- loc/sd
         },
-         D3S4 = {
+         MD2 = {
             est.x <- stats::median(x, na.rm = na.rm)
             est.y <- stats::median(y, na.rm = na.rm)
             loc <- est.x - est.y
