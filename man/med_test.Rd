@@ -8,7 +8,7 @@ med_test(
   x,
   y,
   alternative = c("two.sided", "greater", "less"),
-  delta = 0,
+  delta = ifelse(var.test, 1, 0),
   method = c("asymptotic", "exact", "sampled"),
   scale = c("S3", "S4"),
   n.rep = 10000,

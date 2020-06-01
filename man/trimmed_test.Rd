@@ -9,7 +9,7 @@ trimmed_test(
   y,
   gamma = 0.2,
   alternative = c("two.sided", "less", "greater"),
-  delta = 0,
+  delta = ifelse(var.test, 1, 0),
   na.rm = FALSE,
   var.test = FALSE
 )

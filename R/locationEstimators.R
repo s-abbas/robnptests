@@ -253,6 +253,7 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
 #' @export
 
 hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
+
   ## NA handling
   if (!na.rm & (any(is.na(x)) || any(is.na(y)))) {
     return(NA)

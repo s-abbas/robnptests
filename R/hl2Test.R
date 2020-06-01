@@ -107,8 +107,13 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   ## If no choice is made regarding the computation of the p-value, the method
   ## is automatically selected based on the sample sizes
   if (length(method) > 1 & identical(method, c("asymptotic", "exact", "sampled"))) {
-    if (length(x) >= 30 & length(y) >= 30) method <- "asymptotic"
-    else method <- "sampled"
+    if (length(x) >= 30 & length(y) >= 30) {
+      method <- "asymptotic"
+    }
+    else {
+      method <- "sampled"
+      n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
+    }
   }
 
   if (method %in% c("exact", "sampled")) {
@@ -123,9 +128,9 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     estimates <- hodges_lehmann_2sample(x, y)
 
     ## Calculate permutation distribution
-    if (method == "sampled") sampled <- TRUE else sampled <- FALSE
+    # if (method == "sampled") sampled <- TRUE else sampled <- FALSE
 
-    distribution <- perm_distribution(x = x, y = y - delta, type = type, sampled = sampled, n.rep = n.rep)
+    distribution <- perm_distribution(x = x, y = y - delta, type = type, sampled = (method == sampled), n.rep = n.rep)
 
     ## p-value
     p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y), sampled = sampled, n.rep = n.rep, alternative = alternative)

@@ -148,7 +148,7 @@ rob_perm_statistic <- function(x, y,
   type <- match.arg(type)
 
   if(!(type %in% c("D1S1", "D1S2", "D2S1", "D2S2", "D3S3", "D3S4"))) {
-    stop("type needs to be one of 'D1S1', 'D1S2', 'D2S1', 'D2S2', 'D3S3', 'D3S4'")
+    stop("type needs to be one of 'D1S1', 'D1S2', 'D2S1', 'D2S2', 'D3S3', 'D3S4'.")
   }
 
   switch(type,

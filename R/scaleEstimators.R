@@ -178,7 +178,7 @@ rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
 
   ## Error handling
   if (!(type %in% c("S1", "S2", "S3", "S4"))) {
-    stop("type needs to be one of 'S1', 'S2', 'S3', 'S4'")
+    stop("'type' needs to be one of 'S1', 'S2', 'S3', 'S4'.")
   }
   stopifnot(
     is.numeric(x),

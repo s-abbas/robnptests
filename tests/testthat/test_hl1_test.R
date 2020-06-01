@@ -48,7 +48,7 @@ testthat::test_that("hl1_test works correctly", {
   testthat::expect_equal(res.method, "Asymptotic test based on the one-sample Hodges-Lehmann estimator")
 
   ## ___________________________________________________________________________
-  ## If not method is given, the randomized test should be performed automatically
+  ## If no method is given, the randomized test should be performed automatically
   ## for small to moderate sample sizes
   ## ___________________________________________________________________________
   set.seed(108)
@@ -79,9 +79,9 @@ testthat::test_that("hl1_test works correctly", {
   testthat::expect_error(hl1_test(x, y, na.rm = TRUE))
 
 
-  ##
+  ## ___________________________________________________________________________
   ## Return errors if the wrong methods/alternative are handed over
-  ##
+  ## ___________________________________________________________________________
 
   set.seed(108)
 
@@ -93,21 +93,71 @@ testthat::test_that("hl1_test works correctly", {
   testthat::expect_error(hl1_test(x, y, delta="xyz"))
   testthat::expect_error(hl1_test(x, y, scale="SD"))
 
+  ## ___________________________________________________________________________
+  ## Compare p-values for different alternative hypothesis
+  ## ___________________________________________________________________________
+  ## The p-values should be related by the following equations:
+  ## (i) p.two.sided = 2 * min(p.less, p.greater)
+  ## (ii) p.less = 1 - p.greater,
+  ## where p.two.sided is the p-value for the two.sided alternative and
+  ## p.greater and p.less are the p-values for the one-sided alternatives.
+
   ##
-  ## Results should differ depending on the alternative given to the test
+  ## Asymptotic test
   ##
 
   set.seed(108)
 
   x <- rnorm(30)
-  y <- rnorm(30) + 0.5
+  y <- rnorm(30)
 
-  p.two.sided <- hl1_test(x, y, method="asymptotic", alternative="two.sided")$p.value
-  p.greater <- hl1_test(x, y, method="asymptotic", alternative="greater")$p.value
-  p.less <- hl1_test(x, y, method="asymptotic", alternative="less")$p.value
+  p.two.sided <- hl1_test(x, y, method = "asymptotic", alternative = "two.sided")$p.value
+  p.greater <- hl1_test(x, y, method = "asymptotic", alternative = "greater")$p.value
+  p.less <- hl1_test(x, y, method = "asymptotic", alternative = "less")$p.value
 
-  testthat::expect_false(p.two.sided == p.greater)
-  testthat::expect_false(p.greater == p.less)
-  testthat::expect_false(p.two.sided == p.less)
+  testthat::expect_equal(p.two.sided, 2 * min(p.less, p.greater))
+  testthat::expect_equal(p.less, 1 - p.greater)
+
+  ##
+  ## Permutation test
+  ##
+
+  set.seed(108)
+
+  x <- rnorm(5)
+  y <- rnorm(5)
+
+  p.two.sided <- hl1_test(x, y, method = "exact", alternative = "two.sided")$p.value
+  p.greater <- hl1_test(x, y, method = "exact", alternative = "greater")$p.value
+  p.less <- hl1_test(x, y, method = "exact", alternative = "less")$p.value
+
+  testthat::expect_equal(p.two.sided, 2 * min(p.less, p.greater))
+
+  ##
+  ## Randomized test
+  ##
+
+  set.seed(108)
+
+  x <- rnorm(10)
+  y <- rnorm(10)
+
+  set.seed(123)
+  p.two.sided <- hl1_test(x, y, method = "sampled", alternative = "two.sided", n.rep = 1000)$p.value
+  set.seed(123)
+  p.greater <- hl1_test(x, y, method = "sampled", alternative = "greater", n.rep = 1000)$p.value
+  set.seed(123)
+  p.less <- hl1_test(x, y, method = "sampled", alternative = "less", n.rep = 1000)$p.value
+
+  ## We use the correction by Phipson and Smyth (2011) as implemented in the
+  ## R package statmod. Thus, we need to determine the number b of values in
+  ## randomization distributions which are at least as extreme as the observed
+  ## value.
+  set.seed(99)
+  dist.sampled <- perm_distribution(x, y, type = "D1S1", sampled = TRUE, n.rep = 1000)
+  b <- sum(dist.sampled >= rob_perm_statistic(x, y, type = "D1S1")$statistic)/1001
+
+  testthat::expect_equal(p.two.sided, 2 * min(p.less, p.greater))
+
 }
 )

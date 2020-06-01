@@ -22,25 +22,28 @@
 
 perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = 10000) {
   ## Sample sizes
-  h <- length(x)
-  k <- length(y)
+  m <- length(x)
+  n <- length(y)
 
   ## Error handling
-  if (sampled & n.rep > choose(h + k, h)) {
-    stop (paste0("'n.rep' must not be larger than ", choose(h + k, h), ", the number of all splits."))
+  if (sampled & n.rep > choose(m + n, m)) {
+    stop (paste0("'n.rep' must not be larger than ", choose(m + n, m), ", the number of all splits."))
   }
 
   ## Splits in two samples
   if (!sampled) {
+    ## Computation of permutation distribution
+
     complete <- c(x, y)
-    splits <- gtools::combinations((h + k), h, 1:(h + k))
+    splits <- gtools::combinations((m + n), m, 1:(m + n))
 
     distribution <- apply(splits, 1, function(s) rob_perm_statistic(x = complete[s], y = complete[-s], type)$statistic)
-
   } else if (sampled) {
+    ## Computation of randomization distribution
+
     splits <- replicate(n.rep, sample(c(x, y)))
 
-    distribution <- apply(splits, 2, function(s) rob_perm_statistic(x = s[1:h], y = s[(h + 1):(h + k)], type)$statistic)
+    distribution <- apply(splits, 2, function(s) rob_perm_statistic(x = s[1:m], y = s[(m + 1):(m + n)], type)$statistic)
   }
 
   return(distribution)
@@ -63,12 +66,12 @@ perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = 10000) {
 #' @export
 
 mest_perm_distribution <- function(x, y, psi, k1, sampled = FALSE, n.rep = NULL) {
-  h <- length(x)
-  k <- length(y)
+  m <- length(x)
+  n <- length(y)
 
   if (!sampled) {
     complete <- c(x, y)
-    splits <- gtools::combinations((h + k), h, 1:(h + k))
+    splits <- gtools::combinations((m + n), h, 1:(m + n))
 
     distribution <- apply(splits, 1, function(s) m_test_statistic(x = complete[s], y = complete[-s],
                                                                   psi = psi, k = k1)$statistic)
@@ -76,7 +79,7 @@ mest_perm_distribution <- function(x, y, psi, k1, sampled = FALSE, n.rep = NULL)
   else if (sampled) {
     splits <- replicate(n.rep, sample(c(x, y)))
 
-    distribution <- apply(splits, 2, function(s) m_test_statistic(x = s[1:h], y = s[(h+1):(h+k)], psi = psi, k = k1)$statistic)
+    distribution <- apply(splits, 2, function(s) m_test_statistic(x = s[1:m], y = s[(m + 1):(m + n)], psi = psi, k = k1)$statistic)
   }
 
   return(distribution)
@@ -99,20 +102,20 @@ mest_perm_distribution <- function(x, y, psi, k1, sampled = FALSE, n.rep = NULL)
 
 asym_trimmed_perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = NULL) {
   ## Sample sizes
-  h <- length(x)
-  k <- length(y)
+  m <- length(x)
+  n <- length(y)
 
   ## Splits in two samples
   if (!sampled) {
     complete <- c(x, y)
-    splits <- gtools::combinations((h + k), h, 1:(h + k))
+    splits <- gtools::combinations((m + n), m, 1:(m + n))
 
     distribution <- apply(splits, 1, function(s) asym_trimmed_t(x = complete[s], y = complete[-s], type)$statistic)
 
   } else if (sampled) {
     splits <- replicate(n.rep, sample(c(x, y)))
 
-    distribution <- apply(splits, 2, function(s) asym_trimmed_t(x = s[1:h], y = s[(h + 1):(h + k)], type)$statistic)
+    distribution <- apply(splits, 2, function(s) asym_trimmed_t(x = s[1:m], y = s[(m + 1):(m + n)], type)$statistic)
   }
 
   return(distribution)
@@ -126,7 +129,7 @@ asym_trimmed_perm_distribution <- function(x, y, type, sampled = FALSE, n.rep = 
 #' Calculation of permutation p-value
 #'
 #' @description
-#' \code{calc_perm_p_value} calculates the permutation p-value following Smyth & Phipson (2010).
+#' \code{calc_perm_p_value} calculates the permutation p-value following Phipson & Smyth (2010).
 #'
 #' @template statistic
 #' @template distribution
@@ -154,11 +157,12 @@ calc_perm_p_value <- function(statistic, distribution, m, n, sampled, n.rep, alt
               less = sum(distribution <= statistic)
   )
 
+  ## Computation of p-value
   if (sampled) {
-    ## Random subset of permutations with replacement
-    p.value <- statmod::permp(A, nperm = n.rep, n1 = m, n2 = n, twosided = (alternative == "two.sided"))
+    ## Randomization distribution
+    p.value <- statmod::permp(A, nperm = n.rep, n1 = m, n2 = n, twosided = (alternative == "two.sided"), method = "auto")
   } else if (!sampled) {
-    ## All permutations
+    ## Permutation distribution
     p.value <- A / choose(m + n, m)
   }
 

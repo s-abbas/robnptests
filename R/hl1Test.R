@@ -52,7 +52,7 @@
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{SmyPhi10perm}{robTests}
+#' \insertRef{PhiSmy10perm}{robTests}
 #'
 #' \insertRef{FriDeh11robu}{robTests}
 #'
@@ -73,12 +73,13 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
                      var.test = FALSE) {
 
   alternative <- match.arg(alternative)
-  method <- match.arg(method)
+#  method <- match.arg(method)
   scale <- match.arg(scale)
 
   ## Names of data sets
   dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
+  ## NA handling
   if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
     return(NA)
   } else if (na.rm & (any(is.na(x)) | any(is.na(y)))) {
@@ -102,7 +103,7 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
     type <- "D1S1"
   } else if (scale == "S2") {
     type <- "D1S2"
-  } else stop(" 'scale' must one of 'S1' and 'S2' ")
+  } else stop(" 'scale' must one of 'S1' and 'S2'.")
 
   ## Error handling
   if (!missing(delta) && (length(delta) != 1 || is.na(delta))) {
@@ -116,8 +117,13 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
   ## If no choice is made regarding the computation of the p-value, the method
   ## is automatically selected based on the sample sizes
   if (length(method) > 1 & identical(method, c("asymptotic", "exact", "sampled"))) {
-    if (length(x) >= 30 & length(y) >= 30) method <- "asymptotic"
-    else method <- "sampled"
+    if (length(x) >= 30 & length(y) >= 30) {
+      method <- "asymptotic"
+    }
+    else {
+      method <- "sampled"
+      n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
+    }
   }
 
 
@@ -127,13 +133,19 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
 
     statistic <- perm.stats$statistic
     estimates <- perm.stats$estimates
-    if (delta != 0) estimates[2] <- hodges_lehmann(y)
+    if (delta != 0) {
+      estimates[2] <- hodges_lehmann(y)
+    }
 
-    ## Calculate permutation distribution
-    if (method == "sampled") sampled <- TRUE else sampled <- FALSE
+    # ## Calculate permutation distribution
+    # if (method == "sampled") {
+    #   sampled <- TRUE
+    # } else {
+    #   sampled <- FALSE
+    # }
 
     distribution <- perm_distribution(x = x, y = y - delta, type = type,
-                                      sampled = sampled, n.rep = n.rep)
+                                      sampled = (method == sampled), n.rep = n.rep)
 
     ## p-value
     p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y),
@@ -154,9 +166,11 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
     int <- dens(0)
 
     estimates <- c(hodges_lehmann(x), hodges_lehmann(y - delta))
-    statistic <- sqrt(12*m*n/(m+n)) * int * (estimates[1] - estimates[2])
+    statistic <- sqrt(12 * m*n/(m+n)) * int * (estimates[1] - estimates[2])
 
-    if (delta != 0) estimates[2] <- hodges_lehmann(y)
+    if (delta != 0) {
+      estimates[2] <- hodges_lehmann(y)
+    }
 
     p.value <- switch (alternative,
                        two.sided = 2 * stats::pnorm(abs(statistic), lower.tail = FALSE),
