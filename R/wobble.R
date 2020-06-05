@@ -1,6 +1,8 @@
 ## ----------------------------------------------------------------------------
 ## Add random noise if too many values in the samples are equal
 ## ----------------------------------------------------------------------------
+
+#' @title Test
 #'
 #' @description
 #' \code{wobble} makes a discrete sample continuous by adding uniform noise to the
@@ -11,7 +13,7 @@
 #' @param partially logical, indicates whether the complete sample should be treated or only the
 #'                  values that are duplicated, default is \code{FALSE}
 #'
-#' @details
+#' @details Test
 
 #' @return
 #' A list of length two containing the modified \code{x} and \code{y}
