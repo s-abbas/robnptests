@@ -143,19 +143,19 @@ testthat::test_that("hl1_test works correctly", {
   y <- rnorm(10)
 
   set.seed(123)
-  p.two.sided <- hl1_test(x, y, method = "sampled", alternative = "two.sided", n.rep = 1000)$p.value
+  p.two.sided <- hl1_test(x, y, method = "randomization", alternative = "two.sided", n.rep = 1000)$p.value
   set.seed(123)
-  p.greater <- hl1_test(x, y, method = "sampled", alternative = "greater", n.rep = 1000)$p.value
+  p.greater <- hl1_test(x, y, method = "randomization", alternative = "greater", n.rep = 1000)$p.value
   set.seed(123)
-  p.less <- hl1_test(x, y, method = "sampled", alternative = "less", n.rep = 1000)$p.value
+  p.less <- hl1_test(x, y, method = "randomization", alternative = "less", n.rep = 1000)$p.value
 
   ## We use the correction by Phipson and Smyth (2011) as implemented in the
   ## R package statmod. Thus, we need to determine the number b of values in
   ## randomization distributions which are at least as extreme as the observed
   ## value.
   set.seed(99)
-  dist.sampled <- perm_distribution(x, y, type = "D1S1", sampled = TRUE, n.rep = 1000)
-  b <- sum(dist.sampled >= rob_perm_statistic(x, y, type = "D1S1")$statistic)/1001
+  dist.sampled <- perm_distribution(x, y, type = "HL11", randomization = TRUE, n.rep = 1000)
+  b <- sum(dist.sampled >= rob_perm_statistic(x, y, type = "HL11")$statistic)/1001
 
   testthat::expect_equal(p.two.sided, 2 * min(p.less, p.greater))
 

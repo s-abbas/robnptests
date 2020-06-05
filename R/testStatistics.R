@@ -134,7 +134,11 @@ asym_trimmed_t <- function(x, y, type, delta = 0, na.rm = FALSE) {
 #'          estimates for the mutual sample scale. See Fried and Dehling (2011) for details.
 #'
 #' @examples
+#' ## Generate random samples
+#' set.seed(108)
 #' x <- rnorm(20); y <- rnorm(20)
+#'
+#' ## Compute HL21 statistic
 #' rob_perm_statistic(x, y, type = "HL21")
 #'
 #' @references
