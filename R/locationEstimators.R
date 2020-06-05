@@ -19,8 +19,11 @@
 #' The trimmed mean.
 #'
 #' @examples
+#' ## Generate random sample
 #' set.seed(108)
 #' x <- rnorm(10)
+#'
+#' ## Compute 20% trimmed mean
 #' trim_mean(x, gamma = 0.2)
 #'
 #' @export
@@ -78,8 +81,11 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' \insertRef{ReeSta96hing}{robTests}
 #'
 #' @examples
+#' ## Generate random sample
 #' set.seed(108)
 #' x <- rnorm(10)
+#'
+#' ## Compute asymmetrically trimmed means
 #' asym_trimmed_mean(x, type = "Q2")
 #' asym_trimmed_mean(x, type = "SK2")
 #' asym_trimmed_mean(x, type = "SK5")
@@ -151,8 +157,11 @@ asym_trimmed_mean <- function(x, type = c("Q2", "SK2", "SK5"), na.rm = FALSE) {
 #' The winsorized mean.
 #'
 #' @examples
+#' ## Generate random samples
 #' set.seed(108)
 #' x <- rnorm(10)
+#'
+#' ## Compute 20% winsorized mean
 #' win_mean(x, gamma = 0.2)
 #'
 #' @export
@@ -201,8 +210,11 @@ win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' \insertRef{HodLeh63esti}{robTests}
 #'
 #' @examples
+#' ## Generate random sample
 #' set.seed(108)
 #' x <- rnorm(10)
+#'
+#' ## Compute one-sample Hodges-Lehmann estimator
 #' hodges_lehmann(x)
 #'
 #' @export
@@ -246,8 +258,11 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
 #' \insertRef{HodLeh63esti}{robTests}
 #'
 #' @examples
+#' ## Generate random samples
 #' set.seed(108)
 #' x <- rnorm(10); y <- rnorm(10)
+#'
+#' ## Compute two-sample Hodges-Lehmann estimator
 #' hodges_lehmann_2sample(x, y)
 #'
 #' @export
@@ -297,9 +312,12 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 #'
 #'
 #' @examples
+#'
+#' ## Generate random sample
 #' set.seed(108)
 #' x <- rnorm(10)
 #'
+#' ## Computer Huber's M-estimate
 #' m_est(x, psi = "huber")
 #'
 #' @export

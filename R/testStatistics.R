@@ -143,12 +143,12 @@ asym_trimmed_t <- function(x, y, type, delta = 0, na.rm = FALSE) {
 #' @export
 
 rob_perm_statistic <- function(x, y,
-                          type = c("HL11", "HL12", "HL21", "HL22", "MD1", "MD2"),
+                          type = c("HL11", "HL12", "HL21", "HL22", "MED1", "MED2"),
                           na.rm = FALSE) {
   type <- match.arg(type)
 
-  if(!(type %in% c("HL11", "HL12", "HL21", "HL22", "MD1", "MD2"))) {
-    stop("type needs to be one of 'HL11', 'HL12', 'HL21', 'HL22', 'MD1', 'MD2'.")
+  if(!(type %in% c("HL11", "HL12", "HL21", "HL22", "MED1", "MED2"))) {
+    stop("type needs to be one of 'HL11', 'HL12', 'HL21', 'HL22', 'MED1', 'MED2'.")
   }
 
   switch(type,
@@ -178,14 +178,14 @@ rob_perm_statistic <- function(x, y,
             sd <- rob_var(x, y, na.rm = na.rm, type = "S2")
             res <- loc/sd
          },
-         MD1 = {
+         MED1 = {
             est.x <- stats::median(x, na.rm = na.rm)
             est.y <- stats::median(y, na.rm = na.rm)
             loc <- est.x - est.y
             sd <- rob_var(x, y, na.rm = na.rm, type = "S3")
             res <- loc/sd
         },
-         MD2 = {
+         MED2 = {
             est.x <- stats::median(x, na.rm = na.rm)
             est.y <- stats::median(y, na.rm = na.rm)
             loc <- est.x - est.y

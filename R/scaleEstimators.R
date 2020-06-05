@@ -20,10 +20,12 @@
 #'
 #'
 #' @examples
+#' ## Generate random sample
 #' set.seed(108)
 #' x <- rnorm(10)
-#' win_var(x, gamma = 0.2)
 #'
+#' ## Compute 20% winsorized variance
+#' win_var(x, gamma = 0.2)
 #'
 #' @export
 
@@ -77,8 +79,11 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
 #'
 #'
 #' @examples
+#' ## Generate random sample
 #' set.seed(108)
 #' x <- rnorm(10)
+#'
+#' ## Compute asymmetrical winsorized variance
 #' asym_win_var(x, type = "SK5")
 #'
 #'

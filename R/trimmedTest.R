@@ -26,7 +26,10 @@
 #' \item{data.name}{a character string giving the names of the data.}
 #'
 #' @examples
+#' ## Generate random samples
 #' x <- rnorm(20); y <- rnorm(20)
+#'
+#' ## Trimmed t-test
 #' trimmed_test(x, y, gamma = 0.1)
 #'
 #' @importFrom Rdpack reprompt

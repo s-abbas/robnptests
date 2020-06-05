@@ -52,9 +52,19 @@
 #' \insertRef{FriDeh11robu}{robTests}
 #'
 #' @examples
+#' ## Generate random samples
+#' set.seed(108)
 #' x <- rnorm(20); y <- rnorm(20)
+#'
+#' ## Asymptotic HL2 test
 #' hl2_test(x, y, method = "asymptotic", scale = "S1")
+#'
+#' ## HL22 test using randomization principle by drawing 1000 random permutations
+#' ## with replacement
+#'
+#' \dontrun{
 #' hl2_test(x, y, method = "randomization", n.rep = 1000, scale = "S2")
+#' }
 #'
 #' @export
 

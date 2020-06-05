@@ -53,9 +53,19 @@
 #' \insertRef{FriDeh11robu}{robTests}
 #'
 #' @examples
+#' ## Generate random samples
+#' set.seed(108)
 #' x <- rnorm(20); y <- rnorm(20)
+#'
+#' ## Asymptotic MED test
 #' med_test(x, y, method = "asymptotic", scale = "S3")
+#'
+#' ## MED2 test using randomization principle by drawing 1000 random permutations
+#' ## with replacement
+#'
+#' \dontrun{
 #' med_test(x, y, method = "randomization", n.rep = 1000, scale = "S4")
+#' }
 #'
 #' @export
 
@@ -87,9 +97,9 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   scale <- match.arg(scale)
 
   if (scale == "S3") {
-    type <- "MD1"
+    type <- "MED1"
   } else if (scale == "S4") {
-    type <- "MD2"
+    type <- "MED2"
     } else stop(" 'scale' must one of 'S3' and 'S4' ")
 
   ## Error handling
