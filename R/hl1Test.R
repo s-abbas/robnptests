@@ -148,18 +148,18 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
     }
 
     ## Calculate permutation distribution
-    if (method == "randomization") {
-      randomization <- TRUE
-    } else {
-      randomization <- FALSE
-    }
+    # if (method == "randomization") {
+    #   randomization <- TRUE
+    # } else {
+    #   randomization <- FALSE
+    # }
 
     distribution <- perm_distribution(x = x, y = y - delta, type = type,
-                                      randomization = (method == randomization), n.rep = n.rep)
+                                      randomization = (method == "randomization"), n.rep = n.rep)
 
     ## p-value
     p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y),
-                                 randomization = randomization, n.rep = n.rep, alternative = alternative)
+                                 randomization = (method == "randomization"), n.rep = n.rep, alternative = alternative)
 
   } else if (method == "asymptotic") {
 

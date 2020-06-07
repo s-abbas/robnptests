@@ -144,10 +144,10 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
       randomization <- FALSE
     }
 
-    distribution <- perm_distribution(x = x, y = y - delta, type = type, randomization = (method == randomization), n.rep = n.rep)
+    distribution <- perm_distribution(x = x, y = y - delta, type = type, randomization = (method == "randomization"), n.rep = n.rep)
 
     ## p-value
-    p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y), randomization = randomization, n.rep = n.rep, alternative = alternative)
+    p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y), randomization = (method == "randomization"), n.rep = n.rep, alternative = alternative)
 
     } else if (method == "asymptotic") {
 

@@ -127,18 +127,18 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     if (delta != 0) estimates[2] <- stats::median(y)
 
     ## Calculate permutation distribution
-    if (method == "randomization") {
-      randomization <- TRUE
-    } else {
-      randomization <- FALSE
-    }
+    # if (method == "randomization") {
+    #   randomization <- TRUE
+    # } else {
+    #   randomization <- FALSE
+    # }
 
-    distribution <- perm_distribution(x = x, y = y - delta, type = type, randomization = randomization,
+    distribution <- perm_distribution(x = x, y = y - delta, type = type, randomization = (method == "randomization"),
                                       n.rep = n.rep)
 
     ## p-value
     p.value <- calc_perm_p_value(statistic, distribution, m = length(x),
-                                 n = length(y), randomization = randomization, n.rep = n.rep,
+                                 n = length(y), randomization = (method == "randomization"), n.rep = n.rep,
                                  alternative = alternative)
 
   } else if (method == "asymptotic") {

@@ -168,4 +168,3 @@ calc_perm_p_value <- function(statistic, distribution, m, n, randomization, n.re
 
   return(p.value)
 }
-
