@@ -36,7 +36,7 @@ testthat::test_that("hodges_lehmann_2sample works correctly", {
   n <- length(y)
 
   ## Align second sample
-  y <- y - hodges_lehmann_2sample(x, y)
+  x <- x - hodges_lehmann_2sample(x, y)
 
   ## Two-sample Wilcoxon rank-sum statistic of aligned sampled needs to be
   ## equal to its expected value under H_0 of two-sample Wilcoxon rank-sum test

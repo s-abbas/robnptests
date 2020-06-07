@@ -9,8 +9,8 @@ testthat::test_that("hl1_test works correctly", {
   x <- rnorm(5)
   y <- rnorm(5)
 
-  res.s1 <- as.numeric(hl1_test(x, y, method = "exact", scale = "S1")$statistic)
-  res.s2 <- as.numeric(hl1_test(x, y, method = "exact", scale = "S2")$statistic)
+  res.s1 <- as.numeric(hl1_test(x, y, method = "permutation", scale = "S1")$statistic)
+  res.s2 <- as.numeric(hl1_test(x, y, method = "permutation", scale = "S2")$statistic)
 
   testthat::expect_equal(res.s1, (hodges_lehmann(x) - hodges_lehmann(y))/rob_var(x, y, type = "S1"))
   testthat::expect_equal(res.s2, (hodges_lehmann(x) - hodges_lehmann(y))/rob_var(x, y, type = "S2"))
@@ -101,6 +101,10 @@ testthat::test_that("hl1_test works correctly", {
   ## (ii) p.less = 1 - p.greater,
   ## where p.two.sided is the p-value for the two.sided alternative and
   ## p.greater and p.less are the p-values for the one-sided alternatives.
+  ##
+  ## For the permutation and the randomization test, we need to increase the
+  ## tolerance in the comparison. This is because the null distributions are
+  ## discrete. Hence,
 
   ##
   ## Asymptotic test
@@ -127,14 +131,25 @@ testthat::test_that("hl1_test works correctly", {
   x <- rnorm(5)
   y <- rnorm(5)
 
-  p.two.sided <- hl1_test(x, y, method = "exact", alternative = "two.sided")$p.value
-  p.greater <- hl1_test(x, y, method = "exact", alternative = "greater")$p.value
-  p.less <- hl1_test(x, y, method = "exact", alternative = "less")$p.value
+  p.two.sided <- hl1_test(x, y, method = "permutation", alternative = "two.sided")$p.value
+  p.greater <- hl1_test(x, y, method = "permutation", alternative = "greater")$p.value
+  p.less <- hl1_test(x, y, method = "permutation", alternative = "less")$p.value
+
+  perm.dist <- perm_distribution(x, y, type = "HL11", randomization = FALSE)
+  hl11.statistic <- rob_perm_statistic(x, y, type = "HL11")$statistic
 
   testthat::expect_equal(p.two.sided, 2 * min(p.less, p.greater))
 
+  ## In the comparison of the one-sided p-values, we need to add the number of
+  ## values in the permutation distribution that are equal to the value of the
+  ## test statistic. Because of the discrete null distribution, the value of the
+  ## test statistic is included in the computation of the left-sided and the
+  ## computation of the right-sided p-value. Hence, it is counted twice so
+  ## that p.less + p.greater > 1.
+  testthat::expect_equal(p.less, 1 - p.greater + sum(hl11.statistic == perm.dist)/252)
+
   ##
-  ## Randomized test
+  ## Randomization test
   ##
 
   set.seed(108)
@@ -149,15 +164,11 @@ testthat::test_that("hl1_test works correctly", {
   set.seed(123)
   p.less <- hl1_test(x, y, method = "randomization", alternative = "less", n.rep = 1000)$p.value
 
-  ## We use the correction by Phipson and Smyth (2011) as implemented in the
-  ## R package statmod. Thus, we need to determine the number b of values in
-  ## randomization distributions which are at least as extreme as the observed
-  ## value.
-  set.seed(99)
-  dist.sampled <- perm_distribution(x, y, type = "HL11", randomization = TRUE, n.rep = 1000)
-  b <- sum(dist.sampled >= rob_perm_statistic(x, y, type = "HL11")$statistic)/1001
-
-  testthat::expect_equal(p.two.sided, 2 * min(p.less, p.greater))
-
+  ## We increase the tolerance for the comparisons. One reason is the discrete
+  ## null distribution. Moreover, as we use the correction by Phipson and Smyth (2011),
+  ## it would be necessary to compute and add the integral in equation (2)
+  ## of their paper, which would make this test case more complicated.
+  testthat::expect_equal(p.two.sided, 2 * min(p.less, p.greater), tolerance = 10^(-2))
+  testthat::expect_equal(1, p.less + p.greater, tolerance = 10^(-3))
 }
 )
