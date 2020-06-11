@@ -7,7 +7,7 @@
 rob_perm_statistic(
   x,
   y,
-  type = c("D1S1", "D1S2", "D2S1", "D2S2", "D3S3", "D3S4"),
+  type = c("HL11", "HL12", "HL21", "HL22", "MD1", "MD2"),
   na.rm = FALSE
 )
 }
@@ -38,7 +38,7 @@ The test statistics returned by \code{rob_perm_statistic} are of the form
 }
 \examples{
 x <- rnorm(20); y <- rnorm(20)
-rob_perm_statistic(x, y, type = "D2S1")
+rob_perm_statistic(x, y, type = "HL21")
 
 }
 \references{

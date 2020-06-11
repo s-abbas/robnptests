@@ -37,7 +37,7 @@ only needed if \code{type \%in\% c("min2", "min3")}.}
 \item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 
 \item{n.rep}{an integer value specifying the number of random permutations used to calculate
-the permutation distribution of the minimum p-value;
+the randomization distribution of the minimum p-value;
 default is \code{n.rep = 1000}.}
 
 \item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}

@@ -9,7 +9,7 @@ med_test(
   y,
   alternative = c("two.sided", "greater", "less"),
   delta = ifelse(var.test, 1, 0),
-  method = c("asymptotic", "exact", "sampled"),
+  method = c("asymptotic", "permutation", "randomization"),
   scale = c("S3", "S4"),
   n.rep = 10000,
   na.rm = FALSE,
@@ -30,10 +30,10 @@ on whether the test should be performed for a difference in location or in scale
 
 \item{method}{a character string specifying the test method used,
 \code{"asymptotic"} for an asymptotic test based on the
-normal distribution, \code{"exact"} for an exact and
-\code{"sampled"} for a randomized permutation test.
-The exact permutation test uses all data splits into two samples,
-while the randomized test draws \code{n.rep} random splits
+normal distribution, \code{"permutation"} for a permutation and
+\code{"randomization"} for a randomization test.
+The permutation test uses all data splits into two samples,
+while the randomization test draws \code{n.rep} random splits
 with replacement.}
 
 \item{scale}{a character string specifying the scale estimator used for standardization
@@ -42,8 +42,8 @@ Default is \code{"S3"}. Ignored if \code{method = "asymptotic"};
 see details for definition of the scale estimators.}
 
 \item{n.rep}{an integer value specifying the number of random splits used to
-calculate the permutation distribution if \code{method = "sampled"},
-ignored if \code{method = "exact"} or \code{method = "asymptotic"};
+calculate the randomization distribution if \code{method = "randomization"},
+ignored if \code{method = "permutation"} or \code{method = "asymptotic"};
 default is \code{n.rep = 10000}.}
 
 \item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
@@ -68,7 +68,9 @@ the difference of the sample medians for both samples.
 When computing a randomization distribution based on randomly drawn splits with replacement, the results of
 Smyth & Phipson (2010) to calculate the p-value are used. The test statistics and the asymptotic distribution are taken from Fried & Dehling (2011).
 
-The test statistics for the exact and sampled version of the test is standardized using a robust scale estimator.
+The estimator of the location shift is the difference of the medians of \texttt{x} and \texttt{y}.
+
+The test statistics for the permutation and randomization version of the test is standardized using a robust scale estimator.
 \code{scale = "S3"} represents use of
 
 \deqn{S = 2 * ( |X_1 - med(X)|,...,|X_m - med(X)|, |Y_1 - med(Y)|,...,|Y_n - med(Y)| ),}
@@ -82,7 +84,7 @@ For more details see Fried & Dehling (2011).
 \examples{
 x <- rnorm(20); y <- rnorm(20)
 med_test(x, y, method = "asymptotic", scale = "S3")
-med_test(x, y, method = "sampled", n.rep = 1000, scale = "S4")
+med_test(x, y, method = "randomization", n.rep = 1000, scale = "S4")
 
 }
 \references{

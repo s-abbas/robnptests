@@ -4,7 +4,15 @@
 \alias{calc_perm_p_value}
 \title{Calculation of permutation p-value}
 \usage{
-calc_perm_p_value(statistic, distribution, m, n, sampled, n.rep, alternative)
+calc_perm_p_value(
+  statistic,
+  distribution,
+  m,
+  n,
+  randomization,
+  n.rep,
+  alternative
+)
 }
 \arguments{
 \item{statistic}{observed value of the test statistic.}
@@ -15,13 +23,11 @@ calc_perm_p_value(statistic, distribution, m, n, sampled, n.rep, alternative)
 
 \item{n}{integer value giving size of second sample.}
 
-\item{sampled}{logical value indicating whether all splits should be
-considered or only a random sample, where the observations
-are drawn with replacement.}
+\item{randomization}{logical value indicating whether the p-value should be computed from a permutation (\code{FALSE}) or a randomization (\code{TRUE}) distribution.}
 
 \item{n.rep}{an integer value specifying the number of random splits used to
-calculate the permutation distribution if \code{method = "sampled"},
-ignored if \code{method = "exact"} or \code{method = "asymptotic"};
+calculate the randomization distribution if \code{method = "randomization"},
+ignored if \code{method = "permutation"} or \code{method = "asymptotic"};
 default is \code{n.rep = 10000}.}
 
 \item{alternative}{a character string specifying the alternative hypothesis,
@@ -31,7 +37,7 @@ must be one of "two.sided" (default), "greater" or "less".}
 p.value for the specified alternative.
 }
 \description{
-\code{calc_perm_p_value} calculates the permutation p-value following Smyth & Phipson (2010).
+\code{calc_perm_p_value} calculates the permutation p-value following Phipson & Smyth (2010).
 }
 \references{
 \insertRef{SmyPhi10perm}{robTests}

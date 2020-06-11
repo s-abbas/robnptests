@@ -4,7 +4,7 @@
 \alias{mest_perm_distribution}
 \title{Permutation distribution for M-statistics}
 \usage{
-mest_perm_distribution(x, y, psi, k1, sampled = FALSE, n.rep = NULL)
+mest_perm_distribution(x, y, psi, k1, randomization = FALSE, n.rep = NULL)
 }
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
@@ -18,13 +18,11 @@ defaults to \code{"huber"}.}
 \item{k1}{tuning parameter(s) for the respective kernel function,
 defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}} in the package \pkg{robustbase}.}
 
-\item{sampled}{logical value indicating whether all splits should be
-considered or only a random sample, where the observations
-are drawn with replacement.}
+\item{randomization}{logical value indicating whether the p-value should be computed from a permutation (\code{FALSE}) or a randomization (\code{TRUE}) distribution.}
 
 \item{n.rep}{an integer value specifying the number of random permutations used to calculate
-the permutation distribution if \code{method = "sampled"},
-ignored if \code{method = "exact"}. Default is 10000.}
+the randomization distribution if \code{method = "randomization"},
+ignored if \code{method = "permutation"}; default is 10000.}
 }
 \value{
 Vector with permutation distribution.

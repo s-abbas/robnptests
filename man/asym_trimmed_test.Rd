@@ -10,7 +10,7 @@ asym_trimmed_test(
   type = c("Q2", "SK2", "SK5"),
   alternative = c("two.sided", "greater", "less"),
   delta = 0,
-  method = c("asymptotic", "exact", "sampled"),
+  method = c("asymptotic", "permutation", "randomization"),
   n.rep = 10000,
   na.rm = FALSE,
   var.test = FALSE
@@ -33,15 +33,15 @@ on whether the test should be performed for a difference in location or in scale
 
 \item{method}{a character string specifying the test method used,
 \code{"asymptotic"} for an asymptotic test based on the
-normal distribution, \code{"exact"} for an exact and
-\code{"sampled"} for a randomized permutation test.
-The exact permutation test uses all data splits into two samples,
-while the randomized test draws \code{n.rep} random splits
+normal distribution, \code{"permutation"} for a permutation and
+\code{"randomization"} for a randomization test.
+The permutation test uses all data splits into two samples,
+while the randomization test draws \code{n.rep} random splits
 with replacement.}
 
 \item{n.rep}{an integer value specifying the number of random splits used to
-calculate the permutation distribution if \code{method = "sampled"},
-ignored if \code{method = "exact"} or \code{method = "asymptotic"};
+calculate the randomization distribution if \code{method = "randomization"},
+ignored if \code{method = "permutation"} or \code{method = "asymptotic"};
 default is \code{n.rep = 10000}.}
 
 \item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
@@ -52,7 +52,7 @@ default is \code{n.rep = 10000}.}
 A list with class "\code{htest}" containing the following components:
 \item{statistic}{the value of the test statistic.}
 \item{p.value}{the p-value for the test.}
-\item{estimate}{the estimated sample means of \code{x} and \code{y}.}
+\item{estimate}{the asymmetrically trimmed means of \code{x} and \code{y}.}
 \item{null.value}{the specified hypothesized value of the mean difference.}
 \item{alternative}{a character string describing the alternative hypothesis.}
 \item{method}{a character string indicating what type of test was performed.}
@@ -89,7 +89,7 @@ asym_trimmed_test(x, y, type = "Q2", method = "asymptotic")
 asym_trimmed_test(x, y, type = "SK2", method = "asymptotic")
 asym_trimmed_test(x, y, type = "SK5", method = "asymptotic")
 
-asym_trimmed_test(x, y, type = "SK5", method = "sampled")
+asym_trimmed_test(x, y, type = "SK5", method = "randomization")
 
 }
 \references{

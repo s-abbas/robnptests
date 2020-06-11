@@ -25,7 +25,7 @@ An estimate of the pooled variance of the two samples.
 based on two samples.
 }
 \details{
-For definitions of the scale estimators see Fried and Dehling (2011). Here,
+For definitions of the scale estimators see Fried and Dehling (2011).
 }
 \references{
 \insertRef{FriDeh11robu}{robTests}

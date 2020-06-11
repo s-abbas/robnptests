@@ -9,7 +9,7 @@ m_estimator_test(
   y,
   alternative = c("two.sided", "greater", "less"),
   delta = ifelse(var.test, 1, 0),
-  method = c("sampled", "exact"),
+  method = c("randomization", "permutation"),
   psi = c("huber", "hampel", "bisquare"),
   k = .Mpsi.tuning.default(psi),
   n.rep = 10000,
@@ -29,10 +29,10 @@ must be one of "two.sided" (default), "greater" or "less".}
 on whether the test should be performed for a difference in location or in scale, default is
 \code{delta = 0} for location test and \code{delta = 1} for scale test.}
 
-\item{method}{a character string specifying the test method used: \code{"exact"}
-for an exact and \code{"sampled"} for a randomized permutation test.
-The exact permutation test uses all data splits into two samples,
-while the randomized test draws \code{n.rep} random splits
+\item{method}{a character string specifying the test method used: \code{"permutation"}
+for a permutation and \code{"randomization"} for a randomization test.
+The permutation test uses all data splits into two samples,
+while the randomization test draws \code{n.rep} random splits
 with replacement.}
 
 \item{psi}{kernel used for optimization.
@@ -43,8 +43,8 @@ defaults to \code{"huber"}.}
 defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}} in the package \pkg{robustbase}.}
 
 \item{n.rep}{an integer value specifying the number of random permutations used to calculate
-the permutation distribution if \code{method = "sampled"},
-ignored if \code{method = "exact"}. Default is 10000.}
+the randomization distribution if \code{method = "randomization"},
+ignored if \code{method = "permutation"}; default is 10000.}
 
 \item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 
@@ -54,7 +54,7 @@ ignored if \code{method = "exact"}. Default is 10000.}
 A list with class "\code{htest}" containing the following components:
 \item{statistic}{the value of the test statistic.}
 \item{p.value}{the p-value for the test.}
-\item{estimate}{the estimated difference in means.}
+\item{estimate}{the estimated location difference based on the difference of M-estimates.}
 \item{null.value}{the specified hypothesized value of the mean difference.}
 \item{alternative}{a character string describing the alternative hypothesis.}
 \item{method}{a character string indicating what type of test was performed.}
@@ -69,8 +69,8 @@ Details on the tests implemented here can be found in Aboukalam (1992).
 }
 \examples{
 x <- rnorm(20); y <- rnorm(20)
-m_estimator_test(x, y, psi = "huber", method = "sampled", n.rep = 1000)
-m_estimator_test(x, y, psi = "bisquare", method = "sampled", n.rep = 1000)
+m_estimator_test(x, y, psi = "huber", method = "randomization", n.rep = 1000)
+m_estimator_test(x, y, psi = "bisquare", method = "randomization", n.rep = 1000)
 
 }
 \references{

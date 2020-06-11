@@ -9,7 +9,7 @@ hl1_test(
   y,
   alternative = c("two.sided", "greater", "less"),
   delta = ifelse(var.test, 1, 0),
-  method = c("asymptotic", "exact", "sampled"),
+  method = c("asymptotic", "permutation", "randomization"),
   scale = c("S1", "S2"),
   n.rep = 10000,
   na.rm = FALSE,
@@ -30,10 +30,10 @@ on whether the test should be performed for a difference in location or in scale
 
 \item{method}{a character string specifying the test method used,
 \code{"asymptotic"} for an asymptotic test based on the
-normal distribution, \code{"exact"} for an exact and
-\code{"sampled"} for a randomized permutation test.
-The exact permutation test uses all data splits into two samples,
-while the randomized test draws \code{n.rep} random splits
+normal distribution, \code{"permutation"} for a permutation and
+\code{"randomization"} for a randomization test.
+The permutation test uses all data splits into two samples,
+while the randomization test draws \code{n.rep} random splits
 with replacement.}
 
 \item{scale}{a character string specifying the scale estimator used for standardization
@@ -42,8 +42,8 @@ Default is \code{"S1"}. Ignored if \code{method = "asymptotic"};
 see details for definition of the scale estimators.}
 
 \item{n.rep}{an integer value specifying the number of random splits used to
-calculate the permutation distribution if \code{method = "sampled"},
-ignored if \code{method = "exact"} or \code{method = "asymptotic"};
+calculate the randomization distribution if \code{method = "randomization"},
+ignored if \code{method = "permutation"} or \code{method = "asymptotic"};
 default is \code{n.rep = 10000}.}
 
 \item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
@@ -54,7 +54,7 @@ default is \code{n.rep = 10000}.}
 A list with class "\code{htest}" containing the following components:
 \item{statistic}{the value of the test statistic.}
 \item{p.value}{the p-value for the test.}
-\item{estimate}{the estimated sample means of \code{x} and \code{y}.}
+\item{estimate}{the one-sample Hodges-Lehmann estimates of \code{x} and \code{y}.}
 \item{null.value}{the specified hypothesized value of the mean difference.}
 \item{alternative}{a character string describing the alternative hypothesis.}
 \item{method}{a character string indicating what type of test was performed.}
@@ -68,7 +68,7 @@ the difference of the one-sample Hodges-Lehmann estimators for both samples.
 When computing a randomization distribution based on randomly drawn splits with replacement, the results of
 Smyth & Phipson (2010) to calculate the p-value are used. The test statistics and the asymptotic distribution are taken from Fried & Dehling (2011).
 
-The test statistics for the exact and sampled version of the test is standardized using a robust scale estimator.
+The test statistics for the permutation and randomization version of the test is standardized using a robust scale estimator.
 \code{scale = "S1"} represents use of
 
 \deqn{S = med(|X_i - X_j|: 1 \le i < j \le m, |Y_i - Y_j|, 1 <= i < j <= n),}
@@ -86,13 +86,22 @@ scale difference appears as a location difference between the transformed sample
 see Fried (2012).
 }
 \examples{
+## Generate random samples
+set.seed(108)
 x <- rnorm(20); y <- rnorm(20)
+
+## Asymptotic HL1 test
 hl1_test(x, y, method = "asymptotic", scale = "S1")
-hl1_test(x, y, method = "sampled", n.rep = 1000, scale = "S2")
+
+## HL12 test using randomization principle by drawing 1000 random permutations
+## with replacement
+\dontrun{
+hl1_test(x, y, method = "randomization", n.rep = 1000, scale = "S2")
+}
 
 }
 \references{
-\insertRef{SmyPhi10perm}{robTests}
+\insertRef{PhiSmy10perm}{robTests}
 
 \insertRef{FriDeh11robu}{robTests}
 

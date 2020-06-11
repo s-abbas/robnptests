@@ -4,7 +4,7 @@
 \alias{perm_distribution}
 \title{Permutation Distribution}
 \usage{
-perm_distribution(x, y, type, sampled = FALSE, n.rep = 10000)
+perm_distribution(x, y, type, randomization = FALSE, n.rep = 10000)
 }
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
@@ -15,13 +15,11 @@ perm_distribution(x, y, type, sampled = FALSE, n.rep = 10000)
 where "D1" to "D3" mark different estimators for the location shift and
 "S1" to "S4" are estimates for the scale of the samples; defaults to \code{"D1S1"}.}
 
-\item{sampled}{logical value indicating whether all splits should be
-considered or only a random sample, where the observations
-are drawn with replacement.}
+\item{randomization}{logical value indicating whether the p-value should be computed from a permutation (\code{FALSE}) or a randomization (\code{TRUE}) distribution.}
 
 \item{n.rep}{an integer value specifying the number of random splits used to
-calculate the permutation distribution if \code{method = "sampled"},
-ignored if \code{method = "exact"} or \code{method = "asymptotic"};
+calculate the randomization distribution if \code{method = "randomization"},
+ignored if \code{method = "permutation"} or \code{method = "asymptotic"};
 default is \code{n.rep = 10000}.}
 }
 \value{
