@@ -1,0 +1,131 @@
+---
+title: "Getting started with `robTests`"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(robTests)
+```
+
+# Introduction
+The package `robTests` contains functions that allow for robust and non-parametric
+two-sample testing for location problems. At the end of this vignette, we also
+briefly discuss the possibility to detect scale changes between two samples.
+
+For the detection of location differences, we consider the following data situation:
+Let $\boldsymbol{X} = \left(X_1, \ldots, X_m\right)$ and $\boldsymbol{Y} = \left(Y_1, \ldots, Y_n\right)$
+be two samples of sizes $m, n \in \mathbb{N}$, which should be compared. Each
+sample is assumed to consist of independent and identically distributed (i.i.d.)
+random variables so that
+\begin{align*}
+  X_1, \ldots, X_m \overset{i.i.d.}{\sim} F \quad \text{and} \quad Y_1, \ldots, Y_n \overset{i.i.d.}{\sim} G,
+\end{align*}
+where $F, G\colon \mathbb{R} \to \left[0, 1\right]$ are the cumulative distribution functions
+of the underlying unknown continuous distributions with unknown expected values $\mu_X$ and $\mu_Y$
+as well as unknown variances $\sigma^2 := \sigma_X^2 = \sigma_Y^2$. In particular, this means
+that we assume homoscedasticity. We assume that the distributions differ at most in location so that
+\begin{align*}
+  G\left(x\right) = F\left(x - \Delta\right) \quad \text{for all}\ x \in \mathbb{R},
+\end{align*}
+where $\Delta \in \mathbb{R}$ is the value of the location difference. The following
+hypotheses can be tested:
+\begin{align*}
+  &H_0^{(=)}\colon \Delta = \Delta_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon \Delta \neq \Delta_0 \\
+  &H_0^{(>)}\colon \Delta > \Delta_0 \quad \text{vs.} \quad H_1^{(\leq)}\colon \Delta \neq \Delta_0 \\
+  &H_0^{(<)}\colon \Delta < \Delta_0 \quad \text{vs.} \quad H_1^{(\geq)}\colon \Delta \neq \Delta_0.
+\end{align*}
+
+A frequently used test for this scenario is the ordinary two-sample $t$-test, which
+assumes a normal distribution for both samples. For large samples, the central limit theorem ensures that the test keeps the desired
+significance level $\alpha \in \left(0, 1\right)$ for most distributions. Relying on the
+central limit theorem might not be appropriate in small samples. Moreover, the test is known to be vulnerable to outlying 
+values as they can mask existing location shifts or lead to wrong rejections of 
+the null hypothesis. The Wilcoxon-Mann-Whitney test, another popular two-sample
+test for the outlined data situation, is a distribution-free test which is nearly
+as powerful as the $t$-test under normality but can be more powerful under non-normal
+distributions. It is often preferred over the $t$-test, when the normality assumption
+is not fulfilled. However, it can be nearly as vulnerable to outliers as the $t$-test.
+
+The tests implemented in this package were chosen with the following objectives
+in mind:
+
+* robustness against outliers
+* (approximately) distribution free, i.e. keep the significance level under $H_0$
+* have a large power over several distributional shapes.
+
+In this vignette, we describe the basic functionality of the package and the
+implemented tests.
+
+```{r}
+library(robTests)
+
+sessionInfo()
+```
+
+# Overview on implemented tests
+The package contains the following two-sample tests:
+
+Function name | Description | Literature
+------------- | ----------- | ----------
+`hl1_test`    | Tests based on the one-sample Hodges-Lehmann estimator | Fried \& Dehling (2011)
+`hl2_test`    | Tests based on the two-sample Hodges-Lehmann estimator | Fried \& Dehling (2011)
+`med_test`    | Tests based on the difference of the sample medians | Fried \& Dehling (2011)
+
+We describe the test statistics in detail in the next subsection. All functions
+contain several arguments to adjust the functions to certain data situations which
+are also discussed in the following sections.
+
+## Test statistics
+
+### HL1 test
+
+### HL2 test
+
+### MED test
+
+## Computation of p-values
+
+### Permutation
+
+### Randomization
+
+- Smyth & Phipson (2011)
+
+### Asymptotic
+
+# Testing for a location difference
+
+## Continuous data
+
+- Permutation
+- Randomization
+- Asymptotic
+
+## Discrete data
+
+- Wobbling (auch bei asymptotischen Tests?)
+
+# Testing for a difference in scale
+
+## Idea
+
+## Data transformation
+
+## Other packages
+
+## Outlook
+
+## References
+

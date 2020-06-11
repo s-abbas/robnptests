@@ -27,4 +27,7 @@ RoxygenNote: 7.1.0
 Imports: Rdpack, gtools, robustbase, statmod, stats, utils
 RdMacros: Rdpack
 Suggests: 
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
