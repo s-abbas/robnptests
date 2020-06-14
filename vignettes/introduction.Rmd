@@ -32,7 +32,7 @@ random variables so that
 \begin{align*}
   X_1, \ldots, X_m \overset{i.i.d.}{\sim} F \quad \text{and} \quad Y_1, \ldots, Y_n \overset{i.i.d.}{\sim} G,
 \end{align*}
-where $F, G\colon \mathbb{R} \to \left[0, 1\right]$ are the cumulative distribution functions
+where $F, G\colon\ \mathbb{R} \to \left[0, 1\right]$ are the cumulative distribution functions
 of the underlying unknown continuous distributions with unknown expected values $\mu_X$ and $\mu_Y$
 as well as unknown variances $\sigma^2 := \sigma_X^2 = \sigma_Y^2$. In particular, this means
 that we assume homoscedasticity. We assume that the distributions differ at most in location so that
@@ -42,9 +42,9 @@ that we assume homoscedasticity. We assume that the distributions differ at most
 where $\Delta \in \mathbb{R}$ is the value of the location difference. The following
 hypotheses can be tested:
 \begin{align*}
-  &H_0^{(=)}\colon \Delta = \Delta_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon \Delta \neq \Delta_0 \\
-  &H_0^{(>)}\colon \Delta > \Delta_0 \quad \text{vs.} \quad H_1^{(\leq)}\colon \Delta \neq \Delta_0 \\
-  &H_0^{(<)}\colon \Delta < \Delta_0 \quad \text{vs.} \quad H_1^{(\geq)}\colon \Delta \neq \Delta_0.
+  &H_0^{(=)}\colon\ \Delta = \Delta_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \Delta \neq \Delta_0 \\
+  &H_0^{(>)}\colon\ \Delta > \Delta_0 \quad \text{vs.} \quad H_1^{(\leq)}\colon\ \Delta \neq \Delta_0 \\
+  &H_0^{(<)}\colon\ \Delta < \Delta_0 \quad \text{vs.} \quad H_1^{(\geq)}\colon\ \Delta \neq \Delta_0.
 \end{align*}
 
 A frequently used test for this scenario is the ordinary two-sample $t$-test, which
@@ -88,22 +88,119 @@ contain several arguments to adjust the functions to certain data situations whi
 are also discussed in the following sections.
 
 ## Test statistics
+The test statistics in this package follow the construction principle of the $t$-statistic, i.e.,
+an estimator $\hat{\Delta}$ for the location difference $\Delta$ between both samples is divided
+by a pooled estimator $\hat{S}$ for the unknown variance $\sigma^2$. Hence, the test statistics
+are of the form
+\begin{align*}
+  T = \frac{\hat{\Delta}}{\hat{S}}.
+\end{align*}
+In the $t$-statistic, $\hat{\Delta}$ is estimated by the difference of the sample means
+and $\hat{S}$ is the pooled empirical standard deviation. We replace both estimators
+by robust estimators which are described in the following subsections.
 
-### HL1 test
+We assume to have observed two samples $x_1, \ldots, x_m$ and $y_1, \ldots, y_n$
+from the two populations.
 
-### HL2 test
+### MED tests
+`med_test`
 
-### MED test
+Estimator for the location difference
+\begin{align*}
+  \text{median}\left(x_1, \ldots, x_m\right) - \text{median}\left(y_1, \ldots, y_n\right)
+\end{align*}
+
+`scale = S3`
+\begin{align*}
+  \hat{S} = 2 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|, |y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\},
+\end{align*}
+where $\tilde{x}$ and $\tilde{y}$ are the sample medians.
+
+`scale = S4`
+\begin{align*}
+  \hat{S} = 1.4826 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|\right\} + 1.4826 \cdot \text{median}\left\{|y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\}
+\end{align*}
+
+### HL1 tests
+
+`hl1_test`
+
+Estimator for the location difference
+\begin{align*}
+ \text{median}\left\{\frac{x_i + x_j}{2}\colon\ 1 \leq i < j \leq m\right\} - \text{median}\left\{\frac{y_i + y_j}{2}\colon\ 1 \leq i < j \leq n\right\}
+\end{align*}
+
+`scale = S1`
+\begin{align*}
+  \text{median}\left\{|x_i - x_j|\colon\ 1 \leq i < j \leq m,\ |y_i - y_j|\colon\ 1 \leq i < j \leq n\right\}
+\end{align*}
+
+`scale = S2`
+\begin{align*}
+  \text{median}\left\{|z_i - z_j|\colon\ 1 \leq i < j \leq m + n\right\},
+\end{align*}
+where
+\begin{align*}
+  \left(z_1, \ldots, z_{m + n}\right) = \left(x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n - \tilde{y}\right)
+\end{align*}
+
+### HL2 tests
+
+`hl2_test`
+
+Estimator for the location difference
+\begin{align*}
+  \text{median}\left\{|x_i - y_j|\colon\ 1 \leq i \leq m,\ 1 \leq j \leq m\right\}.
+\end{align*}
+
 
 ## Computation of p-values
+We implemented several ways to compute $p$-values for the different tests, which
+are briefly described in this section.
+
+The functions for each test have the argument `method`, which can be set to
+`method = "permutation"` for a permutation test, `method = "randomization"` for a
+randomization test, and `method = "asymptotic"` for an asymptotic test.
 
 ### Permutation
+With the permutation principle, the $p$-value of the test is obtained by
+computing the value of the test statistic for all possible splits of 
+the joint sample $\left(x_1, \ldots, x_m, y_1, \ldots, y_n\right)$ into two
+samples of sizes $m$ and $n$. This is achieved by permuting the joint sample and
+splitting the permutations so that the first $m$ observations form the first
+and the last $n$ observations form the second sample. This leads to $\binom{m}{m + n}$
+possible splits. The idea is that under the null hypothesis, each of these 
+permutations is equally likely to be generated from the data generating distribution.
+
+Using the permutation principle leads to distribution-free tests, i.e., a permutation
+test holds its significance level under every continuous distribution.
+
+- Berechnung des $p$-Werts
+
+As the number of splits to enumerate over increases rapidly in $m$ and $n$, 
+using the permutation principle can lead to memory and computation time issues.
+Therefore, we recommend this approach only for very small sample sizes or when
+sufficient computational resources are available.
 
 ### Randomization
+The randomization principle is a commonly used way to deal with the aforementioned
+shortcomings of the permutation principle. Instead of computing all possible
+splits, only a random subset is selected. As commonly proposed in the literature,
+we draw these random subsets with replacement, i.e., a single permutation may be 
+drawn repeatedly. We account for this when computing the $p$-value by following
+the approach of Smyth & Phipson (2011).
 
-- Smyth & Phipson (2011)
+- Berechnung des $p$-Werts.
 
 ### Asymptotic
+For very large sample sizes, asymptotical $p$-values can be computed for each
+test. This leads to an additional drop in the computation time as compared to the
+randomization principle.
+
+We use the following asymptotical distributions for the different estimators
+for location difference.
+
+
 
 # Testing for a location difference
 
