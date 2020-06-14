@@ -24,9 +24,11 @@ winsorized variance.}
 \code{win_var} calculates the winsorized variance of a sample.
 }
 \examples{
+## Generate random sample
 set.seed(108)
 x <- rnorm(10)
-win_var(x, gamma = 0.2)
 
+## Compute 20\% winsorized variance
+win_var(x, gamma = 0.2)
 
 }

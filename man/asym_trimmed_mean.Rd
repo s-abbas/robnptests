@@ -39,8 +39,11 @@ implemented. The argument \code{type} specifies which one is used.
 }
 }
 \examples{
+## Generate random sample
 set.seed(108)
 x <- rnorm(10)
+
+## Compute asymmetrically trimmed means
 asym_trimmed_mean(x, type = "Q2")
 asym_trimmed_mean(x, type = "SK2")
 asym_trimmed_mean(x, type = "SK5")

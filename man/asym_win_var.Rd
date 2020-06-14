@@ -25,8 +25,11 @@ asymmetrically winsorized variance.}
 skewness selector statistics.
 }
 \examples{
+## Generate random sample
 set.seed(108)
 x <- rnorm(10)
+
+## Compute asymmetrical winsorized variance
 asym_win_var(x, type = "SK5")
 
 

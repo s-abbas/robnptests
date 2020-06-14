@@ -21,8 +21,11 @@ The winsorized mean.
 \code{win_mean} calculates the winsorized mean of a sample.
 }
 \examples{
+## Generate random samples
 set.seed(108)
 x <- rnorm(10)
+
+## Compute 20\% winsorized mean
 win_mean(x, gamma = 0.2)
 
 }

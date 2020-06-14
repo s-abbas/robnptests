@@ -24,8 +24,11 @@ The trimmed mean.
 This is a wrapper function for the function \code{\link[base]{mean}}.
 }
 \examples{
+## Generate random sample
 set.seed(108)
 x <- rnorm(10)
+
+## Compute 20\% trimmed mean
 trim_mean(x, gamma = 0.2)
 
 }

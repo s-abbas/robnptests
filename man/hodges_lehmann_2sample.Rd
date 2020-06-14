@@ -21,8 +21,11 @@ The two-sample Hodges-Lehmann estimator.
 estimator for the location difference of two samples x and y.
 }
 \examples{
+## Generate random samples
 set.seed(108)
 x <- rnorm(10); y <- rnorm(10)
+
+## Compute two-sample Hodges-Lehmann estimator
 hodges_lehmann_2sample(x, y)
 
 }

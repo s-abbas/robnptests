@@ -17,6 +17,7 @@
 #' @template n_rep
 #' @template na_rm
 #' @template var_test
+#' @template wobble
 #'
 #' @details
 #' When computing a randomization distribution based on randomly drawn splits with replacement, the results of
@@ -31,9 +32,16 @@
 #'
 #' \code{scale = "S4"} uses
 #'
-#' \deqn{S = 1.4826 * ( med( |X_1 - med(X)|,...,|X_m - med(X)| ) + med( |Y_1 - med(Y)|,...,|Y_n - med(Y)| ). }
+#' \deqn{S = ( med( |X_1 - med(X)|,...,|X_m - med(X)| ) + med( |Y_1 - med(Y)|,...,|Y_n - med(Y)| ). }
 #'
 #' For more details see Fried & Dehling (2011).
+#'
+#' For \code{var.test = TRUE}, the test compares two sample for a difference in scale.
+#' This is achieved by log-transforming the original observations so that a potential
+#' scale difference appears as a location difference between the transformed samples;
+#' see Fried (2012). The sample cannot contain zeros due to the necessary log-transformation.
+#' If it contains zeros, uniform noise is added to all variables in order to remove zeros.
+#' A warning is printed.
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:
@@ -73,7 +81,8 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
                      delta = ifelse(var.test, 1, 0),
                      method = c("asymptotic", "permutation", "randomization"),
                      scale = c("S3", "S4"), n.rep = 10000,
-                     na.rm = FALSE, var.test = FALSE) {
+                     na.rm = FALSE, var.test = FALSE,
+                     wobble = FALSE) {
 
   dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
@@ -85,8 +94,20 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   }
 
 
+  if (wobble) {
+    xy <- wobble(x, y)
+    x <- xy$x
+    y <- xy$y
+  }
+
   ## If necessary: Transformation to test for difference in scale
   if (var.test) {
+    if (any(c(x, y) == 0)) {
+      xy <- wobble(x, y, check = FALSE)
+      x <- xy$x
+      y <- xy$y
+      warning("Added random noise before log transformation due to zeros in the sample.")
+    }
     x <- log(x^2)
     y <- log(y^2)
     delta <- log(delta^2)

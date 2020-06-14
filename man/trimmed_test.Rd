@@ -47,7 +47,10 @@ A list with class "\code{htest}" containing the following components:
 \code{trimmed_test} performs the two-sample Yuen t-test.
 }
 \examples{
+## Generate random samples
 x <- rnorm(20); y <- rnorm(20)
+
+## Trimmed t-test
 trimmed_test(x, y, gamma = 0.1)
 
 }

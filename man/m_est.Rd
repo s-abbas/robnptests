@@ -42,9 +42,12 @@ To compute the M-estimate, the iterative algorithm described in Maronna et al. (
 The variance is estimated according to Huber (1981, p. 150).
 }
 \examples{
+
+## Generate random sample
 set.seed(108)
 x <- rnorm(10)
 
+## Computer Huber's M-estimate
 m_est(x, psi = "huber")
 
 }

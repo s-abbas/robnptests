@@ -13,7 +13,8 @@ hl1_test(
   scale = c("S1", "S2"),
   n.rep = 10000,
   na.rm = FALSE,
-  var.test = FALSE
+  var.test = FALSE,
+  wobble = FALSE
 )
 }
 \arguments{
@@ -49,6 +50,11 @@ default is \code{n.rep = 10000}.}
 \item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 
 \item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
+
+\item{wobble}{logical value indicating whether uniform noise should be added to the sample before
+proceeding with the test, in order to make sure there are no duplicate values in the
+sample that can cause the scale estimate to be 0. Only necessary for the permutation and
+randomization version of the test. Defaults to FALSE.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:
@@ -95,6 +101,7 @@ hl1_test(x, y, method = "asymptotic", scale = "S1")
 
 ## HL12 test using randomization principle by drawing 1000 random permutations
 ## with replacement
+
 \dontrun{
 hl1_test(x, y, method = "randomization", n.rep = 1000, scale = "S2")
 }

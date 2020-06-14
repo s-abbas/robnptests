@@ -7,7 +7,7 @@
 rob_perm_statistic(
   x,
   y,
-  type = c("HL11", "HL12", "HL21", "HL22", "MD1", "MD2"),
+  type = c("HL11", "HL12", "HL21", "HL22", "MED1", "MED2"),
   na.rm = FALSE
 )
 }
@@ -37,7 +37,11 @@ The test statistics returned by \code{rob_perm_statistic} are of the form
          estimates for the mutual sample scale. See Fried and Dehling (2011) for details.
 }
 \examples{
+## Generate random samples
+set.seed(108)
 x <- rnorm(20); y <- rnorm(20)
+
+## Compute HL21 statistic
 rob_perm_statistic(x, y, type = "HL21")
 
 }

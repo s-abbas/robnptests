@@ -4,30 +4,31 @@
 \alias{wobble}
 \title{Test}
 \usage{
-wobble(x, y, partially = FALSE)
+wobble(x, y, check = TRUE)
 }
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
 
 \item{y}{a (non-empty) numeric vector of data values.}
 
-\item{partially}{logical, indicates whether the complete sample should be treated or only the
-values that are duplicated, default is \code{FALSE}}
+\item{check}{logical value indicating whether the samples should be checked for bindings prior to
+adding uniform noise or not, defaults to \code{TRUE}}
 }
 \value{
 A list of length two containing the modified \code{x} and \code{y}
 }
 \description{
-\code{wobble} makes a discrete sample continuous by adding uniform noise to the
+\code{wobble} makes a discrete sample with duplicated values continuous by adding uniform noise to the
 discrete observations
 }
 \details{
-Test
+The function checks whether all values in the two numeric input vectors are distinct.
+If so, it returns the original values, otherwise the values are made continuous by adding uniform
+noise.
 }
 \examples{
 x <- rnorm(20); y <- rnorm(20); x <- round(x)
 wobble(x, y)
-wobble(x, y, partially=TRUE)
 
 }
 \references{

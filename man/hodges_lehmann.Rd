@@ -19,8 +19,11 @@ The one-sample Hodges-Lehmann estimator.
 of a sample.
 }
 \examples{
+## Generate random sample
 set.seed(108)
 x <- rnorm(10)
+
+## Compute one-sample Hodges-Lehmann estimator
 hodges_lehmann(x)
 
 }
