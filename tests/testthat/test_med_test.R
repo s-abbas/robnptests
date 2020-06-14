@@ -1,6 +1,6 @@
-context("HL1 test")
+context("Median-based test")
 
-testthat::test_that("hl1_test works correctly", {
+testthat::test_that("med_test works correctly", {
   ## ___________________________________________________________________________
   ## Computation of test statistic
   ## ___________________________________________________________________________
@@ -9,11 +9,11 @@ testthat::test_that("hl1_test works correctly", {
   x <- rnorm(5)
   y <- rnorm(5)
 
-  res.s1 <- as.numeric(hl1_test(x, y, method = "permutation", scale = "S1")$statistic)
-  res.s2 <- as.numeric(hl1_test(x, y, method = "permutation", scale = "S2")$statistic)
+  res.s1 <- as.numeric(med_test(x, y, method = "permutation", scale = "S3")$statistic)
+  res.s2 <- as.numeric(med_test(x, y, method = "permutation", scale = "S4")$statistic)
 
-  testthat::expect_equal(res.s1, (hodges_lehmann(x) - hodges_lehmann(y))/rob_var(x, y, type = "S1"))
-  testthat::expect_equal(res.s2, (hodges_lehmann(x) - hodges_lehmann(y))/rob_var(x, y, type = "S2"))
+  testthat::expect_equal(res.s1, (stats::median(x) - stats::median(y)) / rob_var(x, y, type = "S3"))
+  testthat::expect_equal(res.s2, (stats::median(x) - stats::median(y)) / rob_var(x, y, type = "S4"))
 
 
   ## ___________________________________________________________________________
@@ -26,26 +26,27 @@ testthat::test_that("hl1_test works correctly", {
   y <- rnorm(30)
 
   delta <- 0
-  estimates <- c(hodges_lehmann(x), hodges_lehmann(y - delta))
+  med.x <- stats::median(x)
+  med.y <- stats::median(y - delta)
+
+  diff <- c(x - med.x, y - delta - med.y)
+
+  dens <- stats::approxfun(stats::density(diff))
+  med <- dens(0)
 
   m <- length(x)
   n <- length(y)
 
-  # pairwise differences the density estimate is calculated from:
-  xcomb <- utils::combn(x, 2)
-  ycomb <- utils::combn(y - delta, 2)
-  pwdiffs <- c(xcomb[2, ] - xcomb[1, ], ycomb[2, ] - ycomb[1, ])
-  dens <- stats::density(pwdiffs)
-  dens <- stats::approxfun(dens)
+  est <- med.x - med.y
 
-  int <- dens(0)
+  statistic <- sqrt(m*n/(m+n)) * 2 * med * est
 
-  res.asymptotic <- hl1_test(x, y)
+  res.asymptotic <- med_test(x, y)
   res.statistic <- as.numeric(res.asymptotic$statistic)
   res.method <- res.asymptotic$method
 
-  testthat::expect_equal(res.statistic, sqrt(12*m*n/(m+n)) * int * (estimates[1] - estimates[2]))
-  testthat::expect_equal(res.method, "Asymptotic test based on the one-sample Hodges-Lehmann estimator")
+  testthat::expect_equal(res.statistic, sqrt(m*n/(m+n)) * 2 * med * est)
+  testthat::expect_equal(res.method, "Asymptotic test based on sample medians")
 
   ## ___________________________________________________________________________
   ## If no method is given, the randomized test should be performed automatically
@@ -56,10 +57,10 @@ testthat::test_that("hl1_test works correctly", {
   x <- rnorm(10)
   y <- rnorm(10)
 
-  res.randomized <- hl1_test(x, y)
+  res.randomized <- med_test(x, y)
   res.method <- res.randomized$method
 
-  testthat::expect_equal(res.method, "Randomization test based on the one-sample Hodges-Lehmann estimator")
+  testthat::expect_equal(res.method, "Randomization test based on sample medians")
 
   ## ___________________________________________________________________________
   ## Throw error when one or both samples consist of less than five observations
@@ -71,12 +72,12 @@ testthat::test_that("hl1_test works correctly", {
   x <- rnorm(4)
   y <- rnorm(20)
 
-  testthat::expect_error(hl1_test(x, y))
+  testthat::expect_error(med_test(x, y))
 
   ## Many missing values
   x <- c(x, rep(NA, 5))
 
-  testthat::expect_error(hl1_test(x, y, na.rm = TRUE))
+  testthat::expect_error(med_test(x, y, na.rm = TRUE))
 
 
   ## ___________________________________________________________________________
@@ -88,10 +89,10 @@ testthat::test_that("hl1_test works correctly", {
   x <- rnorm(30)
   y <- rnorm(30)
 
-  testthat::expect_error(hl1_test(x, y, alternative="none"))
-  testthat::expect_error(hl1_test(x, y, method="toss_a_coin"))
-  testthat::expect_error(hl1_test(x, y, delta="xyz"))
-  testthat::expect_error(hl1_test(x, y, scale="SD"))
+  testthat::expect_error(med_test(x, y, alternative="none"))
+  testthat::expect_error(med_test(x, y, method="toss_a_coin"))
+  testthat::expect_error(med_test(x, y, delta="xyz"))
+  testthat::expect_error(med_test(x, y, scale="SD"))
 
   ## ___________________________________________________________________________
   ## Compare p-values for different alternative hypothesis
@@ -115,9 +116,9 @@ testthat::test_that("hl1_test works correctly", {
   x <- rnorm(30)
   y <- rnorm(30)
 
-  p.two.sided <- hl1_test(x, y, method = "asymptotic", alternative = "two.sided")$p.value
-  p.greater <- hl1_test(x, y, method = "asymptotic", alternative = "greater")$p.value
-  p.less <- hl1_test(x, y, method = "asymptotic", alternative = "less")$p.value
+  p.two.sided <- med_test(x, y, method = "asymptotic", alternative = "two.sided")$p.value
+  p.greater <- med_test(x, y, method = "asymptotic", alternative = "greater")$p.value
+  p.less <- med_test(x, y, method = "asymptotic", alternative = "less")$p.value
 
   testthat::expect_equal(p.two.sided, 2 * min(p.less, p.greater))
   testthat::expect_equal(p.less, 1 - p.greater)
@@ -131,12 +132,12 @@ testthat::test_that("hl1_test works correctly", {
   x <- rnorm(5)
   y <- rnorm(5)
 
-  p.two.sided <- hl1_test(x, y, method = "permutation", alternative = "two.sided")$p.value
-  p.greater <- hl1_test(x, y, method = "permutation", alternative = "greater")$p.value
-  p.less <- hl1_test(x, y, method = "permutation", alternative = "less")$p.value
+  p.two.sided <- med_test(x, y, method = "permutation", alternative = "two.sided")$p.value
+  p.greater <- med_test(x, y, method = "permutation", alternative = "greater")$p.value
+  p.less <- med_test(x, y, method = "permutation", alternative = "less")$p.value
 
-  perm.dist <- perm_distribution(x, y, type = "HL11", randomization = FALSE)
-  hl11.statistic <- rob_perm_statistic(x, y, type = "HL11")$statistic
+  perm.dist <- perm_distribution(x, y, type = "MED1", randomization = FALSE)
+  med1.statistic <- rob_perm_statistic(x, y, type = "MED1")$statistic
 
   testthat::expect_equal(p.two.sided, 2 * min(p.less, p.greater))
 
@@ -146,7 +147,7 @@ testthat::test_that("hl1_test works correctly", {
   ## test statistic is included in the computation of the left-sided and the
   ## computation of the right-sided p-value. Hence, it is counted twice so
   ## that p.less + p.greater > 1.
-  testthat::expect_equal(p.less, 1 - p.greater + sum(hl11.statistic == perm.dist)/252)
+  testthat::expect_equal(p.less, 1 - p.greater + sum(med1.statistic == perm.dist)/252)
 
   ##
   ## Randomization test
@@ -158,11 +159,11 @@ testthat::test_that("hl1_test works correctly", {
   y <- rnorm(10)
 
   set.seed(123)
-  p.two.sided <- hl1_test(x, y, method = "randomization", alternative = "two.sided", n.rep = 1000)$p.value
+  p.two.sided <- med_test(x, y, method = "randomization", alternative = "two.sided", n.rep = 1000)$p.value
   set.seed(123)
-  p.greater <- hl1_test(x, y, method = "randomization", alternative = "greater", n.rep = 1000)$p.value
+  p.greater <- med_test(x, y, method = "randomization", alternative = "greater", n.rep = 1000)$p.value
   set.seed(123)
-  p.less <- hl1_test(x, y, method = "randomization", alternative = "less", n.rep = 1000)$p.value
+  p.less <- med_test(x, y, method = "randomization", alternative = "less", n.rep = 1000)$p.value
 
   ## We increase the tolerance for the comparisons. One reason is the discrete
   ## null distribution. Moreover, as we use the correction by Phipson and Smyth (2011),
@@ -170,6 +171,8 @@ testthat::test_that("hl1_test works correctly", {
   ## of their paper, which would make this test case more complicated.
   testthat::expect_equal(p.two.sided, 2 * min(p.less, p.greater), tolerance = 10^(-2))
   testthat::expect_equal(1, p.less + p.greater, tolerance = 10^(-3))
+
+  ############# PASST NOCH NICHT!!!
 
   ##
   ## Zeros in var.test: A warning should be thrown if at least 1 of the observations is zero.
@@ -180,7 +183,7 @@ testthat::test_that("hl1_test works correctly", {
   x <- rnorm(10)
   y <- c(rnorm(9), 0)
 
-  testthat::expect_warning(hl1_test(x, y, method = "asymptotic", var.test = TRUE))
+  testthat::expect_warning(med_test(x, y, method = "asymptotic", var.test = TRUE))
 }
 
 )

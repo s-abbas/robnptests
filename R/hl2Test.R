@@ -94,6 +94,10 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     y <- as.numeric(stats::na.omit(y))
   }
 
+  if (length(x) < 5 || length(y) < 5) {
+    stop("Both samples need at least 5 non-missing values.")
+  }
+
   if (wobble) {
     xy <- wobble(x, y)
     x <- xy$x
@@ -114,7 +118,7 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   }
 
   alternative <- match.arg(alternative)
-  method <- match.arg(method)
+  # method <- match.arg(method)
   scale <- match.arg(scale)
 
 
@@ -137,7 +141,7 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
 
   ## If no choice is made regarding the computation of the p-value, the method
   ## is automatically selected based on the sample sizes
-  if (length(method) > 1 & identical(method, c("asymptotic", "permutation", "randomization"))) {
+  if ((length(method) > 1) & identical(method, c("asymptotic", "permutation", "randomization"))) {
     if (length(x) >= 30 & length(y) >= 30) {
       method <- "asymptotic"
     }

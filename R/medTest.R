@@ -93,6 +93,10 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     y <- as.numeric(stats::na.omit(y))
   }
 
+  if (length(x) < 5 || length(y) < 5) {
+    stop("Both samples need at least 5 non-missing values.")
+  }
+
 
   if (wobble) {
     xy <- wobble(x, y)
@@ -114,7 +118,7 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   }
 
   alternative <- match.arg(alternative)
-  method <- match.arg(method)
+  # method <- match.arg(method)
   scale <- match.arg(scale)
 
   if (scale == "S3") {
@@ -176,7 +180,7 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     n <- length(y)
 
     if (delta != 0) estimates <- c(med.x, stats::median(y)) else estimates <- c(med.x, med.y)
-    est <- med.y - med.x
+    est <- med.x - med.y
 
     statistic <- sqrt(m*n/(m+n)) * 2 * med * est
 
