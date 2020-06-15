@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 library(robTests)
 ```
 
-# Introduction
+# Introduction {#introduction}
 The package `robTests` contains functions that allow for robust and non-parametric
 two-sample testing for location problems. At the end of this vignette, we also
 briefly discuss the possibility to detect scale changes between two samples.
@@ -43,8 +43,8 @@ where $\Delta \in \mathbb{R}$ is the value of the location difference. The follo
 hypotheses can be tested:
 \begin{align*}
   &H_0^{(=)}\colon\ \Delta = \Delta_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \Delta \neq \Delta_0 \\
-  &H_0^{(>)}\colon\ \Delta > \Delta_0 \quad \text{vs.} \quad H_1^{(\leq)}\colon\ \Delta \neq \Delta_0 \\
-  &H_0^{(<)}\colon\ \Delta < \Delta_0 \quad \text{vs.} \quad H_1^{(\geq)}\colon\ \Delta \neq \Delta_0.
+  &H_0^{(>)}\colon\ \Delta \leq \Delta_0 \quad \text{vs.} \quad H_1^{(>)}\colon\ \Delta \neq \Delta_0 \\
+  &H_0^{(<)}\colon\ \Delta \geq \Delta_0 \quad \text{vs.} \quad H_1^{(<)}\colon\ \Delta \neq \Delta_0.
 \end{align*}
 
 A frequently used test for this scenario is the ordinary two-sample $t$-test, which
@@ -215,10 +215,40 @@ for location difference.
 - Wobbling (auch bei asymptotischen Tests?)
 
 # Testing for a difference in scale
+Following Fried (2012), the argument `var.test` allows to decide whether the
+samples should be tested for a location difference (`var.test = FALSE`), which is
+the default, or for different variances (`var.test = TRUE`), i.e. $\sigma^2_X \neq \sigma^2_Y$.
+
+Setting `var.test = TRUE` transforms the observations so that a possible variance
+difference between the samples appears as a location difference between the 
+transformed samples.
+
+The resulting variance tests can resist outliers and heavy tailes, and work
+well under asymmetry.
+
+- Vergleich mit Standardtests ansprechen.
 
 ## Idea
+Again, we start with two samples $X_1, \ldots, X_m$ and $Y_1, \ldots, Y_n$, each
+of which consists of i.i.d. random variables. However, now we assume that we can write the random variables as
+\begin{align*}
+  X_i = \sigma_X \cdot \varepsilon_{X, i},\ $i = 1, \ldots, m$ \quad \text{and} \quad Y_j = \sigma_Y \cdot \varepsilon_{Y, j},\ $j = 1, \ldots, n$.
+\end{align*}
+Here, $\sigma_X$ is the standard deviation of the first sample and $\sigma_Y$ is the standard deviation of the second sample. The random variables $\varepsilon_{X, 1}, \ldots, \varepsilon_{X, m}$ and $\varepsilon_{Y, 1}, \ldots, \varepsilon_{Y, m}$ are i.i.d. random variables with expectation zero and unit variance.
 
-## Data transformation
+We address the following hypotheses pairs:
+\begin{align*}
+  &H_0^{(=)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} = 1 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \neq 1 \\
+  &H_0^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \leq 1 \quad \text{vs.} \quad H_1^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} > 1 \\
+  &H_0^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \geq 1 \quad \text{vs.} \quad H_1^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} < 1.
+\end{align*}
+
+By log-transforming the random variables, we obtain
+\begin{align*}
+  U_i = \log\left(X_i^2\right) = \log\left(\sigma_X^2\right) + \log\left(\varepsilon_{X, i}^2\right),\ i = 1, \ldots, m, \quad \text{and} \quad V_i = \log\left(Y_j^2\right) = \log\left(\sigma_Y^2\right) + \log\left(\varepsilon_{Y, j}^2\right), j = 1, \ldots, n.
+\end{align*}
+This leads to $\text{E}\left(U_i\right) = \log\left(\sigma_X^2\right),\ i = 1, \ldots, m$ and $\text{E}\left(V_i\right) = \log\left(\sigma_Y^2\right),\ j = 1, \ldots, n$. Under the previously made assumptions, this means that we are in the same situation as in the Introduction. Therefore, unequal standard deviations $\sigma_X$ and $\sigma_Y$ lead to a location difference of size $\log\left(\sigma_X^2\right) - \log\left(\sigma_Y^2\right)$ in the transformed samples.
+
 
 ## Other packages
 
