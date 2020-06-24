@@ -93,7 +93,7 @@ an estimator $\hat{\Delta}$ for the location difference $\Delta$ between both sa
 by a pooled estimator $\hat{S}$ for the unknown variance $\sigma^2$. Hence, the test statistics
 are of the form
 \begin{align*}
-  T = \frac{\hat{\Delta}}{\hat{S}}.
+  T = \frac{\hat{\Delta} - \Delta_0}{\hat{S}}.
 \end{align*}
 In the $t$-statistic, $\hat{\Delta}$ is estimated by the difference of the sample means
 and $\hat{S}$ is the pooled empirical standard deviation. We replace both estimators
@@ -122,6 +122,8 @@ where $\tilde{x}$ and $\tilde{y}$ are the sample medians.
 \end{align*}
 
 ### HL1 tests
+
+- HL1-estimator estimates pseudo-median
 
 `hl1_test`
 
@@ -201,16 +203,64 @@ We use the following asymptotical distributions for the different estimators
 for location difference.
 
 
-
 # Testing for a location difference
+We will now describe several possibilities to test for a location difference with
+the functions implemented in the package.
 
 ## Continuous data
+- We start with data from a continuous distribution
 
-- Permutation
-- Randomization
-- Asymptotic
+```{r}
+set.seed(108)
+x <- rnorm(10)
+y <- rnorm(10)
+```
+
+
+### Permutation test
+- Example HL1-test with scale estimator $\hat{S}^{(2)}$
+- $\Delta_0 = 0$
+
+```{r, cache = TRUE}
+## Two-sided permutation test assuming no location difference between the samples under the null hypothesis
+hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "permutation", scale = "S2")
+```
+
+- Output is object of class `htest`.
+- p-value can be accessed by `$p.value`
+- test statistic can be accessed by `$statistic`
+- individual HL1 estimates can be asscess by `$estimate`
+
+### Randomization test
+- draw 10000 splits randomly with replacement
+
+```{r, cache = TRUE}
+## Two-sided randomization test assuming no location difference between the samples under the null hypothesis
+set.seed(47)
+hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "randomization", scale = "S2", n.rep = 10000)
+```
+
+- $p$-value close to the one computed from permutation test
+
+## Asymptotic test
+- no scale estimator necessary
+
+```{r}
+## Asymptotic two-sided test assuming no location difference between the samples under the null hypothesis
+hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "asymptotic")
+```
+
+We can also perform the test when assuming that a certain location difference between both samples exists under $H_0$, i.e. $\Delta_0 \neq 0$.
+
+```{r}
+x1 <- x + 5
+## Asymptotic two-sided test assuming \Delta_0 = 5
+hl1_test(x = x1, y = y, alternative = "two.sided", delta = 5, method = "asymptotic")
+```
 
 ## Discrete data
+
+
 
 - Wobbling (auch bei asymptotischen Tests?)
 
@@ -249,6 +299,21 @@ By log-transforming the random variables, we obtain
 \end{align*}
 This leads to $\text{E}\left(U_i\right) = \log\left(\sigma_X^2\right),\ i = 1, \ldots, m$ and $\text{E}\left(V_i\right) = \log\left(\sigma_Y^2\right),\ j = 1, \ldots, n$. Under the previously made assumptions, this means that we are in the same situation as in the Introduction. Therefore, unequal standard deviations $\sigma_X$ and $\sigma_Y$ lead to a location difference of size $\log\left(\sigma_X^2\right) - \log\left(\sigma_Y^2\right)$ in the transformed samples.
 
+```{r, cache = TRUE}
+set.seed(108)
+
+x <- rnorm(30)
+y <- rnorm(30)
+
+## Asymptotic two-sided test assuming no scale difference between both samples
+hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", var.test = TRUE)
+```
+
+- Include scale difference
+```{r, cache = TRUE}
+## Asymptotic two-sided test assuming no scale difference between both samples
+hl1_test(x = x, y = y * 5, alternative = "two.sided", delta = 5, method = "asymptotic", var.test = TRUE)
+```
 
 ## Other packages
 
