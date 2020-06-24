@@ -155,7 +155,7 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     ## Exact HL2-test using permutation distribution
 
     ## Results of rob_perm_statistic
-    perm.stats <- rob_perm_statistic(x, y - delta, type = type, na.rm = na.rm)
+    perm.stats <- rob_perm_statistic(x, y + delta, type = type, na.rm = na.rm)
 
     statistic <- perm.stats$statistic
     # estimates <- perm.stats$estimates
@@ -169,7 +169,7 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
       randomization <- FALSE
     }
 
-    distribution <- perm_distribution(x = x, y = y - delta, type = type, randomization = (method == "randomization"), n.rep = n.rep)
+    distribution <- perm_distribution(x = x, y = y + delta, type = type, randomization = (method == "randomization"), n.rep = n.rep)
 
     ## p-value
     p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y), randomization = (method == "randomization"), n.rep = n.rep, alternative = alternative)
@@ -182,14 +182,14 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
 
     ## Estimation of density at zero for pairwise differences
     xcomb <- utils::combn(x, 2)
-    ycomb <- utils::combn(y - delta, 2)
+    ycomb <- utils::combn(y + delta, 2)
 
     pwdiffs <- c(xcomb[2, ] - xcomb[1, ], ycomb[2, ] - ycomb[1, ])
 
     dens <- stats::density(pwdiffs)
     int <- stats::approxfun(dens)(0)
 
-    est <- hodges_lehmann_2sample(x, y - delta)
+    est <- hodges_lehmann_2sample(x, y + delta)
     statistic <- sqrt(12 * lambda * (1 - lambda)) * int * sqrt(m + n) * est
 
     estimates <- hodges_lehmann_2sample(x, y)

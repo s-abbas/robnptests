@@ -154,7 +154,7 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
 
   if (method %in% c("permutation", "randomization")) {
     ## Results of rob_perm_statistic
-    perm.stats <- rob_perm_statistic(x, y - delta, type = type, na.rm = na.rm)
+    perm.stats <- rob_perm_statistic(x, y + delta, type = type, na.rm = na.rm)
 
     statistic <- perm.stats$statistic
     estimates <- perm.stats$estimates
@@ -169,7 +169,7 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
     #   randomization <- FALSE
     # }
 
-    distribution <- perm_distribution(x = x, y = y - delta, type = type,
+    distribution <- perm_distribution(x = x, y = y + delta, type = type,
                                       randomization = (method == "randomization"), n.rep = n.rep)
 
     ## p-value
@@ -183,14 +183,14 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
 
     # pairwise differences the density estimate is calculated from:
     xcomb <- utils::combn(x, 2)
-    ycomb <- utils::combn(y - delta, 2)
+    ycomb <- utils::combn(y + delta, 2)
     pwdiffs <- c(xcomb[2, ] - xcomb[1, ], ycomb[2, ] - ycomb[1, ])
     dens <- stats::density(pwdiffs)
     dens <- stats::approxfun(dens)
 
     int <- dens(0)
 
-    estimates <- c(hodges_lehmann(x), hodges_lehmann(y - delta))
+    estimates <- c(hodges_lehmann(x), hodges_lehmann(y + delta))
     statistic <- sqrt(12 * m*n/(m+n)) * int * (estimates[1] - estimates[2])
 
     if (delta != 0) {

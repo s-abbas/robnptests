@@ -144,7 +144,7 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   if (method %in% c("permutation", "randomization")) {
 
     ## Results of rob_perm_statistic
-    perm.stats <- rob_perm_statistic(x, y - delta, type = type, na.rm = na.rm)
+    perm.stats <- rob_perm_statistic(x, y + delta, type = type, na.rm = na.rm)
 
     statistic <- perm.stats$statistic
     estimates <- perm.stats$estimates
@@ -158,7 +158,7 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     #   randomization <- FALSE
     # }
 
-    distribution <- perm_distribution(x = x, y = y - delta, type = type, randomization = (method == "randomization"),
+    distribution <- perm_distribution(x = x, y = y + delta, type = type, randomization = (method == "randomization"),
                                       n.rep = n.rep)
 
     ## p-value
@@ -169,9 +169,9 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   } else if (method == "asymptotic") {
 
     med.x <- stats::median(x, na.rm = na.rm)
-    med.y <- stats::median(y - delta, na.rm = na.rm)
+    med.y <- stats::median(y + delta, na.rm = na.rm)
 
-    diff <- c(x - med.x, y - delta - med.y)
+    diff <- c(x - med.x, y + delta - med.y)
 
     dens <- stats::approxfun(stats::density(diff))
     med <- dens(0)
