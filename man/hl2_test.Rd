@@ -85,6 +85,14 @@ Smyth & Phipson (2010) to calculate the p-value are used. The test statistics an
 
 where \eqn{ Z = ( X_1 - med(X),...,X_m - med(X), Y_1 - med(Y),...,Y_n - med(Y) )'}
 is the median corrected sample. For more details see Fried & Dehling (2011).
+
+
+For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
+This is achieved by log-transforming the original observations so that a potential
+scale difference appears as a location difference between the transformed samples;
+see Fried (2012). The sample cannot contain zeros due to the necessary log-transformation.
+If it contains zeros, uniform noise is added to all variables in order to remove zeros.
+A warning is printed.
 }
 \examples{
 ## Generate random samples

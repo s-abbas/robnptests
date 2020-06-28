@@ -18,6 +18,7 @@
 #' @template na_rm
 #' @template var_test
 #' @template wobble
+#' @template seed
 #'
 #' @details
 #' When computing a randomization distribution based on randomly drawn splits with replacement, the results of
@@ -35,7 +36,7 @@
 #' where \eqn{ Z = ( X_1 - med(X),...,X_m - med(X), Y_1 - med(Y),...,Y_n - med(Y) )'}
 #' is the median corrected sample. For more details see Fried & Dehling (2011).
 #'
-#' For \code{var.test = TRUE}, the test compares two sample for a difference in scale.
+#' For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
 #' This is achieved by log-transforming the original observations so that a potential
 #' scale difference appears as a location difference between the transformed samples;
 #' see Fried (2012). The sample cannot contain zeros due to the necessary log-transformation.
@@ -83,7 +84,7 @@
 hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delta = ifelse(var.test, 1, 0),
                      method = c("asymptotic", "permutation", "randomization"), scale = c("S1", "S2"),
                      n.rep = 10000, na.rm = FALSE,
-                     var.test = FALSE, wobble = FALSE) {
+                     var.test = FALSE, wobble = FALSE, seed = NULL) {
 
   alternative <- match.arg(alternative)
 #  method <- match.arg(method)
@@ -106,18 +107,31 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
   }
 
   if (wobble) {
+
+    if (is.null(seed)) seed <- sample(1e6, 1)
+    set.seed(seed)
+
     xy <- wobble(x, y)
     x <- xy$x
     y <- xy$y
+
+    warning(paste0("Added random noise to x and y. The seed is ",
+                   seed, "."))
   }
 
   ## If necessary: Transformation to test for difference in scale
   if (var.test) {
     if (any(c(x, y) == 0)) {
+
+      if (is.null(seed)) seed <- sample(1e6, 1)
+      set.seed(seed)
+
       xy <- wobble(x, y, check = FALSE)
       x <- xy$x
       y <- xy$y
-      warning("Added random noise before log transformation due to zeros in the sample.")
+
+      warning(paste0("Added random noise before log transformation due to zeros in the sample. The seed is ",
+                     seed, "."))
     }
     x <- log(x^2)
     y <- log(y^2)
@@ -169,8 +183,8 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
     #   randomization <- FALSE
     # }
 
-    distribution <- perm_distribution(x = x, y = y + delta, type = type,
-                                      randomization = (method == "randomization"), n.rep = n.rep)
+    distribution <- suppressWarnings(perm_distribution(x = x, y = y + delta, type = type,
+                                      randomization = (method == "randomization"), n.rep = n.rep))
 
     ## p-value
     p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y),

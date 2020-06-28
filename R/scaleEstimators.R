@@ -191,7 +191,7 @@ rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
   )
 
   if (length(unique(x)) == 1 | length(unique(y)) == 1) {
-    warning("At least one of the input vectors is constant.")
+    warning("At least one of the input vectors is constant.", call. = FALSE)
   }
 
   ## NA handling
@@ -221,9 +221,9 @@ rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
     est <- stats::median(abs(x - stats::median(x)) + stats::median(abs(y - stats::median(y))))
   }
 
-  if (est == 0 & length(unique(x)) > 1 & length(unique(y)) > 1) {
-    warning("Estimate is 0 although the data is not constant. Consider using a
-            different location estimator")
+  if (est == 0 & (length(unique(x)) > 1 & length(unique(y)) > 1)) {
+    warning("Estimate of scale is 0 although the data is not constant. Consider using a different estimator or setting wobble = TRUE in the function call.",
+            call. = FALSE)
   }
 
   return(est)

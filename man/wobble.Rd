@@ -22,9 +22,10 @@ A list of length two containing the modified \code{x} and \code{y}
 discrete observations
 }
 \details{
-The function checks whether all values in the two numeric input vectors are distinct.
+If \code{check = TRUE} the function checks whether all values in the two numeric input vectors are distinct.
 If so, it returns the original values, otherwise the values are made continuous by adding uniform
-noise.
+noise. Otherwise, it simply determines the number of digits and adds uniform noise in order to
+make the sample "more" continuous.
 }
 \examples{
 x <- rnorm(20); y <- rnorm(20); x <- round(x)

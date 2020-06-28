@@ -83,9 +83,16 @@ The test statistics for the permutation and randomization version of the test is
 
 \code{scale = "S4"} uses
 
-\deqn{S = 1.4826 * ( med( |X_1 - med(X)|,...,|X_m - med(X)| ) + med( |Y_1 - med(Y)|,...,|Y_n - med(Y)| ). }
+\deqn{S = ( med( |X_1 - med(X)|,...,|X_m - med(X)| ) + med( |Y_1 - med(Y)|,...,|Y_n - med(Y)| ). }
 
 For more details see Fried & Dehling (2011).
+
+For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
+This is achieved by log-transforming the original observations so that a potential
+scale difference appears as a location difference between the transformed samples;
+see Fried (2012). The sample cannot contain zeros due to the necessary log-transformation.
+If it contains zeros, uniform noise is added to all variables in order to remove zeros.
+A warning is printed.
 }
 \examples{
 ## Generate random samples

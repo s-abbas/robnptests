@@ -36,7 +36,7 @@
 #'
 #' For more details see Fried & Dehling (2011).
 #'
-#' For \code{var.test = TRUE}, the test compares two sample for a difference in scale.
+#' For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
 #' This is achieved by log-transforming the original observations so that a potential
 #' scale difference appears as a location difference between the transformed samples;
 #' see Fried (2012). The sample cannot contain zeros due to the necessary log-transformation.

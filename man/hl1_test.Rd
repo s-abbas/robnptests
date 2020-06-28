@@ -14,7 +14,8 @@ hl1_test(
   n.rep = 10000,
   na.rm = FALSE,
   var.test = FALSE,
-  wobble = FALSE
+  wobble = FALSE,
+  seed = NULL
 )
 }
 \arguments{
@@ -55,6 +56,10 @@ default is \code{n.rep = 10000}.}
 proceeding with the test, in order to make sure there are no duplicate values in the
 sample that can cause the scale estimate to be 0. Only necessary for the permutation and
 randomization version of the test. Defaults to FALSE.}
+
+\item{seed}{Optional, numerical value used as a seed to be used for 'wobbling' of the samples.
+If no seed is given, it is set randomly. In any case, the seed used will be returned in a
+warning message. The argument is ignored if \code{wobble = FALSE}.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:
@@ -86,10 +91,12 @@ The test statistics for the permutation and randomization version of the test is
 where \eqn{ Z = ( X_1 - med(X),...,X_m - med(X), Y_1 - med(Y),...,Y_n - med(Y) )'}
 is the median corrected sample. For more details see Fried & Dehling (2011).
 
-For \code{var.test = TRUE}, the test compares two sample for a difference in scale.
+For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
 This is achieved by log-transforming the original observations so that a potential
 scale difference appears as a location difference between the transformed samples;
-see Fried (2012).
+see Fried (2012). The sample cannot contain zeros due to the necessary log-transformation.
+If it contains zeros, uniform noise is added to all variables in order to remove zeros.
+A warning is printed.
 }
 \examples{
 ## Generate random samples
