@@ -185,6 +185,29 @@ testthat::test_that("hl2_test works correctly", {
   y <- c(rnorm(9), 0)
 
   testthat::expect_warning(hl2_test(x, y, method = "asymptotic", var.test = TRUE))
+
+  ##
+  ## Wobbling: Check whether the wobbled sample can be retrieved from the test
+  ##
+
+  set.seed(108)
+
+  x <- c(0, 0, 0, 0, 0, 1, 0, 0, 0, 0)
+  y <- c(0, 1, 2, 0, 1, 2, 0, 1, 2, 0)
+
+  testthat::expect_warning(hl2_test(x, y, method = "randomization", n.rep = 1000))
+
+  testthat::expect_warning(hl2_test(x, y, method = "randomization", n.rep = 1000,
+                                    wobble = TRUE, wobble.seed = 1234))
+
+  set.seed(1234)
+  wob <- wobble(x, y, check = FALSE)
+
+  testthat::expect_equal(suppressWarnings(hl2_test(x, y, method = "randomization", n.rep = 1000,
+                                                   wobble = TRUE, wobble.seed = 1234)$statistic),
+                         suppressWarnings(hl2_test(wob$x, wob$y, method = "randomization", n.rep = 1000,
+                                                   wobble = FALSE)$statistic))
+
 }
 
 )
