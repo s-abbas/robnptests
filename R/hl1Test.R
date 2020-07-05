@@ -43,6 +43,11 @@
 #' If it contains zeros, uniform noise is added to all variables in order to remove zeros.
 #' A warning is printed.
 #'
+#' If the sample has been modified (either because of 0's for \code{var.test = TRUE}, or
+#' as \code{wobble = TRUE}, the modified samples can be retrieved using
+#'
+#' \code{set.seed(wobble.seed); wobble(x, y)}
+#'
 #' @return
 #' A list with class "\code{htest}" containing the following components:
 #' \item{statistic}{the value of the test statistic.}
@@ -81,10 +86,12 @@
 #'
 #' @export
 
-hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delta = ifelse(var.test, 1, 0),
-                     method = c("asymptotic", "permutation", "randomization"), scale = c("S1", "S2"),
+hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
+                     delta = ifelse(var.test, 1, 0),
+                     method = c("asymptotic", "permutation", "randomization"),
+                     scale = c("S1", "S2"),
                      n.rep = 10000, na.rm = FALSE,
-                     var.test = FALSE, wobble = FALSE, seed = NULL) {
+                     var.test = FALSE, wobble = FALSE, wobble.seed = NULL) {
 
   alternative <- match.arg(alternative)
 #  method <- match.arg(method)
@@ -108,30 +115,30 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delt
 
   if (wobble) {
 
-    if (is.null(seed)) seed <- sample(1e6, 1)
-    set.seed(seed)
+    if (is.null(wobble.seed)) wobble.seed <- sample(1e6, 1)
+    set.seed(wobble.seed)
 
     xy <- wobble(x, y)
     x <- xy$x
     y <- xy$y
 
     warning(paste0("Added random noise to x and y. The seed is ",
-                   seed, "."))
+                   wobble.seed, "."))
   }
 
   ## If necessary: Transformation to test for difference in scale
   if (var.test) {
     if (any(c(x, y) == 0)) {
 
-      if (is.null(seed)) seed <- sample(1e6, 1)
-      set.seed(seed)
+      if (is.null(wobble.seed)) wobble.seed <- sample(1e6, 1)
+      set.seed(wobble.seed)
 
       xy <- wobble(x, y, check = FALSE)
       x <- xy$x
       y <- xy$y
 
       warning(paste0("Added random noise before log transformation due to zeros in the sample. The seed is ",
-                     seed, "."))
+                     wobble.seed, "."))
     }
     x <- log(x^2)
     y <- log(y^2)

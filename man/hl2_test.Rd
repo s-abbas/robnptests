@@ -14,7 +14,8 @@ hl2_test(
   n.rep = 10000,
   na.rm = FALSE,
   var.test = FALSE,
-  wobble = FALSE
+  wobble = FALSE,
+  wobble.seed = NULL
 )
 }
 \arguments{
@@ -51,7 +52,7 @@ default is \code{n.rep = 10000}.}
 
 \item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
 
-\item{wobble}{logical value indicating whether uniform noise should be added to the sample before
+\item{wobble.seed}{logical value indicating whether uniform noise should be added to the sample before
 proceeding with the test, in order to make sure there are no duplicate values in the
 sample that can cause the scale estimate to be 0. Only necessary for the permutation and
 randomization version of the test. Defaults to FALSE.}
@@ -93,6 +94,13 @@ scale difference appears as a location difference between the transformed sample
 see Fried (2012). The sample cannot contain zeros due to the necessary log-transformation.
 If it contains zeros, uniform noise is added to all variables in order to remove zeros.
 A warning is printed.
+
+If the sample has been modified (either because of 0's for \code{var.test = TRUE}, or
+as \code{wobble = TRUE}, the modified samples can be retrieved using
+
+\code{set.seed(wobble.seed)}
+
+\code{wobble(x, y)}
 }
 \examples{
 ## Generate random samples

@@ -2,7 +2,7 @@
 ## Add random noise if too many values in the samples are equal
 ## ----------------------------------------------------------------------------
 
-#' @title Test
+#' @title Funtion that undiscretizes rounded samples
 #'
 #' @description
 #' \code{wobble} makes a discrete sample with duplicated values continuous by adding uniform noise to the
@@ -30,6 +30,7 @@
 #' x <- rnorm(20); y <- rnorm(20); x <- round(x)
 #' wobble(x, y)
 #'
+#' @export
 
 
 wobble <- function(x, y, check = TRUE) {

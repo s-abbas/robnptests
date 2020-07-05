@@ -2,7 +2,7 @@
 % Please edit documentation in R/wobble.R
 \name{wobble}
 \alias{wobble}
-\title{Test}
+\title{Funtion that undiscretizes rounded samples}
 \usage{
 wobble(x, y, check = TRUE)
 }
