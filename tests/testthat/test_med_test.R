@@ -158,11 +158,11 @@ testthat::test_that("med_test works correctly", {
   x <- rnorm(10)
   y <- rnorm(10)
 
-  set.seed(123)
+  set.seed(47)
   p.two.sided <- med_test(x, y, method = "randomization", alternative = "two.sided", n.rep = 1000)$p.value
-  set.seed(123)
+  set.seed(47)
   p.greater <- med_test(x, y, method = "randomization", alternative = "greater", n.rep = 1000)$p.value
-  set.seed(123)
+  set.seed(47)
   p.less <- med_test(x, y, method = "randomization", alternative = "less", n.rep = 1000)$p.value
 
   ## We increase the tolerance for the comparisons. One reason is the discrete
@@ -171,8 +171,6 @@ testthat::test_that("med_test works correctly", {
   ## of their paper, which would make this test case more complicated.
   testthat::expect_equal(p.two.sided, 2 * min(p.less, p.greater), tolerance = 10^(-2))
   testthat::expect_equal(1, p.less + p.greater, tolerance = 10^(-3))
-
-  ############# PASST NOCH NICHT!!!
 
   ##
   ## Zeros in var.test: A warning should be thrown if at least 1 of the observations is zero.
@@ -190,23 +188,23 @@ testthat::test_that("med_test works correctly", {
   ## Wobbling: Check whether the wobbled sample can be retrieved from the test
   ##
 
-  # set.seed(108)
-  #
-  # x <- c(0, 0, 0, 0, 0, 1, 0, 0, 0, 0)
-  # y <- c(0, 1, 2, 0, 1, 2, 0, 1, 2, 0)
-  #
-  # testthat::expect_warning(med_test(x, y, method = "randomization", n.rep = 1000))
-  #
-  # testthat::expect_warning(med_test(x, y, method = "randomization", n.rep = 1000,
-  #                                   wobble = TRUE, wobble.seed = 1234))
-  #
-  # set.seed(1234)
-  # wob <- wobble(x, y, check = FALSE)
-  #
-  # testthat::expect_equal(suppressWarnings(med_test(x, y, method = "randomization", n.rep = 1000,
-  #                                                  wobble = TRUE, wobble.seed = 1234)$statistic),
-  #                        suppressWarnings(med_test(wob$x, wob$y, method = "randomization", n.rep = 1000,
-  #                                                  wobble = FALSE)$statistic))
+  set.seed(108)
+
+  x <- c(0, 0, 0, 0, 0, 1, 0, 0, 0, 0)
+  y <- c(0, 1, 2, 0, 1, 2, 0, 1, 2, 0)
+
+  testthat::expect_error(med_test(x, y, method = "randomization", n.rep = 1000))
+
+  testthat::expect_warning(med_test(x, y, method = "randomization", n.rep = 1000,
+                                    wobble = TRUE, wobble.seed = 1234))
+
+  set.seed(1234)
+  wob <- wobble(x, y, check = FALSE)
+
+  testthat::expect_equal(suppressWarnings(med_test(x, y, method = "randomization", n.rep = 1000,
+                                                   wobble = TRUE, wobble.seed = 1234)$statistic),
+                         suppressWarnings(med_test(wob$x, wob$y, method = "randomization", n.rep = 1000,
+                                                   wobble = FALSE)$statistic))
 
 }
 

@@ -98,9 +98,7 @@ A warning is printed.
 If the sample has been modified (either because of 0's for \code{var.test = TRUE}, or
 as \code{wobble = TRUE}, the modified samples can be retrieved using
 
-\code{set.seed(wobble.seed)}
-
-\code{wobble(x, y)}
+\code{set.seed(wobble.seed); wobble(x, y)}
 }
 \examples{
 ## Generate random samples

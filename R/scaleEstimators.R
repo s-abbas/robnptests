@@ -222,7 +222,7 @@ rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
   }
 
   if (est == 0 & (length(unique(x)) > 1 & length(unique(y)) > 1)) {
-    warning("Estimate of scale is 0 although the data is not constant. Consider using a different estimator or setting wobble = TRUE in the function call.",
+    stop("Estimate of scale is 0 although the data is not constant. Consider using a different estimator or setting wobble = TRUE in the function call.",
             call. = FALSE)
   }
 

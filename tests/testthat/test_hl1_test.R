@@ -191,7 +191,7 @@ testthat::test_that("hl1_test works correctly", {
   x <- c(0, 0, 0, 0, 0, 1, 0, 0, 0, 0)
   y <- c(0, 1, 2, 0, 1, 2, 0, 1, 2, 0)
 
-  testthat::expect_warning(hl1_test(x, y, method = "randomization", n.rep = 1000))
+  testthat::expect_error(hl1_test(x, y, method = "randomization", n.rep = 1000))
 
   testthat::expect_warning(hl1_test(x, y, method = "randomization", n.rep = 1000,
                                     wobble = TRUE, wobble.seed = 1234))

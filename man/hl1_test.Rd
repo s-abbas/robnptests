@@ -97,6 +97,11 @@ scale difference appears as a location difference between the transformed sample
 see Fried (2012). The sample cannot contain zeros due to the necessary log-transformation.
 If it contains zeros, uniform noise is added to all variables in order to remove zeros.
 A warning is printed.
+
+If the sample has been modified (either because of 0's for \code{var.test = TRUE}, or
+as \code{wobble = TRUE}, the modified samples can be retrieved using
+
+\code{set.seed(wobble.seed); wobble(x, y)}
 }
 \examples{
 ## Generate random samples
