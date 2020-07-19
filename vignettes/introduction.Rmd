@@ -108,7 +108,7 @@ to replace the sample means by the sample medians, i.e. the location difference
 is estimated by
 
 \begin{align*}
-  \text{median}\left(x_1, \ldots, x_m\right) - \text{median}\left(y_1, \ldots, y_n\right).
+   \hat{\Delta}^{(\text{MED})} = \text{median}\left(x_1, \ldots, x_m\right) - \text{median}\left(y_1, \ldots, y_n\right).
 \end{align*}
 
 The test can be used with the function `med_test`.
@@ -140,9 +140,8 @@ and efficiency are the Hodges-Lehmann estimators (Hodges & Lehmann, 1964).
 An estimator for the location difference based on the one-sample Hodges-Lehmann
 estimator (HL1 estimator) is given by
 
-Estimator for the location difference
 \begin{align*}
- \text{median}\left\{\frac{x_i + x_j}{2}\colon\ 1 \leq i < j \leq m\right\} - \text{median}\left\{\frac{y_i + y_j}{2}\colon\ 1 \leq i < j \leq n\right\}.
+ \hat{\Delta}^{(\text{HL1})} = \text{median}\left\{\frac{x_i + x_j}{2}\colon\ 1 \leq i < j \leq m\right\} - \text{median}\left\{\frac{y_i + y_j}{2}\colon\ 1 \leq i < j \leq n\right\}.
 \end{align*}
 
 The test is performed by the function `hl1_test`.
@@ -168,14 +167,12 @@ Instead of estimating the location difference by subtracting the estimated
 locations of both samples, the two-sample Hodges-Lehmann estimator (HL2 estimator)
 estimates the location difference directly:
 
-Estimator for the location difference
 \begin{align*}
-  \text{median}\left\{|x_i - y_j|\colon\ 1 \leq i \leq m,\ 1 \leq j \leq m\right\}.
+   \hat{\Delta}^{(\text{HL2})} = \text{median}\left\{|x_i - y_j|\colon\ 1 \leq i \leq m,\ 1 \leq j \leq m\right\}.
 \end{align*}
 
 It can be performed by using the function `hl2_test`. The scale estimators are the 
 same as for the HL1 test.
-
 
 ## Computation of p-values
 We implemented several ways to compute $p$-values for the different tests, which
@@ -185,20 +182,29 @@ The functions for each test have the argument `method`, which can be set to
 `method = "permutation"` for a permutation test, `method = "randomization"` for a
 randomization test, and `method = "asymptotic"` for an asymptotic test.
 
-### Permutation
+### Permutation test
 With the permutation principle, the $p$-value of the test is obtained by
 computing the value of the test statistic for all possible splits of 
 the joint sample $\left(x_1, \ldots, x_m, y_1, \ldots, y_n\right)$ into two
 samples of sizes $m$ and $n$. This is achieved by permuting the joint sample and
 splitting the permutations so that the first $m$ observations form the first
-and the last $n$ observations form the second sample. This leads to $\binom{m}{m + n}$
+and the last $n$ observations form the second sample. This leads to $B = \binom{m}{m + n}$
 possible splits. The idea is that under the null hypothesis, each of these 
 permutations is equally likely to be generated from the data generating distribution.
 
 Using the permutation principle leads to distribution-free tests, i.e., a permutation
 test holds its significance level under every continuous distribution.
 
-- Berechnung des $p$-Werts
+Let $A$ be the number of splits leading to values which are at least as extreme as
+the observed value of the test statistic. More formally, let $t_i$ be the 
+value of the test statistic for split $i$, $i = 1, \ldots, B$, and $t^{(\text{obs})}$
+the observed value of the test statistic. Then,
+
+- for $H_0^{(=)}$: $A = \#\left(|t_i| \geq |t^{(\text{obs})|}\right)$
+- for $H_0^{(\leq)}$: $A = \#\left(t_i \geq t^{(\text{obs})}\right)$
+- for $H_0^{(\geq)}$: $A = \#\left(t_i \leq t^{(\text{obs})}\right)$
+
+and $p$-value $= \frac{A}{B}$.
 
 As the number of splits to enumerate over increases rapidly in $m$ and $n$, 
 using the permutation principle can lead to memory and computation time issues.
@@ -208,21 +214,43 @@ sufficient computational resources are available.
 ### Randomization
 The randomization principle is a commonly used way to deal with the aforementioned
 shortcomings of the permutation principle. Instead of computing all possible
-splits, only a random subset is selected. As commonly proposed in the literature,
-we draw these random subsets with replacement, i.e., a single permutation may be 
-drawn repeatedly. We account for this when computing the $p$-value by following
-the approach of Smyth & Phipson (2011).
+splits, only a random subset of $b << B$ splits is selected. As commonly proposed 
+in the literature,we draw these random subsets with replacement, i.e., a single 
+permutation may be drawn repeatedly. 
 
-- Berechnung des $p$-Werts.
+The $p$-value can then be estimated by $\frac{A + 1}{b + 1}$, where $A$ now
+relates to the drawn subsets of the splits. In the numerator and the denominator, 
+the number $1$ is added to include the observed value of the test statistic.
+
+This estimator will overestimate the true $p$-value the observed sample can be
+included multiple times in the drawn splits. Following Smyth & Phipson (2011),
+we correct the $p$-value using the function \code{permp} from the R package
+\code{statmod}.
 
 ### Asymptotic
 For very large sample sizes, asymptotical $p$-values can be computed for each
 test. This leads to an additional drop in the computation time as compared to the
 randomization principle.
 
-We use the following asymptotical distributions for the different estimators
-for location difference.
+Using the asymptotic distribution of the sample median, an asymptotic test statistic
+for the MED-test is
+\begin{align*}
+  T_a^{(\text{MED})} = \sqrt{\frac{m \cdot n}{m + n}} \cdot 2 \cdot f\left(F^{-1}\left(0.5\right)\right) \cdot  \hat{\Delta}^{(\text{MED})} \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, 1\right),
+\end{align*}
+where $f$ is the density function belonging to the cumulative distribution function $F$. The value $f\left(F^{-1}\left(0.5\right)\right)$ can be estimated by a kernel-density estimator on the 
+sample $x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n - \tilde{y}$.
 
+For the HL2-test and $\lambda = \frac{m}{n + n} \in \left(0, 1\right)$, we use the asymptotic test statistic
+\begin{align*}
+T_a^{(\text{HL2})} = \sqrt{12 \cdot \lambda \cdot \left(1 - \lambda\right)} \int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x \cdot \left(m + n\right) \cdot \hat{\Delta}^{(\text{HL2})} \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, 1\right),
+\end{align*}
+where $\int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x$ is the value of the density of $X - Y$ at zero and
+can be estimated by a kernel-density estimator on the within-sample pairwise differences
+$x_2 - x_1, \ldots, x_m - x_1, \ldots, x_m - x_{m - 1}, y_2 - y_1, \ldots, y_n - y_1, \ldots, y_n - y_{n - 1}$.
+
+To obtain an asymptotic HL1-test, we replace $\hat{\Delta}^{(\text{HL2})}$ by 
+$\hat{\Delta}^{(\text{HL1})}$. For the kernel-density estimation, we use the R function
+\code{densitiy} from the \code{stats} package.
 
 # Testing for a location difference
 We will now describe several possibilities to test for a location difference with
