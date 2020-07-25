@@ -2,6 +2,8 @@
 title: "Getting started with `robTests`"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+bibliography: ../inst/REFERENCES.bib
+csl: csda.csl
 vignette: >
   %\VignetteIndexEntry{introduction}
   %\VignetteEngine{knitr::rmarkdown}
@@ -50,8 +52,8 @@ hypotheses can be tested:
 A frequently used test for this scenario is the ordinary two-sample $t$-test, which
 assumes a normal distribution for both samples. For large samples, the central limit theorem ensures that the test keeps the desired
 significance level $\alpha \in \left(0, 1\right)$ for most distributions. Relying on the
-central limit theorem might not be appropriate in small samples. Moreover, the test is known to be vulnerable to outlying 
-values as they can mask existing location shifts or lead to wrong rejections of 
+central limit theorem might not be appropriate in small samples. Moreover, the test is known to be vulnerable to outlying
+values as they can mask existing location shifts or lead to wrong rejections of
 the null hypothesis. The Wilcoxon-Mann-Whitney test, another popular two-sample
 test for the outlined data situation, is a distribution-free test which is nearly
 as powerful as the $t$-test under normality but can be more powerful under non-normal
@@ -79,9 +81,9 @@ The package contains the following two-sample tests:
 
 Function name | Description | Literature
 ------------- | ----------- | ----------
-`med_test`    | Tests based on the difference of the sample medians | Fried \& Dehling (2011)
-`hl1_test`    | Tests based on the one-sample Hodges-Lehmann estimator | Fried \& Dehling (2011)
-`hl2_test`    | Tests based on the two-sample Hodges-Lehmann estimator | Fried \& Dehling (2011)
+`med_test`    | Tests based on the difference of the sample medians | [@FriDeh11robu]
+`hl1_test`    | Tests based on the one-sample Hodges-Lehmann estimator | [@FriDeh11robu]
+`hl2_test`    | Tests based on the two-sample Hodges-Lehmann estimator | [@FriDeh11robu]
 
 We describe the test statistics in detail in the next subsection. All functions
 contain several arguments to adjust the functions to certain data situations, which
@@ -129,13 +131,13 @@ from the sample median (MAD) of each sample:
   \hat{S} = 1.4826 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|\right\} + 1.4826 \cdot \text{median}\left\{|y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\}.
 \end{align*}
 
-The constant '1.4826' allows for an unbiased estimation of the sample standard 
+The constant '1.4826' allows for an unbiased estimation of the sample standard
 deviation by the MAD.
 
 ### HL1 tests
 A known disadvantage of the sample median is its low efficiency under normality
 compared to the sample mean. Estimators that provide a compromise between robustness
-and efficiency are the Hodges-Lehmann estimators (Hodges & Lehmann, 1964).
+and efficiency are the Hodges-Lehmann estimators [@HodLeh64est].
 
 An estimator for the location difference based on the one-sample Hodges-Lehmann
 estimator (HL1 estimator) is given by
@@ -171,7 +173,7 @@ estimates the location difference directly:
    \hat{\Delta}^{(\text{HL2})} = \text{median}\left\{|x_i - y_j|\colon\ 1 \leq i \leq m,\ 1 \leq j \leq m\right\}.
 \end{align*}
 
-It can be performed by using the function `hl2_test`. The scale estimators are the 
+It can be performed by using the function `hl2_test`. The scale estimators are the
 same as for the HL1 test.
 
 ## Computation of p-values
@@ -184,19 +186,19 @@ randomization test, and `method = "asymptotic"` for an asymptotic test.
 
 ### Permutation test
 With the permutation principle, the $p$-value of the test is obtained by
-computing the value of the test statistic for all possible splits of 
+computing the value of the test statistic for all possible splits of
 the joint sample $\left(x_1, \ldots, x_m, y_1, \ldots, y_n\right)$ into two
 samples of sizes $m$ and $n$. This is achieved by permuting the joint sample and
 splitting the permutations so that the first $m$ observations form the first
 and the last $n$ observations form the second sample. This leads to $B = \binom{m}{m + n}$
-possible splits. The idea is that under the null hypothesis, each of these 
+possible splits. The idea is that under the null hypothesis, each of these
 permutations is equally likely to be generated from the data generating distribution.
 
 Using the permutation principle leads to distribution-free tests, i.e., a permutation
 test holds its significance level under every continuous distribution.
 
 Let $A$ be the number of splits leading to values which are at least as extreme as
-the observed value of the test statistic. More formally, let $t_i$ be the 
+the observed value of the test statistic. More formally, let $t_i$ be the
 value of the test statistic for split $i$, $i = 1, \ldots, B$, and $t^{(\text{obs})}$
 the observed value of the test statistic. Then,
 
@@ -206,7 +208,7 @@ the observed value of the test statistic. Then,
 
 and $p$-value $= \frac{A}{B}$.
 
-As the number of splits to enumerate over increases rapidly in $m$ and $n$, 
+As the number of splits to enumerate over increases rapidly in $m$ and $n$,
 using the permutation principle can lead to memory and computation time issues.
 Therefore, we recommend this approach only for very small sample sizes or when
 sufficient computational resources are available.
@@ -214,16 +216,16 @@ sufficient computational resources are available.
 ### Randomization
 The randomization principle is a commonly used way to deal with the aforementioned
 shortcomings of the permutation principle. Instead of computing all possible
-splits, only a random subset of $b << B$ splits is selected. As commonly proposed 
-in the literature,we draw these random subsets with replacement, i.e., a single 
-permutation may be drawn repeatedly. 
+splits, only a random subset of $b << B$ splits is selected. As commonly proposed
+in the literature,we draw these random subsets with replacement, i.e., a single
+permutation may be drawn repeatedly.
 
 The $p$-value can then be estimated by $\frac{A + 1}{b + 1}$, where $A$ now
-relates to the drawn subsets of the splits. In the numerator and the denominator, 
+relates to the drawn subsets of the splits. In the numerator and the denominator,
 the number $1$ is added to include the observed value of the test statistic.
 
 This estimator will overestimate the true $p$-value the observed sample can be
-included multiple times in the drawn splits. Following Smyth & Phipson (2011),
+included multiple times in the drawn splits. Following [@PhiSmy10perm],
 we correct the $p$-value using the function \code{permp} from the R package
 \code{statmod}.
 
@@ -237,7 +239,7 @@ for the MED-test is
 \begin{align*}
   T_a^{(\text{MED})} = \sqrt{\frac{m \cdot n}{m + n}} \cdot 2 \cdot f\left(F^{-1}\left(0.5\right)\right) \cdot  \hat{\Delta}^{(\text{MED})} \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, 1\right),
 \end{align*}
-where $f$ is the density function belonging to the cumulative distribution function $F$. The value $f\left(F^{-1}\left(0.5\right)\right)$ can be estimated by a kernel-density estimator on the 
+where $f$ is the density function belonging to the cumulative distribution function $F$. The value $f\left(F^{-1}\left(0.5\right)\right)$ can be estimated by a kernel-density estimator on the
 sample $x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n - \tilde{y}$.
 
 For the HL2-test and $\lambda = \frac{m}{n + n} \in \left(0, 1\right)$, we use the asymptotic test statistic
@@ -248,7 +250,7 @@ where $\int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x$ is the value of th
 can be estimated by a kernel-density estimator on the within-sample pairwise differences
 $x_2 - x_1, \ldots, x_m - x_1, \ldots, x_m - x_{m - 1}, y_2 - y_1, \ldots, y_n - y_1, \ldots, y_n - y_{n - 1}$.
 
-To obtain an asymptotic HL1-test, we replace $\hat{\Delta}^{(\text{HL2})}$ by 
+To obtain an asymptotic HL1-test, we replace $\hat{\Delta}^{(\text{HL2})}$ by
 $\hat{\Delta}^{(\text{HL1})}$. For the kernel-density estimation, we use the R function
 \code{densitiy} from the \code{stats} package.
 
@@ -298,9 +300,9 @@ hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "randomiza
   ## Asymptotic two-sided test assuming no location difference between the samples under the null hypothesis
   hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "asymptotic")
 ```
-  
+
   We can also perform the test when assuming that a certain location difference between both samples exists under $H_0$, i.e. $\Delta_0 \neq 0$.
-  
+
   ```{r}
   x1 <- x + 5
   ## Asymptotic two-sided test assuming \Delta_0 = 5
@@ -314,7 +316,7 @@ In many applications the data may be rounded to a small number of digits or the 
 - reduced power of the test, i.e. location differences may not be found/can vanish due to rounding
 
 
-We implemented a procedure call wobbling (Fried & Gather, 2007), i.e. we add random noise from a uniform distribution to the
+We implemented a procedure call wobbling [@FriGat07rank], i.e. we add random noise from a uniform distribution to the
 observations. To keep the alteration of the original observations as small as possible, the scale of the noise is chosen
 depending on the number of decimal places.
 
@@ -349,12 +351,12 @@ hl1_test(round(x), round(y), alternative = "two.sided", method = "randomization"
 - Wobbling (auch bei asymptotischen Tests?)
 
 # Testing for a difference in scale
-Following Fried (2012), the argument `var.test` allows to decide whether the
+Following [@Fri12onli] the argument `var.test` allows to decide whether the
 samples should be tested for a location difference (`var.test = FALSE`), which is
 the default, or for different variances (`var.test = TRUE`), i.e. $\sigma^2_X \neq \sigma^2_Y$.
 
 Setting `var.test = TRUE` transforms the observations so that a possible variance
-difference between the samples appears as a location difference between the 
+difference between the samples appears as a location difference between the
 transformed samples.
 
 The resulting variance tests can resist outliers and heavy tailes, and work
@@ -400,6 +402,7 @@ hl1_test(x = x * 5, y = y, alternative = "two.sided", delta = 5, method = "asymp
 ```
 
 ## Other packages
+The tests in this package are constructed assuming homoscedasticity. Robust two-sample tests for the heteroscedastic scenario can be found in \code{R} package [WRS2](https://cran.r-project.org/web/packages/WRS2/index.html) [@MaiWil20robu].
 
 ## Outlook
 
