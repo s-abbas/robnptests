@@ -17,58 +17,56 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(robTests)
-```
-
 # Introduction {#introduction}
-The package `robTests` contains functions that allow for robust and non-parametric
-two-sample testing for location problems. At the end of this vignette, we also
-briefly discuss the possibility to detect scale changes between two samples.
+The package `robTests` contains robust (approximately) distribution-free tests for the two-sample location problem.
 
-For the detection of location differences, we consider the following data situation:
-Let $\boldsymbol{X} = \left(X_1, \ldots, X_m\right)$ and $\boldsymbol{Y} = \left(Y_1, \ldots, Y_n\right)$
-be two samples of sizes $m, n \in \mathbb{N}$, which should be compared. Each
-sample is assumed to consist of independent and identically distributed (i.i.d.)
-random variables so that
+We consider the following data situation: Let $\boldsymbol{X} = \left(X_1, \ldots, X_m\right)$ 
+and $\boldsymbol{Y} = \left(Y_1, \ldots, Y_n\right)$ be two samples of sizes $m, n \in \mathbb{N}$.
+Each sample consists of independent and identically distributed (i.i.d.) random variables so that
 \begin{align*}
   X_1, \ldots, X_m \overset{i.i.d.}{\sim} F \quad \text{and} \quad Y_1, \ldots, Y_n \overset{i.i.d.}{\sim} G,
 \end{align*}
 where $F, G\colon\ \mathbb{R} \to \left[0, 1\right]$ are the cumulative distribution functions
-of the underlying unknown continuous distributions with unknown expected values $\mu_X$ and $\mu_Y$
-as well as unknown variances $\sigma^2 := \sigma_X^2 = \sigma_Y^2$. In particular, this means
-that we assume homoscedasticity. We assume that the distributions differ at most in location so that
+of the underlying unknown continuous distributions. Let $G$ be a shifted version of $F$, i.e.
 \begin{align*}
-  G\left(x\right) = F\left(x - \Delta\right) \quad \text{for all}\ x \in \mathbb{R},
+  G\left(x\right) = F\left(x + \Delta\right) \quad \text{for all}\ x \in \mathbb{R},
 \end{align*}
-where $\Delta \in \mathbb{R}$ is the value of the location difference. The following
-hypotheses can be tested:
-\begin{align*}
-  &H_0^{(=)}\colon\ \Delta = \Delta_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \Delta \neq \Delta_0 \\
-  &H_0^{(>)}\colon\ \Delta \leq \Delta_0 \quad \text{vs.} \quad H_1^{(>)}\colon\ \Delta \neq \Delta_0 \\
-  &H_0^{(<)}\colon\ \Delta \geq \Delta_0 \quad \text{vs.} \quad H_1^{(<)}\colon\ \Delta \neq \Delta_0.
-\end{align*}
+with $\Delta \in \mathbb{R}$ denoting the shift size. Hence, $F$ and $G$ differ at
+most in location and, in particular, have the same variance $\sigma^2 := \sigma_X^2 = \sigma_Y^2 > 0$ (homoscedasticity).
 
-A frequently used test for this scenario is the ordinary two-sample $t$-test, which
-assumes a normal distribution for both samples. For large samples, the central limit theorem ensures that the test keeps the desired
-significance level $\alpha \in \left(0, 1\right)$ for most distributions. Relying on the
-central limit theorem might not be appropriate in small samples. Moreover, the test is known to be vulnerable to outlying
-values as they can mask existing location shifts or lead to wrong rejections of
-the null hypothesis. The Wilcoxon-Mann-Whitney test, another popular two-sample
-test for the outlined data situation, is a distribution-free test which is nearly
+The following hypotheses can be tested:
+\begin{align*}
+  &H_0^{(=)}\colon\ \Delta = \Delta_0 \quad \text{vs.} \quad H_1^{(=)}\colon\ \Delta \neq \Delta_0 \\
+  &H_0^{(\leq)}\colon\ \Delta \leq \Delta_0 \quad \text{vs.} \quad H_1^{(\leq)}\colon\ \Delta > \Delta_0 \\
+  &H_0^{(\geq)}\colon\ \Delta \geq \Delta_0 \quad \text{vs.} \quad H_1^{(\geq)}\colon\ \Delta < \Delta_0,
+\end{align*}
+where $\Delta_0 \in \mathbb{R}$ is a value to which $\Delta$ is set into relation.
+
+A popular test for this scenario is the ordinary two-sample $t$-test, which uses the normality assumption. For large samples, the central limit theorem ensures that the test keeps the desired significance level $\alpha \in \left(0, 1\right)$, 
+even if the underlying distributions are not normal. However, relying on the central 
+limit theorem is often not appropriate in small samples. Moreover, the test is known 
+to be vulnerable to outlying values as they can mask existing location shifts or lead to wrong rejections of
+the null hypothesis. 
+
+The Wilcoxon-Mann-Whitney test is a popular distribution-free test which is nearly
 as powerful as the $t$-test under normality but can be more powerful under non-normal
 distributions. It is often preferred over the $t$-test, when the normality assumption
-is not fulfilled. However, it can be nearly as vulnerable to outliers as the $t$-test.
+cannot be justified, but can be nearly as vulnerable to outliers [@FriGat07rank].
 
-The tests implemented in this package were chosen with the following objectives
-in mind:
+We implemented tests for the outlined situation with the following objectives in mind:
 
 * robustness against outliers
-* (approximately) distribution free, i.e. keep the significance level under $H_0$
-* have a large power over several distributional shapes.
+* (approximately) distribution free, i.e. keep the significance level under $H_0$ over all continuous distributions
+* have a large power over several distributions.
 
 In this vignette, we describe the basic functionality of the package and the
 implemented tests.
+
+In addition to the two-sample location problem, the tests can also be used to
+detect scale differences between two independent samples. This will be briefly
+discussed at the end of the vignette.
+
+In the remainder of this vignette, let $\boldsymbol{x} = \left(x_1, \ldots, x_m\right)$ and $\boldsymbol{y} = \left(y_1, \ldots, y_n\right)$ be observed samples from both distributions.
 
 ```{r}
 library(robTests)
@@ -78,35 +76,44 @@ sessionInfo()
 
 # Overview on implemented tests
 The package contains the following two-sample tests:
-
-Function name | Description | Literature
-------------- | ----------- | ----------
-`med_test`    | Tests based on the difference of the sample medians | [@FriDeh11robu]
-`hl1_test`    | Tests based on the one-sample Hodges-Lehmann estimator | [@FriDeh11robu]
-`hl2_test`    | Tests based on the two-sample Hodges-Lehmann estimator | [@FriDeh11robu]
+  
+Function name | Test names | Description | Literature
+------------- | --------- | ----------- | ----------
+`med_test`    | MED1-test, MED2-test | Tests based on the difference of the sample medians | [@FriDeh11robu]
+`hl1_test`    | HL11-test, HL12-test | Tests based on the one-sample Hodges-Lehmann estimator | [@FriDeh11robu]
+`hl2_test`    | HL21-test, HL22-test | Tests based on the two-sample Hodges-Lehmann estimator | [@FriDeh11robu]
 
 We describe the test statistics in detail in the next subsection. All functions
-contain several arguments to adjust the functions to certain data situations, which
-are also discussed in the following sections.
+contain several arguments to adjust the functions to certain data situations and
+objectives.
 
 ## Test statistics
-The test statistics in this package follow the construction principle of the $t$-statistic, i.e.,
-an estimator $\hat{\Delta}$ for the location difference $\Delta$ between both samples is divided
-by a pooled estimator $\hat{S}$ for the unknown variance $\sigma^2$. Hence, the test statistics
-are of the form
+We use test statistics which follow the construction principle of the $t$-statistic, i.e.
+an estimator $\hat{\Delta}$ for the true location difference $\Delta$ between both samples is divided
+by a pooled estimator $\hat{S}$ for the unknown standard deviation $\sigma$, leading to test
+statistics of the form
 \begin{align*}
   T = \frac{\hat{\Delta} - \Delta_0}{\hat{S}}.
 \end{align*}
-In the $t$-statistic, $\hat{\Delta}$ is estimated by the difference of the sample means
-and $\hat{S}$ is the pooled empirical standard deviation. We replace both estimators
-by robust estimators which are described in the following subsections.
+In the $t$-statistic, $\hat{\Delta}$ is estimated by $\overline{x} - \overline{y}$,
+where $\overline{x}$ and $\overline{y}$ are the sample means of $\boldsymbol{x}$ and
+$\boldsymbol{y}$, respectively. The denominator $\hat{S}$ is the pooled empirical 
+standard deviation. We replace both estimators by the robust estimators described 
+in the following subsections.
 
-We assume to have observed two samples $x_1, \ldots, x_m$ and $y_1, \ldots, y_n$
-from the two populations.
+The argument `alternative` in the function of an implemented test determines for
+which hypothesis pair the test is performed. The following table shows the different
+options for the simplified case $\Delta_0 = 0$.
 
-### MED tests
-An obvious choice to obtain a robustified version of the $t$-statistic would be
-to replace the sample means by the sample medians, i.e. the location difference
+Value of argument `alternative` | Alternative hypothesis | Meaning of the alternative hypothesis
+--------------------- | ------------ | -----------
+`two.sided`                     | $H_1^{(=)}\colon\ \Delta \neq 0$ | $X$ and $Y$ are stocastically unequal.
+`greater`                       | $H_1^{(\leq)}\colon\ \Delta > 0$ | $X$ is stochastically larger than $Y$.
+`less`                          | $H_1^{(\geq)}\colon\ \Delta < 0$ | $X$ is stochastically smaller than $Y$.
+
+### MED-tests
+An obvious possibility to obtain a robust estimator for $\Delta$ is to 
+replace the sample means by the sample medians, i.e. the location difference
 is estimated by
 
 \begin{align*}
@@ -115,32 +122,32 @@ is estimated by
 
 The test can be used with the function `med_test`.
 
-Currently, two different options for estimating the within-sample variability are
-available. Setting the argument `scale = S3`, the scale is estimated by the median
-of the absolute deviations of each observation from its corresponding sample median:
+Two different options for estimating the within-sample variability are available. 
+Setting the argument `scale = S3`, the scale is estimated by the median of the 
+absolute deviations of each observation from its corresponding sample median:
 
 \begin{align*}
   \hat{S} = 2 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|, |y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\},
 \end{align*}
 where $\tilde{x}$ and $\tilde{y}$ are the sample medians.
 
-Another possibility is to set `scale = S4`, to estimate the scale by the sum of the median absolute deviations
+Another possibility is to set `scale = S4` to estimate the scale by the sum of the median absolute deviations
 from the sample median (MAD) of each sample:
 
 \begin{align*}
   \hat{S} = 1.4826 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|\right\} + 1.4826 \cdot \text{median}\left\{|y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\}.
 \end{align*}
 
-The constant '1.4826' allows for an unbiased estimation of the sample standard
+The constant `1.4826` allows for an unbiased estimation of the sample standard
 deviation by the MAD.
 
-### HL1 tests
+### HL1-tests
 A known disadvantage of the sample median is its low efficiency under normality
 compared to the sample mean. Estimators that provide a compromise between robustness
-and efficiency are the Hodges-Lehmann estimators [@HodLeh64est].
+and efficiency are the Hodges-Lehmann estimators [@HodLeh63esti].
 
 An estimator for the location difference based on the one-sample Hodges-Lehmann
-estimator (HL1 estimator) is given by
+estimator (HL1-estimator) is given by
 
 \begin{align*}
  \hat{\Delta}^{(\text{HL1})} = \text{median}\left\{\frac{x_i + x_j}{2}\colon\ 1 \leq i < j \leq m\right\} - \text{median}\left\{\frac{y_i + y_j}{2}\colon\ 1 \leq i < j \leq n\right\}.
@@ -164,13 +171,13 @@ where
   \left(z_1, \ldots, z_{m + n}\right) = \left(x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n - \tilde{y}\right).
 \end{align*}
 
-### HL2 tests
+### HL2-tests
 Instead of estimating the location difference by subtracting the estimated
-locations of both samples, the two-sample Hodges-Lehmann estimator (HL2 estimator)
+locations of both samples, the two-sample Hodges-Lehmann estimator (HL2-estimator)
 estimates the location difference directly:
 
 \begin{align*}
-   \hat{\Delta}^{(\text{HL2})} = \text{median}\left\{|x_i - y_j|\colon\ 1 \leq i \leq m,\ 1 \leq j \leq m\right\}.
+   \hat{\Delta}^{(\text{HL2})} = \text{median}\left\{|x_i - y_j|\colon\ 1 \leq i \leq m,\ 1 \leq j \leq n\right\}.
 \end{align*}
 
 It can be performed by using the function `hl2_test`. The scale estimators are the
