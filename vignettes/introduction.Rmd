@@ -50,9 +50,9 @@ to be vulnerable to outlying values as they can mask existing location shifts or
 the null hypothesis. 
 
 The Wilcoxon-Mann-Whitney test is a popular distribution-free test which is nearly
-as powerful as the $t$-test under normality but can be more powerful under non-normal
+as powerful as the $t$-test under normality, but can be more powerful under non-normal
 distributions. It is often preferred over the $t$-test, when the normality assumption
-cannot be justified, but can be nearly as vulnerable to outliers [@FriGat07rank].
+cannot be justified. However, it can be nearly as vulnerable to outliers [@FriGat07rank].
 
 We implemented tests for the outlined situation with the following objectives in mind:
 
@@ -63,11 +63,11 @@ We implemented tests for the outlined situation with the following objectives in
 In this vignette, we describe the basic functionality of the package and the
 implemented tests.
 
-In addition to the two-sample location problem, the tests can also be used to
+In addition to the two-sample location problem, the tests can be used to
 detect scale differences between two independent samples. This will be briefly
 discussed at the end of the vignette.
 
-In the remainder of this vignette, let $\boldsymbol{x} = \left(x_1, \ldots, x_m\right)$ and $\boldsymbol{y} = \left(y_1, \ldots, y_n\right)$ be observed samples from both distributions.
+In the remainder, let $\boldsymbol{x} = \left(x_1, \ldots, x_m\right)$ and $\boldsymbol{y} = \left(y_1, \ldots, y_n\right)$ be observed samples from both distributions.
 
 ```{r}
 library(robTests)
@@ -114,21 +114,21 @@ Value of argument `alternative` | Alternative hypothesis | Meaning of the altern
 
 ### MED-tests
 An obvious possibility to obtain a robust estimator for $\Delta$ is to 
-replace the sample means by the sample medians, i.e. the location difference
+replace the sample means, as used in the standard $t$-statistic, by the sample medians. I.e., the location difference
 is estimated by
 
 \begin{align*}
    \hat{\Delta}^{(\text{MED})} = \text{median}\left(x_1, \ldots, x_m\right) - \text{median}\left(y_1, \ldots, y_n\right).
 \end{align*}
 
-The test can be used with the function `med_test`.
+The test can be called with the function `med_test`.
 
 Two different options for estimating the within-sample variability are available. 
 Setting the argument `scale = S3`, the scale is estimated by the median of the 
 absolute deviations of each observation from its corresponding sample median:
 
 \begin{align*}
-  \hat{S} = 2 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|, |y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\},
+  \hat{S}^{(3)} = 2 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|, |y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\},
 \end{align*}
 where $\tilde{x}$ and $\tilde{y}$ are the sample medians.
 
@@ -136,7 +136,7 @@ Another possibility is to set `scale = S4` to estimate the scale by the sum of t
 from the sample median (MAD) of each sample:
 
 \begin{align*}
-  \hat{S} = 1.4826 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|\right\} + 1.4826 \cdot \text{median}\left\{|y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\}.
+  \hat{S}^{(4)} = 1.4826 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|\right\} + 1.4826 \cdot \text{median}\left\{|y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\}.
 \end{align*}
 
 The constant `1.4826` allows for an unbiased estimation of the sample standard
@@ -159,13 +159,13 @@ The test is performed by the function `hl1_test`.
 By setting `scale = S1`, the within-sample variability is estimated by the
 median of the absolute pairwise differences within both samples:
 \begin{align*}
-  \text{median}\left\{|x_i - x_j|\colon\ 1 \leq i < j \leq m,\ |y_i - y_j|\colon\ 1 \leq i < j \leq n\right\}.
+  \hat{S}^{(1)} = \text{median}\left\{|x_i - x_j|\colon\ 1 \leq i < j \leq m,\ |y_i - y_j|\colon\ 1 \leq i < j \leq n\right\}.
 \end{align*}
 
 Using `scale = S2` estimates it by the absolute pairwise differences within the
 joint sample, where every observation is centred by its corresponding sample median:
 \begin{align*}
-  \text{median}\left\{|z_i - z_j|\colon\ 1 \leq i < j \leq m + n\right\},
+  \hat{S}^{(2)} = \text{median}\left\{|z_i - z_j|\colon\ 1 \leq i < j \leq m + n\right\},
 \end{align*}
 where
 \begin{align*}
@@ -236,11 +236,11 @@ sample $x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n -
 `densitiy` from the [stats](https://cran.r-project.org/web/packages/stats/index.html) package with its default settings for the kernel-density estimation.
 
 #### Asymptotic HL1-/HL2-test
-With $\lambda = \frac{m}{n + n} \in \left(0, 1\right)$, the asymptotic HL2-test has the test statistic
+With $\lambda = \frac{m}{m + n} \in \left(0, 1\right)$, the asymptotic HL2-test has the test statistic
 \begin{align*}
 T_a^{(\text{HL2})} = \sqrt{12 \cdot \lambda \cdot \left(1 - \lambda\right)} \int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x \cdot \left(m + n\right) \cdot \hat{\Delta}^{(\text{HL2})} \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, 1\right),
 \end{align*}
-where $\int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x$ is the value of the density of $X - Y$ at zero and can be estimated by a kernel-density estimator on the within-sample pairwise differences
+where $\int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x$ can be interpreted as the value of the density of $X - Y$ at zero. In practice, it can be estimated by a kernel-density estimator on the within-sample pairwise differences
 $x_2 - x_1, \ldots, x_m - x_1, \ldots, x_m - x_{m - 1}, y_2 - y_1, \ldots, y_n - y_1, \ldots, y_n - y_{n - 1}$.
 
 Replacing $\hat{\Delta}^{(\text{HL2})}$ by $\hat{\Delta}^{(\text{HL1})}$ gives us the test statistic of the asymptotic HL1-test.
@@ -273,7 +273,7 @@ hl1.res
 ```
 
 The output is an object of the class `htest` and contains all relevant information on the performed test.
-The $p$-vlaue can be accessed via `hl1.res$p.value`. To extract the value of the test statistic, we use `hl1.res$statistic` and for the HL1-estimates of each sample `hl1.res$estimate`.
+The $p$-value can be accessed via `hl1.res$p.value`. To extract the value of the test statistic, we use `hl1.res$statistic`, and for the HL1-estimates of each sample `hl1.res$estimate`.
 
 ### Randomization test
 In this example, we draw 10000 splits randomly from the observed joint sample to perform a randomized HL1-test.
@@ -283,7 +283,7 @@ set.seed(47)
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "randomization", scale = "S2", n.rep = 10000)
 ```
 
-The $p$-value is close to that we have calculated using the permutation principle.
+The $p$-value is close to the one we have calculated using the permutation principle.
 
 ### Asymptotic test
 Although the sample sizes in our example are rather small, we use the samples to demonstrate how to use the asymptotic HL1-test.
@@ -304,6 +304,8 @@ x1 <- x + 5
 
 hl1_test(x = x1, y = y, alternative = "two.sided", delta = 5, method = "asymptotic")
 ```
+
+As expected, the $p$-value is the same as the one from the previous test. 
 
 ## Discrete data
 In many applications the data may be rounded to a small number of digits or the data-generating process may be discrete.
@@ -368,6 +370,12 @@ set.seed(47)
 hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2", wobble = TRUE, wobble.seed = 2187)
 ```
 
+The wobbled samples can be retrieved using the seed printed in the output and the function `wobble`
+```{r, cache=TRUE}
+set.seed(2187)
+wobble(x1, y1, check = FALSE)
+```
+
 # Testing for a difference in scale
 Following [@Fri12onli] the argument `var.test` allows to decide whether the
 samples should be tested for a location difference (`var.test = FALSE`), which is
@@ -377,7 +385,7 @@ Setting `var.test = TRUE` transforms the observations so that a possible varianc
 difference between the samples appears as a location difference between the
 transformed samples.
 
-The resulting variance tests can resist outliers and heavy tailes, and work
+The resulting variance tests can resist outliers and heavy tails, and work
 well under asymmetry.
 
 - Vergleich mit Standardtests ansprechen.
@@ -386,7 +394,7 @@ well under asymmetry.
 Again, we start with two samples $X_1, \ldots, X_m$ and $Y_1, \ldots, Y_n$, each
 of which consists of i.i.d. random variables. However, now we assume that we can write the random variables as
 \begin{align*}
-  X_i = \sigma_X \cdot \varepsilon_{X, i},\ $i = 1, \ldots, m$ \quad \text{and} \quad Y_j = \sigma_Y \cdot \varepsilon_{Y, j},\ $j = 1, \ldots, n$.
+  X_i = \sigma_X \cdot \varepsilon_{X, i},\ i = 1, \ldots, m \quad \text{and} \quad Y_j = \sigma_Y \cdot \varepsilon_{Y, j},\ j = 1, \ldots, n.
 \end{align*}
 Here, $\sigma_X$ is the standard deviation of the first sample and $\sigma_Y$ is the standard deviation of the second sample. The random variables $\varepsilon_{X, 1}, \ldots, \varepsilon_{X, m}$ and $\varepsilon_{Y, 1}, \ldots, \varepsilon_{Y, m}$ are i.i.d. random variables with expectation zero and unit variance.
 
@@ -413,9 +421,9 @@ y <- rnorm(30)
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", var.test = TRUE)
 ```
 
-- Include scale difference
+Including a scale difference of 5 yields
 ```{r, cache = TRUE}
-## Asymptotic two-sided test assuming no scale difference between both samples
+## Asymptotic two-sided test assuming a scale difference of 5 between both samples
 hl1_test(x = x * 5, y = y, alternative = "two.sided", delta = 5, method = "asymptotic", var.test = TRUE)
 ```
 
