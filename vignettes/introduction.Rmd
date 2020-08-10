@@ -409,7 +409,8 @@ By log-transforming the random variables, we obtain
 \begin{align*}
   U_i = \log\left(X_i^2\right) = \log\left(\sigma_X^2\right) + \log\left(\varepsilon_{X, i}^2\right),\ i = 1, \ldots, m, \quad \text{and} \quad V_i = \log\left(Y_j^2\right) = \log\left(\sigma_Y^2\right) + \log\left(\varepsilon_{Y, j}^2\right), j = 1, \ldots, n.
 \end{align*}
-This leads to $\text{E}\left(U_i\right) = \log\left(\sigma_X^2\right),\ i = 1, \ldots, m$ and $\text{E}\left(V_i\right) = \log\left(\sigma_Y^2\right),\ j = 1, \ldots, n$. Under the previously made assumptions, this means that we are in the same situation as in the Introduction. Therefore, unequal standard deviations $\sigma_X$ and $\sigma_Y$ lead to a location difference of size $\log\left(\sigma_X^2\right) - \log\left(\sigma_Y^2\right)$ in the transformed samples.
+
+With these transformed samples, we are in the data situation described in the introduction as the distributions differ at most by $\Delta = \log\left(\sigma_X^2\right) - \log\left(\sigma_Y^2\right)$.
 
 ```{r, cache = TRUE}
 set.seed(108)
