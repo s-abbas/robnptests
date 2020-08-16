@@ -385,10 +385,8 @@ Setting `var.test = TRUE` transforms the observations so that a possible varianc
 difference between the samples appears as a location difference between the
 transformed samples.
 
-The resulting variance tests can resist outliers and heavy tails, and work
-well under asymmetry.
-
-- Vergleich mit Standardtests ansprechen.
+In terms of the power, the resulting variance tests can outperform classical tests like the $F$-test,
+the Mood test, or the Ansary-Bradley test under outliers and asymmetry.
 
 ## Idea
 Again, we start with two samples $X_1, \ldots, X_m$ and $Y_1, \ldots, Y_n$, each
