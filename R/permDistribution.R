@@ -57,7 +57,7 @@ perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) 
 #' @template x
 #' @template y
 #' @template psi
-#' @template k1_mest
+#' @template k_mest
 #' @template randomization
 #' @template n_rep_m_test
 #'
@@ -65,16 +65,16 @@ perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) 
 #'
 #' @export
 
-mest_perm_distribution <- function(x, y, psi, k1, randomization = FALSE, n.rep = NULL) {
+mest_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep = NULL) {
   m <- length(x)
   n <- length(y)
 
   if (!randomization) {
     complete <- c(x, y)
-    splits <- gtools::combinations((m + n), h, 1:(m + n))
+    splits <- gtools::combinations((m + n), m, 1:(m + n))
 
     distribution <- apply(splits, 1, function(s) m_test_statistic(x = complete[s], y = complete[-s],
-                                                                  psi = psi, k = k1)$statistic)
+                                                                  psi = psi, k = k)$statistic)
   }
   else if (randomization) {
     splits <- replicate(n.rep, sample(c(x, y)))

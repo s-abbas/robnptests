@@ -215,23 +215,47 @@ rob_perm_statistic <- function(x, y,
 #'
 #' @export
 
+# m_test_statistic <- function(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi)) {
+#   ## Sample sizes
+#   m <- length(x)
+#   n <- length(y)
+#
+#   ## M-estimators and corresponding variances for both samples
+#   m.x <- m_est(x, psi = psi, k = k, max.it = 1)
+#   m.y <- m_est(y, psi = psi, k = k, max.it = 1)
+#
+#   est.x <- m.x$est
+#   est.y <- m.y$est
+#
+#   var.x <- m * m.x$var
+#   var.y <- n * m.y$var
+#
+#   ## Test statistic
+#   return(list(statistic = (est.x - est.y) / sqrt(((m - 1) * var.x + (n - 1) * var.y) / (n + m - 2) * (1/m + 1/n)),
+#               estimates = c(est.x, est.y)))
+# }
+
 m_test_statistic <- function(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi)) {
   ## Sample sizes
   m <- length(x)
   n <- length(y)
 
-  ## M-estimators and corresponding variances for both samples
-  m.x <- m_est(x, psi = psi, k = k, max.it = 1)
-  m.y <- m_est(y, psi = psi, k = k, max.it = 1)
+  ## M-estimates for both samples
+  est.x <- m_est(x = x, psi = psi, k = k)$est
+  est.y <- m_est(x = y, psi = psi, k = k)$est
 
-  est.x <- m.x$est
-  est.y <- m.y$est
+  ## Estimator for \nu
+  psi.x <- robustbase::Mpsi((x - est.x)/mad(x, constant = 1), psi = psi, cc = k)
+  rho.x <- robustbase::Mpsi((x - est.x)/mad(x, constant = 1), psi = psi, cc = k, deriv = 1)
 
-  var.x <- m * m.x$var
-  var.y <- n * m.y$var
+  psi.y <- robustbase::Mpsi((y - est.y)/mad(y, constant = 1), psi = psi, cc = k)
+  rho.y <- robustbase::Mpsi((y - est.y)/mad(y, constant = 1), psi = psi, cc = k, deriv = 1)
+
+  nu.x <- mean(psi.x^2)/(mean(rho.x)^2)
+  nu.y <- mean(psi.y^2)/(mean(rho.y)^2)
 
   ## Test statistic
-  return(list(statistic = (est.x - est.y) / sqrt(((m - 1) * var.x + (n - 1) * var.y) / (n + m - 2) * (1/m + 1/n)),
+  return(list(statistic = (est.x - est.y) / sqrt((n * robustbase::scaleTau2(x, consistency = FALSE)^2 * nu.x + m * robustbase::scaleTau2(y, consistency = FALSE)^2 * nu.y) / (m * n)),
               estimates = c(est.x, est.y)))
 }
 
