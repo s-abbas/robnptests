@@ -4,7 +4,7 @@
 \alias{mest_perm_distribution}
 \title{Permutation distribution for M-statistics}
 \usage{
-mest_perm_distribution(x, y, psi, k1, randomization = FALSE, n.rep = NULL)
+mest_perm_distribution(x, y, psi, k, randomization = FALSE, n.rep = NULL)
 }
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
@@ -15,7 +15,7 @@ mest_perm_distribution(x, y, psi, k1, randomization = FALSE, n.rep = NULL)
 Must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"};
 defaults to \code{"huber"}.}
 
-\item{k1}{tuning parameter(s) for the respective kernel function,
+\item{k}{tuning parameter(s) for the respective kernel function,
 defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}} in the package \pkg{robustbase}.}
 
 \item{randomization}{logical value indicating whether the p-value should be computed from a permutation (\code{FALSE}) or a randomization (\code{TRUE}) distribution.}
