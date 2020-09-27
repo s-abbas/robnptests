@@ -79,7 +79,7 @@ mest_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep = 
   else if (randomization) {
     splits <- replicate(n.rep, sample(c(x, y)))
 
-    distribution <- apply(splits, 2, function(s) m_test_statistic(x = s[1:m], y = s[(m + 1):(m + n)], psi = psi, k = k1)$statistic)
+    distribution <- apply(splits, 2, function(s) m_test_statistic(x = s[1:m], y = s[(m + 1):(m + n)], psi = psi, k = k)$statistic)
   }
 
   return(distribution)
