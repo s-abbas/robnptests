@@ -245,20 +245,19 @@ m_test_statistic <- function(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi
   est.y <- m_est(x = y, psi = psi, k = k)$est
 
   ## Estimator for \nu
-  psi.x <- robustbase::Mpsi((x - est.x)/mad(x, constant = 1), psi = psi, cc = k)
-  rho.x <- robustbase::Mpsi((x - est.x)/mad(x, constant = 1), psi = psi, cc = k, deriv = 1)
+  psi.x <- robustbase::Mpsi((x - est.x)/mad(x), psi = psi, cc = k)
+  rho.x <- robustbase::Mpsi((x - est.x)/mad(x), psi = psi, cc = k, deriv = 1)
 
-  psi.y <- robustbase::Mpsi((y - est.y)/mad(y, constant = 1), psi = psi, cc = k)
-  rho.y <- robustbase::Mpsi((y - est.y)/mad(y, constant = 1), psi = psi, cc = k, deriv = 1)
+  psi.y <- robustbase::Mpsi((y - est.y)/mad(y), psi = psi, cc = k)
+  rho.y <- robustbase::Mpsi((y - est.y)/mad(y), psi = psi, cc = k, deriv = 1)
 
   nu.x <- mean(psi.x^2)/(mean(rho.x)^2)
   nu.y <- mean(psi.y^2)/(mean(rho.y)^2)
 
   ## Test statistic
-  return(list(statistic = (est.x - est.y) / sqrt((n * robustbase::scaleTau2(x, consistency = FALSE)^2 * nu.x + m * robustbase::scaleTau2(y, consistency = FALSE)^2 * nu.y) / (m * n)),
+  return(list(statistic = (est.x - est.y) / sqrt((n * robustbase::scaleTau2(x, consistency = TRUE)^2 * nu.x + m * robustbase::scaleTau2(y, consistency = FALSE)^2 * nu.y) / (m * n)),
               estimates = c(est.x, est.y)))
 }
-
 
 #' @title Simultaneous Huber-M-estimates of scale and location
 #'
