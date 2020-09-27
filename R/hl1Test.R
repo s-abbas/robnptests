@@ -1,5 +1,5 @@
 ## ----------------------------------------------------------------------------
-## One-sample Hodges-Lehmann test
+## Two-sample location tests based on one-sample Hodges-Lehmann estimator
 ## ----------------------------------------------------------------------------
 
 #' Two-sample location tests based on one-sample Hodges-Lehmann estimator
@@ -94,7 +94,7 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
                      var.test = FALSE, wobble = FALSE, wobble.seed = NULL) {
 
   alternative <- match.arg(alternative)
-#  method <- match.arg(method)
+  # method <- match.arg(method)
   scale <- match.arg(scale)
 
   ## Names of data sets
@@ -171,7 +171,6 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
       n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
     }
   }
-
 
   if (method %in% c("permutation", "randomization")) {
     ## Results of rob_perm_statistic
