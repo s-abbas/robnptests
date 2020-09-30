@@ -31,15 +31,16 @@
 #' The tau scale estimate is computed with the default parameter settings
 #' of the function \code{\link[robustbase]{scaleTau2}}.
 #'
-#' The test statistic is given by
+#' The test statistic is the difference of the M-estimates for both samples scaled by a pooled estimate for the standard deviation.
+#' This estimate is based on the tau-scale estimator. For more details, see the vignette.
 #'
-#' TODO: Include test statistic
-#'
-#' which follows asymptotically a standard normal distribution. However, this is
-#' only guaranteed for normally distributed data. In case of a non-normal
-#' distribution, the test might not keep the desired significance level. This
-#' can be corrected by correcting the test statistic by a factor which has to
-#' be determined individually for each distribution.
+#' The distribution of the test statistic is approximated by a standard normal distribution.
+#' However, this assumption is only justified under the normality assumption. In case of a non-normal
+#' distribution, the test might not keep the desired significance level. The test keeps the
+#' level under severe distributions as long as the variance exists. However, under
+#' skewed distributions, it tends to be conservative.
+#' The test statistic can be corrected by a factor which has to be determined
+#' individually for a specific distribution.
 #'
 #' For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
 #' This is achieved by log-transforming the original observations so that a potential
@@ -63,6 +64,21 @@
 #' \item{alternative}{a character string describing the alternative hypothesis.}
 #' \item{method}{a character string indicating what type of test was performed.}
 #' \item{data.name}{a character string giving the names of the data.}
+#'
+#' @examples
+#' ## Generate random samples
+#' set.seed(108)
+#' x <- rnorm(20); y <- rnorm(20)
+#'
+#' ## Asymptotic test based on Huber M-estimator
+#' m_test(x, y, method = "asymptotic", psi = "huber")
+#'
+#' ## Randomization test based on Hampel M-estimator with 1000 random permutations
+#' drawn with replacement
+#'
+#' \dontrun{
+#' m_test(x, y, method = "randomization", n.rep = 1000, psi = "hampel")
+#' }
 #'
 #' @export
 
