@@ -85,41 +85,6 @@ mest_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep = 
   return(distribution)
 }
 
-#' @title Permutation distribution for asymmetrically trimmed statistics
-#'
-#' @description \code{asym_trimmed_perm_distribution} calculates the permutation distribution for the asymmetrically
-#' trimmed statistics from \code{asym_trimmed_test}.
-#'
-#' @template x
-#' @template y
-#' @template type_skewness
-#' @template randomization
-#' @template n_rep
-#'
-#' @return Vector with permutation distribution.
-#'
-#' @export
-
-asym_trimmed_perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = NULL) {
-  ## Sample sizes
-  m <- length(x)
-  n <- length(y)
-
-  ## Splits in two samples
-  if (!randomization) {
-    complete <- c(x, y)
-    splits <- gtools::combinations((m + n), m, 1:(m + n))
-
-    distribution <- apply(splits, 1, function(s) asym_trimmed_t(x = complete[s], y = complete[-s], type)$statistic)
-
-  } else if (randomization) {
-    splits <- replicate(n.rep, sample(c(x, y)))
-
-    distribution <- apply(splits, 2, function(s) asym_trimmed_t(x = s[1:m], y = s[(m + 1):(m + n)], type)$statistic)
-  }
-
-  return(distribution)
-}
 
 
 ## ----------------------------------------------------------------------------

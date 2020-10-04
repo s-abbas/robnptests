@@ -1,3 +1,55 @@
+#' @title Simultaneous Huber-M-estimates of scale and location
+#'
+#' @description Calculates M-estimates of location and the joined scale of two samples
+#'
+#' @template x
+#' @template y
+#' @template k_mest
+#'
+#' @return Named list containing the following objects
+#'         \item{mu.x}{Location estimate of x}
+#'         \item{mu.y}{Location estimate of y}
+#'         \item{s}{Scale estimate for the joined sample}
+#' @import robustbase
+#' @export
+
+huber_2sample <- function(x, y, k) {
+  m <- length(x)
+  n <- length(y)
+
+  N <- m + n
+
+  beta <- 2 * k^2 * (1 - stats::pnorm(k)) + 2 * stats::pnorm(k) - 1 - sqrt(2/pi) * k * exp(-1/2 * k^2)
+
+  s.old <- stats::mad(x) + stats::mad(y)
+  #2 * stats::median(c(abs(x - stats::median(x)), abs(y - stats::median(y))))
+  mux.old <- stats::median(x)
+  muy.old <- stats::median(y)
+
+  #repeat {
+  z.x <- (x - mux.old)/s.old
+  z.y <- (y - muy.old)/s.old
+
+  s.new <- sqrt(1/((N - 1) * beta) * (sum(robustbase::Mpsi(z.x, psi = "huber", cc = k)^2) + sum(robustbase::Mpsi(z.y, psi = "huber", cc = k)^2)) * s.old^2)
+
+  mux.new <- mux.old + (1/m * sum(robustbase::Mpsi(z.x, psi = "huber", cc = k)) * s.old)/(1/m * sum(robustbase::Mpsi(z.x, psi = "huber", cc = k, deriv = 1)))
+
+  muy.new <- muy.old + (1/n * sum(robustbase::Mpsi(z.y, psi = "huber", cc = k)) * s.old)/(1/n * sum(robustbase::Mpsi(z.y, psi = "huber", cc = k, deriv = 1)))
+
+
+  #if (abs(mux.new - mux.old) < 1e-6 & abs(muy.new - muy.old) < 1e-6 & abs(s.new - s.old) < 1e-6) {
+  #  break
+  #}
+
+  s.old <- s.new
+  mux.old <- mux.new
+  muy.old <- muy.new
+  #}
+
+  return(list(mu.x = mux.new, mu.y = muy.new, s = s.new))
+}
+
+
 ## ----------------------------------------------------------------------------
 ## Huber two-sample test
 ## ----------------------------------------------------------------------------

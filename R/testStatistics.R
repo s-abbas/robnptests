@@ -59,60 +59,6 @@ trimmed_t <- function(x, y, gamma = 0.2, delta = 0, na.rm = FALSE) {
   return(res)
 }
 
-#' @title Test statistic for the asymmetrically trimmed test
-#'
-#' @description
-#' \code{asym_trimmed_t} calculates the test statistic of the asymmetrically trimmed test with a given skewness selector statistic
-#'
-#' @template x
-#' @template y
-#' @template type_skewness
-#' @template delta
-#' @template na_rm
-#'
-#' @return
-#' A list containing the following components:
-#' \item{statistic}{the value of the test statistic.}
-#' \item{estimates}{the asymmetrically trimmed means for both samples.}
-#' \item{df}{the degrees of freedom for the test statistic.}
-#'
-#' @references
-#' \insertRef{YueDix73appr}{robTests}
-#'
-#' \insertRef{Yue74trim}{robTests}
-#'
-#' @export
-
-asym_trimmed_t <- function(x, y, type, delta = 0, na.rm = FALSE) {
-
-  ## Trimmed means
-  x.trim <- asym_trimmed_mean(x, type = type, na.rm = na.rm)
-  y.trim <- asym_trimmed_mean(y - delta, type = type, na.rm = na.rm)
-  estimates <- c(x.trim, y.trim)
-
-  ## Scale estimator
-  var.x <- asym_win_var(x, type = type, na.rm = na.rm)
-  var.y <- asym_win_var(y, type = type, na.rm = na.rm)
-
-  h.x <- var.x$h
-  h.y <- var.y$h
-  var.x <- var.x$var
-  var.y <- var.y$var
-
-  m <- length(x)
-  n <- length(y)
-  pool.var <- ((h.x - 1) * var.x + (h.y - 1) * var.y)/(h.x + h.y - 2)
-
-  ## Degrees of freedom
-  df <- h.x + h.y - 2
-
-  ## Test statistic
-  statistic <- (x.trim - y.trim) / sqrt(pool.var * (1/h.x + 1/h.y))
-
-  res <- list(statistic = statistic, estimates = estimates, df = df)
-
-  return(res)
-}
 
 
 #' @title Robust permutation statistics based on medians
@@ -259,54 +205,4 @@ m_test_statistic <- function(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi
               estimates = c(est.x, est.y)))
 }
 
-#' @title Simultaneous Huber-M-estimates of scale and location
-#'
-#' @description Calculates M-estimates of location and the joined scale of two samples
-#'
-#' @template x
-#' @template y
-#' @template k_mest
-#'
-#' @return Named list containing the following objects
-#'         \item{mu.x}{Location estimate of x}
-#'         \item{mu.y}{Location estimate of y}
-#'         \item{s}{Scale estimate for the joined sample}
-#' @import robustbase
-#' @export
-
-huber_2sample <- function(x, y, k) {
-  m <- length(x)
-  n <- length(y)
-
-  N <- m + n
-
-  beta <- 2 * k^2 * (1 - stats::pnorm(k)) + 2 * stats::pnorm(k) - 1 - sqrt(2/pi) * k * exp(-1/2 * k^2)
-
-  s.old <- stats::mad(x) + stats::mad(y)
-  #2 * stats::median(c(abs(x - stats::median(x)), abs(y - stats::median(y))))
-  mux.old <- stats::median(x)
-  muy.old <- stats::median(y)
-
-  #repeat {
-  z.x <- (x - mux.old)/s.old
-  z.y <- (y - muy.old)/s.old
-
-  s.new <- sqrt(1/((N - 1) * beta) * (sum(robustbase::Mpsi(z.x, psi = "huber", cc = k)^2) + sum(robustbase::Mpsi(z.y, psi = "huber", cc = k)^2)) * s.old^2)
-
-  mux.new <- mux.old + (1/m * sum(robustbase::Mpsi(z.x, psi = "huber", cc = k)) * s.old)/(1/m * sum(robustbase::Mpsi(z.x, psi = "huber", cc = k, deriv = 1)))
-
-  muy.new <- muy.old + (1/n * sum(robustbase::Mpsi(z.y, psi = "huber", cc = k)) * s.old)/(1/n * sum(robustbase::Mpsi(z.y, psi = "huber", cc = k, deriv = 1)))
-
-
-  #if (abs(mux.new - mux.old) < 1e-6 & abs(muy.new - muy.old) < 1e-6 & abs(s.new - s.old) < 1e-6) {
-  #  break
-  #}
-
-  s.old <- s.new
-  mux.old <- mux.new
-  muy.old <- muy.new
-  #}
-
-  return(list(mu.x = mux.new, mu.y = muy.new, s = s.new))
-}
 
