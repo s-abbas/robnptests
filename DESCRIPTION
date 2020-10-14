@@ -19,7 +19,7 @@ Description: Implementations of several robust and non-parametric two-sample tes
     (approximate) distribution independence of the test decision. Besides location shifts, the tests can also be used to test for scale changes
     between the underlying populations by a data transformation; see Fried (2012) <doi:10.1016/j.csda.2011.02.012>.
 License: GPL (>= 2)
-Depends: R (>= 3.4.0)
+Depends: R (>= 3.5.0)
 URL: https://github.com/s-abbas/robTests
 Encoding: UTF-8
 LazyData: true
