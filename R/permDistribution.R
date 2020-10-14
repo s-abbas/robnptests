@@ -108,7 +108,7 @@ mest_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep = 
 #' p.value for the specified alternative.
 #'
 #' @references
-#' \insertRef{SmyPhi10perm}{robTests}
+#' \insertRef{PhiSmy10perm}{robTests}
 #'
 #' @export
 

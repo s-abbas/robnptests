@@ -299,7 +299,7 @@ asym_trimmed_perm_distribution <- function(x, y, type, randomization = FALSE, n.
 #' p.value for the specified alternative.
 #'
 #' @references
-#' \insertRef{SmyPhi10perm}{robTests}
+#' \insertRef{PhiSmy10perm}{robTests}
 #'
 #' @export
 
@@ -392,7 +392,9 @@ calc_perm_p_value <- function(statistic, distribution, m, n, randomization, n.re
 #' asym_trimmed_test(x, y, type = "SK2", method = "asymptotic")
 #' asym_trimmed_test(x, y, type = "SK5", method = "asymptotic")
 #'
+#' \dontrun{
 #' asym_trimmed_test(x, y, type = "SK5", method = "randomization")
+#' }
 #'
 #' @export
 
@@ -426,7 +428,7 @@ asym_trimmed_test <- function(x, y, type = c("Q2", "SK2", "SK5"),
     stop ("'delta' must be a single number.")
   }
 
-  if (!(method %in% c("asymptotic", "permutation", "randomizatoin"))) {
+  if (!(method %in% c("asymptotic", "permutation", "randomization"))) {
     stop (" 'method' must be one of 'asymptotic', 'permutation' or 'randomization'. ")
   }
 

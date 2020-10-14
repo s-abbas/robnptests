@@ -27,7 +27,7 @@
 #' When computing a randomization distribution based on randomly drawn splits
 #' with replacement, the results of Smyth & Phipson (2010) to calculate the p-value
 #' are used. The psi and rho functions, which are needed to obtain the M-estimates,
-#' are computed via the implementations in the package \code{\link[robustbase]{robustbase}}.
+#' are computed via the implementations in the package \code{\link[=Mpsi]{robustbase}}.
 #' The tau scale estimate is computed with the default parameter settings
 #' of the function \code{\link[robustbase]{scaleTau2}}.
 #'
@@ -74,7 +74,7 @@
 #' m_test(x, y, method = "asymptotic", psi = "huber")
 #'
 #' ## Randomization test based on Hampel M-estimator with 1000 random permutations
-#' drawn with replacement
+#' ## drawn with replacement
 #'
 #' \dontrun{
 #' m_test(x, y, method = "randomization", n.rep = 1000, psi = "hampel")

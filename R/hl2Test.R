@@ -61,7 +61,7 @@
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{SmyPhi10perm}{robTests}
+#' \insertRef{PhiSmy10perm}{robTests}
 #'
 #' \insertRef{FriDeh11robu}{robTests}
 #'

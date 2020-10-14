@@ -63,7 +63,7 @@ wobble <- function(x, y, check = TRUE) {
 
   # I propose we use the full range of values between the observations:
   ## Add random noise from a uniform distribution
-  z.wobble <- z + runif(length(z),
+  z.wobble <- z + stats::runif(length(z),
                         -0.5*10^(-min(digits)), 0.5*10^(-min(digits)))
 
   #z.wobble <- z + runif(length(z), min = -10^(-(max.digits + 1)), max = 10^(-(max.digits + 1)))

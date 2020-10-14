@@ -342,6 +342,7 @@ trimmed_t <- function(x, y, gamma = 0.2, delta = 0, na.rm = FALSE) {
 #' @template alternative
 #' @template delta
 #' @template na_rm
+#' @template var_test
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:
@@ -669,7 +670,6 @@ min_tc_test <- function(x, y, alternative = c("two.sided", "greater", "less"), d
 #' @template y
 #' @template alternative
 #' @template delta
-#' @template k_minc
 #' @template n_rep_hybrid
 #' @template na_rm
 #' @template n_rep_hybrid
@@ -695,7 +695,7 @@ min_tc_test <- function(x, y, alternative = c("two.sided", "greater", "less"), d
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{SmyPhi10perm}{robTests}
+#' \insertRef{PhiSmy10perm}{robTests}
 #' \insertRef{WeiHot02robu}{robTests}
 #'
 #' @seealso

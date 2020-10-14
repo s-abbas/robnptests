@@ -13,6 +13,7 @@
 #' @template alternative
 #' @template delta
 #' @template na_rm
+#' @template var_test
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:
