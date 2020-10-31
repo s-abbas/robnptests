@@ -100,7 +100,7 @@ rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
     is.numeric(y)
   )
 
-  if (length(unique(x)) == 1 | length(unique(y)) == 1) {
+  if ((length(unique(x)) == 1) | (length(unique(y)) == 1)) {
     warning("At least one of the input vectors is constant.", call. = FALSE)
   }
 

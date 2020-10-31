@@ -182,7 +182,8 @@ rob_perm_statistic <- function(x, y,
 #               estimates = c(est.x, est.y)))
 # }
 
-m_test_statistic <- function(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi)) {
+m_test_statistic <- function(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi),
+                             ...) {
   ## Sample sizes
   m <- length(x)
   n <- length(y)
@@ -202,7 +203,7 @@ m_test_statistic <- function(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi
   nu.y <- mean(psi.y^2)/(mean(rho.y)^2)
 
   ## Test statistic
-  return(list(statistic = (est.x - est.y) / sqrt((n * robustbase::scaleTau2(x, consistency = TRUE)^2 * nu.x + m * robustbase::scaleTau2(y, consistency = TRUE)^2 * nu.y) / (m * n)),
+  return(list(statistic = (est.x - est.y) / sqrt((n * robustbase::scaleTau2(x, consistency = TRUE, ...)^2 * nu.x + m * robustbase::scaleTau2(y, consistency = TRUE)^2 * nu.y) / (m * n)),
               estimates = c(est.x, est.y)))
 }
 

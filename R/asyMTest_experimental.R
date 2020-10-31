@@ -4,7 +4,7 @@
 
 #' @title Two sample location test based on M-estimators
 #'
-#' @description \code{m_estimator_test} performs a two-sample location test
+#' @description \code{m_test} performs a two-sample location test
 #'              based on M-estimators.
 #'
 #' @template x
@@ -19,6 +19,7 @@
 #' @template var_test
 #' @template wobble
 #' @template seed
+#' @template scaleTau2
 #'
 #' @details
 #' The test statistic is the difference of M-estimates for both samples
@@ -29,7 +30,7 @@
 #' are used. The psi and rho functions, which are needed to obtain the M-estimates,
 #' are computed via the implementations in the package \code{\link[=Mpsi]{robustbase}}.
 #' The tau scale estimate is computed with the default parameter settings
-#' of the function \code{\link[robustbase]{scaleTau2}}.
+#' of the function \code{\link[robustbase]{scaleTau2}}. Those can be changed if necessary.
 #'
 #' The test statistic is the difference of the M-estimates for both samples scaled by a pooled estimate for the standard deviation.
 #' This estimate is based on the tau-scale estimator. For more details, see the vignette.
@@ -65,6 +66,15 @@
 #' \item{method}{a character string indicating what type of test was performed.}
 #' \item{data.name}{a character string giving the names of the data.}
 #'
+#' @references
+#'
+#' \insertRef{Fri12onli}{robTests}
+#'
+#' \insertRef{MarZam02robu}{robTests}
+#'
+#' \insertRef{PhiSmy10perm}{robTests}
+#'
+#'
 #' @examples
 #' ## Generate random samples
 #' set.seed(108)
@@ -88,7 +98,7 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
                    psi = c("huber", "hampel", "bisquare"),
                    k = robustbase::.Mpsi.tuning.default(psi),
                    n.rep = 10000, na.rm = FALSE,
-                   var.test = FALSE, wobble = FALSE, wobble.seed = NULL) {
+                   var.test = FALSE, wobble = FALSE, wobble.seed = NULL, ...) {
 
   ## ___________________________________________________________________________
   ## Error messages
@@ -193,7 +203,7 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   ## ___________________________________________________________________________
 
   ## Test statistic and location estimates for both samples
-  stats <- m_test_statistic(x, y - delta, psi = psi, k = k)
+  stats <- m_test_statistic(x, y - delta, psi = psi, k = k, ...)
   statistic <- stats$statistic
   estimates <- stats$estimates
 
