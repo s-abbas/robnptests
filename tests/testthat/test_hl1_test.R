@@ -169,7 +169,7 @@ testthat::test_that("hl1_test works correctly", {
   ## it would be necessary to compute and add the integral in equation (2)
   ## of their paper, which would make this test case more complicated.
   testthat::expect_equal(p.two.sided, 2 * min(p.less, p.greater), tolerance = 10^(-2))
-  testthat::expect_equal(1, p.less + p.greater, tolerance = 10^(-3))
+  testthat::expect_equal(1, p.less + p.greater, tolerance = 10^(-2))
 
   ##
   ## Zeros in var.test: A warning should be thrown if at least 1 of the observations is zero.
