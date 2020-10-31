@@ -105,9 +105,9 @@ rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
   }
 
   ## NA handling
-  if (!na.rm & any(is.na(x)) || any(is.na(y))) {
+  if (!na.rm & (any(is.na(x)) || any(is.na(y)))) {
     return(NA)
-  } else if (na.rm & any(is.na(x)) || is.na(y)) {
+  } else if (na.rm & (any(is.na(x)) || any(is.na(y)))) {
     x <- as.vector(stats::na.omit(x))
     y <- as.vector(stats::na.omit(y))
   }
@@ -136,5 +136,5 @@ rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
             call. = FALSE)
   }
 
-  return(est)
+  return(1)
 }
