@@ -184,6 +184,46 @@ estimates the location difference directly:
 It can be performed by using the function `hl2_test`. The scale estimators are the
 same as for the HL1 test.
 
+### M-tests
+Very flexible location estimators can be derived via M-estimation.
+An M-estimator $\hat{\mu}^{(M)}_X$ for the locatin parameter of the $x$-sample (and analogously for the $y$-sample) can be obtained by solving the minimization problem
+\begin{equation*}
+  \hat{\mu}^{(M)}_X = \arg\underset{\mu_X}{\min} \sum_{i = 1}^m \rho\left(\frac{x_i - \mu_X}{\sigma_X}\right),
+\end{equation*}
+where $\rho:\ \mathbb{R} \to \mathbb{R}$ is a function which is chose to achieve a \enquote{nearly optimal} location estimate when the $X_i$ are normally or approximately normally distributed [@MarMarYoh06robu, p. 22].
+For differentiable functions $\rho$ with $\rho' = \psi$, the optimization problem can be translated to finding the value of $\mu_X$, for which
+\begin{equation*}
+  \sum_{i = 1}^m \psi\left(\frac{x_i - \mu_X}{\sigma_X}\right) \overset{!}{=} 0.
+\end{equation*}
+
+For an increasing function $\psi$, it can be shown that
+\begin{equation*}
+  \sqrt{m} \left(\hat{\mu}^{(M)}_X - \mu_X\right) \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, \sigma_X^2 \cdot \nu_X\right),
+\end{equation*}
+where
+\begin{equation*}
+  \nu_X = \frac{\text{E}\left(\psi\left(\frac{X - \mu_X}{\sigma_X}\right)^2\right)}{\left(\text{E}\left(\psi\left(\frac{X - \mu_X}{\sigma_X}\right)\right)\right)^2}.
+\end{equation*}
+
+To estimate $\nu_X$, we replace the expected values by the sample means, i.e.
+\begin{equation*}
+\hat{\nu}_X = \frac{\frac{1}{m} \sum_{i = 1}^m \psi\left(\frac{x_i - \hat{\mu}^{(M)}_X}{\sigma_X}\right)^2}{\left(\frac{1}{m} \sum_{i = 1}^m \psi\left(\frac{x_i - \hat{\mu}^{(M)}_X}{\sigma_X}\right)\right)^2}.
+\end{equation*}
+
+The only estimator $\hat{\sigma}_X$ for $\sigma_X$ which ensures the asymptotical normal distribution stated before, is the empirical standard deviation, which, however, is not robust.
+In the package, we decided to use the $\tau$-scale estimator as implemented in the package [robustbase](https://cran.r-project.org/web/packages/robustbase/index.html) [@MaeRouCro20robu].
+The quality of the normal approximation depends on the true data-generating distribution. 
+In some simulations, we found that the approximation works quite well for symmetrical distributions as long as the variance exists.
+However, it becomes worse for very skewed distributions, under which the resulting two-sample tests becomes conservative.
+Hence, larger samples are necessary for an acceptable approximation.
+
+The test statistic of the two-sample $M$-estimator test in the package is
+\begin{equation*}
+  \sqrt{\frac{m \cdot n}{n \cdot \hat{\sigma}^2_X \cdot \hat{\nu}_X + m \cdot \hat{\sigma}^2_Y \cdot \hat{\nu}_Y}} \cdot \hat{\mu}^{(M)}_X - \hat{\mu}^{(M)}_Y.
+\end{equation*}
+
+We currently allow for Huber-, Hampel-, and Bisquare $\psi$-functions as implemented in [robustbase](https://cran.r-project.org/web/packages/robustbase/index.html).
+
 ## Computation of p-values
 The $p$-values for the different tests can be computed in various ways, which are
 briefly described in this section.
@@ -197,10 +237,8 @@ The underlying idea is that all splits occur with equal probability under $H_0$.
 
 The permutation principle allows for an exact computation of the $p$-value and leads to distribution-free tests, i.e. a permutation test holds its significance level under every distribution.
 
-The $p$-value corresponds to the fraction of computed values of the test statistic,
-which are at least as extreme as the observed value, represented by $A$ in the following.
-Let $t_i$ be the value of the test statistic for split $i$, $i = 1, \ldots, B$, and $t^{(\text{obs})}$
-the observed value of the test statistic. Then,
+The $p$-value corresponds to the fraction of computed values of the test statistic, which are at least as extreme as the observed value, represented by $A$ in the following.
+Let $t_i$ be the value of the test statistic for split $i$, $i = 1, \ldots, B$, and $t^{(\text{obs})}$ the observed value of the test statistic. Then,
 
 - for $H_0^{(=)}$: $A = \#\left(|t_i| \geq |t^{(\text{obs})|}\right)$
 - for $H_0^{(\leq)}$: $A = \#\left(t_i \geq t^{(\text{obs})}\right)$
@@ -247,6 +285,10 @@ Replacing $\hat{\Delta}^{(\text{HL2})}$ by $\hat{\Delta}^{(\text{HL1})}$ gives u
 
 [@FriDeh11robu] recommend the asymptotic tests for sample sizes $m, n \geq 30$ to hold the significance level $\alpha = 0.05$. 
 
+#### Asymptotic M-test
+As stated before, the test statistic of the two-sample $M$-test follows an asymptotical normal distribution under certain assumptions.
+However, as we estimate some parameters, this is only valid approximately and greatly depends on the data-generating distribution.
+
 # Testing for a location difference
 We will now show how to use the functions to test for location difference between two samples.
 
@@ -267,7 +309,7 @@ In this example, we use the two-sided HL1-test with the scale estimator $\hat{S}
 assume that $\Delta_0 = 0$.
 
 ```{r, cache = TRUE}
-#hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "permutation", scale = "S2")
+hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "permutation", scale = "S2")
 ```
 
 The output is an object of the class `htest` and contains all relevant information on the performed test.
@@ -277,9 +319,9 @@ The $p$-value can be accessed via `hl1.res$p.value`. To extract the value of the
 In this example, we draw 10000 splits randomly from the observed joint sample to perform a randomized HL1-test.
 
 ```{r, cache = TRUE}
-# set.seed(47)
+set.seed(47)
 
-# hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "randomization", scale = "S2", n.rep = 10000)
+hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "randomization", scale = "S2", n.rep = 10000)
 ```
 
 The $p$-value is close to the one we have calculated using the permutation principle.
@@ -328,7 +370,7 @@ x1
 y1
 
 set.seed(47)
-# hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2")
+hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2")
 ```
 
 Although the value of the scale estimator in the original sample is `rob_var(x1, y1, type = "S2")`, there exists at least one split used to compute the randomization distribution, which leads to the estimated scale `0`.
@@ -358,15 +400,15 @@ y1 <- trunc(y)
 
 ## HL12-test on original observations
 set.seed(47)
-# hl1_test(x, y, alternative = "two.sided", method = "randomization", scale = "S2")
+hl1_test(x, y, alternative = "two.sided", method = "randomization", scale = "S2")
 
 ## HL12-test on truncated observations
 set.seed(47)
-# hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2")
+hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2")
 
 ## HL12-test on truncated observations with wobbling
 set.seed(47)
-# hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2", wobble = TRUE, wobble.seed = 2187)
+hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2", wobble = TRUE, wobble.seed = 2187)
 ```
 
 The wobbled samples can be retrieved using the seed printed in the output and the function `wobble`
@@ -411,7 +453,7 @@ With these transformed samples, we are in the data situation described in the in
 
 ```{r, cache = TRUE}
 set.seed(108)
-
+  
 x <- rnorm(30)
 y <- rnorm(30)
 
@@ -427,8 +469,6 @@ hl1_test(x = x * 5, y = y, alternative = "two.sided", delta = 5, method = "asymp
 
 ## Other packages
 The tests in this package are constructed assuming homoscedasticity. Robust two-sample tests for the heteroscedastic scenario can be found in R package [WRS2](https://cran.r-project.org/web/packages/WRS2/index.html) [@MaiWil20robu].
-
-## Outlook
 
 ## References
 
