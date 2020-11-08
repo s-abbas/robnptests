@@ -21,19 +21,20 @@ knitr::opts_chunk$set(
 # Introduction {#introduction}
 The package `robTests` contains robust (approximately) distribution-free tests for the two-sample location problem.
 
-We consider the following data situation: Let $\boldsymbol{X} = \left(X_1, \ldots, X_m\right)$ 
-and $\boldsymbol{Y} = \left(Y_1, \ldots, Y_n\right)$ be two samples of sizes $m, n \in \mathbb{N}$.
+We consider the following data situation: Let $\boldsymbol{X} = \left(X_1, \ldots, X_m\right)$ and $\boldsymbol{Y} = \left(Y_1, \ldots, Y_n\right)$ be two samples of sizes $m, n \in \mathbb{N}$.
 Each sample consists of independent and identically distributed (i.i.d.) random variables so that
+
 \begin{align*}
   X_1, \ldots, X_m \overset{i.i.d.}{\sim} F \quad \text{and} \quad Y_1, \ldots, Y_n \overset{i.i.d.}{\sim} G,
 \end{align*}
-where $F, G\colon\ \mathbb{R} \to \left[0, 1\right]$ are the cumulative distribution functions
-of the underlying unknown continuous distributions. Let $G$ be a shifted version of $F$, i.e.
+
+where $F, G\colon\ \mathbb{R} \to \left[0, 1\right]$ are the cumulative distribution functions of the underlying unknown continuous distributions. Let $G$ be a shifted version of $F$, i.e.
+
 \begin{align*}
   G\left(x\right) = F\left(x + \Delta\right) \quad \text{for all}\ x \in \mathbb{R},
 \end{align*}
-with $\Delta \in \mathbb{R}$ denoting the shift size. Hence, $F$ and $G$ differ at
-most in location and, in particular, have the same variance $\sigma^2 := \sigma_X^2 = \sigma_Y^2 > 0$ (homoscedasticity).
+
+with $\Delta \in \mathbb{R}$ denoting the shift size. Hence, $F$ and $G$ differ at most in location and, in particular, have the same variance $\sigma^2 := \sigma_X^2 = \sigma_Y^2 > 0$ (homoscedasticity).
 
 The following hypotheses can be tested:
 \begin{align*}
@@ -43,29 +44,22 @@ The following hypotheses can be tested:
 \end{align*}
 where $\Delta_0 \in \mathbb{R}$ is a value to which $\Delta$ is set into relation.
 
-A popular test for this scenario is the ordinary two-sample $t$-test, which uses the normality assumption. For large samples, the central limit theorem ensures that the test keeps the desired significance level $\alpha \in \left(0, 1\right)$, 
-even if the underlying distributions are not normal. However, relying on the central 
-limit theorem is often not appropriate in small samples. Moreover, the test is known 
-to be vulnerable to outlying values as they can mask existing location shifts or lead to wrong rejections of
-the null hypothesis. 
+A popular test for this scenario is the ordinary two-sample $t$-test, which uses the normality assumption. For large samples, the central limit theorem ensures that the test keeps the desired significance level $\alpha \in \left(0, 1\right)$, even if the underlying distributions are not normal. However, relying on the central limit theorem is often not appropriate in small samples. 
+Moreover, the test is known to be vulnerable to outlying values as they can mask existing location shifts or lead to wrong rejections of the null hypothesis. 
 
-The Wilcoxon-Mann-Whitney test is a popular distribution-free test which is nearly
-as powerful as the $t$-test under normality, but can be more powerful under non-normal
-distributions. It is often preferred over the $t$-test, when the normality assumption
-cannot be justified. However, it can be nearly as vulnerable to outliers [@FriGat07rank].
+The Wilcoxon-Mann-Whitney test is a popular distribution-free test which is nearly as powerful as the $t$-test under normality, but can be more powerful under non-normal distributions. It is often preferred over the $t$-test when the normality assumption cannot be justified. 
+However, it can be equally vulnerable to outliers [@FriGat07rank].
 
 We implemented tests for the outlined situation with the following objectives in mind:
 
-* robustness against outliers
-* (approximately) distribution free, i.e. keep the significance level under $H_0$ over all continuous distributions
+* robustness against outliers,
+* (approximately) distribution free, i.e. keep $\alpha$ under $H_0$ over many continuous distributions, and
 * have a large power over several distributions.
 
-In this vignette, we describe the basic functionality of the package and the
-implemented tests.
+In this vignette, we describe the basic functionality of the package and the implemented tests.
 
-In addition to the two-sample location problem, the tests can be used to
-detect scale differences between two independent samples. This will be briefly
-discussed at the end of the vignette.
+In addition to the two-sample location problem, the tests can be used to detect scale differences between two independent samples. 
+This will be briefly discussed at the end of the vignette.
 
 In the remainder, let $\boldsymbol{x} = \left(x_1, \ldots, x_m\right)$ and $\boldsymbol{y} = \left(y_1, \ldots, y_n\right)$ be observed samples from both distributions.
 
@@ -83,72 +77,69 @@ Function name | Test names | Description | Literature
 `med_test`    | MED1-test, MED2-test | Tests based on the difference of the sample medians | [@FriDeh11robu]
 `hl1_test`    | HL11-test, HL12-test | Tests based on the one-sample Hodges-Lehmann estimator | [@FriDeh11robu]
 `hl2_test`    | HL21-test, HL22-test | Tests based on the two-sample Hodges-Lehmann estimator | [@FriDeh11robu]
+`m_test`      | M-estimator test | Tests based on M-estimators | 
 
-We describe the test statistics in detail in the next subsection. All functions
-contain several arguments to adjust the functions to certain data situations and
-objectives.
+We describe the test statistics in detail in the next subsection. 
+All functions contain several arguments to adjust the functions to certain data situations and objectives.
 
 ## Test statistics
-We use test statistics which follow the construction principle of the $t$-statistic, i.e.
-an estimator $\hat{\Delta}$ for the true location difference $\Delta$ between both samples is divided
-by a pooled estimator $\hat{S}$ for the unknown standard deviation $\sigma$, leading to test
+The implemented test statistics follow the construction principle of the $t$-statistic, i.e. an estimator $\hat{\Delta}$ for the true location difference $\Delta$ between both samples is divided by a pooled estimator $\hat{S}$ for the unknown standard deviation $\sigma$, leading to test
 statistics of the form
+
 \begin{align*}
   T = \frac{\hat{\Delta} - \Delta_0}{\hat{S}}.
 \end{align*}
-In the $t$-statistic, $\hat{\Delta}$ is estimated by $\overline{x} - \overline{y}$,
-where $\overline{x}$ and $\overline{y}$ are the sample means of $\boldsymbol{x}$ and
-$\boldsymbol{y}$, respectively. The denominator $\hat{S}$ is the pooled empirical 
-standard deviation. We replace both estimators by the robust estimators described 
-in the following subsections.
 
-The argument `alternative` in the function of an implemented test determines for
-which hypothesis pair the test is performed. The following table shows the different
-options for the simplified case $\Delta_0 = 0$.
+In the $t$-statistic, $\hat{\Delta}$ is estimated by $\overline{x} - \overline{y}$, where $\overline{x}$ and $\overline{y}$ are the sample means of $\boldsymbol{x}$ and $\boldsymbol{y}$, respectively. 
+The denominator $\hat{S}$ is the pooled empirical standard deviation. 
+We replace both estimators by the robust estimators described in the following subsections.
+
+For each test, the argument `alternative` specifies which hypothesis pair is tested. 
+The following table shows the different options for the simplified case $\Delta_0 = 0$.
 
 Value of argument `alternative` | Alternative hypothesis | Meaning of the alternative hypothesis
 --------------------- | ------------ | -----------
-`two.sided`                     | $H_1^{(=)}\colon\ \Delta \neq 0$ | $X$ and $Y$ are stocastically unequal.
-`greater`                       | $H_1^{(\leq)}\colon\ \Delta > 0$ | $X$ is stochastically larger than $Y$.
-`less`                          | $H_1^{(\geq)}\colon\ \Delta < 0$ | $X$ is stochastically smaller than $Y$.
+`two.sided`                     | $H_1^{(=)}\colon\ \Delta \neq 0$ | $X$ and $Y$ are stocastically unequal
+`greater`                       | $H_1^{(\leq)}\colon\ \Delta > 0$ | $X$ is stochastically larger than $Y$
+`less`                          | $H_1^{(\geq)}\colon\ \Delta < 0$ | $X$ is stochastically smaller than $Y$
 
 ### MED-tests
-An obvious possibility to obtain a robust estimator for $\Delta$ is to 
-replace the sample means, as used in the standard $t$-statistic, by the sample medians. I.e., the location difference
-is estimated by
+Using the difference of the sample medians, i.e.
 
 \begin{align*}
-   \hat{\Delta}^{(\text{MED})} = \text{median}\left(x_1, \ldots, x_m\right) - \text{median}\left(y_1, \ldots, y_n\right).
+   \hat{\Delta}^{(\text{MED})} = \text{median}\left(x_1, \ldots, x_m\right) - \text{median}\left(y_1, \ldots, y_n\right)
 \end{align*}
 
-The test can be called with the function `med_test`.
+is an obvious way to estimate the location difference $\Delta$ robustly.
+
+Tests based on this estimator can be called with the function `med_test`.
 
 Two different options for estimating the within-sample variability are available. 
-Setting the argument `scale = S3`, the scale is estimated by the median of the 
-absolute deviations of each observation from its corresponding sample median:
+Setting the argument `scale = S3`, it is estimated by the median of the absolute deviations of each observation from its corresponding sample median, namely
 
 \begin{align*}
   \hat{S}^{(3)} = 2 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|, |y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\},
 \end{align*}
+
 where $\tilde{x}$ and $\tilde{y}$ are the sample medians.
 
-Another possibility is to set `scale = S4` to estimate the scale by the sum of the median absolute deviations
-from the sample median (MAD) of each sample:
+Another possibility is `scale = S4` to estimate the scale by the sum of the median absolute deviations from the sample median (MAD) of each sample, i.e.
 
 \begin{align*}
-  \hat{S}^{(4)} = 1.4826 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|\right\} + 1.4826 \cdot \text{median}\left\{|y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\}.
+  \hat{S}^{(4)} = \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|\right\} + 1.4826 \text{median}\left\{|y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\}.
 \end{align*}
 
-The constant `1.4826` allows for an unbiased estimation of the sample standard
-deviation by the MAD.
+<!-- \begin{align*} -->
+<!--   \hat{S}^{(4)} = 1.4826 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|\right\} + 1.4826 \cdot \text{median}\left\{|y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\}. -->
+<!-- \end{align*} -->
+
+<!-- The constant `1.4826` allows for an unbiased estimation of the sample standard deviation by the MAD under normality. -->
 
 ### HL1-tests
-A known disadvantage of the sample median is its low efficiency under normality
-compared to the sample mean. Estimators that provide a compromise between robustness
-and efficiency are the Hodges-Lehmann estimators [@HodLeh63esti].
+A disadvantage of the sample median is its low efficiency under normality compared to the sample mean. 
+Estimators that provide a compromise between robustness and efficiency are the Hodges-Lehmann estimators [@HodLeh63esti].
 
-An estimator for the location difference based on the one-sample Hodges-Lehmann
-estimator (HL1-estimator) is given by
+An estimator for the location difference based on the one-sample Hodges-Lehmann estimator (HL1-estimator) is given by
 
 \begin{align*}
  \hat{\Delta}^{(\text{HL1})} = \text{median}\left\{\frac{x_i + x_j}{2}\colon\ 1 \leq i < j \leq m\right\} - \text{median}\left\{\frac{y_i + y_j}{2}\colon\ 1 \leq i < j \leq n\right\}.
@@ -156,93 +147,98 @@ estimator (HL1-estimator) is given by
 
 The test is performed by the function `hl1_test`.
 
-By setting `scale = S1`, the within-sample variability is estimated by the
-median of the absolute pairwise differences within both samples:
+By setting `scale = S1`, the within-sample variability is estimated by the median of the absolute pairwise differences within both samples:
+
 \begin{align*}
   \hat{S}^{(1)} = \text{median}\left\{|x_i - x_j|\colon\ 1 \leq i < j \leq m,\ |y_i - y_j|\colon\ 1 \leq i < j \leq n\right\}.
 \end{align*}
 
-Using `scale = S2` estimates it by the absolute pairwise differences within the
-joint sample, where every observation is centred by its corresponding sample median:
+Using `scale = S2` estimates it by the absolute pairwise differences within the joint sample, where every observation is centred by its corresponding sample median:
+
 \begin{align*}
   \hat{S}^{(2)} = \text{median}\left\{|z_i - z_j|\colon\ 1 \leq i < j \leq m + n\right\},
 \end{align*}
-where
+
+with
+
 \begin{align*}
   \left(z_1, \ldots, z_{m + n}\right) = \left(x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n - \tilde{y}\right).
 \end{align*}
 
 ### HL2-tests
-Instead of estimating the location difference by subtracting the estimated
-locations of both samples, the two-sample Hodges-Lehmann estimator (HL2-estimator)
-estimates the location difference directly:
+Instead of subtracting location estimates of both samples, the two-sample Hodges-Lehmann estimator (HL2-estimator) estimates the location difference directly:
 
 \begin{align*}
    \hat{\Delta}^{(\text{HL2})} = \text{median}\left\{|x_i - y_j|\colon\ 1 \leq i \leq m,\ 1 \leq j \leq n\right\}.
 \end{align*}
 
-It can be performed by using the function `hl2_test`. The scale estimators are the
-same as for the HL1 test.
+The test is performed by the function `hl2_test` with the same scale estimators as for the HL1-test.
 
 ### M-tests
 Very flexible location estimators can be derived via M-estimation.
 An M-estimator $\hat{\mu}^{(M)}_X$ for the locatin parameter of the $x$-sample (and analogously for the $y$-sample) can be obtained by solving the minimization problem
+
 \begin{equation*}
   \hat{\mu}^{(M)}_X = \arg\underset{\mu_X}{\min} \sum_{i = 1}^m \rho\left(\frac{x_i - \mu_X}{\sigma_X}\right),
 \end{equation*}
-where $\rho:\ \mathbb{R} \to \mathbb{R}$ is a function which is chose to achieve a \enquote{nearly optimal} location estimate when the $X_i$ are normally or approximately normally distributed [@MarMarYoh06robu, p. 22].
+
+where $\rho:\ \mathbb{R} \to \mathbb{R}$ is a function chosen to achieve a \enquote{nearly optimal} location estimate when the $X_i$ are normally or approximately normally distributed [@MarMarYoh06robu, p. 22].
 For differentiable functions $\rho$ with $\rho' = \psi$, the optimization problem can be translated to finding the value of $\mu_X$, for which
+
 \begin{equation*}
   \sum_{i = 1}^m \psi\left(\frac{x_i - \mu_X}{\sigma_X}\right) \overset{!}{=} 0.
 \end{equation*}
 
-For an increasing function $\psi$, it can be shown that
+If $\psi$ is an increasing function, it can be shown that
+
 \begin{equation*}
   \sqrt{m} \left(\hat{\mu}^{(M)}_X - \mu_X\right) \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, \sigma_X^2 \cdot \nu_X\right),
 \end{equation*}
-where
+
+with
+
 \begin{equation*}
   \nu_X = \frac{\text{E}\left(\psi\left(\frac{X - \mu_X}{\sigma_X}\right)^2\right)}{\left(\text{E}\left(\psi\left(\frac{X - \mu_X}{\sigma_X}\right)\right)\right)^2}.
 \end{equation*}
 
-To estimate $\nu_X$, we replace the expected values by the sample means, i.e.
+We estimate $\nu_X$ by replacing the expected values by the sample means, i.e.
+
 \begin{equation*}
 \hat{\nu}_X = \frac{\frac{1}{m} \sum_{i = 1}^m \psi\left(\frac{x_i - \hat{\mu}^{(M)}_X}{\sigma_X}\right)^2}{\left(\frac{1}{m} \sum_{i = 1}^m \psi\left(\frac{x_i - \hat{\mu}^{(M)}_X}{\sigma_X}\right)\right)^2}.
 \end{equation*}
 
-The only estimator $\hat{\sigma}_X$ for $\sigma_X$ which ensures the asymptotical normal distribution stated before, is the empirical standard deviation, which, however, is not robust.
-In the package, we decided to use the $\tau$-scale estimator as implemented in the package [robustbase](https://cran.r-project.org/web/packages/robustbase/index.html) [@MaeRouCro20robu].
+The only estimator $\hat{\sigma}_X$ for $\sigma_X$ that ensures the asymptotical normality stated before is the empirical standard deviation, which, however, is not robust.
+In our package, we use the $\tau$-scale estimator as implemented in the package [robustbase](https://cran.r-project.org/web/packages/robustbase/index.html) [@MaeRouCro20robu].
 The quality of the normal approximation depends on the true data-generating distribution. 
 In some simulations, we found that the approximation works quite well for symmetrical distributions as long as the variance exists.
-However, it becomes worse for very skewed distributions, under which the resulting two-sample tests becomes conservative.
-Hence, larger samples are necessary for an acceptable approximation.
+However, it becomes worse for very skewed distributions, under which the resulting two-sample tests become conservative.
+Larger samples are necessary for an acceptable approximation.
 
 The test statistic of the two-sample $M$-estimator test in the package is
 \begin{equation*}
   \sqrt{\frac{m \cdot n}{n \cdot \hat{\sigma}^2_X \cdot \hat{\nu}_X + m \cdot \hat{\sigma}^2_Y \cdot \hat{\nu}_Y}} \cdot \hat{\mu}^{(M)}_X - \hat{\mu}^{(M)}_Y.
 \end{equation*}
 
-We currently allow for Huber-, Hampel-, and Bisquare $\psi$-functions as implemented in [robustbase](https://cran.r-project.org/web/packages/robustbase/index.html).
+We currently allow for Huber-, Hampel-, and Bisquare $\psi$-functions called from [robustbase](https://cran.r-project.org/web/packages/robustbase/index.html).
 
 ## Computation of p-values
-The $p$-values for the different tests can be computed in various ways, which are
-briefly described in this section.
+In this section, we describe briefly how the $p$-values of the tests are computed.
 
 The argument `method` can be set to `"permutation"` for a permutation test, 
 `"randomization"` for a randomization test, and `"asymptotic"` for an asymptotic test.
 
 ### Permutation test
-Using the permutation principle, the $p$-value is obtained by computing the value of the test statistic for all possible $B = \binom{m}{m + n}$ splits of the joint sample $\left(x_1, \ldots, x_m, y_1, \ldots, y_n\right)$ into two samples of sizes $m$ and $n$.
+When using the permutation principle, the $p$-value is obtained by computing the value of the test statistic for all possible $B = \binom{m}{m + n}$ splits of the joint sample $\left(x_1, \ldots, x_m, y_1, \ldots, y_n\right)$ into two samples of sizes $m$ and $n$.
 The underlying idea is that all splits occur with equal probability under $H_0$. 
 
-The permutation principle allows for an exact computation of the $p$-value and leads to distribution-free tests, i.e. a permutation test holds its significance level under every distribution.
+The permutation principle allows for an exact computation of the $p$-value and leads to distribution-free tests, i.e. a permutation test keeps $\alpha$ under every continuous distribution.
 
-The $p$-value corresponds to the fraction of computed values of the test statistic, which are at least as extreme as the observed value, represented by $A$ in the following.
-Let $t_i$ be the value of the test statistic for split $i$, $i = 1, \ldots, B$, and $t^{(\text{obs})}$ the observed value of the test statistic. Then,
+The $p$-value corresponds to the fraction of computed values of the test statistic, which are at least as extreme as the observed value.
+Let $A$ be the number of theses values, $t_i$ the value of the test statistic for split $i$, $i = 1, \ldots, B$, and $t^{(\text{obs})}$ the observed value of the test statistic. Then,
 
-- for $H_0^{(=)}$: $A = \#\left(|t_i| \geq |t^{(\text{obs})|}\right)$
-- for $H_0^{(\leq)}$: $A = \#\left(t_i \geq t^{(\text{obs})}\right)$
-- for $H_0^{(\geq)}$: $A = \#\left(t_i \leq t^{(\text{obs})}\right)$
+* for $H_0^{(=)}$: $A = \#\left(|t_i| \geq |t^{(\text{obs})|}\right)$
+* for $H_0^{(\leq)}$: $A = \#\left(t_i \geq t^{(\text{obs})}\right)$
+* for $H_0^{(\geq)}$: $A = \#\left(t_i \leq t^{(\text{obs})}\right)$
 
 and $p$-value $= \frac{A}{B}$.
 
@@ -250,39 +246,40 @@ $B$ increases rapidly in $m$ and $n$, so using the permutation principle can lea
 We recommend this approach only for very small sample sizes or when sufficient computational resources are available.
 
 ### Randomization
-The randomization principle can be used to deal with the aforementioned shortcomings of the permutation principle. 
-Instead of computing all possible splits, only a random subset of $b << B$ splits is selected. As commonly proposed
-in the literature, we draw these random subsets with replacement, i.e. a single permutation may be drawn repeatedly.
+The randomization principle can be used to deal with the aforementioned computational shortcomings of the permutation principle. 
+Instead of computing all possible splits, only a random subset of $b << B$ splits is selected. 
+As commonly proposed in the literature (e.g. [@PhiSmy10perm]), we draw these random subsets with replacement, i.e. a single permutation may be drawn repeatedly.
 
-The $p$-value can then be estimated by $\frac{A + 1}{b + 1}$, where $A$ now
-relates to the drawn subsets of the splits. In the numerator and the denominator,
-the number $1$ is added to include the observed value of the test statistic.
+The $p$-value can then be estimated by $\frac{A + 1}{b + 1}$, where $A$ now relates to the drawn subsets of the splits. 
+In the numerator and the denominator, the number $1$ is added as the observed samples are also a legitimate split.
 
-This estimator will overestimate the true $p$-value because the observed sample may be drawn several times. Following [@PhiSmy10perm],
-we correct the $p$-value using their function `permp` from the R package [statmod](https://cran.r-project.org/web/packages/statmod/index.html).
+This estimator will overestimate the true $p$-value because the observed sample may be drawn several times. 
+Following [@PhiSmy10perm], we correct the $p$-value using the function `permp` from their R package [statmod](https://cran.r-project.org/web/packages/statmod/index.html).
 
 ### Asymptotic
-For very large sample sizes, asymptotical $p$-values can be computed for each test. This further reduces the computation time as compared to the randomization principle.
+For very large sample sizes, asymptotical $p$-values can be computed for each test using a normal approximation. This reduces the computation time further as compared to the randomization principle.
 
 #### Asymptotic MED-test
 Using the asymptotic distribution of the sample median, the test statistic of the asymptotic MED-test is
+
 \begin{align*}
   T_a^{(\text{MED})} = \sqrt{\frac{m \cdot n}{m + n}} \cdot 2 \cdot f\left(F^{-1}\left(0.5\right)\right) \cdot  \hat{\Delta}^{(\text{MED})} \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, 1\right),
 \end{align*}
-where $f$ is the density function belonging to the cumulative distribution function $F$. The value $f\left(F^{-1}\left(0.5\right)\right)$ can be estimated by a kernel-density estimator on the
-sample $x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n - \tilde{y}$. We use the R function
-`densitiy` from the [stats](https://cran.r-project.org/web/packages/stats/index.html) package with its default settings for the kernel-density estimation.
+
+where $f$ is the density function belonging to the cumulative distribution function $F$. The value $f\left(F^{-1}\left(0.5\right)\right)$ can be estimated by a kernel-density estimator on the sample $x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n - \tilde{y}$. 
+We use the R function `densitiy` from the [stats](https://cran.r-project.org/web/packages/stats/index.html) package with its default settings for the kernel-density estimation.
 
 #### Asymptotic HL1-/HL2-test
 With $\lambda = \frac{m}{m + n} \in \left(0, 1\right)$, the asymptotic HL2-test has the test statistic
+
 \begin{align*}
 T_a^{(\text{HL2})} = \sqrt{12 \cdot \lambda \cdot \left(1 - \lambda\right)} \int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x \cdot \left(m + n\right) \cdot \hat{\Delta}^{(\text{HL2})} \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, 1\right),
 \end{align*}
-where $\int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x$ can be interpreted as the value of the density of $X - Y$ at zero. In practice, it can be estimated by a kernel-density estimator on the within-sample pairwise differences
-$x_2 - x_1, \ldots, x_m - x_1, \ldots, x_m - x_{m - 1}, y_2 - y_1, \ldots, y_n - y_1, \ldots, y_n - y_{n - 1}$.
+
+where $\int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x$ can be interpreted as the value of the density of $X - Y$ at zero. 
+In practice, it can be estimated by a kernel-density estimator on the within-sample pairwise differences $x_2 - x_1, \ldots, x_m - x_1, \ldots, x_m - x_{m - 1}, y_2 - y_1, \ldots, y_n - y_1, \ldots, y_n - y_{n - 1}$.
 
 Replacing $\hat{\Delta}^{(\text{HL2})}$ by $\hat{\Delta}^{(\text{HL1})}$ gives us the test statistic of the asymptotic HL1-test.
-
 [@FriDeh11robu] recommend the asymptotic tests for sample sizes $m, n \geq 30$ to hold the significance level $\alpha = 0.05$. 
 
 #### Asymptotic M-test
@@ -313,10 +310,11 @@ hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "permutati
 ```
 
 The output is an object of the class `htest` and contains all relevant information on the performed test.
-The $p$-value can be accessed via `hl1.res$p.value`. To extract the value of the test statistic, we use `hl1.res$statistic`, and for the HL1-estimates of each sample `hl1.res$estimate`.
+The $p$-value can be accessed via `hl1.res$p.value`. 
+To extract the value of the test statistic, we use `hl1.res$statistic`, and for the HL1-estimates of each sample `hl1.res$estimate`.
 
 ### Randomization test
-In this example, we draw 10000 splits randomly from the observed joint sample to perform a randomized HL1-test.
+We draw 10000 splits randomly from the observed joint sample to use the randomization principle on the HL1-test.
 
 ```{r, cache = TRUE}
 set.seed(47)
@@ -324,10 +322,10 @@ set.seed(47)
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "randomization", scale = "S2", n.rep = 10000)
 ```
 
-The $p$-value is close to the one we have calculated using the permutation principle.
+The $p$-value is close to the one we have calculated with the permutation principle.
 
 ### Asymptotic test
-Although the sample sizes in our example are rather small, we use the samples to demonstrate how to use the asymptotic HL1-test.
+Although the sample sizes in our example are rather small, we use the samples to demonstrate how to perform an asymptotic HL1-test.
 
 ```{r}
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "asymptotic")
@@ -337,7 +335,7 @@ The $p$-value is not too far away from those obtained by the permutation and ran
 
 ### Location difference under $H_0$
 We can also perform the test when assuming a certain location difference between both samples under $H_0$, i.e. $\Delta_0 \neq 0$.
-In this example, we use $\Delta_0 = 5$, i.e. under $H_0$, we assume that the location parameter of the distribution of $X_i$, $i = 1, \ldots, m$, is five units larger than that of the distribution of $Y_j$, $j = 1, \ldots, m$.
+In this example, we use $\Delta_0 = 5$, i.e. under $H_0$, we assume that the location parameter of the distribution of $X_i$, $i = 1, \ldots, m$, is five units larger than that of the distribution of $Y_j$, $j = 1, \ldots, n$.
 We shift $x_1, \ldots, x_m$ by five units so that $H_0$ should not be rejected.
 
 ```{r}
@@ -352,13 +350,12 @@ As expected, the $p$-value is the same as the one from the previous test.
 In many applications the data may be rounded to a small number of digits or the data-generating process may be discrete.
 This can lead to several problems:
 
-- If there is no location difference, the scale estimate, i.e. the denominator of the test statistic, may be zero so that the test statistic cannot be computed.
-- The test has only little power, i.e. location differences between the samples may not be found.
+* If there is no location difference, the scale estimate, i.e. the denominator of the test statistic, may be zero so that the test statistic cannot be computed.
+* The test has only little power, i.e. location differences between the samples may not be found.
 
-Following the suggestion of [@FriGat07rank], we implemented a procedure called wobbling, i.e. we add random noise from a uniform distribution to the observations. 
+Following the suggestion of [@FriGat07rank], we implemented a procedure called wobbling, where we add random noise from a uniform distribution to the observations. 
 To keep the alterations small, the scale of the noise depends on the number of decimal places of the observations.
-
-The addition of random noise is controlled by the argument `wobble`, where `TRUE` means that noise is added and `FALSE` means that no noise is added.
+This is controlled by the argument `wobble`, where `TRUE` means that noise is added and `FALSE` means that no noise is added.
 
 In the following example, we round the previously generated observations and perform the HL12-test.
 
@@ -378,7 +375,7 @@ We follow the advice in the error message and set `wobble = TRUE`. To enable the
 
 ```{r, cache = TRUE}
 set.seed(47)
-# hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2", wobble = TRUE, wobble.seed = 2187)
+hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2", wobble = TRUE, wobble.seed = 2187)
 ```
 
 The $p$-value deviates quite strongly from the $p$-value obtained for the original observations.
@@ -387,7 +384,7 @@ If we chose to wobble on the original observations, the $p$-value would again be
 
 ```{r, cache = TRUE}
 set.seed(47)
-# hl1_test(x, y, alternative = "two.sided", method = "randomization", scale = "S2", wobble = TRUE, wobble.seed = 2187)
+hl1_test(x, y, alternative = "two.sided", method = "randomization", scale = "S2", wobble = TRUE, wobble.seed = 2187)
 ```
 
 We now consider an example, where a location difference of size $\Delta = 1.5$ exists between the samples.
@@ -418,23 +415,20 @@ wobble(x1, y1, check = FALSE)
 ```
 
 # Testing for a difference in scale
-Following [@Fri12onli] the argument `var.test` allows to decide whether the
-samples should be tested for a location difference (`var.test = FALSE`), which is
-the default, or for different variances (`var.test = TRUE`), i.e. $\sigma^2_X \neq \sigma^2_Y$.
+Following [@Fri12onli] the argument `var.test` allows to decide whether the samples should be tested for a location difference (`var.test = FALSE`), which is the default, or for different variances (`var.test = TRUE`), i.e. $\sigma^2_X \neq \sigma^2_Y$.
 
-Setting `var.test = TRUE` transforms the observations so that a possible variance
-difference between the samples appears as a location difference between the
-transformed samples.
+Setting `var.test = TRUE` transforms the observations so that a possible variance difference between the samples appears as a location difference between the transformed samples.
 
-In terms of the power, the resulting variance tests can outperform classical tests like the $F$-test,
-the Mood test, or the Ansary-Bradley test under outliers and asymmetry.
+In terms of the power, the resulting variance tests can outperform classical tests like the $F$-test, the Mood test, or the Ansary-Bradley test under outliers and asymmetry.
 
 ## Idea
-Again, we start with two samples $X_1, \ldots, X_m$ and $Y_1, \ldots, Y_n$, each
-of which consists of i.i.d. random variables. However, now we assume that we can write the random variables as
+Again, we start with two samples $X_1, \ldots, X_m$ and $Y_1, \ldots, Y_n$, each of which consists of i.i.d. random variables. 
+However, now we assume that we can write the random variables as
+
 \begin{align*}
   X_i = \sigma_X \cdot \varepsilon_{X, i},\ i = 1, \ldots, m \quad \text{and} \quad Y_j = \sigma_Y \cdot \varepsilon_{Y, j},\ j = 1, \ldots, n.
 \end{align*}
+
 Here, $\sigma_X$ is the standard deviation of the first sample and $\sigma_Y$ is the standard deviation of the second sample. The random variables $\varepsilon_{X, 1}, \ldots, \varepsilon_{X, m}$ and $\varepsilon_{Y, 1}, \ldots, \varepsilon_{Y, m}$ are i.i.d. random variables with expectation zero and unit variance.
 
 We address the following hypotheses pairs:
@@ -445,6 +439,7 @@ We address the following hypotheses pairs:
 \end{align*}
 
 By log-transforming the random variables, we obtain
+
 \begin{align*}
   U_i = \log\left(X_i^2\right) = \log\left(\sigma_X^2\right) + \log\left(\varepsilon_{X, i}^2\right),\ i = 1, \ldots, m, \quad \text{and} \quad V_i = \log\left(Y_j^2\right) = \log\left(\sigma_Y^2\right) + \log\left(\varepsilon_{Y, j}^2\right), j = 1, \ldots, n.
 \end{align*}
