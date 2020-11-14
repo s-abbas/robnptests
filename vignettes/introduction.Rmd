@@ -126,7 +126,7 @@ where $\tilde{x}$ and $\tilde{y}$ are the sample medians.
 Another possibility is `scale = S4` to estimate the scale by the sum of the median absolute deviations from the sample median (MAD) of each sample, i.e.
 
 \begin{align*}
-  \hat{S}^{(4)} = \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|\right\} + 1.4826 \text{median}\left\{|y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\}.
+  \hat{S}^{(4)} = \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|\right\} + \text{median}\left\{|y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\}.
 \end{align*}
 
 <!-- \begin{align*} -->
@@ -176,7 +176,7 @@ The test is performed by the function `hl2_test` with the same scale estimators 
 
 ### M-tests
 Very flexible location estimators can be derived via M-estimation.
-An M-estimator $\hat{\mu}^{(M)}_X$ for the locatin parameter of the $x$-sample (and analogously for the $y$-sample) can be obtained by solving the minimization problem
+An M-estimator $\hat{\mu}^{(M)}_X$ for the location parameter of the $x$-sample (and analogously for the $y$-sample) can be obtained by solving the minimization problem
 
 \begin{equation*}
   \hat{\mu}^{(M)}_X = \arg\underset{\mu_X}{\min} \sum_{i = 1}^m \rho\left(\frac{x_i - \mu_X}{\sigma_X}\right),
@@ -216,7 +216,7 @@ Larger samples are necessary for an acceptable approximation.
 
 The test statistic of the two-sample $M$-estimator test in the package is
 \begin{equation*}
-  \sqrt{\frac{m \cdot n}{n \cdot \hat{\sigma}^2_X \cdot \hat{\nu}_X + m \cdot \hat{\sigma}^2_Y \cdot \hat{\nu}_Y}} \cdot \hat{\mu}^{(M)}_X - \hat{\mu}^{(M)}_Y.
+  \sqrt{\frac{m \cdot n}{n \cdot \hat{\sigma}^2_X \cdot \hat{\nu}_X + m \cdot \hat{\sigma}^2_Y \cdot \hat{\nu}_Y}} \cdot \left( \hat{\mu}^{(M)}_X - \hat{\mu}^{(M)}_Y \right).
 \end{equation*}
 
 We currently allow for Huber-, Hampel-, and Bisquare $\psi$-functions called from [robustbase](https://cran.r-project.org/web/packages/robustbase/index.html).
@@ -247,7 +247,7 @@ We recommend this approach only for very small sample sizes or when sufficient c
 
 ### Randomization
 The randomization principle can be used to deal with the aforementioned computational shortcomings of the permutation principle. 
-Instead of computing all possible splits, only a random subset of $b << B$ splits is selected. 
+Instead of computing all possible splits, only a random subset of $b \ll B$ splits is selected. 
 As commonly proposed in the literature (e.g. [@PhiSmy10perm]), we draw these random subsets with replacement, i.e. a single permutation may be drawn repeatedly.
 
 The $p$-value can then be estimated by $\frac{A + 1}{b + 1}$, where $A$ now relates to the drawn subsets of the splits. 
@@ -267,7 +267,7 @@ Using the asymptotic distribution of the sample median, the test statistic of th
 \end{align*}
 
 where $f$ is the density function belonging to the cumulative distribution function $F$. The value $f\left(F^{-1}\left(0.5\right)\right)$ can be estimated by a kernel-density estimator on the sample $x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n - \tilde{y}$. 
-We use the R function `densitiy` from the [stats](https://cran.r-project.org/web/packages/stats/index.html) package with its default settings for the kernel-density estimation.
+We use the R function `density` from the [stats](https://cran.r-project.org/web/packages/stats/index.html) package with its default settings for the kernel-density estimation.
 
 #### Asymptotic HL1-/HL2-test
 With $\lambda = \frac{m}{m + n} \in \left(0, 1\right)$, the asymptotic HL2-test has the test statistic
@@ -290,7 +290,7 @@ However, as we estimate some parameters, this is only valid approximately and gr
 We will now show how to use the functions to test for location difference between two samples.
 
 ## Continuous data
-Let $x_1, \ldots, x_m$ and $y_1, \ldots, y_m$ be observations from a continuous distrubtions.
+Let $x_1, \ldots, x_m$ and $y_1, \ldots, y_m$ be observations from a continuous distributions.
 
 ```{r}
 set.seed(108)
