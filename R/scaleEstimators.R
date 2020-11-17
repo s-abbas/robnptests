@@ -136,5 +136,5 @@ rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
             call. = FALSE)
   }
 
-  return(1)
+  return(est)
 }

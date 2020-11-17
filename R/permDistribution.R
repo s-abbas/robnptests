@@ -13,7 +13,7 @@
 #' @template randomization
 #' @template n_rep
 #'
-#' @return Vector with permutation distribution.
+#' @return Vector with permutation distribution of the test statistic specified by \code{type}.
 #'
 #' @details see documentation of \code{rob_perm_statistic()} for a description of
 #' the \code{type}-parameter
@@ -61,7 +61,7 @@ perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) 
 #' @template randomization
 #' @template n_rep_m_test
 #'
-#' @return Vector with permutation distribution.
+#' @return Vector with permutation distribution of the desired M-estimator based test statistic.
 #'
 #' @export
 
@@ -105,7 +105,7 @@ mest_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep = 
 #' @template alternative
 #'
 #' @return
-#' p.value for the specified alternative.
+#' p-value for the specified alternative.
 #'
 #' @references
 #' \insertRef{PhiSmy10perm}{robTests}

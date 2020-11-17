@@ -61,9 +61,10 @@ trimmed_t <- function(x, y, gamma = 0.2, delta = 0, na.rm = FALSE) {
 
 
 
-#' @title Robust permutation statistics based on medians
+#' @title Robust permutation statistics based on robust location estimators
 #'
-#' @description \code{rob_perm_statistic()} calculates test statistics for robust permutation tests based on medians.
+#' @description \code{rob_perm_statistic()} calculates test statistics for robust permutation tests based on robust location estimators:
+#' Medians and Hodges-Lehmann estimators.
 #'
 #' @template x
 #' @template y
@@ -155,6 +156,7 @@ rob_perm_statistic <- function(x, y,
 #' @template y
 #' @template psi
 #' @template k_mest
+#' @template scaleTau2
 #'
 #' @return A list containing
 #'         \item{statistic}{the standardized test statistic, and}
@@ -162,25 +164,6 @@ rob_perm_statistic <- function(x, y,
 #'
 #' @export
 
-# m_test_statistic <- function(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi)) {
-#   ## Sample sizes
-#   m <- length(x)
-#   n <- length(y)
-#
-#   ## M-estimators and corresponding variances for both samples
-#   m.x <- m_est(x, psi = psi, k = k, max.it = 1)
-#   m.y <- m_est(y, psi = psi, k = k, max.it = 1)
-#
-#   est.x <- m.x$est
-#   est.y <- m.y$est
-#
-#   var.x <- m * m.x$var
-#   var.y <- n * m.y$var
-#
-#   ## Test statistic
-#   return(list(statistic = (est.x - est.y) / sqrt(((m - 1) * var.x + (n - 1) * var.y) / (n + m - 2) * (1/m + 1/n)),
-#               estimates = c(est.x, est.y)))
-# }
 
 m_test_statistic <- function(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi),
                              ...) {
@@ -203,7 +186,7 @@ m_test_statistic <- function(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi
   nu.y <- mean(psi.y^2)/(mean(rho.y)^2)
 
   ## Test statistic
-  return(list(statistic = (est.x - est.y) / sqrt((n * robustbase::scaleTau2(x, consistency = TRUE, ...)^2 * nu.x + m * robustbase::scaleTau2(y, consistency = TRUE)^2 * nu.y) / (m * n)),
+  return(list(statistic = (est.x - est.y) / sqrt((n * robustbase::scaleTau2(x, consistency = TRUE, ...)^2 * nu.x + m * robustbase::scaleTau2(y, consistency = TRUE, ...)^2 * nu.y) / (m * n)),
               estimates = c(est.x, est.y)))
 }
 

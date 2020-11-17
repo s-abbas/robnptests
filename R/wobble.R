@@ -15,9 +15,9 @@
 #'
 #' @details If \code{check = TRUE} the function checks whether all values in the two numeric input vectors are distinct.
 #' If so, it returns the original values, otherwise the values are made continuous by adding uniform
-#' noise. Otherwise, it simply determines the number of digits and adds uniform noise in order to
+#' noise. If \code{check = FALSE}, it simply determines the number of digits and adds uniform noise in order to
 #' make the sample "more" continuous.
-
+#'
 #' @return
 #' A list of length two containing the modified \code{x} and \code{y}
 #'
@@ -72,8 +72,6 @@ wobble <- function(x, y, check = TRUE) {
 }
 
 
-## PROBLEM: WOLLEN WIR BEIDE STICHPROBEN WOBBELN, ODER NUR JEWEILS EINE, FALLS DIE ANDERE EH NUR
-## DISTINCT VALUES ENTHÄLT? -> GEMISCHTE SAMPLES?
 
 
 
