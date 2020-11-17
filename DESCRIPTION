@@ -12,7 +12,7 @@ Author: Sermad Abbas [aut, cre],
   Roland Fried [aut]
 Maintainer: Sermad Abbas <abbas@statistik.tu-dortmund.de>
 Description: Implementations of several robust and non-parametric two-sample tests
-    for the location problem under homoscedasticity as described in Fried & Dehling (2011) <doi:0.1007/s10260-011-0164-1>.
+    for the location problem under homoscedasticity as described in Fried & Dehling (2011) <doi:10.1007/s10260-011-0164-1>.
     The test statistics are based on robust location estimators to achieve robustness. 
     The p-values can be computed by the permutation principle, the randomization principle or, for large samples, by using
     the asymptotic distributions of the test statistics under the null hypothesis, which ensures

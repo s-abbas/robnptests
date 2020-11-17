@@ -19,6 +19,7 @@
 #' @template var_test
 #' @template wobble
 #' @template seed
+#' @template dots
 #'
 #' @template scaleTau2
 #'
