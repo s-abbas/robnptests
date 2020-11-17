@@ -6,7 +6,7 @@ output: rmarkdown::html_vignette
 bibliography: ../inst/REFERENCES.bib
 csl: csda.csl
 vignette: >
-  %\VignetteIndexEntry{introduction}
+  %\VignetteIndexEntry{robTests}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -208,7 +208,7 @@ We estimate $\nu_X$ by replacing the expected values by the sample means, i.e.
 \end{equation*}
 
 The only estimator $\hat{\sigma}_X$ for $\sigma_X$ that ensures the asymptotical normality stated before is the empirical standard deviation, which, however, is not robust.
-In our package, we use the $\tau$-scale estimator as implemented in the package [robustbase](https://cran.r-project.org/web/packages/robustbase/index.html) [@MaeRouCro20robu].
+In our package, we use the $\tau$-scale estimator as implemented in the package [robustbase](https://cran.r-project.org/package=robustbase) [@MaeRouCro20robu].
 The quality of the normal approximation depends on the true data-generating distribution. 
 In some simulations, we found that the approximation works quite well for symmetrical distributions as long as the variance exists.
 However, it becomes worse for very skewed distributions, under which the resulting two-sample tests become conservative.
@@ -219,7 +219,7 @@ The test statistic of the two-sample $M$-estimator test in the package is
   \sqrt{\frac{m \cdot n}{n \cdot \hat{\sigma}^2_X \cdot \hat{\nu}_X + m \cdot \hat{\sigma}^2_Y \cdot \hat{\nu}_Y}} \cdot \left( \hat{\mu}^{(M)}_X - \hat{\mu}^{(M)}_Y \right).
 \end{equation*}
 
-We currently allow for Huber-, Hampel-, and Bisquare $\psi$-functions called from [robustbase](https://cran.r-project.org/web/packages/robustbase/index.html).
+We currently allow for Huber-, Hampel-, and Bisquare $\psi$-functions called from [robustbase](https://cran.r-project.org/package=robustbase).
 
 ## Computation of p-values
 In this section, we describe briefly how the $p$-values of the tests are computed.
@@ -254,7 +254,7 @@ The $p$-value can then be estimated by $\frac{A + 1}{b + 1}$, where $A$ now rela
 In the numerator and the denominator, the number $1$ is added as the observed samples are also a legitimate split.
 
 This estimator will overestimate the true $p$-value because the observed sample may be drawn several times. 
-Following [@PhiSmy10perm], we correct the $p$-value using the function `permp` from their R package [statmod](https://cran.r-project.org/web/packages/statmod/index.html).
+Following [@PhiSmy10perm], we correct the $p$-value using the function `permp` from their R package [statmod](https://cran.r-project.org/package=statmod).
 
 ### Asymptotic
 For very large sample sizes, asymptotical $p$-values can be computed for each test using a normal approximation. This reduces the computation time further as compared to the randomization principle.
@@ -267,7 +267,7 @@ Using the asymptotic distribution of the sample median, the test statistic of th
 \end{align*}
 
 where $f$ is the density function belonging to the cumulative distribution function $F$. The value $f\left(F^{-1}\left(0.5\right)\right)$ can be estimated by a kernel-density estimator on the sample $x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n - \tilde{y}$. 
-We use the R function `density` from the [stats](https://cran.r-project.org/web/packages/stats/index.html) package with its default settings for the kernel-density estimation.
+We use the R function `density` from the [stats](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/00Index.html) package with its default settings for the kernel-density estimation.
 
 #### Asymptotic HL1-/HL2-test
 With $\lambda = \frac{m}{m + n} \in \left(0, 1\right)$, the asymptotic HL2-test has the test statistic
@@ -463,7 +463,7 @@ hl1_test(x = x * 5, y = y, alternative = "two.sided", delta = 5, method = "asymp
 ```
 
 ## Other packages
-The tests in this package are constructed assuming homoscedasticity. Robust two-sample tests for the heteroscedastic scenario can be found in R package [WRS2](https://cran.r-project.org/web/packages/WRS2/index.html) [@MaiWil20robu].
+The tests in this package are constructed assuming homoscedasticity. Robust two-sample tests for the heteroscedastic scenario can be found in R package [WRS2](https://cran.r-project.org/package=WRS2) [@MaiWil20robu].
 
 ## References
 
