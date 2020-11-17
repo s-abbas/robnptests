@@ -1,6 +1,9 @@
 context("HL2 test")
 
 testthat::test_that("hl2_test works correctly", {
+
+  testthat::skip_on_cran()
+
   ## ___________________________________________________________________________
   ## Computation of test statistic
   ## ___________________________________________________________________________

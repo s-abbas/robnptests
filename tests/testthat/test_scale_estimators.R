@@ -2,6 +2,8 @@ context("Scale Estimators")
 
 testthat::test_that("Robust scale estimators work correctly", {
 
+  testthat::skip_on_cran()
+
   ##
   ## Check that the function returns errors when we hand over the wrong method
   ## or something non-numeric

@@ -1,6 +1,9 @@
 context("Median-based test")
 
 testthat::test_that("med_test works correctly", {
+
+  testthat::skip_on_cran()
+
   ## ___________________________________________________________________________
   ## Computation of test statistic
   ## ___________________________________________________________________________

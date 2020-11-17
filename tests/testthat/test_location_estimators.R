@@ -25,6 +25,9 @@ testthat::test_that("hodges_lehmann works correctly", {
 
 ## Two-sample Hodges-Lehmann estimator
 testthat::test_that("hodges_lehmann_2sample works correctly", {
+
+  testthat::skip_on_cran()
+
   ## ___________________________________________________________________________
   ## Computation of two-sample Hodges-Lehmann estimator
   ## ___________________________________________________________________________

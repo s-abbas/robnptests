@@ -2,6 +2,8 @@ context("Permutation distribution")
 
 testthat::test_that("perm_distribution works correctly", {
 
+  testthat::skip_on_cran()
+
   ## ___________________________________________________________________________
   ## Number of randomly drawn splits for randomization tests must not be larger
   ## than the number of all splits
