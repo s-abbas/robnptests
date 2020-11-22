@@ -15,9 +15,6 @@
 #'
 #' @return Vector with permutation distribution of the test statistic specified by \code{type}.
 #'
-#' @details see documentation of \code{rob_perm_statistic()} for a description of
-#' the \code{type}-parameter
-#'
 #' @export
 
 perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) {
@@ -51,7 +48,7 @@ perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) 
 
 #' @title Permutation distribution for M-statistics
 #'
-#' @description \code{mest_perm_distribution} calculates the permutation distribution for M-statistics from
+#' @description \code{mest_perm_distribution} calculates the permutation distribution for the M-statistics from
 #'              \code{m_test_statistic}.
 #'
 #' @template x
@@ -59,9 +56,13 @@ perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) 
 #' @template psi
 #' @template k_mest
 #' @template randomization
-#' @template n_rep_m_test
+#' @template n_rep
 #'
-#' @return Vector with permutation distribution of the desired M-estimator based test statistic.
+#' @return Vector with permutation distribution of the test statistic specified by \code{psi}
+#'         and \code{k}.
+#'
+#' @references
+#' \insertRef{MaeRouCro20robu}{robTests}
 #'
 #' @export
 
@@ -75,8 +76,7 @@ mest_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep = 
 
     distribution <- apply(splits, 1, function(s) m_test_statistic(x = complete[s], y = complete[-s],
                                                                   psi = psi, k = k)$statistic)
-  }
-  else if (randomization) {
+  } else if (randomization) {
     splits <- replicate(n.rep, sample(c(x, y)))
 
     distribution <- apply(splits, 2, function(s) m_test_statistic(x = s[1:m], y = s[(m + 1):(m + n)], psi = psi, k = k)$statistic)
@@ -85,8 +85,6 @@ mest_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep = 
   return(distribution)
 }
 
-
-
 ## ----------------------------------------------------------------------------
 ## Calculate p-value for permutation tests
 ## ----------------------------------------------------------------------------
@@ -94,7 +92,7 @@ mest_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep = 
 #' Calculation of permutation p-value
 #'
 #' @description
-#' \code{calc_perm_p_value} calculates the permutation p-value following Phipson & Smyth (2010).
+#' \code{calc_perm_p_value} calculates the permutation p-value following \insertCite{PhiSmy10perm;textual}{robTests}.
 #'
 #' @template statistic
 #' @template distribution

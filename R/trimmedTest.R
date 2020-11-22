@@ -23,7 +23,7 @@
 #' \item{estimate}{the trimmed means of \code{x} and \code{y}.}
 #' \item{null.value}{the specified hypothesized value of the mean difference.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
-#' \item{method}{a character string indicating what type of test was performed.}
+#' \item{method}{a character string indicating how the p-value was computed.}
 #' \item{data.name}{a character string giving the names of the data.}
 #'
 #' @examples
@@ -39,6 +39,8 @@
 #' \insertRef{YueDix73appr}{robTests}
 #'
 #' \insertRef{Yue74trim}{robTests}
+#'
+#' \insertRef{Fri12onli}{robTests}
 #'
 #' @export
 

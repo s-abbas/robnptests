@@ -19,12 +19,10 @@
 #' make the sample "more" continuous.
 #'
 #' @return
-#' A list of length two containing the modified \code{x} and \code{y}
+#' A list of length two containing the modified \code{x} and \code{y}.
 #'
 #' @references
-#' \insertRef{Fri12onli}{robTests}
-#'
-#'
+#' \insertRef{FriGat07rank}{robTests}
 #'
 #' @examples
 #' x <- rnorm(20); y <- rnorm(20); x <- round(x)

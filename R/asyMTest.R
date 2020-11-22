@@ -18,9 +18,6 @@
 #' @template na_rm
 #' @template var_test
 #' @template wobble
-#' @template seed
-#' @template dots
-#'
 #' @template scaleTau2
 #'
 #' @details
@@ -28,32 +25,35 @@
 #' divided by a pooled tau-estimate for the within-sample variance.
 #'
 #' When computing a randomization distribution based on randomly drawn splits
-#' with replacement, the results of Smyth & Phipson (2010) to calculate the p-value
-#' are used. The psi and rho functions, which are needed to obtain the M-estimates,
-#' are computed via the implementations in the package \code{\link[=Mpsi]{robustbase}}.
+#' with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+#' is used to calculate the p-value. The psi function for the the M-estimate
+#' is computed via the implementations in the package \code{\link[=Mpsi]{robustbase}}.
 #' The tau scale estimate is computed with the default parameter settings
-#' of the function \code{\link[robustbase]{scaleTau2}}. Those can be changed if necessary.
+#' of the function \code{\link[robustbase]{scaleTau2}}. These can be changed if necessary.
 #'
-#' The test statistic is the difference of the M-estimates for both samples scaled by a pooled estimate for the standard deviation.
-#' This estimate is based on the tau-scale estimator. For more details, see the vignette.
+#' The test statistic is the difference of the M-estimates for both samples scaled
+#' by a pooled estimate for the standard deviation. This estimate is based on the
+#' tau scale estimator. More details are given in the vignette, which can be
+#' called by \code{vignette{"robTests-vignette"}}.
 #'
 #' The distribution of the test statistic is approximated by a standard normal distribution.
-#' However, this assumption is only justified under the normality assumption. In case of a non-normal
-#' distribution, the test might not keep the desired significance level. The test keeps the
-#' level under severe distributions as long as the variance exists. However, under
-#' skewed distributions, it tends to be conservative.
+#' However, this assumption is only justified under the normality assumption. In
+#' case of a non-normal distribution, the test might not keep the desired significance
+#' level. The test keeps the level under several distributions as long as the
+#' variance exists. However, under skewed distributions, it tends to be conservative.
 #' The test statistic can be corrected by a factor which has to be determined
 #' individually for a specific distribution.
 #'
 #' For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
 #' This is achieved by log-transforming the original observations so that a potential
 #' scale difference appears as a location difference between the transformed samples;
-#' see Fried (2012). The sample cannot contain zeros due to the necessary log-transformation.
-#' If it contains zeros, uniform noise is added to all variables in order to remove zeros.
-#' A warning is printed.
+#' see \insertCite{Fri12onli;textual}{robTests}. The sample should not contain zeros
+#' to prevent problems with the necessary log-transformation. If it contains zeros,
+#' uniform noise is added to all variables in order to remove zeros. A warning is
+#' printed.
 #'
-#' If the sample has been modified (either because of 0's for \code{var.test = TRUE}, or
-#' as \code{wobble = TRUE}, the modified samples can be retrieved using
+#' If the sample has been modified (either because of zeros for \code{var.test = TRUE}, or
+#' \code{wobble = TRUE}, the modified samples can be retrieved using
 #'
 #' \code{set.seed(wobble.seed); wobble(x, y)}
 #'
@@ -65,7 +65,7 @@
 #' \item{estimate}{the Huber M-estimates of \code{x} and \code{y}.}
 #' \item{null.value}{the specified hypothesized value of the mean difference.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
-#' \item{method}{a character string indicating what type of test was performed.}
+#' \item{method}{a character string indicating how the p-value was computed.}
 #' \item{data.name}{a character string giving the names of the data.}
 #'
 #' @references
@@ -76,7 +76,6 @@
 #'
 #' \insertRef{PhiSmy10perm}{robTests}
 #'
-#'
 #' @examples
 #' ## Generate random samples
 #' set.seed(108)
@@ -85,10 +84,10 @@
 #' ## Asymptotic test based on Huber M-estimator
 #' m_test(x, y, method = "asymptotic", psi = "huber")
 #'
+#' \dontrun{
 #' ## Randomization test based on Hampel M-estimator with 1000 random permutations
 #' ## drawn with replacement
 #'
-#' \dontrun{
 #' m_test(x, y, method = "randomization", n.rep = 1000, psi = "hampel")
 #' }
 #'
@@ -105,6 +104,13 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   ## ___________________________________________________________________________
   ## Error messages
   ## ___________________________________________________________________________
+
+  ## Number of repetitions for randomization distribution
+  stopifnot("'n.rep' needs to be an integer value" = n.rep%%1 == 0)
+
+  ## Data types of x and y
+  stopifnot("'x' and 'y' need to be numeric vectors" = is.numeric(x) & is.numeric(y))
+
 
   ## alternative
   if (!all((alternative %in% c("two.sided", "greater", "less")))) {

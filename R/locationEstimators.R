@@ -105,6 +105,11 @@ win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' @template x
 #' @template na_rm
 #'
+#' @details The one-sample Hodges-Lehmann estimator for a sample of size \code{n}
+#'          is defined as
+#'
+#' \deqn{med(\frac{X_i + X_j}{2},  1 \le i < j \le m).}
+#'
 #' @return
 #' The one-sample Hodges-Lehmann estimator.
 #'
@@ -122,6 +127,9 @@ win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' @export
 
 hodges_lehmann <- function(x, na.rm = FALSE) {
+
+  ## Check arguments
+  stopifnot("x needs to be a numeric vector" = is.numeric(x))
 
   ## NA handling
   if (!na.rm & any(is.na(x))) {
@@ -151,6 +159,11 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
 #' @template y
 #' @template na_rm
 #'
+#' @details The two-sample Hodges-Lehmann estimator for two samples \code{x}
+#'          and \code{y} of sizes \code{m} and \code{n} is defined as
+#'
+#' \deqn{med(|x_i - y_j|, 1 \le i \le m, 1 \le j \le n).}
+#'
 #' @return
 #' The two-sample Hodges-Lehmann estimator.
 #'
@@ -171,6 +184,9 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
 
 hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 
+  ## Check arguments
+  stopifnot("x and y need to be numeric vectors" = is.numeric(x) & is.numeric(y))
+
   ## NA handling
   if (!na.rm & (any(is.na(x)) || any(is.na(y)))) {
     return(NA)
@@ -187,7 +203,8 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 
 #' @title M-estimator of location
 #'
-#' @description \code{m_est} calculates an M-estimate of location and its variance using different tuning functions.
+#' @description \code{m_est} calculates an M-estimate of location and its variance
+#' for different psi functions.
 #'
 #' @template x
 #' @template psi
@@ -197,12 +214,12 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 #' @template na_rm
 #'
 #' @details
-#' To compute the M-estimate, the iterative algorithm described in Maronna et al. (2006, p. 39) is used.
-#' The variance is estimated according to Huber (1981, p. 150).
+#' To compute the M-estimate, the iterative algorithm described in \insertCite{MarMarYoh06robu;textual}{robTests} is used.
+#' The variance is estimated as in \insertCite{Hub81robu;textual}{robTests}.
 #'
 #'
-#' @return A list containing the items:
-#'         \item{est}{estimated mean, and}
+#' @return A list containing the components:
+#'         \item{est}{estimated mean.}
 #'         \item{var}{estimated variance.}
 #'
 #' @importFrom Rdpack reprompt

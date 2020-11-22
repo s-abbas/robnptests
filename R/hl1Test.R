@@ -6,7 +6,7 @@
 #'
 #' @description
 #' \code{hl1_test} performs a two-sample location test based on
-#' the difference of the one-sample Hodges-Lehmann estimators for both samples.
+#' the difference of the one-sample Hodges-Lehmann estimators of both samples.
 #'
 #' @template x
 #' @template y
@@ -18,33 +18,36 @@
 #' @template na_rm
 #' @template var_test
 #' @template wobble
-#' @template seed
 #'
 #' @details
-#' When computing a randomization distribution based on randomly drawn splits with replacement, the results of
-#' Smyth & Phipson (2010) to calculate the p-value are used. The test statistics and the asymptotic distribution are taken from Fried & Dehling (2011).
+#' When computing a randomization distribution based on randomly drawn splits with
+#' replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+#' is used to calculate the p-value. The test statistics and the asymptotic distribution
+#' are taken from \insertCite{FriDeh11robu;textual}{robTests}.
 #'
 #' The test statistics for the permutation and randomization version of the test is standardized using a robust scale estimator.
-#' \code{scale = "S1"} represents use of
 #'
-#' \deqn{S = med(|X_i - X_j|: 1 \le i < j \le m, |Y_i - Y_j|, 1 <= i < j <= n),}
+#' Setting \code{scale = "S1"} represents use of
 #'
-#' \code{scale = "S2"} uses
+#' \deqn{S = med(|X_i - X_j|: 1 \le i < j \le m, |Y_i - Y_j|, 1 \le i < j \le n),}
 #'
-#' \deqn{S = med(|Z_i - Z_j|: 1 \le i < j \le m+n) }
+#' whereas \code{scale = "S2"} uses
 #'
-#' where \eqn{ Z = ( X_1 - med(X),...,X_m - med(X), Y_1 - med(Y),...,Y_n - med(Y) )'}
-#' is the median corrected sample. For more details see Fried & Dehling (2011).
+#' \deqn{S = med(|Z_i - Z_j|: 1 \le i < j \le m+n).}
+#'
+#' Here, \eqn{ Z = ( X_1 - med(X),...,X_m - med(X), Y_1 - med(Y),...,Y_n - med(Y) )'}
+#' is the median-corrected sample. For more details see \insertCite{FriDeh11robu;textual}{robTests}.
 #'
 #' For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
 #' This is achieved by log-transforming the original observations so that a potential
 #' scale difference appears as a location difference between the transformed samples;
-#' see Fried (2012). The sample cannot contain zeros due to the necessary log-transformation.
-#' If it contains zeros, uniform noise is added to all variables in order to remove zeros.
-#' A warning is printed.
+#' see \insertCite{Fri12onli;textual}{robTests}. The sample should not contain zeros
+#' to prevent problems with the necessary log-transformation. If it contains zeros,
+#' uniform noise is added to all variables in order to remove zeros. A warning is
+#' printed.
 #'
-#' If the sample has been modified (either because of 0's for \code{var.test = TRUE}, or
-#' as \code{wobble = TRUE}, the modified samples can be retrieved using
+#' If the sample has been modified (either because of zeros for \code{var.test = TRUE}, or
+#' \code{wobble = TRUE}, the modified samples can be retrieved using
 #'
 #' \code{set.seed(wobble.seed); wobble(x, y)}
 #'
@@ -55,7 +58,7 @@
 #' \item{estimate}{the one-sample Hodges-Lehmann estimates of \code{x} and \code{y}.}
 #' \item{null.value}{the specified hypothesized value of the mean difference.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
-#' \item{method}{a character string indicating what type of test was performed.}
+#' \item{method}{a character string indicating how the p-value was computed.}
 #' \item{data.name}{a character string giving the names of the data.}
 #'
 #' @importFrom Rdpack reprompt
@@ -77,10 +80,10 @@
 #' ## Asymptotic HL1 test
 #' hl1_test(x, y, method = "asymptotic", scale = "S1")
 #'
+#' \dontrun{
 #' ## HL12 test using randomization principle by drawing 1000 random permutations
 #' ## with replacement
 #'
-#' \dontrun{
 #' hl1_test(x, y, method = "randomization", n.rep = 1000, scale = "S2")
 #' }
 #'
@@ -93,8 +96,11 @@ hl1_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
                      n.rep = 10000, na.rm = FALSE,
                      var.test = FALSE, wobble = FALSE, wobble.seed = NULL) {
 
+  ## Check arguments
+  stopifnot("n.rep needs to be an integer value" = n.rep%%1 == 0)
+  stopifnot("x and y need to be numeric vectors" = is.numeric(x) & is.numeric(y))
+
   alternative <- match.arg(alternative)
-  # method <- match.arg(method)
   scale <- match.arg(scale)
 
   ## Names of data sets

@@ -63,8 +63,9 @@ trimmed_t <- function(x, y, gamma = 0.2, delta = 0, na.rm = FALSE) {
 
 #' @title Robust permutation statistics based on robust location estimators
 #'
-#' @description \code{rob_perm_statistic()} calculates test statistics for robust permutation tests based on robust location estimators:
-#' Medians and Hodges-Lehmann estimators.
+#' @description \code{rob_perm_statistic()} calculates test statistics for robust
+#' permutation/randomization tests based on the sample median, the one-sample
+#' Hodges-Lehmann estimator, or the two-sample Hodges-Lehmann estimator.
 #'
 #' @template x
 #' @template y
@@ -72,13 +73,14 @@ trimmed_t <- function(x, y, gamma = 0.2, delta = 0, na.rm = FALSE) {
 #' @template na_rm
 #'
 #' @return A list containing the following components:
-#'         \item{statistic}{the selected test statistic}
-#'         \item{abs.statistic}{the absolute value of the selected test statistic}
-#'         \item{estimates}{estimate of location for each sample if available}
+#'         \item{statistic}{the selected test statistic.}
+#'         \item{abs.statistic}{the absolute value of the selected test statistic.}
+#'         \item{estimates}{estimate of location for each sample if available.}
 #'
 #' @details The test statistics returned by \code{rob_perm_statistic} are of the form
 #'          \deqn{D_i/S_j} where the D_i, i = 1,...,3, are different estimators of location and the S_j, j = 1,...,4 are
-#'          estimates for the mutual sample scale. See Fried and Dehling (2011) for details.
+#'          estimates for the mutual sample scale. See \insertCite{FriDeh11robu;textual}{robTests}
+#'          or the vignette (\code{vignette(robTests-vignette)}) for details.
 #'
 #' @examples
 #' ## Generate random samples
@@ -150,7 +152,7 @@ rob_perm_statistic <- function(x, y,
 
 #' @title Calculate the M-test-statistic
 #'
-#' @description \code{m_test_statistic} calculates the test statistics for randomization tests based on M-estimators
+#' @description \code{m_test_statistic} calculates the test statistics for tests based on M-estimators.
 #'
 #' @template x
 #' @template y
@@ -158,9 +160,9 @@ rob_perm_statistic <- function(x, y,
 #' @template k_mest
 #' @template scaleTau2
 #'
-#' @return A list containing
-#'         \item{statistic}{the standardized test statistic, and}
-#'         \item{estimates}{the M-estimates of location for both \code{x} and \code{y}}
+#' @return A list containing the following components:
+#'         \item{statistic}{standardized test statistic.}
+#'         \item{estimates}{M-estimates of location for both \code{x} and \code{y}.}
 #'
 #' @export
 
