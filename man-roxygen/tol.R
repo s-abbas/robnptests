@@ -1,1 +1,1 @@
-#' @param tol tolerance for convergence, defaults to 1e-06.
+#' @param tol tolerance for convergence. The default is 1e-06.

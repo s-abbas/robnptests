@@ -1,1 +1,1 @@
-#' @param max.it the maximum number of iterations, defaults to 15.
+#' @param max.it the maximum number of iterations. The default is 15.
