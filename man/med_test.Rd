@@ -27,16 +27,16 @@ med_test(
 must be one of "two.sided" (default), "greater" or "less".}
 
 \item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
-on whether the test should be performed for a difference in location or in scale, default is
-\code{delta = 0} for location test and \code{delta = 1} for scale test.}
+on whether the test should be performed for a difference in location or in scale.
+The default is \code{delta = 0} for location test and \code{delta = 1} for scale test.}
 
-\item{method}{a character string specifying the test method used,
-\code{"asymptotic"} for an asymptotic test based on the
-normal distribution, \code{"permutation"} for a permutation and
+\item{method}{a character string specifying how the p-value is computed,
+\code{"asymptotic"} for an asymptotic test based on a normal
+approximation, \code{"permutation"} for a permutation test and
 \code{"randomization"} for a randomization test.
-The permutation test uses all data splits into two samples,
-while the randomization test draws \code{n.rep} random splits
-with replacement.}
+The permutation test uses all splits of the joint sample into two samples
+of sizes \code{m} and \code{n}, while the randomization test draws
+\code{n.rep} random splits with replacement.}
 
 \item{scale}{a character string specifying the scale estimator used for standardization
 of the test statistic, must be one of \code{"S3"} and \code{"S4"}.
@@ -44,22 +44,23 @@ Default is \code{"S3"}. Ignored if \code{method = "asymptotic"};
 see details for definition of the scale estimators.}
 
 \item{n.rep}{an integer value specifying the number of random splits used to
-calculate the randomization distribution if \code{method = "randomization"},
-ignored if \code{method = "permutation"} or \code{method = "asymptotic"};
-default is \code{n.rep = 10000}.}
+calculate the randomization distribution if \code{method = "randomization"}.
+This argument is ignored if \code{method = "permutation"} or \code{method = "asymptotic"}.
+The default is \code{n.rep = 10000}.}
 
 \item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 
 \item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
 
-\item{wobble.seed}{logical value indicating whether uniform noise should be added to the sample before
+\item{wobble}{logical value indicating whether uniform noise should be added to the sample before
 proceeding with the test, in order to make sure there are no duplicate values in the
 sample that can cause the scale estimate to be 0. Only necessary for the permutation and
-randomization version of the test. Defaults to FALSE.}
+randomization version of the test. The default is \code{wobble = FALSE}.}
 
-\item{seed}{Optional, numerical value used as a seed to be used for 'wobbling' of the samples.
-If no seed is given, it is set randomly. In any case, the seed used will be returned in a
-warning message. The argument is ignored if \code{wobble = FALSE}.}
+\item{wobble.seed}{integer value used as a seed for the random number generation in case of \code{wobble = TRUE}.
+If no seed is given, it is set randomly. In any case, the
+seed used will be returned in a warning message. The argument is
+ignored if wobble = FALSE.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:
@@ -68,7 +69,7 @@ A list with class "\code{htest}" containing the following components:
 \item{estimate}{the sample medians of \code{x} and \code{y}.}
 \item{null.value}{the specified hypothesized value of the mean difference.}
 \item{alternative}{a character string describing the alternative hypothesis.}
-\item{method}{a character string indicating what type of test was performed.}
+\item{method}{a character string indicating how the p-value was computed.}
 \item{data.name}{a character string giving the names of the data.}
 }
 \description{
@@ -76,31 +77,34 @@ A list with class "\code{htest}" containing the following components:
 the difference of the sample medians for both samples.
 }
 \details{
-When computing a randomization distribution based on randomly drawn splits with replacement, the results of
-Smyth & Phipson (2010) to calculate the p-value are used. The test statistics and the asymptotic distribution are taken from Fried & Dehling (2011).
+When computing a randomization distribution based on randomly drawn splits with
+replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+is used to calculate the p-value. The test statistics and the asymptotic distribution
+are taken from \insertCite{FriDeh11robu;textual}{robTests}.
 
-The estimator of the location shift is the difference of the medians of \texttt{x} and \texttt{y}.
+The estimator of the location shift is the difference of the medians of \code{x} and \code{y}.
 
 The test statistics for the permutation and randomization version of the test is standardized using a robust scale estimator.
-\code{scale = "S3"} represents use of
+The argument \code{scale = "S3"} represents use of
 
 \deqn{S = 2 * ( |X_1 - med(X)|,...,|X_m - med(X)|, |Y_1 - med(Y)|,...,|Y_n - med(Y)| ),}
 
-\code{scale = "S4"} uses
+whereas \code{scale = "S4"} uses
 
-\deqn{S = ( med( |X_1 - med(X)|,...,|X_m - med(X)| ) + med( |Y_1 - med(Y)|,...,|Y_n - med(Y)| ). }
+\deqn{S = ( med( |X_1 - med(X)|,...,|X_m - med(X)| ) + med( |Y_1 - med(Y)|,...,|Y_n - med(Y)| ).}
 
-For more details see Fried & Dehling (2011).
+For more details see \insertCite{FriDeh11robu;textual}{robTests}.
 
 For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
 This is achieved by log-transforming the original observations so that a potential
 scale difference appears as a location difference between the transformed samples;
-see Fried (2012). The sample cannot contain zeros due to the necessary log-transformation.
-If it contains zeros, uniform noise is added to all variables in order to remove zeros.
-A warning is printed.
+see \insertCite{Fri12onli;textual}{robTests}. The sample should not contain zeros
+to prevent problems with the necessary log-transformation. If it contains zeros,
+uniform noise is added to all variables in order to remove zeros. A warning is
+printed.
 
-If the sample has been modified (either because of 0's for \code{var.test = TRUE}, or
-as \code{wobble = TRUE}, the modified samples can be retrieved using
+If the sample has been modified (either because of zeros for \code{var.test = TRUE}, or
+\code{wobble = TRUE}, the modified samples can be retrieved using
 
 \code{set.seed(wobble.seed); wobble(x, y)}
 }
@@ -112,16 +116,18 @@ x <- rnorm(20); y <- rnorm(20)
 ## Asymptotic MED test
 med_test(x, y, method = "asymptotic", scale = "S3")
 
+\dontrun{
 ## MED2 test using randomization principle by drawing 1000 random permutations
 ## with replacement
 
-\dontrun{
 med_test(x, y, method = "randomization", n.rep = 1000, scale = "S4")
 }
 
 }
 \references{
-\insertRef{SmyPhi10perm}{robTests}
+\insertRef{PhiSmy10perm}{robTests}
 
 \insertRef{FriDeh11robu}{robTests}
+
+\insertRef{Fri12onli}{robTests}
 }

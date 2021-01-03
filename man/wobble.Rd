@@ -15,7 +15,7 @@ wobble(x, y, check = TRUE)
 adding uniform noise or not, defaults to \code{TRUE}}
 }
 \value{
-A list of length two containing the modified \code{x} and \code{y}
+A list of length two containing the modified \code{x} and \code{y}.
 }
 \description{
 \code{wobble} makes a discrete sample with duplicated values continuous by adding uniform noise to the
@@ -24,7 +24,7 @@ discrete observations
 \details{
 If \code{check = TRUE} the function checks whether all values in the two numeric input vectors are distinct.
 If so, it returns the original values, otherwise the values are made continuous by adding uniform
-noise. Otherwise, it simply determines the number of digits and adds uniform noise in order to
+noise. If \code{check = FALSE}, it simply determines the number of digits and adds uniform noise in order to
 make the sample "more" continuous.
 }
 \examples{
@@ -33,5 +33,5 @@ wobble(x, y)
 
 }
 \references{
-\insertRef{Fri12onli}{robTests}
+\insertRef{FriGat07rank}{robTests}
 }

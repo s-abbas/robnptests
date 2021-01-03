@@ -20,6 +20,12 @@ The two-sample Hodges-Lehmann estimator.
 \code{hodges_lehmann_2sample} calculates the two-sample Hodges-Lehmann
 estimator for the location difference of two samples x and y.
 }
+\details{
+The two-sample Hodges-Lehmann estimator for two samples \code{x}
+         and \code{y} of sizes \code{m} and \code{n} is defined as
+
+\deqn{med(|x_i - y_j|, 1 \le i \le m, 1 \le j \le n).}
+}
 \examples{
 ## Generate random samples
 set.seed(108)

@@ -18,6 +18,12 @@ The one-sample Hodges-Lehmann estimator.
 \code{hodges_lehmann} calculates the one-sample Hodges-Lehmann estimator
 of a sample.
 }
+\details{
+The one-sample Hodges-Lehmann estimator for a sample of size \code{n}
+         is defined as
+
+\deqn{med(\frac{X_i + X_j}{2},  1 \le i < j \le m).}
+}
 \examples{
 ## Generate random sample
 set.seed(108)

@@ -74,7 +74,7 @@ testthat::test_that("hodges_lehmann_2sample works correctly", {
   x <- rnorm(10)
   y <- letters[1:12]
 
-  ## If there are non-numeric input values, the function should throw a warning
-  testthat::expect_warning(hodges_lehmann_2sample(x, y))
+  ## If there are non-numeric input values, the function should throw an error
+  testthat::expect_error(hodges_lehmann_2sample(x, y))
 }
 )

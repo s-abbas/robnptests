@@ -19,18 +19,20 @@ trimmed_test(
 
 \item{y}{a (non-empty) numeric vector of data values.}
 
+\item{gamma}{numeric value in [0, 0.5] specifying the fraction of observations to be
+trimmed from each end of the sample before calculating the mean. Values
+of trim outside that range are taken as the nearest endpoint.}
+
 \item{alternative}{a character string specifying the alternative hypothesis,
 must be one of "two.sided" (default), "greater" or "less".}
 
 \item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
-on whether the test should be performed for a difference in location or in scale, default is
-\code{delta = 0} for location test and \code{delta = 1} for scale test.}
+on whether the test should be performed for a difference in location or in scale.
+The default is \code{delta = 0} for location test and \code{delta = 1} for scale test.}
 
 \item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 
-\item{numeric}{value in [0, 0.5] specifying the fraction of observations to be
-trimmed from each end of the sample before calculating the mean. Values
-of trim outside that range are taken as the nearest endpoint.}
+\item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:
@@ -40,7 +42,7 @@ A list with class "\code{htest}" containing the following components:
 \item{estimate}{the trimmed means of \code{x} and \code{y}.}
 \item{null.value}{the specified hypothesized value of the mean difference.}
 \item{alternative}{a character string describing the alternative hypothesis.}
-\item{method}{a character string indicating what type of test was performed.}
+\item{method}{a character string indicating how the p-value was computed.}
 \item{data.name}{a character string giving the names of the data.}
 }
 \description{
@@ -58,4 +60,6 @@ trimmed_test(x, y, gamma = 0.1)
 \insertRef{YueDix73appr}{robTests}
 
 \insertRef{Yue74trim}{robTests}
+
+\insertRef{Fri12onli}{robTests}
 }

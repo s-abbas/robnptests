@@ -12,22 +12,28 @@ mest_perm_distribution(x, y, psi, k, randomization = FALSE, n.rep = NULL)
 \item{y}{a (non-empty) numeric vector of data values.}
 
 \item{psi}{kernel used for optimization.
-Must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"};
-defaults to \code{"huber"}.}
+Must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"}.
+The default is \code{"huber"}.}
 
 \item{k}{tuning parameter(s) for the respective kernel function,
-defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}} in the package \pkg{robustbase}.}
+defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}}
+in the package \href{https://cran.r-project.org/package=robustbase}{robustbase}.}
 
 \item{randomization}{logical value indicating whether the p-value should be computed from a permutation (\code{FALSE}) or a randomization (\code{TRUE}) distribution.}
 
-\item{n.rep}{an integer value specifying the number of random permutations used to calculate
-the randomization distribution if \code{method = "randomization"},
-ignored if \code{method = "permutation"}; default is 10000.}
+\item{n.rep}{an integer value specifying the number of random splits used to
+calculate the randomization distribution if \code{method = "randomization"}.
+This argument is ignored if \code{method = "permutation"} or \code{method = "asymptotic"}.
+The default is \code{n.rep = 10000}.}
 }
 \value{
-Vector with permutation distribution.
+Vector with permutation distribution of the test statistic specified by \code{psi}
+        and \code{k}.
 }
 \description{
-\code{mest_perm_distribution} calculates the permutation distribution for M-statistics from
+\code{mest_perm_distribution} calculates the permutation distribution for the M-statistics from
              \code{m_test_statistic}.
+}
+\references{
+\insertRef{MaeRouCro20robu}{robTests}
 }
