@@ -37,4 +37,6 @@ Vector with permutation distribution of the test statistic specified by \code{ps
 \references{
 \insertRef{MaeRouCro20robu}{robTests}
 }
+
 \keyword{internal}
+

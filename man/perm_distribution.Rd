@@ -33,3 +33,4 @@ Vector with permutation distribution of the test statistic specified by \code{ty
 several test statistics.
 }
 \keyword{internal}
+

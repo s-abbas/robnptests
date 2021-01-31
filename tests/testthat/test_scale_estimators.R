@@ -26,13 +26,11 @@ testthat::test_that("Robust scale estimators work correctly", {
 
   x2 <- c(x, NA)
 
-  # invisible(sapply(types, function(type) {
-  #   testthat::expect_true(is.na(rob_var(x2, y, na.rm=FALSE, type=type)))
-  #   testthat::expect_identical(rob_var(x, y, na.rm=FALSE, type=type),
-  #                              rob_var(x2, y, na.rm=TRUE, type=type))
-  # })) # Kann man das so machen, um alle vier Schätzer gleichzeitig abzuarbeiten?
-      # zumindest gibt es einen error aus wenn sie nicht identical sind.
-      # invisible sorgt dafür, dass kein Output in die Konsole geprintet wird
+  for (type in types) {
+    testthat::expect_true(is.na(rob_var(x2, y, na.rm=FALSE, type=type)))
+    testthat::expect_identical(rob_var(x, y, na.rm=FALSE, type=type),
+                               rob_var(x2, y, na.rm=TRUE, type=type))
+  }
 
   ##
   ## Check for location and permutation invariance
@@ -41,21 +39,21 @@ testthat::test_that("Robust scale estimators work correctly", {
   x3 <- x + 5 # shift in location
   x4 <- sort(x) # a simple 'permutation' of x
 
-  # invisible(sapply(types, function(type) {
-  #   testthat::expect_equal(rob_var(x, y, type=type), rob_var(y, x, type=type)) # switching x and y
-  #   testthat::expect_equal(rob_var(x, y, type=type), rob_var(x3, y, type=type)) # location invariance
-  #   testthat::expect_equal(rob_var(x, y, type=type), rob_var(x4, y, type=type)) # permutation invariance
-  # }))
+  for (type in types) {
+    testthat::expect_equal(rob_var(x, y, type=type), rob_var(y, x, type=type)) # switching x and y
+    testthat::expect_equal(rob_var(x, y, type=type), rob_var(x3, y, type=type)) # location invariance
+    testthat::expect_equal(rob_var(x, y, type=type), rob_var(x4, y, type=type)) # permutation invariance
+  }
 
   ##
   ## Check if the function returns 0 when all observations are constant
   ## and prints a warning if the observations are not.
   ##
 
-  # invisible(sapply(types, function(type) {-
-  #   testthat::expect_equal(suppressWarnings(rob_var(rep(1, 10), rep(1, 10), type=type)), 0)
-  #   testthat::expect_warning(rob_var(x, rep(1, 10), type=type))
-  # }))
+  for (type in types) {
+    testthat::expect_equal(suppressWarnings(rob_var(rep(1, 10), rep(1, 10), type=type)), 0)
+    testthat::expect_warning(rob_var(x, rep(1, 10), type=type))
+  }
 
   testthat::expect_error(rob_var(rep(c(1, 2), 5), c(rep(1, 9), 100), type="S1"))
 
@@ -111,8 +109,3 @@ testthat::test_that("Winsorized variance works correctly", {
 
 })
 
-# testthat::test_that("Asymmetric trimmed variance works correctly", {
-#
-#  ## TO-DO
-#
-# })
