@@ -4,5 +4,6 @@ man-roxygen
 ^R/XXX_asymTrimmedTest\.R$
 ^R/XXX_huberTest\.R$
 ^R/XXX_hybridTest\.R$
+^R/XXX_mTest\.R$
 ^doc$
 ^Meta$

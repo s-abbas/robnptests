@@ -16,8 +16,8 @@ at each end of the sample before calculating the mean.}
 }
 \value{
 A list containing the following items:
-\item{var}{The winsorized variance, and}
-\item{h}{the degrees of freedom used for tests based on trimmed means and the
+\item{var}{winsorized variance.}
+\item{h}{degrees of freedom used for tests based on trimmed means and the
 winsorized variance.}
 }
 \description{

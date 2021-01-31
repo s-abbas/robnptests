@@ -15,7 +15,7 @@
 #'
 #' @return Vector with permutation distribution of the test statistic specified by \code{type}.
 #'
-#' @export
+#' @keywords internal
 
 perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) {
   ## Sample sizes
@@ -64,7 +64,7 @@ perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) 
 #' @references
 #' \insertRef{MaeRouCro20robu}{robTests}
 #'
-#' @export
+#' @keywords internal
 
 mest_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep = NULL) {
   m <- length(x)
@@ -108,7 +108,7 @@ mest_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep = 
 #' @references
 #' \insertRef{PhiSmy10perm}{robTests}
 #'
-#' @export
+#' @keywords internal
 
 calc_perm_p_value <- function(statistic, distribution, m, n, randomization, n.rep, alternative) {
 

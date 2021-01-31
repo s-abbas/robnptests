@@ -11,15 +11,15 @@ trimmed_t(x, y, gamma = 0.2, delta = 0, na.rm = FALSE)
 
 \item{y}{a (non-empty) numeric vector of data values.}
 
-\item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
-on whether the test should be performed for a difference in location or in scale, default is
-\code{delta = 0} for location test and \code{delta = 1} for scale test.}
-
-\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
-
-\item{numeric}{value in [0, 0.5] specifying the fraction of observations to be
+\item{gamma}{numeric value in [0, 0.5] specifying the fraction of observations to be
 trimmed from each end of the sample before calculating the mean. Values
 of trim outside that range are taken as the nearest endpoint.}
+
+\item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
+on whether the test should be performed for a difference in location or in scale.
+The default is \code{delta = 0} for location test and \code{delta = 1} for scale test.}
+
+\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 }
 \value{
 A list containing the following components:

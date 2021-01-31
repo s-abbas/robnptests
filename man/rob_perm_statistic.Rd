@@ -2,7 +2,7 @@
 % Please edit documentation in R/testStatistics.R
 \name{rob_perm_statistic}
 \alias{rob_perm_statistic}
-\title{Robust permutation statistics based on medians}
+\title{Robust permutation statistics based on robust location estimators}
 \usage{
 rob_perm_statistic(
   x,
@@ -16,25 +16,31 @@ rob_perm_statistic(
 
 \item{y}{a (non-empty) numeric vector of data values.}
 
-\item{type}{desired test statistic, in \code{"D1S1"} (default), \code{"D2S1", "D2S1", "D2S2", "D3S3", "D3S4"},
-where "D1" to "D3" mark different estimators for the location shift and
-"S1" to "S4" are estimates for the scale of the samples; defaults to \code{"D1S1"}.}
+\item{type}{desired test statistic. It must be one of \code{"HL11"} (default),
+\code{"HL12", "HL21", "HL22", "MED1"}, and \code{"MED2"},
+ where "HL1", "HL2" and "MED" specify the location estimator
+ and the numbers \code{1} and \code{2} the scale estimator.
+ See the vignette (\code{vignette("robTests-vignette")}) for more
+ information.}
 
 \item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 }
 \value{
 A list containing the following components:
-        \item{statistic}{the selected test statistic}
-        \item{abs.statistic}{the absolute value of the selected test statistic}
-        \item{estimates}{estimate of location for each sample if available}
+        \item{statistic}{the selected test statistic.}
+        \item{abs.statistic}{the absolute value of the selected test statistic.}
+        \item{estimates}{estimate of location for each sample if available.}
 }
 \description{
-\code{rob_perm_statistic()} calculates test statistics for robust permutation tests based on medians.
+\code{rob_perm_statistic()} calculates test statistics for robust
+permutation/randomization tests based on the sample median, the one-sample
+Hodges-Lehmann estimator, or the two-sample Hodges-Lehmann estimator.
 }
 \details{
 The test statistics returned by \code{rob_perm_statistic} are of the form
          \deqn{D_i/S_j} where the D_i, i = 1,...,3, are different estimators of location and the S_j, j = 1,...,4 are
-         estimates for the mutual sample scale. See Fried and Dehling (2011) for details.
+         estimates for the mutual sample scale. See \insertCite{FriDeh11robu;textual}{robTests}
+         or the vignette (\code{vignette(robTests-vignette)}) for details.
 }
 \examples{
 ## Generate random samples
@@ -42,7 +48,7 @@ set.seed(108)
 x <- rnorm(20); y <- rnorm(20)
 
 ## Compute HL21 statistic
-rob_perm_statistic(x, y, type = "HL21")
+#rob_perm_statistic(x, y, type = "HL21")
 
 }
 \references{

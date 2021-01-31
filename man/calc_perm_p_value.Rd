@@ -26,19 +26,20 @@ calc_perm_p_value(
 \item{randomization}{logical value indicating whether the p-value should be computed from a permutation (\code{FALSE}) or a randomization (\code{TRUE}) distribution.}
 
 \item{n.rep}{an integer value specifying the number of random splits used to
-calculate the randomization distribution if \code{method = "randomization"},
-ignored if \code{method = "permutation"} or \code{method = "asymptotic"};
-default is \code{n.rep = 10000}.}
+calculate the randomization distribution if \code{method = "randomization"}.
+This argument is ignored if \code{method = "permutation"} or \code{method = "asymptotic"}.
+The default is \code{n.rep = 10000}.}
 
 \item{alternative}{a character string specifying the alternative hypothesis,
 must be one of "two.sided" (default), "greater" or "less".}
 }
 \value{
-p.value for the specified alternative.
+p-value for the specified alternative.
 }
 \description{
-\code{calc_perm_p_value} calculates the permutation p-value following Phipson & Smyth (2010).
+\code{calc_perm_p_value} calculates the permutation p-value following \insertCite{PhiSmy10perm;textual}{robTests}.
 }
 \references{
-\insertRef{SmyPhi10perm}{robTests}
+\insertRef{PhiSmy10perm}{robTests}
 }
+\keyword{internal}
