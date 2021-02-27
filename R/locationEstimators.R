@@ -1,6 +1,6 @@
 ## ----------------------------------------------------------------------------
-## Location estimators for univariate samples and
-## estimators for the location difference between two samples
+## Location estimators for univariate samples and estimators for the location
+## difference between two samples
 ## ----------------------------------------------------------------------------
 
 #' @title Trimmed mean
@@ -29,22 +29,29 @@
 #' @export
 
 trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
-  ## Error handling
+
+  ## Check input arguments ----
+  stopifnot(
+    !missing(x),
+    is.numeric(x),
+    is.numeric(gamma),
+    is.logical(na.rm)
+  )
+
   if (gamma < 0 || gamma > 0.5) {
-    stop ("gamma has to be in [0, 0.5]")
+    stop("'gamma' has to be in [0, 0.5].")
   }
 
-  ## NA handling
+  ## Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
-    return(NA)
+    return(NA_real_)
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
   }
 
-  ## Calculate trimmed mean
+  ## Calculate trimmed mean ----
   return(mean(x, trim = gamma))
 }
-
 
 
 #' @title Winsorized mean
