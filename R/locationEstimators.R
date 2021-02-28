@@ -32,14 +32,19 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 
   ## Check input arguments ----
   stopifnot(
-    !missing(x),
-    is.numeric(x),
-    is.numeric(gamma),
-    is.logical(na.rm)
+    "'x' is missing." = !missing(x),
+    "'x' must not be NULL." = !is.null(x),
+    "'gamma' must not be NULL." = !is.null(gamma),
+    "'na.rm' must not be NULL." = !is.null(na.rm),
+    "'x' has to a numeric vector." = is.numeric(x),
+    "'gamma' has to be a numeric value." = is.numeric(gamma),
+    "'na.rm' has to be a logical value." = is.logical(na.rm),
+    "'gamma' has to be a single value, not a vector of length >= 1." = identical(length(gamma), 1L),
+    "'na.rm' has to be a single value, not a vector of length >= 1." = identical(length(na.rm), 1L)
   )
 
-  if (gamma < 0 || gamma > 0.5) {
-    stop("'gamma' has to be in [0, 0.5].")
+  if ((gamma < 0) || (gamma > 0.5)) {
+    stop("'gamma' has to be a numeric value in [0, 0.5].")
   }
 
   ## Remove missing values in 'x' ----
@@ -76,32 +81,49 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' @export
 
 win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
-  ## Error handling
-  if (gamma < 0 || gamma > 0.5) {
-    stop ("gamma has to be in [0, 0.5]")
+
+  ## Check input arguments ----
+  stopifnot(
+    "'x' is missing." = !missing(x),
+    "'x' must not be NULL." = !is.null(x),
+    "'gamma' must not be NULL." = !is.null(gamma),
+    "'na.rm' must not be NULL." = !is.null(na.rm),
+    "'x' has to a numeric vector." = is.numeric(x),
+    "'gamma' has to be a numeric value." = is.numeric(gamma),
+    "'na.rm' has to be a logical value." = is.logical(na.rm),
+    "'gamma' has to be a single value, not a vector of length >= 1." = identical(length(gamma), 1L),
+    "'na.rm' has to be a single value, not a vector of length >= 1." = identical(length(na.rm), 1L)
+  )
+
+  if ((gamma < 0) || (gamma > 0.5)) {
+    stop("'gamma' has to be a numeric value in [0, 0.5].")
   }
 
-  ## NA handling
+  ## Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
-    return(NA)
+    return(NA_real_)
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
   }
 
-  n <- length(x)
+  ## Calculate winsorized mean ----
 
-  ## Number of trimmed observations
+  # For 'gamma == 0', the winsorized mean is identical to the sample mean
+  if (identical(gamma, 0)) {
+    return(mean(x))
+  }
+
+  # Number of trimmed observations
+  n <- length(x)
   r <- floor(gamma * n)
 
-  ## Replace first and last r observations
+  # Replace first and last r observations
   x.sort <- sort(x)
   x.sort[1:r] <- x.sort[r + 1]
   x.sort[(n - r + 1):n] <- x.sort[n - r]
 
-  ## Winsorized mean
-  res <- mean(x.sort)
-
-  return(res)
+  # Winsorized mean
+  return(mean(x.sort))
 }
 
 #' @title One-sample Hodges-Lehmann estimator
@@ -135,25 +157,33 @@ win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 
 hodges_lehmann <- function(x, na.rm = FALSE) {
 
-  ## Check arguments
-  stopifnot("x needs to be a numeric vector" = is.numeric(x))
+  ## Check input arguments ----
+  stopifnot(
+    "'x' is missing." = !missing(x),
+    "'x' must not be NULL." = !is.null(x),
+    "'na.rm' must not be NULL." = !is.null(na.rm),
+    "'x' has to a numeric vector." = is.numeric(x),
+    "'na.rm' has to be a logical value." = is.logical(na.rm),
+    "'x' needs at least 2 values." = (length(x) > 1),
+    "'na.rm' has to be a single value, not a vector of length >= 1." = identical(length(na.rm), 1L)
+  )
 
-  ## NA handling
+  ## Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
-    return(NA)
+    return(NA_real_)
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
   }
 
-  ## Pairwise means
+  ## Calculate one-sample Hodges-Lehmann estimate ----
+
+  # Compute pairwise means
   x.grid <- cbind(rep(1:length(x), each = length(x)), 1:length(x))
   x.diffs <- x.grid[x.grid[, 1] < x.grid[, 2], , drop = FALSE]
   mean.pairwise.sums <- (x[x.diffs[, 1]] + x[x.diffs[, 2]])/2
 
   ## Hodges-Lehmann estimate
-  res <- stats::median(mean.pairwise.sums)
-
-  return(res)
+  return(stats::median(mean.pairwise.sums))
 }
 
 
@@ -191,20 +221,33 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
 
 hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 
-  ## Check arguments
-  stopifnot("x and y need to be numeric vectors" = is.numeric(x) & is.numeric(y))
+  ## Check input arguments ----
+  stopifnot(
+    "'x' is missing." = !missing(x),
+    "'y' is missing." = !missing(y),
+    "'x' must not be NULL." = !is.null(x),
+    "'y' must not be NULL." = !is.null(y),
+    "'na.rm' must not be NULL." = !is.null(na.rm),
+    "'x' has to a numeric vector." = is.numeric(x),
+    "'y' has to a numeric vector." = is.numeric(y),
+    "'na.rm' has to be a logical value." = is.logical(na.rm),
+    "'na.rm' has to be a single value, not a vector of length >= 1." = identical(length(na.rm), 1L)
+  )
 
-  ## NA handling
   if (!na.rm & (any(is.na(x)) || any(is.na(y)))) {
-    return(NA)
+    return(NA_real_)
   } else if (na.rm & (any(is.na(x)) || any(is.na(y)))) {
     x <- as.vector(stats::na.omit(x))
     y <- as.vector(stats::na.omit(y))
   }
 
+  ## Calculate two-sample Hodges-Lehmann estimate ----
+
+  # Compute pairwise differences between the two samples
   diff <- expand.grid(x, y)
   res <- diff[, 1] - diff[, 2]
 
+  # Two-sample Hodges-Lehmann estimate
   return(stats::median(res))
 }
 
