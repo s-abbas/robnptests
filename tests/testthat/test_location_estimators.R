@@ -49,6 +49,10 @@ testthat::test_that("trimmed_mean works correctly", {
   testthat::expect_identical(trim_mean(x = x, gamma = 0.5),
                              mean(x = x, trim = 0.5)
   )
+
+  ## If all elements of 'x' are NA, the output needs to be NA
+  testthat::expect_identical(trim_mean(x = NA_real_, gamma = 0.2, na.rm = TRUE), NA_real_)
+  testthat::expect_identical(trim_mean(x = NA_real_, gamma = 0.2, na.rm = FALSE), NA_real_)
 })
 
 ## Winsorized mean ----
@@ -95,6 +99,10 @@ testthat::test_that("win_mean works correctly", {
   ## and to the sample mean if 'gamma == 0'
   testthat::expect_equal(win_mean(x = x, gamma = 0.05), 55.65)
   testthat::expect_equal(win_mean(x = x, gamma = 0), mean(x = x))
+
+  ## If all elements of 'x' are NA, the output needs to be NA
+  testthat::expect_identical(win_mean(x = NA_real_, gamma = 0.2, na.rm = TRUE), NA_real_)
+  testthat::expect_identical(win_mean(x = NA_real_, gamma = 0.2, na.rm = FALSE), NA_real_)
 })
 
 ## One-sample Hodges-Lehmann estimator ----
@@ -130,9 +138,13 @@ testthat::test_that("hodges_lehmann works correctly", {
 
   ## The computed value has to be identical to 7
   testthat::expect_equal(hodges_lehmann(x), 7)
+
+  ## If all elements of 'x' are NA, the output needs to be NA
+  testthat::expect_identical(hodges_lehmann(x = rep(NA_real_, 2, na.rm = TRUE)), NA_real_)
+  testthat::expect_identical(hodges_lehmann(x = rep(NA_real_, 2, na.rm = FALSE)), NA_real_)
 })
 
-## Two-sample Hodges-Lehmann estimator
+## Two-sample Hodges-Lehmann estimator ----
 testthat::test_that("hodges_lehmann_2sample works correctly", {
 
   ## Generate exemplary input vectors
@@ -181,3 +193,63 @@ testthat::test_that("hodges_lehmann_2sample works correctly", {
   # equal to its expected value under H_0 of two-sample Wilcoxon rank-sum test
   testthat::expect_equal(sum(rank(c(x, y))[1:m]), m * (m + n + 1)/2)
 })
+
+## M-estimator ----
+testthat::test_that("m_est works correctly", {
+
+  ## The input arguments need to be checked
+
+  # Generate exemplary input vector
+  set.seed(108)
+  x <- rnorm(10)
+
+  # Missing input arguments
+  testthat::expect_error(m_est(psi = "huber"), regexp = "'x' is missing.", fixed = TRUE)
+  testthat::expect_error(m_est(x = x), regexp = "'psi' is missing.", fixed = TRUE)
+
+  # Input arguments are NULL
+  testthat::expect_error(m_est(x = NULL, psi = "huber"), regexp = "'x' must not be NULL", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = NULL), regexp = "'psi' must not be NULL", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", k = NULL), regexp = "'k' must not be NULL", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", tol = NULL), regexp = "'tol' must not be NULL", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", max.it = NULL), regexp = "'max.it' must not be NULL", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", na.rm = NULL), regexp = "'na.rm' must not be NULL", fixed = TRUE)
+
+  # Input arguments are NA
+  testthat::expect_error(m_est(x = x, psi = NA)) # An error is thrown by .Mpsi.tuning.default(psi)
+  testthat::expect_error(m_est(x = x, psi = "huber", k = NA), regexp = "'k' must not be NA", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", tol = NA), regexp = "'tol' must not be NA", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", max.it = NA), regexp = "'max.it' must not be NA", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", na.rm = NA), regexp = "'na.rm' must not be NA", fixed = TRUE)
+
+  # Wrong data types
+  testthat::expect_error(m_est(x = as.character(x), psi = "huber"), regexp = "'x' has to a numeric vector.", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = 1), regexp = "'psi' has to a character value.", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", k = "1.345"), regexp = "'k' has to be a numeric value.", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", tol = "1e-06"), regexp = "'tol' has to be a numeric value.", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", max.it = "15"), regexp = "'max.it' has to be a numeric value.", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", na.rm = 1), regexp = "'na.rm' has to be a logical value.", fixed = TRUE)
+
+  # Length of input arguments
+  testthat::expect_error(m_est(x = x, psi = c("huber", "hampel", "bisquare"))) # An error is thrown by .Mpsi.tuning.defaul(psi)
+  testthat::expect_error(m_est(x = x, psi = "welsh"), regexp = "'psi' must be one of 'huber', 'hampel', or 'bisquare'.", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = c("tukey"))) # An error is thrown by .Mpsi.tuning.defaul(psi)
+  testthat::expect_error(m_est(x = x, psi = "huber", k = c(1.03, 1.345)), regexp = "'k' has to be a single value, not a vector of length >= 1.", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", tol = c(1e-06, 1e-10)), regexp = "'tol' has to be a single value, not a vector of length >= 1.", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", max.it = c(10, 15)), regexp = "'max.it' has to be a single value, not a vector of length >= 1.", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", na.rm = c(TRUE, FALSE)), regexp = "'na.rm' has to be a single value, not a vector of length >= 1.", fixed = TRUE)
+
+  ## Missing values should be removed correctly
+  testthat::expect_equal(m_est(x = c(x, NA), psi = "huber", na.rm = TRUE),
+                         m_est(x = x, psi = "huber")
+  )
+  testthat::expect_equal(m_est(x = c(x, NA), psi = "huber", na.rm = FALSE),
+                         NA_real_
+  )
+  testthat::expect_equal(m_est(x = c(x, NA), psi = "huber"),
+                         m_est(x = c(x, NA), psi = "huber", na.rm = FALSE)
+  )
+
+  ## TODO: Output needs to be tested.
+})
+
