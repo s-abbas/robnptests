@@ -36,6 +36,8 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
     "'x' must not be NULL." = !is.null(x),
     "'gamma' must not be NULL." = !is.null(gamma),
     "'na.rm' must not be NULL." = !is.null(na.rm),
+    "'gamma' must not be NA." = !is.na(gamma),
+    "'na.rm' must not be NA." = !is.na(na.rm),
     "'x' has to a numeric vector." = is.numeric(x),
     "'gamma' has to be a numeric value." = is.numeric(gamma),
     "'na.rm' has to be a logical value." = is.logical(na.rm),
@@ -49,6 +51,8 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 
   ## Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
+    return(NA_real_)
+  } else if (all(is.na(x))) {
     return(NA_real_)
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
@@ -88,6 +92,8 @@ win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
     "'x' must not be NULL." = !is.null(x),
     "'gamma' must not be NULL." = !is.null(gamma),
     "'na.rm' must not be NULL." = !is.null(na.rm),
+    "'gamma' must not be NA." = !is.na(gamma),
+    "'na.rm' must not be NA." = !is.na(na.rm),
     "'x' has to a numeric vector." = is.numeric(x),
     "'gamma' has to be a numeric value." = is.numeric(gamma),
     "'na.rm' has to be a logical value." = is.logical(na.rm),
@@ -101,6 +107,8 @@ win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 
   ## Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
+    return(NA_real_)
+  } else if (all(is.na(x))) {
     return(NA_real_)
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
@@ -162,6 +170,7 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
     "'x' is missing." = !missing(x),
     "'x' must not be NULL." = !is.null(x),
     "'na.rm' must not be NULL." = !is.null(na.rm),
+    "'na.rm' must not be NA." = !is.na(na.rm),
     "'x' has to a numeric vector." = is.numeric(x),
     "'na.rm' has to be a logical value." = is.logical(na.rm),
     "'x' needs at least 2 values." = (length(x) > 1),
@@ -170,6 +179,8 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
 
   ## Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
+    return(NA_real_)
+  } else if (all(is.na(x))) {
     return(NA_real_)
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
@@ -228,13 +239,17 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
     "'x' must not be NULL." = !is.null(x),
     "'y' must not be NULL." = !is.null(y),
     "'na.rm' must not be NULL." = !is.null(na.rm),
+    "'na.rm' must not be NA." = !is.na(na.rm),
     "'x' has to a numeric vector." = is.numeric(x),
     "'y' has to a numeric vector." = is.numeric(y),
     "'na.rm' has to be a logical value." = is.logical(na.rm),
     "'na.rm' has to be a single value, not a vector of length >= 1." = identical(length(na.rm), 1L)
   )
 
+  # Remove missing values in 'x' and 'y' ----
   if (!na.rm & (any(is.na(x)) || any(is.na(y)))) {
+    return(NA_real_)
+  } else if (all(is.na(x)) || all(is.na(y))) {
     return(NA_real_)
   } else if (na.rm & (any(is.na(x)) || any(is.na(y)))) {
     x <- as.vector(stats::na.omit(x))
@@ -267,6 +282,8 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 #' To compute the M-estimate, the iterative algorithm described in \insertCite{MarMarYoh06robu;textual}{robTests} is used.
 #' The variance is estimated as in \insertCite{Hub81robu;textual}{robTests}.
 #'
+#' If \code{max.it} contains decimal places, it is truncated.
+#'
 #'
 #' @return A list containing the components:
 #'         \item{est}{estimated mean.}
@@ -291,21 +308,59 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 #'
 #' @export
 
-m_est <- function(x, psi, k = robustbase::.Mpsi.tuning.default(psi), tol = 1e-6, max.it = 15, na.rm = TRUE) {
+m_est <- function(x, psi, k = robustbase::.Mpsi.tuning.default(psi), tol = 1e-6, max.it = 15, na.rm = FALSE) {
 
-  ## NA handling
+  ## Check input arguments ----
+  stopifnot(
+    "'x' is missing." = !missing(x),
+    "'psi' is missing." = !missing(psi),
+    "'x' must not be NULL." = !is.null(x),
+    "'psi' must not be NULL." = !is.null(psi),
+    "'k' must not be NULL." = !is.null(k),
+    "'tol' must not be NULL." = !is.null(tol),
+    "'max.it' must not be NULL." = !is.null(max.it),
+    "'na.rm' must not be NULL." = !is.null(na.rm),
+    "'psi' must not be NA." = !is.na(psi),
+    "'k' must not be NA." = !is.na(k),
+    "'tol' must not be NA." = !is.na(tol),
+    "'max.it' must not be NA." = !is.na(max.it),
+    "'na.rm' must not be NA." = !is.na(na.rm),
+    "'x' has to a numeric vector." = is.numeric(x),
+    "'psi' has to a character value." = is.character(psi),
+    "'k' has to be a numeric value." = is.numeric(k),
+    "'tol' has to be a numeric value." = is.numeric(tol),
+    "'max.it' has to be a numeric value." = is.numeric(max.it),
+    "'na.rm' has to be a logical value." = is.logical(na.rm),
+    "'psi' has to be a single value, not a vector of length >= 1." = identical(length(psi), 1L),
+    "'psi' must be one of 'huber', 'hampel', or 'bisquare'." = any(c("huber", "hampel", "bisquare") %in% psi),
+    "'k' has to be a single value, not a vector of length >= 1." = identical(length(k), 1L),
+    "'tol' has to be a single value, not a vector of length >= 1." = identical(length(tol), 1L),
+    "'max.it' has to be a single value, not a vector of length >= 1." = identical(length(max.it), 1L),
+    "'na.rm' has to be a single value, not a vector of length >= 1." = identical(length(na.rm), 1L),
+    "'tol' has to be a positive value." = tol > 0,
+    "'max.it' has to be a positive value." = max.it > 0
+  )
+
+  ## Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
-    return(NA)
+    return(NA_real_)
+  } else if (all(is.na(x))) {
+    return(NA_real_)
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
   }
 
-  ## Initial estimators
+  ## Remove decimal places from 'max.it' ----
+  max.it <- trunc(max.it)
+
+  ## Calculate M-estimate ----
+
+  # Initial estimators
   est.old <- stats::median(x)
   S <- stats::mad(x)
   n.it <- 1
 
-  ## Iterative algorithm for computing the M-estimator, see. e.g. Maronna et al. (2006, p. 39)
+  # Iterative algorithm for computing the M-estimator, see. e.g. Maronna et al. (2006, p. 39)
   repeat {
     w <- robustbase::Mwgt((x - est.old)/S, psi = psi, cc = k)
     est.new <- sum(w * x)/sum(w)
