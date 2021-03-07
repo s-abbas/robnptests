@@ -186,11 +186,15 @@ testthat::test_that("hodges_lehmann_2sample works correctly", {
 
   ## Computation of two-sample Hodges-Lehmann estimator
 
-  # Align second sample
-  x <- x - hodges_lehmann_2sample(x, y)
+  # hodges_lehmann_2sample(x, y) should be equal to -hodges_lehmann_2sample(y, x)
+  testthat::expect_equal(hodges_lehmann_2sample(x, y), -hodges_lehmann_2sample(y, x))
 
   # The two-sample Wilcoxon rank-sum statistic of aligned sampled needs to be
   # equal to its expected value under H_0 of two-sample Wilcoxon rank-sum test
+
+  # Align second sample
+  x <- x - hodges_lehmann_2sample(x, y)
+
   testthat::expect_equal(sum(rank(c(x, y))[1:m]), m * (m + n + 1)/2)
 })
 
