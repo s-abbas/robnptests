@@ -30,19 +30,26 @@
 #' @export
 
 win_var <- function(x, gamma = 0, na.rm = FALSE) {
-  ## Error handling
-  if (gamma < 0 || gamma > 0.5) {
-    stop ("gamma has to be in [0, 0.5]")
+
+  ## Check input arguments
+  stopifnot("'x' is missing." = !missing(x))
+
+  checkmate::assert_numeric(x, min.len = 2, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_number(gamma, na.ok = FALSE, finite = TRUE, null.ok = FALSE)
+  checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
+
+  if ((gamma < 0) || (gamma > 0.5)) {
+    stop("'gamma' has to be a numeric value in [0, 0.5].")
   }
 
-  ## NA handling
+  ## Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
-    return(NA)
+    return(list(var = NA_real_, h = NA_real_))
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
   }
 
-  ## Calculate winsorized variance
+  ## Calculate winsorized variance ----
   n <- length(x)
 
   r <- floor(gamma * n)
@@ -50,8 +57,8 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
   x.sort <- sort(x)
   x.lower <- x.sort[r + 1]
   x.upper <- x.sort[n - r]
-  x.sort[x.sort < x.lower] <- x.lower
-  x.sort[x.sort > x.upper] <- x.upper
+  x.sort[which(x.sort < x.lower)] <- x.lower
+  x.sort[which(x.sort > x.upper)] <- x.upper
 
   res <- 1 / (n - 1) * sum((x.sort - mean(x.sort)) ^ 2)
   h <- n - 2 * r
@@ -88,52 +95,50 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
 #'
 #' @export
 
-rob_var <- function(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4")) {
-  type <- match.arg(type)
+rob_var <- function(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE) {
 
-  ## Error handling
-  if (!(type %in% c("S1", "S2", "S3", "S4"))) {
-    stop("'type' needs to be one of 'S1', 'S2', 'S3', 'S4'.")
+  ## Check input arguments
+  stopifnot("'x' is missing." = !missing(x))
+  stopifnot("'y' is missing." = !missing(y))
+
+  checkmate::assert_numeric(x, min.len = 2, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_numeric(y, min.len = 2, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_character(type, min.chars = 1, ignore.case = FALSE, all.missing = FALSE, min.len = 1, null.ok = FALSE)
+  checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
+
+  ## Match 'type' ----
+  if (length(type) == 4) {
+    type <- type[1]
+  } else {
+    type <- type
   }
-  stopifnot(
-    is.numeric(x),
-    is.numeric(y)
-  )
+  checkmate::assert_choice(type, choices = c("S1", "S2", "S3", "S4"))
 
-  if ((length(unique(x)) == 1) | (length(unique(y)) == 1)) {
-    warning("At least one of the input vectors is constant.", call. = FALSE)
-  }
-
-  ## NA handling
+  # Remove missing values in 'x' and 'y' ----
   if (!na.rm & (any(is.na(x)) || any(is.na(y)))) {
-    return(NA)
+    return(NA_real_)
+  } else if (all(is.na(x)) || all(is.na(y))) {
+    return(NA_real_)
   } else if (na.rm & (any(is.na(x)) || any(is.na(y)))) {
     x <- as.vector(stats::na.omit(x))
     y <- as.vector(stats::na.omit(y))
   }
 
+  ## Compute scale estimates ----
   if (type == "S1") {
     xcomb <- utils::combn(x, 2)
     ycomb <- utils::combn(y, 2)
     xabs <- abs(xcomb[1, ] - xcomb[2, ])
     yabs <- abs(ycomb[1, ] - ycomb[2, ])
     est <- stats::median(c(xabs, yabs))
-
   } else if (type == "S2") {
     z <- c(x - stats::median(x), y - stats::median(y))
     zcomb <- utils::combn(z, 2)
     est <- stats::median(abs(zcomb[1, ] - zcomb[2, ]))
-
   } else  if (type == "S3") {
     est <- 2 * stats::median(c(abs(x - stats::median(x)), abs(y - stats::median(y))))
-
   } else if (type == "S4") {
     est <- stats::median(abs(x - stats::median(x)) + stats::median(abs(y - stats::median(y))))
-  }
-
-  if (est == 0 & (length(unique(x)) > 1 & length(unique(y)) > 1)) {
-    stop("Estimate of scale is 0 although the data is not constant. Consider using a different estimator or setting wobble = TRUE in the function call.",
-            call. = FALSE)
   }
 
   return(est)
