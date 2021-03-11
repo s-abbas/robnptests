@@ -2,7 +2,7 @@
 ## Calculation permutation distribution
 ## ----------------------------------------------------------------------------
 
-#' Permutation Distribution
+#' @title Permutation Distribution for robust statistics
 #'
 #' \code{perm_distribution()} calculates the permutation distribution for
 #' several test statistics.
@@ -26,7 +26,7 @@ perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) 
 
   checkmate::assert_numeric(x, min.len = 5, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
   checkmate::assert_numeric(y, min.len = 5, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
-  checkmate::assert_choice(type, choices = c("S1", "S2", "S3", "S4"), null.ok = FALSE)
+  checkmate::assert_choice(type, choices = c("HL11", "HL12", "HL21", "HL22", "MED1", "MED2"), null.ok = FALSE)
   checkmate::assert_flag(randomization, na.ok = FALSE, null.ok = FALSE)
   checkmate::assert_count(n.rep, na.ok = FALSE, positive = TRUE, null.ok = FALSE)
 
@@ -121,6 +121,7 @@ mest_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep = 
 
   return(distribution)
 }
+
 
 ## ----------------------------------------------------------------------------
 ## Calculate p-value for permutation tests
