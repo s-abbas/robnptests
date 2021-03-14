@@ -83,7 +83,7 @@ perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) 
 #'
 #' @keywords internal
 
-mest_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep = 10000) {
+m_est_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep = 10000) {
 
   ## Check input arguments
   stopifnot("'x' is missing." = !missing(x))

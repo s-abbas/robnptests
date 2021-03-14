@@ -88,7 +88,7 @@
 #
 #   estimates <- c(stats$estimates[1], m_est(y, psi = psi, k = k, max.it = 1)$est) #
 #
-#   distribution <- mest_perm_distribution(x = x, y = y - delta, randomization = randomization,
+#   distribution <- m_est_perm_distribution(x = x, y = y - delta, randomization = randomization,
 #                                          n.rep = n.rep, psi = psi, k1 = k)
 #   p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y),
 #                                randomization = randomization, n.rep = n.rep, alternative = alternative)

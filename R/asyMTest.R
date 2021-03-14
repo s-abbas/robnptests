@@ -221,7 +221,7 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     ## _________________________________________________________________________
 
     ## Permutation or randomization distribution
-    distribution <- mest_perm_distribution(x = x, y = y - delta, randomization = (method == "randomization"),
+    distribution <- m_est_perm_distribution(x = x, y = y - delta, randomization = (method == "randomization"),
                                            n.rep = n.rep, psi = psi, k = k)
 
     ## p-value
