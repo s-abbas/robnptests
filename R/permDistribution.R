@@ -75,6 +75,8 @@ perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) 
 #' @template randomization
 #' @template n_rep
 #'
+#' @details Missing values in either 'x' or 'y' are not allowed.
+#'
 #' @return Vector with permutation distribution of the test statistic specified by \code{psi}
 #'         and \code{k}.
 #'
@@ -91,8 +93,8 @@ m_est_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep =
   stopifnot("'psi' is missing." = !missing(k))
   stopifnot("'k' is missing." = !missing(psi))
 
-  checkmate::assert_numeric(x, min.len = 5, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
-  checkmate::assert_numeric(y, min.len = 5, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_numeric(x, min.len = 5, finite = TRUE, any.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_numeric(y, min.len = 5, finite = TRUE, any.missing = FALSE, null.ok = FALSE)
   checkmate::assert_choice(psi, choices = c("huber", "hampel", "tukey"), null.ok = FALSE)
   checkmate::assert_number(k, na.ok = FALSE, lower = 0, finite = TRUE, null.ok = FALSE)
   checkmate::assert_flag(randomization, na.ok = FALSE, null.ok = FALSE)
@@ -105,7 +107,7 @@ m_est_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep =
   ## For the randomization distribution, the value of 'n.rep' is bounded by the
   ## number of possible splits into two samples
   if (randomization & (n.rep > choose(m + n, m))) {
-    stop (paste0("'n.rep' must not be larger than ", choose(m + n, m), ", the number of all splits."))
+    stop (paste0("'n.rep' may not be larger than ", choose(m + n, m), ", the number of all splits."))
   }
 
   ## Splits in two samples
