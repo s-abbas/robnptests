@@ -13,6 +13,8 @@
 #' @template randomization
 #' @template n_rep
 #'
+#' @details Missing values in either 'x' or 'y' are not allowed.
+#'
 #' @return Vector with permutation distribution of the test statistic specified by \code{type}.
 #'
 #' @keywords internal
@@ -24,8 +26,8 @@ perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) 
   stopifnot("'y' is missing." = !missing(y))
   stopifnot("'type' is missing." = !missing(type))
 
-  checkmate::assert_numeric(x, min.len = 5, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
-  checkmate::assert_numeric(y, min.len = 5, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_numeric(x, min.len = 5, finite = TRUE, any.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_numeric(y, min.len = 5, finite = TRUE, any.missing = FALSE, null.ok = FALSE)
   checkmate::assert_choice(type, choices = c("HL11", "HL12", "HL21", "HL22", "MED1", "MED2"), null.ok = FALSE)
   checkmate::assert_flag(randomization, na.ok = FALSE, null.ok = FALSE)
   checkmate::assert_count(n.rep, na.ok = FALSE, positive = TRUE, null.ok = FALSE)
@@ -37,21 +39,23 @@ perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) 
   ## For the randomization distribution, the value of 'n.rep' is bounded by the
   ## number of possible splits into two samples
   if (randomization & (n.rep > choose(m + n, m))) {
-    stop (paste0("'n.rep' must not be larger than ", choose(m + n, m), ", the number of all splits."))
+    stop (paste0("'n.rep' may not be larger than ", choose(m + n, m), ", the number of all splits."))
   }
 
   ## Splits in two samples
+
+  # Full sample
+  complete <- c(x, y)
+
   if (!randomization) {
     ## Computation of the permutation distribution
-
-    complete <- c(x, y)
     splits <- gtools::combinations((m + n), m, 1:(m + n))
 
-    distribution <- apply(splits, 1, function(s) rob_perm_statistic(x = complete[s], y = complete[-s], type)$statistic)
+    distribution <- apply(splits, 1, function(s) rob_perm_statistic(x = complete[s], y = complete[-s], type = type)$statistic)
   } else if (randomization) {
     ## Computation of the randomization distribution
 
-    splits <- replicate(n.rep, sample(c(x, y)))
+    splits <- replicate(n.rep, sample(complete))
 
     distribution <- apply(splits, 2, function(s) rob_perm_statistic(x = s[1:m], y = s[(m + 1):(m + n)], type)$statistic)
   }
