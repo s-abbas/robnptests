@@ -90,13 +90,13 @@ m_est_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep =
   ## Check input arguments
   stopifnot("'x' is missing." = !missing(x))
   stopifnot("'y' is missing." = !missing(y))
-  stopifnot("'psi' is missing." = !missing(k))
-  stopifnot("'k' is missing." = !missing(psi))
+  stopifnot("'psi' is missing." = !missing(psi))
+  stopifnot("'k' is missing." = !missing(k))
 
   checkmate::assert_numeric(x, min.len = 5, finite = TRUE, any.missing = FALSE, null.ok = FALSE)
   checkmate::assert_numeric(y, min.len = 5, finite = TRUE, any.missing = FALSE, null.ok = FALSE)
-  checkmate::assert_choice(psi, choices = c("huber", "hampel", "tukey"), null.ok = FALSE)
-  checkmate::assert_number(k, na.ok = FALSE, lower = 0, finite = TRUE, null.ok = FALSE)
+  checkmate::assert_choice(psi, choices = c("huber", "hampel", "bisquare"), null.ok = FALSE)
+  checkmate::assert_numeric(k, lower = 0, len = ifelse(psi == "hampel", 3, 1), finite = TRUE, any.missing = FALSE, null.ok = FALSE)
   checkmate::assert_flag(randomization, na.ok = FALSE, null.ok = FALSE)
   checkmate::assert_count(n.rep, na.ok = FALSE, positive = TRUE, null.ok = FALSE)
 
