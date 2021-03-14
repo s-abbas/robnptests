@@ -173,6 +173,12 @@ calc_perm_p_value <- function(statistic, distribution, m, n, randomization, n.re
   checkmate::assert_count(n.rep, na.ok = FALSE, positive = TRUE, null.ok = FALSE)
   checkmate::assert_choice(alternative, choices = c("two.sided", "greater", "less"), null.ok = FALSE)
 
+  ## For the randomization distribution, the value of 'n.rep' is bounded by the
+  ## number of possible splits into two samples
+  if (randomization & (n.rep > choose(m + n, m))) {
+    stop (paste0("'n.rep' may not be larger than ", choose(m + n, m), ", the number of all splits."))
+  }
+
   ## Number of permutations leading to test statistic at least as extreme
   ## as the observed value
   A <- switch(alternative,
@@ -180,6 +186,14 @@ calc_perm_p_value <- function(statistic, distribution, m, n, randomization, n.re
               greater = sum(distribution >= statistic),
               less = sum(distribution <= statistic)
   )
+
+  ## For the approximation of the p-value to work, at 'n.rep' needs to be
+  ## at least as large as 'A'
+  if (randomization & (A > n.rep)) {
+    stop (paste0("'n.rep' needs to be at least as large as the number of observations
+                 which are at least as extreme as the observed value ", statistic,
+                 " of the test statistic."))
+  }
 
   ## Computation of p-value
   if (randomization) {
