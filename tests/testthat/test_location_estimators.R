@@ -238,7 +238,7 @@ testthat::test_that("m_est works correctly", {
   testthat::expect_error(m_est(x = x, psi = c("huber", "hampel", "bisquare"))) # An error is thrown by .Mpsi.tuning.defaul(psi)
   testthat::expect_error(m_est(x = x, psi = "welsh"), regexp = "'psi' must be one of 'huber', 'hampel', or 'bisquare'.", fixed = TRUE)
   testthat::expect_error(m_est(x = x, psi = c("tukey"))) # An error is thrown by .Mpsi.tuning.defaul(psi)
-  testthat::expect_error(m_est(x = x, psi = "huber", k = c(1.03, 1.345)), regexp = "'k' has to be a single value, not a vector of length >= 1.", fixed = TRUE)
+  testthat::expect_error(m_est(x = x, psi = "huber", k = c(1.03, 1.345)), regexp = "Coef. for psi function huber not of length 1", fixed = TRUE)
   testthat::expect_error(m_est(x = x, psi = "huber", tol = c(1e-06, 1e-10)), regexp = "'tol' has to be a single value, not a vector of length >= 1.", fixed = TRUE)
   testthat::expect_error(m_est(x = x, psi = "huber", max.it = c(10, 15)), regexp = "'max.it' has to be a single value, not a vector of length >= 1.", fixed = TRUE)
   testthat::expect_error(m_est(x = x, psi = "huber", na.rm = c(TRUE, FALSE)), regexp = "'na.rm' has to be a single value, not a vector of length >= 1.", fixed = TRUE)
