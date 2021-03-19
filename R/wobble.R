@@ -2,7 +2,7 @@
 ## Add random noise if too many values in the samples are equal
 ## ----------------------------------------------------------------------------
 
-#' @title Funtion that undiscretizes rounded samples
+#' @title Function that undiscretizes rounded samples
 #'
 #' @description
 #' \code{wobble} makes a discrete sample with duplicated values continuous by adding uniform noise to the
@@ -22,7 +22,6 @@
 #' Precisely, we determine the minimum number of digits d_min in the sample
 #' and then add random variables from the U[-0.5 10^(-d_min), 0.5 10^(-d_min)] distribution to each
 #' of the observations.
-#'
 #'
 #' @return
 #' A list of length two containing the modified \code{x} and \code{y}.
