@@ -126,7 +126,7 @@ trimmed_test <- function(x, y, gamma = 0.2,
 
   if (method %in% c("randomization", "permutation")) {
 
-    y <- y - delta
+    y <- y + delta
     complete <- c(x, y)
 
     if (method == "permutation") {
