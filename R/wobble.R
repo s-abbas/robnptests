@@ -83,6 +83,25 @@ wobble <- function(x, y, check = TRUE) {
 }
 
 
+wobble_observations <- function(x, y, wobble.seed) {
+  # Set seed for wobbling
+  if (is.null(wobble.seed)) {
+    wobble.seed <- sample(1e6, 1)
+  } else if (!is.null(wobble.seed)) {
+    set.seed(wobble.seed)
+  }
+
+  # Compute new observations
+  xy <- wobble(x, y)
+  x <- xy$x
+  y <- xy$y
+
+  warning(paste0("Added random noise to x and y. The seed is ",
+                 wobble.seed, "."))
+
+  return(list(x = x, y = y, wobble.seed = wobble.seed))
+}
+
 
 
 
