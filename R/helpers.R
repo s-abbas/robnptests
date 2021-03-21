@@ -67,3 +67,111 @@ remove_missing_values <- function(x, y, na.rm) {
 
 }
 
+select_method <- function(x, y, method, n.rep, test.name) {
+  if (length(method) == 1) {
+    return(list(method = method, n.rep = n.rep))
+  }
+
+  if (test.name %in% c("hl1_test", "hl2_test", "med_test", "trimmed_test", "m_test")) {
+    if (length(method) > 1 & identical(method, c("asymptotic", "permutation", "randomization"))) {
+      if (length(x) >= 30 & length(y) >= 30) {
+        return(list(method = "asymptotic", n.rep = NULL))
+      } else {
+        method <- "randomization"
+        n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
+      }
+    }
+  }
+
+  return(list(method = method, n.rep = n.rep))
+}
+
+compute_results_finite <- function(x, y, alternative, delta, method, n.rep, type) {
+
+  # Compute values of the test statistic and location estimates for both
+  # samples
+  perm.stats <- rob_perm_statistic(x, y + delta, type = type, na.rm = TRUE)
+
+  statistic <- perm.stats$statistic
+
+  if (type %in% c("HL11", "HL12", "MED1", "MED2")) {
+    estimates <- perm.stats$estimates
+    estimates[2] <- estimates[2] - delta
+  } else if (type %in% c("HL21", "HL22")) {
+    estimates <- hodges_lehmann_2sample(x, y)
+  }
+
+  # Compute permutation or randomization distribution
+  distribution <- suppressWarnings(
+    perm_distribution(x = x,
+                      y = y + delta,
+                      type = type,
+                      randomization = (method == "randomization"),
+                      n.rep = n.rep
+    )
+  )
+
+  ## Compute p-value
+  p.value <- calc_perm_p_value(
+    statistic,
+    distribution,
+    m = length(x),
+    n = length(y),
+    randomization = (method == "randomization"),
+    n.rep = n.rep,
+    alternative = alternative
+  )
+
+  return(list(statistic = statistic, estimates = estimates, p.value = p.value))
+}
+
+compute_results_asymptotic <- function(x, y, alternative, delta, type) {
+  # Sample sizes
+  m <- length(x)
+  n <- length(y)
+  lambda <- m/(m + n)
+
+  if (type %in% c("HL11", "HL12", "HL21", "HL22")) {
+    # Kernel-density estimation for density of pairwise differences
+    xcomb <- utils::combn(x, 2)
+    ycomb <- utils::combn(y + delta, 2)
+    pwdiffs <- c(xcomb[2, ] - xcomb[1, ], ycomb[2, ] - ycomb[1, ])
+    dens <- stats::density(pwdiffs)
+    dens <- stats::approxfun(dens)
+
+    int <- dens(0)
+
+    # Compute values of the test statistic and location estimates for both
+    # samples
+    if (type %in% c("HL11", "HL12")) {
+      estimates <- c(hodges_lehmann(x), hodges_lehmann(y + delta))
+      statistic <- sqrt(12 * lambda * (1 - lambda)) * int * sqrt(m + n) * (estimates[1] - estimates[2])
+      estimates[2] <- estimates[2] - delta
+    } else if (type %in% c("HL21", "HL22")) {
+      estimates <- hodges_lehmann_2sample(x, y + delta)
+      statistic <- sqrt(12 * lambda * (1 - lambda)) * int * sqrt(m + n) * estimates
+      estimates <- hodges_lehmann_2sample(x, y)
+    }
+  } else if (type %in% c("MED1", "MED2")) {
+    med.x <- stats::median(x, na.rm = TRUE)
+    med.y <- stats::median(y + delta, na.rm = TRUE)
+
+    diff <- c(x - med.x, y + delta - med.y)
+    dens <- stats::approxfun(stats::density(diff))
+    med <- dens(0)
+
+    estimates <- c(med.x, med.y - delta)
+
+    statistic <- sqrt(m*n/(m+n)) * 2 * med * (estimates[1] - estimates[2])
+  }
+
+  ## Compute p-value
+  p.value <- switch (alternative,
+                     two.sided = 2 * stats::pnorm(abs(statistic), lower.tail = FALSE),
+                     greater = stats::pnorm(statistic, lower.tail = FALSE),
+                     less = stats::pnorm(statistic, lower.tail = TRUE)
+  )
+
+  return(list(statistic = statistic, estimates = estimates, p.value = p.value))
+}
+
