@@ -39,6 +39,10 @@
 
 wobble <- function(x, y, check = TRUE) {
 
+  stopifnot("'x' is missing" = !missing(x),
+    "'y' is missing" = !missing(y)
+  )
+
   # Check input arguments:
   checkmate::assert_double(x, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE)
   checkmate::assert_double(y, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE)
@@ -72,12 +76,8 @@ wobble <- function(x, y, check = TRUE) {
                              function(x) nchar(unlist(strsplit(x, "\\."))[2])))
   digits[is.na(digits)] <- 0 # if the values are discrete we will get NA from the strsplit
 
-  # I propose we use the full range of values between the observations:
-  ## Add random noise from a uniform distribution
   z.wobble <- z + stats::runif(length(z),
                         -0.5*10^(-min(digits)), 0.5*10^(-min(digits)))
-
-  #z.wobble <- z + runif(length(z), min = -10^(-(max.digits + 1)), max = 10^(-(max.digits + 1)))
 
   return(list(x = z.wobble[1:length(x)], y = z.wobble[(length(x) + 1):length(c(x, y))]))
 }
