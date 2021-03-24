@@ -1,4 +1,4 @@
-preprocess_data <- function(x, y, na.rm, wobble, wobble.seed, var.test) {
+preprocess_data <- function(x, y, delta = delta, na.rm, wobble, wobble.seed, var.test) {
 
   if (na.rm) {
     if (any(is.na(x)) | any(is.na(y))) {
@@ -6,7 +6,7 @@ preprocess_data <- function(x, y, na.rm, wobble, wobble.seed, var.test) {
       y <- na.omit(y)
     }
   } else if (!na.rm) {
-    if (any(is.na(x)) | is.na(y)) {
+    if (any(is.na(x)) | any(is.na(y))) {
       return(NA)
     }
   }
@@ -17,7 +17,7 @@ preprocess_data <- function(x, y, na.rm, wobble, wobble.seed, var.test) {
           length(unique(y)) == length(y) &
           length(unique(c(x, y))) == length(c(x, y)))) {
 
-      if (missing(wobble.seed)) {
+      if (missing(wobble.seed) | is.null(wobble.seed)) {
         wobble.seed <- sample(1e6, 1)
       }
       set.seed(wobble.seed)
@@ -36,7 +36,7 @@ preprocess_data <- function(x, y, na.rm, wobble, wobble.seed, var.test) {
 
     if (any(c(x, y) == 0)) {
 
-      if (missing(wobble.seed)) wobble.seed <- sample(1e6, 1)
+      if (missing(wobble.seed) | is.null(wobble.seed)) wobble.seed <- sample(1e6, 1)
 
       set.seed(wobble.seed)
 
@@ -50,11 +50,12 @@ preprocess_data <- function(x, y, na.rm, wobble, wobble.seed, var.test) {
 
     x <- log(x^2)
     y <- log(y^2)
+    delta <- log(delta^2)
     ## The transform of Delta needs to be done in the function!!
   }
 
 
-  return(list(x = x, y = y))
+  return(list(x = x, y = y, delta = delta))
 }
 ## Rückgabe von NA auch in den Test-Funktionen selbst auffangen?
 
