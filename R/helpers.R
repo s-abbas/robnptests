@@ -1,3 +1,65 @@
+preprocess_data <- function(x, y, na.rm, wobble, wobble.seed, var.test) {
+
+  if (na.rm) {
+    if (any(is.na(x)) | any(is.na(y))) {
+      x <- na.omit(x)
+      y <- na.omit(y)
+    }
+  } else if (!na.rm) {
+    if (any(is.na(x)) | is.na(y)) {
+      return(NA)
+    }
+  }
+
+  if (wobble) {
+
+    if (!(length(unique(x)) == length(x) &
+          length(unique(y)) == length(y) &
+          length(unique(c(x, y))) == length(c(x, y)))) {
+
+      if (missing(wobble.seed)) {
+        wobble.seed <- sample(1e6, 1)
+      }
+      set.seed(wobble.seed)
+
+
+      xy <- wobble(x, y, check = FALSE)
+      x <- xy$x
+      y <- xy$y
+
+      warning(paste0("Added random noise to x and y. The seed is ",
+                     wobble.seed, "."))
+    }
+  }
+
+  if (var.test) {
+
+    if (any(c(x, y) == 0)) {
+
+      if (missing(wobble.seed)) wobble.seed <- sample(1e6, 1)
+
+      set.seed(wobble.seed)
+
+      xy <- wobble(x, y, check = FALSE)
+      x <- xy$x
+      y <- xy$y
+
+      warning(paste0("Added random noise before log transformation due to zeros in the sample. The seed is ",
+                     wobble.seed, "."))
+    }
+
+    x <- log(x^2)
+    y <- log(y^2)
+    ## The transform of Delta needs to be done in the function!!
+  }
+
+
+  return(list(x = x, y = y))
+}
+## Rückgabe von NA auch in den Test-Funktionen selbst auffangen?
+
+
+
 check_test_input <- function(x,
                              y,
                              alternative,
