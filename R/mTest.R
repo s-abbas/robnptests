@@ -101,110 +101,30 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
                    n.rep = 10000, na.rm = FALSE,
                    var.test = FALSE, wobble = FALSE, wobble.seed = NULL, ...) {
 
-  ## ___________________________________________________________________________
-  ## Error messages
-  ## ___________________________________________________________________________
+  ## Check input arguments ----
+  check_test_input(x = x, y = y, alternative = alternative, delta = delta,
+                   method = method, scale = scale, n.rep = n.rep, na.rm = na.rm,
+                   var.test = var.test, wobble = wobble, wobble.seed = wobble.seed,
+                   test.name = "m_test", psi = psi, k = k)
 
-  ## Number of repetitions for randomization distribution
-  stopifnot("'n.rep' needs to be an integer value" = n.rep%%1 == 0)
+  # Extract names of data sets ----
+  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
-  ## Data types of x and y
-  stopifnot("'x' and 'y' need to be numeric vectors" = is.numeric(x) & is.numeric(y))
-
-
-  ## alternative
-  if (!all((alternative %in% c("two.sided", "greater", "less")))) {
-    stop (" 'alternative' must be one of 'two.sided', 'greater' or 'less'. ")
-  }
-
-  ## delta
-  if (!missing(delta) && (length(delta) != 1 || is.na(delta))) {
-    stop ("'delta' must be a single number.")
-  }
-
-  ## method
-  if (!all((method %in% c("asymptotic", "permutation", "randomization")))) {
-    stop (" 'method' must be one of 'asymptotic', 'permutation' or 'randomization'. ")
-  }
-
-  ## psi
-  if (!all((psi %in% c("huber", "hampel", "bisquare")))) {
-    stop (" 'psi' must be one of 'huber', 'hampel' or 'bisquare'. ")
-  }
-
-  ## ___________________________________________________________________________
-  ## Extract default argument values
-  ## ___________________________________________________________________________
-
+  ## Match 'alternative' and 'scale' ----
+  # 'method' not matched because computation of p-value depends on sample sizes
+  # if no value is specified by the user
   alternative <- match.arg(alternative)
   psi <- match.arg(psi)
 
-  ## ___________________________________________________________________________
-  ## Check and modify samples
-  ## ___________________________________________________________________________
+  prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
+                          wobble = wobble, wobble.seed = wobble.seed,
+                          var.test = var.test)
+  if (!all(is.na(prep))) {
+    x <- prep$x; y <- prep$y; delta <- prep$delta
+  } else return(NA)
 
-  ## NA handling
-  if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
-    return(NA)
-  } else if (na.rm & (any(is.na(x)) | any(is.na(y)))) {
-    x <- as.numeric(stats::na.omit(x))
-    y <- as.numeric(stats::na.omit(y))
-  }
 
-  ## Check sample sizes
-  if (length(x) < 5 || length(y) < 5) {
-    stop("Both samples need at least 5 non-missing values.")
-  }
-
-  ## Add random noise if user wants to wobble
-  if (wobble) {
-
-    if (is.null(wobble.seed)) wobble.seed <- sample(1e6, 1)
-    set.seed(wobble.seed)
-
-    xy <- wobble(x, y)
-    x <- xy$x
-    y <- xy$y
-
-    warning(paste0("Added random noise to x and y. The seed is ",
-                   wobble.seed, "."))
-  }
-
-  ## If necessary: Transformation to test for difference in scale
-  if (var.test) {
-    if (any(c(x, y) == 0)) {
-
-      if (is.null(wobble.seed)) {
-        wobble.seed <- sample(1e6, 1)
-      }
-      set.seed(wobble.seed)
-
-      xy <- wobble(x, y, check = FALSE)
-      x <- xy$x
-      y <- xy$y
-
-      warning(paste0("Added random noise before log transformation due to zeros in the sample. The seed is ",
-                     wobble.seed, "."))
-    }
-    x <- log(x^2)
-    y <- log(y^2)
-    delta <- log(delta^2)
-  }
-
-  ## ___________________________________________________________________________
-  ## Set method for computation of p-value if not specified by user
-  ## ___________________________________________________________________________
-
-  ## The method is automatically selected based on the sample sizes
-  if (length(method) > 1 & identical(method, c("asymptotic", "permutation", "randomization"))) {
-    if (length(x) >= 30 & length(y) >= 30) {
-      method <- "asymptotic"
-    }
-    else {
-      method <- "randomization"
-      n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
-    }
-  }
+  method <- select_method(x = x, y = y, method = method, test.name = "m_test")
 
   ## ___________________________________________________________________________
   ## Test decision
@@ -243,9 +163,6 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   ## ___________________________________________________________________________
   ## Specify output
   ## ___________________________________________________________________________
-
-  ## Names of data sets
-  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
   ## Names of estimates
   if (var.test) {
