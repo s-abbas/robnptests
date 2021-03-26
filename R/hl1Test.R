@@ -126,7 +126,11 @@ hl1_test <- function(x,
 
   method <- select_method(x = x, y = y, method = method, test.name = "hl1_test")
 
-  type <- ifelse(scale == "S1", "HL11", "HL12")
+  if (scale == "S1") {
+    type <- "HL11"
+  } else if (scale == "S2") {
+    type <- "HL12"
+  } else stop(" 'scale' must one of 'S1' and 'S2' ")
 
   if (method %in% c("permutation", "randomization")) {
     ## Set n.rep

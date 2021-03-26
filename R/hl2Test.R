@@ -92,6 +92,12 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
                      scale = c("S1", "S2"), n.rep = 10000,  na.rm = FALSE,
                      var.test = FALSE, wobble = FALSE, wobble.seed = NULL) {
 
+  ## Check input arguments ----
+  check_test_input(x = x, y = y, alternative = alternative, delta = delta,
+                   method = method, scale = scale, n.rep = n.rep, na.rm = na.rm,
+                   var.test = var.test, wobble = wobble, wobble.seed = wobble.seed,
+                   test.name = "hl2_test")
+
   # Extract names of data sets ----
   dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
@@ -108,10 +114,14 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     x <- prep$x; y <- prep$y; delta <- prep$delta
   } else return(NA)
 
+  if (scale == "S1") {
+    type <- "HL21"
+  } else if (scale == "S2") {
+    type <- "HL22"
+  } else stop(" 'scale' must one of 'S1' and 'S2' ")
 
   method <- select_method(x = x, y = y, method = method, test.name = "hl2_test")
 
-  type <- ifelse(scale == "S1", "HL21", "HL22")
 
   if (method %in% c("permutation", "randomization")) {
     ## Set n.rep
