@@ -119,7 +119,7 @@ hl1_test <- function(x,
   prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
                     wobble = wobble, wobble.seed = wobble.seed,
                     var.test = var.test)
-  if (!is.na(prep)) {
+  if (!all(is.na(prep))) {
     x <- prep$x; y <- prep$y; delta <- prep$delta
   } else return(NA)
 

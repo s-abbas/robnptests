@@ -92,139 +92,45 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
                      scale = c("S1", "S2"), n.rep = 10000,  na.rm = FALSE,
                      var.test = FALSE, wobble = FALSE, wobble.seed = NULL) {
 
-  ## Check arguments
-  stopifnot("n.rep needs to be an integer value" = n.rep%%1 == 0)
-  stopifnot("x and y need to be numeric vectors" = is.numeric(x) & is.numeric(y))
+  # Extract names of data sets ----
+  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
+  ## Match 'alternative' and 'scale' ----
+  # 'method' not matched because computation of p-value depends on sample sizes
+  # if no value is specified by the user
   alternative <- match.arg(alternative)
   scale <- match.arg(scale)
 
-  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
-
-  if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
-    return(NA)
-  } else if (na.rm & (any(is.na(x)) | any(is.na(y)))) {
-    x <- as.numeric(stats::na.omit(x))
-    y <- as.numeric(stats::na.omit(y))
-  }
-
-  if (length(x) < 5 || length(y) < 5) {
-    stop("Both samples need at least 5 non-missing values.")
-  }
-
-  if (wobble) {
-
-    if (is.null(wobble.seed)) wobble.seed <- sample(1e6, 1)
-    set.seed(wobble.seed)
-
-    xy <- wobble(x, y)
-    x <- xy$x
-    y <- xy$y
-
-    warning(paste0("Added random noise to x and y. The seed is ",
-                   wobble.seed, "."))
-  }
-
-  ## If necessary: Transformation to test for difference in scale
-  if (var.test) {
-
-    if (any(c(x, y) == 0)) {
-
-      if (is.null(wobble.seed)) wobble.seed <- sample(1e6, 1)
-      set.seed(wobble.seed)
-
-      xy <- wobble(x, y, check = FALSE)
-      x <- xy$x
-      y <- xy$y
-
-      warning(paste0("Added random noise before log transformation due to zeros in the sample. The seed is ",
-                     wobble.seed, "."))
-    }
-
-    x <- log(x^2)
-    y <- log(y^2)
-    delta <- log(delta^2)
-  }
-
-  if (scale == "S1") {
-    type <- "HL21"
-  } else if (scale == "S2") {
-    type <- "HL22"
-  } else stop(" 'scale' must one of 'S1' and 'S2' ")
+  prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
+                          wobble = wobble, wobble.seed = wobble.seed,
+                          var.test = var.test)
+  if (!all(is.na(prep))) {
+    x <- prep$x; y <- prep$y; delta <- prep$delta
+  } else return(NA)
 
 
-  ## Error handling
-  if (!missing(delta) && (length(delta) != 1 || is.na(delta))) {
-    stop ("'delta' must be a single number.")
-  }
+  method <- select_method(x = x, y = y, method = method, test.name = "hl2_test")
 
-  if (!all(method %in% c("asymptotic", "permutation", "randomization"))) {
-    stop (" 'method' must be one of 'asymptotic', 'permutation' or 'randomization'. ")
-  }
-
-  ## If no choice is made regarding the computation of the p-value, the method
-  ## is automatically selected based on the sample sizes
-  if ((length(method) > 1) & identical(method, c("asymptotic", "permutation", "randomization"))) {
-    if (length(x) >= 30 & length(y) >= 30) {
-      method <- "asymptotic"
-    }
-    else {
-      method <- "randomization"
-      n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
-    }
-  }
+  type <- ifelse(scale == "S1", "HL21", "HL22")
 
   if (method %in% c("permutation", "randomization")) {
-    ## Exact HL2-test using permutation distribution
+    ## Set n.rep
+    n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
+    ## Test decision for permutation or randomization test ----
+    test.results <- compute_results_finite(x = x, y = y, alternative = alternative,
+                                           delta = delta, method = method, type = type,
+                                           n.rep = n.rep)
 
-    ## Results of rob_perm_statistic
-    perm.stats <- rob_perm_statistic(x, y + delta, type = type, na.rm = na.rm)
-
-    statistic <- perm.stats$statistic
-    # estimates <- perm.stats$estimates
-
-    estimates <- hodges_lehmann_2sample(x, y)
-
-    ## Calculate permutation distribution
-    if (method == "randomization") {
-      randomization <- TRUE
-    } else {
-      randomization <- FALSE
-    }
-
-    distribution <- suppressWarnings(perm_distribution(x = x, y = y + delta, type = type,
-                                      randomization = (method == "randomization"),
-                                      n.rep = n.rep))
-
-    ## p-value
-    p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y), randomization = (method == "randomization"), n.rep = n.rep, alternative = alternative)
-
-    } else if (method == "asymptotic") {
-
-    m <- length(x)
-    n <- length(y)
-    lambda <- m/(m + n)
-
-    ## Estimation of density at zero for pairwise differences
-    xcomb <- utils::combn(x, 2)
-    ycomb <- utils::combn(y + delta, 2)
-
-    pwdiffs <- c(xcomb[2, ] - xcomb[1, ], ycomb[2, ] - ycomb[1, ])
-
-    dens <- stats::density(pwdiffs)
-    int <- stats::approxfun(dens)(0)
-
-    est <- hodges_lehmann_2sample(x, y + delta)
-    statistic <- sqrt(12 * lambda * (1 - lambda)) * int * sqrt(m + n) * est
-
-    estimates <- hodges_lehmann_2sample(x, y)
-
-    p.value <- switch (alternative,
-                       two.sided = 2 * stats::pnorm(abs(statistic), lower.tail = FALSE),
-                       greater = stats::pnorm(statistic, lower.tail = FALSE),
-                       less = stats::pnorm(statistic, lower.tail = TRUE)
-    )
+  } else if (method == "asymptotic") {
+    ## Test decision for asymptotic test ----
+    test.results <- compute_results_asymptotic(x = x, y = y, alternative = alternative,
+                                               delta = delta, type = type)
   }
+
+  statistic <- test.results$statistic
+  estimates <- test.results$estimates
+  p.value   <- test.results$p.value
+
 
   ## Assign names to results
   if (var.test) {
