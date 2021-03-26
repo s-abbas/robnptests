@@ -100,7 +100,14 @@ check_test_input <- function(x,
   checkmate::assert_numeric(y, finite = TRUE, all.missing = FALSE, min.len = 5, null.ok = FALSE)
   checkmate::assert_subset(alternative, choices = c("two.sided", "greater", "less"), empty.ok = FALSE)
   checkmate::assert_subset(method, choices = c("asymptotic", "permutation", "randomization"), empty.ok = FALSE)
-  checkmate::assert_subset(scale, choices = c("S1", "S2"), empty.ok = FALSE)
+
+  ###
+  if (test.name %in% c("hl1_test", "hl2_test")) {
+    checkmate::assert_subset(scale, choices = c("S1", "S2"), empty.ok = FALSE)
+  } else if (test.name == "med_test") {
+    checkmate::assert_subset(scale, choices = c("S3", "S4"), empty.ok = FALSE)
+  }
+  ###
   checkmate::assert_count(n.rep, na.ok = FALSE, positive = TRUE)
   checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
   checkmate::assert_flag(var.test, na.ok = FALSE, null.ok = FALSE)
