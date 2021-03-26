@@ -1,4 +1,20 @@
-preprocess_data <- function(x, y, delta = delta, na.rm, wobble, wobble.seed, var.test) {
+#' Preprocess data for the robust two sample tests
+#'
+#' The function performs all the necessary preprocessing steps for the data.
+#'
+#' @template x
+#' @temlate y
+#' @template delta
+#' @template na_rm
+#' @template wobble
+#' @template seed
+#' @template var_test
+#'
+#' @returns A named list containing (the possibly transformed) \code{x}, \code{y} and \code{delta}
+#'
+#' @keywords internal
+
+preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, var.test) {
 
   if (na.rm) {
     if (any(is.na(x)) | any(is.na(y))) {
@@ -130,23 +146,22 @@ remove_missing_values <- function(x, y, na.rm) {
 
 }
 
-select_method <- function(x, y, method, n.rep, test.name) {
+select_method <- function(x, y, method, test.name) {
   if (length(method) == 1) {
-    return(list(method = method, n.rep = n.rep))
+    return(method)
   }
 
   if (test.name %in% c("hl1_test", "hl2_test", "med_test", "trimmed_test", "m_test")) {
     if (length(method) > 1 & identical(method, c("asymptotic", "permutation", "randomization"))) {
       if (length(x) >= 30 & length(y) >= 30) {
-        return(list(method = "asymptotic", n.rep = NULL))
+        method <- "asymptotic"
       } else {
         method <- "randomization"
-        n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
       }
     }
   }
 
-  return(list(method = method, n.rep = n.rep))
+  return(method)
 }
 
 compute_results_finite <- function(x, y, alternative, delta, method, n.rep, type) {
