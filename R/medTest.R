@@ -94,132 +94,55 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
                      na.rm = FALSE, var.test = FALSE,
                      wobble = FALSE, wobble.seed = NULL) {
 
-  ## Check arguments
-  stopifnot("n.rep needs to be an integer value" = n.rep%%1 == 0)
-  stopifnot("x and y need to be numeric vectors" = is.numeric(x) & is.numeric(y))
+  ## Check input arguments ----
+  check_test_input(x = x, y = y, alternative = alternative, delta = delta,
+                   method = method, scale = scale, n.rep = n.rep, na.rm = na.rm,
+                   var.test = var.test, wobble = wobble, wobble.seed = wobble.seed,
+                   test.name = "med_test")
 
+  # Extract names of data sets ----
+  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
+
+  ## Match 'alternative' and 'scale' ----
+  # 'method' not matched because computation of p-value depends on sample sizes
+  # if no value is specified by the user
   alternative <- match.arg(alternative)
   scale <- match.arg(scale)
 
-  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
+  prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
+                          wobble = wobble, wobble.seed = wobble.seed,
+                          var.test = var.test)
 
-  if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
-    return(NA)
-  } else if (na.rm & (any(is.na(x)) | any(is.na(y)))) {
-    x <- as.numeric(stats::na.omit(x))
-    y <- as.numeric(stats::na.omit(y))
-  }
-
-  if (length(x) < 5 || length(y) < 5) {
-    stop("Both samples need at least 5 non-missing values.")
-  }
-
-
-  if (wobble) {
-
-    if (is.null(wobble.seed)) wobble.seed <- sample(1e6, 1)
-    set.seed(wobble.seed)
-
-    xy <- wobble(x, y)
-    x <- xy$x
-    y <- xy$y
-
-    warning(paste0("Added random noise to x and y. The seed is ",
-                   wobble.seed, "."))
-  }
-
-  ## If necessary: Transformation to test for difference in scale
-  if (var.test) {
-
-    if (any(c(x, y) == 0)) {
-
-      if (is.null(wobble.seed)) wobble.seed <- sample(1e6, 1)
-      set.seed(wobble.seed)
-
-      xy <- wobble(x, y, check = FALSE)
-      x <- xy$x
-      y <- xy$y
-
-      warning(paste0("Added random noise before log transformation due to zeros in the sample. The seed is ",
-                     wobble.seed, "."))
-    }
-
-    x <- log(x^2)
-    y <- log(y^2)
-    delta <- log(delta^2)
-  }
+  if (!all(is.na(prep))) {
+    x <- prep$x; y <- prep$y; delta <- prep$delta
+  } else return(NA)
 
   if (scale == "S3") {
     type <- "MED1"
   } else if (scale == "S4") {
     type <- "MED2"
-    } else stop(" 'scale' must one of 'S3' and 'S4' ")
+  } else stop(" 'scale' must one of 'S3' and 'S4' ")
 
-  ## Error handling
-  if (!missing(delta) && (length(delta) != 1 || is.na(delta))) {
-    stop ("'delta' must be a single number.")
-  }
-
-  if (length(method) > 1 & identical(method, c("asymptotic", "permutation", "randomization"))) {
-    if (length(x) >= 30 & length(y) >= 30) method <- "asymptotic"
-    else method <- "randomization"
-  }
-
-  if (!(method %in% c("asymptotic", "permutation", "randomization"))) {
-    stop (" 'method' must be one of 'asymptotic', 'permutation' or 'randomization'. ")
-  }
+  method <- select_method(x = x, y = y, method = method, test.name = "med_test")
 
   if (method %in% c("permutation", "randomization")) {
-
-    ## Results of rob_perm_statistic
-    perm.stats <- rob_perm_statistic(x, y + delta, type = type, na.rm = na.rm)
-
-    statistic <- perm.stats$statistic
-    estimates <- perm.stats$estimates
-
-    if (delta != 0) estimates[2] <- stats::median(y)
-
-    ## Calculate permutation distribution
-    # if (method == "randomization") {
-    #   randomization <- TRUE
-    # } else {
-    #   randomization <- FALSE
-    # }
-
-    distribution <- suppressWarnings(perm_distribution(x = x, y = y + delta, type = type,
-                                      randomization = (method == "randomization"),
-                                      n.rep = n.rep))
-
-    ## p-value
-    p.value <- calc_perm_p_value(statistic, distribution, m = length(x),
-                                 n = length(y), randomization = (method == "randomization"), n.rep = n.rep,
-                                 alternative = alternative)
+    ## Set n.rep
+    n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
+    ## Test decision for permutation or randomization test ----
+    test.results <- compute_results_finite(x = x, y = y, alternative = alternative,
+                                           delta = delta, method = method, type = type,
+                                           n.rep = n.rep)
 
   } else if (method == "asymptotic") {
-
-    med.x <- stats::median(x, na.rm = na.rm)
-    med.y <- stats::median(y + delta, na.rm = na.rm)
-
-    diff <- c(x - med.x, y + delta - med.y)
-
-    dens <- stats::approxfun(stats::density(diff))
-    med <- dens(0)
-
-    m <- length(x)
-    n <- length(y)
-
-    if (delta != 0) estimates <- c(med.x, stats::median(y)) else estimates <- c(med.x, med.y)
-    est <- med.x - med.y
-
-    statistic <- sqrt(m*n/(m+n)) * 2 * med * est
-
-    p.value <- switch (alternative,
-                       two.sided = 2 * stats::pnorm(abs(statistic), lower.tail = FALSE),
-                       greater = stats::pnorm(statistic, lower.tail = FALSE),
-                       less = stats::pnorm(statistic, lower.tail = TRUE)
-    )
-
+    ## Test decision for asymptotic test ----
+    test.results <- compute_results_asymptotic(x = x, y = y, alternative = alternative,
+                                               delta = delta, type = type)
   }
+
+  statistic <- test.results$statistic
+  estimates <- test.results$estimates
+  p.value   <- test.results$p.value
+
 
   ## Assign names to results
 
@@ -235,7 +158,8 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   names(statistic) <- ifelse(var.test, "S", "D")
 
   if (method == "randomization") {
-    method = "Randomization test based on sample medians"
+    method = paste("Randomization test based on sample medians using", n.rep,
+                   "random permutations")
   } else if (method == "permutation") {
     method = "Exact permutation test based on sample medians"
   } else method = "Asymptotic test based on sample medians"
