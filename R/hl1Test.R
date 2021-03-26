@@ -102,24 +102,13 @@ hl1_test <- function(x,
                      wobble.seed = NULL) {
 
   ## Check input arguments ----
-  checkmate::assert_numeric(x, finite = TRUE, all.missing = FALSE, min.len = 5, null.ok = FALSE)
-  checkmate::assert_numeric(y, finite = TRUE, all.missing = FALSE, min.len = 5, null.ok = FALSE)
-  checkmate::assert_subset(alternative, choices = c("two.sided", "greater", "less"))
-  checkmate::assert_character(alternative, null.ok = FALSE)
-  checkmate::assert_subset(method, choices = c("asymptotic", "permutation", "randomization"))
-  checkmate::assert_character(method, null.ok = FALSE)
-  checkmate::assert_subset(scale, choices = c("S1", "S2"))
-  checkmate::assert_character(scale, null.ok = FALSE)
-  checkmate::assert_count(n.rep, na.ok = FALSE, positive = TRUE)
-  checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
-  checkmate::assert_flag(var.test, na.ok = FALSE, null.ok = FALSE)
-  if (var.test) {
-    checkmate::assert_numeric(delta, lower = 0, finite = TRUE, any.missing = FALSE, len = 1, null.ok = FALSE)
-  } else if (!var.test) {
-    checkmate::assert_numeric(delta, finite = TRUE, any.missing = FALSE, len = 1, null.ok = FALSE)
-  }
-  checkmate::assert_flag(wobble, na.ok = FALSE, null.ok = FALSE)
-  checkmate::assert_numeric(wobble.seed, finite = TRUE, any.missing = FALSE, len = 1, null.ok = TRUE)
+  check_test_input(x = x, y = y, alternative = alternative, delta = delta,
+                   method = method, scale = scale, n.rep = n.rep, na.rm = na.rm,
+                   var.test = var.test, wobble = wobble, wobble.seed = wobble.seed,
+                   test.name = "hl1_test")
+
+  # Extract names of data sets ----
+  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
   ## Match 'alternative' and 'scale' ----
   # 'method' not matched because computation of p-value depends on sample sizes
@@ -127,156 +116,37 @@ hl1_test <- function(x,
   alternative <- match.arg(alternative)
   scale <- match.arg(scale)
 
-  ## Remove missing values in 'x' and 'y' ----
-  if (!na.rm & (any(is.na(x)) || any(is.na(y)))) {
-    return(NA_real_)
-  } else if (na.rm & (any(is.na(x)) || any(is.na(y)))) {
-    x <- as.vector(stats::na.omit(x))
-    y <- as.vector(stats::na.omit(y))
+  prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
+                    wobble = wobble, wobble.seed = wobble.seed,
+                    var.test = var.test)
+  if (!is.na(prep)) {
+    x <- prep$x; y <- prep$y; delta <- prep$delta
+  } else return(NA)
 
-    # After removing missing values, both samples need at lest length 5
-    if (length(x) < 5 || length(y) < 5) {
-      stop("Both samples need at least 5 non-missing values.")
-    }
-  }
 
-  ## Wobbling ----
-  if (wobble) {
+  method <- select_method(x = x, y = y, method = method, test.name = "hl1_test")
 
-    # Set seed for wobbling
-    if (is.null(wobble.seed)) {
-      wobble.seed <- sample(1e6, 1)
-    } else if (!is.null(wobble.seed)) {
-      set.seed(wobble.seed)
-    }
-
-    # Compute new observations
-    xy <- wobble(x, y)
-    x <- xy$x
-    y <- xy$y
-
-    warning(paste0("Added random noise to x and y. The seed is ",
-                   wobble.seed, "."))
-  }
-
-  ## Transformation in case of 'var.test = TRUE' ----
-  if (var.test) {
-
-    if (any(c(x, y) == 0)) {
-      # Observations have to be != 0, otherwise random noise is added
-      if (is.null(wobble.seed)) {
-        wobble.seed <- sample(1e6, 1)
-      } else if (!is.null(wobble.seed)) {
-        set.seed(wobble.seed)
-      }
-
-      # Compute new observations
-      xy <- wobble(x, y)
-      x <- xy$x
-      y <- xy$y
-
-      warning(paste0("Added random noise before log transformation due to zeros in the sample. The seed is ",
-                     wobble.seed, "."))
-    }
-    # Transform observations
-    x <- log(x^2)
-    y <- log(y^2)
-    delta <- log(delta^2)
-  }
-
-  ## Select test statistic ----
-  if (scale == "S1") {
-    type <- "HL11"
-  } else if (scale == "S2") {
-    type <- "HL12"
-  }
-
-  ## For large values of m and n asymptotic test ----
-  ## if not stated otherwise
-  if (length(method) > 1 & identical(method, c("asymptotic", "permutation", "randomization"))) {
-    if (length(x) >= 30 & length(y) >= 30) {
-      method <- "asymptotic"
-    }
-    else {
-      method <- "randomization"
-      n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
-    }
-  }
+  type <- ifelse(scale == "S1", "HL11", "HL12")
 
   if (method %in% c("permutation", "randomization")) {
+    ## Set n.rep
+    n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
     ## Test decision for permutation or randomization test ----
-
-    # Compute values of the test statistic and location estimates for both
-    # samples
-    perm.stats <- rob_perm_statistic(x, y + delta, type = type, na.rm = na.rm)
-
-    statistic <- perm.stats$statistic
-    estimates <- perm.stats$estimates
-    estimates[2] <- estimates[2] - delta
-
-    # if (delta != 0) {
-    #   estimates[2] <- hodges_lehmann(y)
-    # }
-
-    # Compute permutation or randomization distribution
-    distribution <- suppressWarnings(
-      perm_distribution(x = x,
-                        y = y + delta,
-                        type = type,
-                        randomization = (method == "randomization"),
-                        n.rep = n.rep
-      )
-    )
-
-    ## Compute p-value
-    p.value <- calc_perm_p_value(
-      statistic,
-      distribution,
-      m = length(x),
-      n = length(y),
-      randomization = (method == "randomization"),
-      n.rep = n.rep,
-      alternative = alternative
-    )
+    test.results <- compute_results_finite(x = x, y = y, alternative = alternative,
+                                           delta = delta, method = method, type = type,
+                                           n.rep = n.rep)
 
   } else if (method == "asymptotic") {
     ## Test decision for asymptotic test ----
-
-    # Sample sizes
-    m <- length(x)
-    n <- length(y)
-
-    # Kernel-density estimation for density of pairwise differences
-    xcomb <- utils::combn(x, 2)
-    ycomb <- utils::combn(y + delta, 2)
-    pwdiffs <- c(xcomb[2, ] - xcomb[1, ], ycomb[2, ] - ycomb[1, ])
-    dens <- stats::density(pwdiffs)
-    dens <- stats::approxfun(dens)
-
-    int <- dens(0)
-
-    # Compute values of the test statistic and location estimates for both
-    # samples
-    estimates <- c(hodges_lehmann(x), hodges_lehmann(y + delta))
-    statistic <- sqrt(12 * m*n/(m+n)) * int * (estimates[1] - estimates[2])
-    estimates[2] <- estimates[2] - delta
-
-    # if (delta != 0) {
-    #   estimates[2] <- hodges_lehmann(y)
-    # }
-
-    ## Compute p-value
-    p.value <- switch (alternative,
-                       two.sided = 2 * stats::pnorm(abs(statistic), lower.tail = FALSE),
-                       greater = stats::pnorm(statistic, lower.tail = FALSE),
-                       less = stats::pnorm(statistic, lower.tail = TRUE)
-    )
+    test.results <- compute_results_asymptotic(x = x, y = y, alternative = alternative,
+                                               delta = delta, type = type)
   }
 
-  ## Prepare output ----
+  statistic <- test.results$statistic
+  estimates <- test.results$estimates
+  p.value   <- test.results$p.value
 
-  # Names of data sets
-  dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
+  ## Prepare output ----
 
   # Assign names to results
   if (var.test) {
