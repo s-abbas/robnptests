@@ -48,68 +48,36 @@
 
 trimmed_test <- function(x, y, gamma = 0.2,
                          alternative = c("two.sided", "less", "greater"),
-                         method = c("asymptotic", "randomization", "permutation"),
+                         method = c("asymptotic", "permutation", "randomization"),
                          delta = ifelse(var.test, 1, 0),
                          n.rep = 1000,
                          na.rm = FALSE, var.test = FALSE,
                          wobble.seed = NULL) {
-  ## Error handling
-  if (!missing(delta) && (length(delta) != 1 || is.na(delta))) {
-    stop ("'delta' must be a single number.")
-  }
 
+  ## Check input arguments ----
+  check_test_input(x = x, y = y, alternative = alternative, delta = delta,
+                   method = method, scale = scale, n.rep = n.rep, na.rm = na.rm,
+                   var.test = var.test, wobble = wobble, wobble.seed = wobble.seed,
+                   test.name = "trimmed_test", gamma = gamma)
+
+  # Extract names of data sets ----
   dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
-  ## NA handling
-  if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
-    return(NA)
-  } else if (na.rm & (any(is.na(x)) | any(is.na(y)))) {
-    x <- as.numeric(stats::na.omit(x))
-    y <- as.numeric(stats::na.omit(y))
-  }
-
-  ## If necessary: Transformation to test for difference in scale
-  ## (with check whether we're taking log(0) anywhere: If so, the sample is
-  ## wobbled)
-
-  if (var.test) {
-
-    if (any(c(x, y) == 0)) {
-
-      if (is.null(wobble.seed)) wobble.seed <- sample(1e6, 1)
-      set.seed(wobble.seed)
-
-      xy <- wobble(x, y, check = FALSE)
-      x <- xy$x
-      y <- xy$y
-
-      warning(paste0("Added random noise before log transformation due to zeros in the sample. The seed is ",
-                     wobble.seed, "."))
-    }
-
-    x <- log(x^2)
-    y <- log(y^2)
-    delta <- log(delta^2)
-  }
-
-  ## Automatically assign the type of test performed, if not handed over explicitly
-  if (!all((method %in% c("asymptotic", "permutation", "randomization")))) {
-    stop (" 'method' must be one of 'asymptotic', 'permutation' or 'randomization'. ")
-  }
-
-  ## If no choice is made regarding the computation of the p-value, the method
-  ## is automatically selected based on the sample sizes
-  if (length(method) > 1 & identical(method, c("asymptotic", "permutation", "randomization"))) {
-    if (length(x) >= 30 & length(y) >= 30) {
-      method <- "asymptotic"
-    }
-    else {
-      method <- "randomization"
-      n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
-    }
-  }
+  ## Match 'alternative' and 'scale' ----
+  # 'method' not matched because computation of p-value depends on sample sizes
+  # if no value is specified by the user
 
   alternative <- match.arg(alternative)
+
+  prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
+                          wobble = FALSE, wobble.seed = wobble.seed,
+                          var.test = var.test)
+  if (!all(is.na(prep))) {
+    x <- prep$x; y <- prep$y; delta <- prep$delta
+  } else return(NA)
+
+  method <- select_method(x = x, y = y, method = method, test.name = "trimmed_test")
+
 
   ## Results of trimmed_t
   t.stats <- trimmed_t(x, y, delta = delta, gamma = gamma, na.rm = na.rm)
@@ -120,9 +88,6 @@ trimmed_test <- function(x, y, gamma = 0.2,
 
   m <- length(x); n <- length(y)
 
-  ### MAKE PERMUTATION DISTRIBUTIONS
-  ### QUESTION: WHERE DOES DELTA HAVE TO GO? FIRST SHIFT THE SAMPLE, THEN PERFORM
-  ### PERMUTATION TEST?
 
   if (method %in% c("randomization", "permutation")) {
 
@@ -139,6 +104,7 @@ trimmed_test <- function(x, y, gamma = 0.2,
     } else if (method == "randomization") {
       ## Computation of the randomization distribution
 
+      n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
       splits <- replicate(n.rep, sample(complete))
 
       distribution <- apply(splits, 2, function(s) {
@@ -177,7 +143,10 @@ trimmed_test <- function(x, y, gamma = 0.2,
   names(statistic) <- "trimmed t"
   names(df) <- "df"
 
-  method <- paste("Trimmed two-sample t-test based on", method, "distribution")
+  if (method == "randomization") {
+    method <- paste("Trimmed two-sample t-test based on",
+                    method, "using",n.rep, "random permutations")
+    } else  method <- paste("Trimmed two-sample t-test based on", method, "distribution")
 
 
   res <- list(statistic = statistic, parameter = df, p.value = p.value,
