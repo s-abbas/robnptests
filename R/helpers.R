@@ -116,7 +116,7 @@ check_test_input <- function(x,
   } else if (!var.test) {
     checkmate::assert_numeric(delta, finite = TRUE, any.missing = FALSE, len = 1, null.ok = FALSE)
   }
-  checkmate::assert_flag(wobble, na.ok = FALSE, null.ok = FALSE)
+  if (!(test.name %in% c("trimmed_test", "m_test"))) checkmate::assert_flag(wobble, na.ok = FALSE, null.ok = FALSE)
   checkmate::assert_numeric(wobble.seed, finite = TRUE, any.missing = FALSE, len = 1, null.ok = TRUE)
 
   ## Additional checks for trimmed t-test and M-tests ---
