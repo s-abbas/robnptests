@@ -18,6 +18,7 @@
 #' @template na_rm
 #' @template var_test
 #' @template wobble
+#' @template wobble_seed
 #'
 #' @details
 #' When computing a randomization distribution based on randomly drawn splits with
@@ -121,7 +122,7 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     type <- "MED1"
   } else if (scale == "S4") {
     type <- "MED2"
-  } else stop(" 'scale' must one of 'S3' and 'S4' ")
+  }
 
   method <- select_method(x = x, y = y, method = method, test.name = "med_test")
 

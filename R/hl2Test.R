@@ -18,6 +18,7 @@
 #' @template na_rm
 #' @template var_test
 #' @template wobble
+#' @template wobble_seed
 #'
 #' @details
 #' When computing a randomization distribution based on randomly drawn splits with
@@ -118,7 +119,7 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     type <- "HL21"
   } else if (scale == "S2") {
     type <- "HL22"
-  } else stop(" 'scale' must one of 'S1' and 'S2' ")
+  }
 
   method <- select_method(x = x, y = y, method = method, test.name = "hl2_test")
 

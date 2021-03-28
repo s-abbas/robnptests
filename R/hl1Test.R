@@ -18,6 +18,7 @@
 #' @template na_rm
 #' @template var_test
 #' @template wobble
+#' @template wobble_seed
 #'
 #' @details
 #' When computing a randomization distribution based on randomly drawn splits with
@@ -130,7 +131,7 @@ hl1_test <- function(x,
     type <- "HL11"
   } else if (scale == "S2") {
     type <- "HL12"
-  } else stop(" 'scale' must one of 'S1' and 'S2' ")
+  }
 
   if (method %in% c("permutation", "randomization")) {
     ## Set n.rep
