@@ -2,7 +2,10 @@
 % Please edit documentation in R/permDistribution.R
 \name{perm_distribution}
 \alias{perm_distribution}
-\title{Permutation Distribution}
+\title{Permutation Distribution for robust statistics
+
+\code{perm_distribution()} calculates the permutation distribution for
+several test statistics.}
 \usage{
 perm_distribution(x, y, type, randomization = FALSE, n.rep = 10000)
 }
@@ -29,8 +32,12 @@ The default is \code{n.rep = 10000}.}
 Vector with permutation distribution of the test statistic specified by \code{type}.
 }
 \description{
+Permutation Distribution for robust statistics
+
 \code{perm_distribution()} calculates the permutation distribution for
 several test statistics.
 }
+\details{
+Missing values in either 'x' or 'y' are not allowed.
+}
 \keyword{internal}
-

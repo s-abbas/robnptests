@@ -38,7 +38,7 @@ The permutation test uses all splits of the joint sample into two samples
 of sizes \code{m} and \code{n}, while the randomization test draws
 \code{n.rep} random splits with replacement.}
 
-\item{scale}{a character string specifying the scale estimator used as standardization
+\item{scale}{a character string specifying the scale estimator used for standardization
 in the test statistic; must be one of \code{"S1"} and \code{"S2"}.
 The default is \code{"S1"}. Ignored if \code{method = "asymptotic"};
 see details for definition of the scale estimators.}
@@ -57,10 +57,12 @@ proceeding with the test, in order to make sure there are no duplicate values in
 sample that can cause the scale estimate to be 0. Only necessary for the permutation and
 randomization version of the test. The default is \code{wobble = FALSE}.}
 
-\item{wobble.seed}{integer value used as a seed for the random number generation in case of \code{wobble = TRUE}.
-If no seed is given, it is set randomly. In any case, the
-seed used will be returned in a warning message. The argument is
-ignored if wobble = FALSE.}
+\item{wobble.seed}{integer value used as a seed for the random number
+generation in case of \code{wobble = TRUE} or when the
+\code{var.test = TRUE} and on of the vectors \code{x} and
+\code{y} contains zeros. When no seed is specified, it is
+set randomly. The argument is ignored if
+\code{var.test = FALSE} and \code{wobble = FALSE}.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:

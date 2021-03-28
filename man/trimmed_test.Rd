@@ -9,9 +9,12 @@ trimmed_test(
   y,
   gamma = 0.2,
   alternative = c("two.sided", "less", "greater"),
+  method = c("asymptotic", "permutation", "randomization"),
   delta = ifelse(var.test, 1, 0),
+  n.rep = 1000,
   na.rm = FALSE,
-  var.test = FALSE
+  var.test = FALSE,
+  wobble.seed = NULL
 )
 }
 \arguments{
@@ -26,13 +29,33 @@ of trim outside that range are taken as the nearest endpoint.}
 \item{alternative}{a character string specifying the alternative hypothesis,
 must be one of "two.sided" (default), "greater" or "less".}
 
+\item{method}{a character string specifying how the p-value is computed,
+\code{"asymptotic"} for an asymptotic test based on a normal
+approximation, \code{"permutation"} for a permutation test and
+\code{"randomization"} for a randomization test.
+The permutation test uses all splits of the joint sample into two samples
+of sizes \code{m} and \code{n}, while the randomization test draws
+\code{n.rep} random splits with replacement.}
+
 \item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
 on whether the test should be performed for a difference in location or in scale.
 The default is \code{delta = 0} for location test and \code{delta = 1} for scale test.}
 
+\item{n.rep}{an integer value specifying the number of random splits used to
+calculate the randomization distribution if \code{method = "randomization"}.
+This argument is ignored if \code{method = "permutation"} or \code{method = "asymptotic"}.
+The default is \code{n.rep = 10000}.}
+
 \item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 
 \item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
+
+\item{wobble.seed}{integer value used as a seed for the random number
+generation in case of \code{wobble = TRUE} or when the
+\code{var.test = TRUE} and on of the vectors \code{x} and
+\code{y} contains zeros. When no seed is specified, it is
+set randomly. The argument is ignored if
+\code{var.test = FALSE} and \code{wobble = FALSE}.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:

@@ -4,18 +4,18 @@
 \alias{rob_var}
 \title{Robust scale estimators based on median absolute deviation}
 \usage{
-rob_var(x, y, na.rm = FALSE, type = c("S1", "S2", "S3", "S4"))
+rob_var(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE)
 }
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
 
 \item{y}{a (non-empty) numeric vector of data values.}
 
-\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
-
 \item{type}{character that specifies the estimator for the variance, can be
 \code{"S1"}, \code{"S2"}, \code{"S3"} and \code{"S4"} for;
 see details for description of the scale estimators.}
+
+\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 }
 \value{
 An estimate of the pooled variance of the two samples.

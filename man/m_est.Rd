@@ -10,7 +10,7 @@ m_est(
   k = robustbase::.Mpsi.tuning.default(psi),
   tol = 1e-06,
   max.it = 15,
-  na.rm = TRUE
+  na.rm = FALSE
 )
 }
 \arguments{
@@ -42,6 +42,8 @@ for different psi functions.
 \details{
 To compute the M-estimate, the iterative algorithm described in \insertCite{MarMarYoh06robu;textual}{robTests} is used.
 The variance is estimated as in \insertCite{Hub81robu;textual}{robTests}.
+
+If \code{max.it} contains decimal places, it is truncated.
 }
 \examples{
 

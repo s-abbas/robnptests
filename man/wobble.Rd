@@ -2,7 +2,7 @@
 % Please edit documentation in R/wobble.R
 \name{wobble}
 \alias{wobble}
-\title{Funtion that undiscretizes rounded samples}
+\title{Function that undiscretizes rounded samples}
 \usage{
 wobble(x, y, check = TRUE)
 }
@@ -25,11 +25,16 @@ discrete observations
 If \code{check = TRUE} the function checks whether all values in the two numeric input vectors are distinct.
 If so, it returns the original values, otherwise the values are made continuous by adding uniform
 noise. If \code{check = FALSE}, it simply determines the number of digits and adds uniform noise in order to
-make the sample "more" continuous.
+make the sample "more" continuous
+
+Precisely, we determine the minimum number of digits d_min in the sample
+and then add random variables from the U[-0.5 10^(-d_min), 0.5 10^(-d_min)] distribution to each
+of the observations.
 }
 \examples{
 x <- rnorm(20); y <- rnorm(20); x <- round(x)
 wobble(x, y)
+
 
 }
 \references{
