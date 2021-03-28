@@ -99,7 +99,7 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
                    psi = c("huber", "hampel", "bisquare"),
                    k = robustbase::.Mpsi.tuning.default(psi),
                    n.rep = 10000, na.rm = FALSE,
-                   var.test = FALSE, wobble = FALSE, wobble.seed = NULL, ...) {
+                   var.test = FALSE, wobble.seed = NULL, ...) {
 
   ## Check input arguments ----
   psi <- match.arg(psi)
