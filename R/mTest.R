@@ -117,7 +117,7 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   alternative <- match.arg(alternative)
 
   prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
-                          wobble = wobble, wobble.seed = wobble.seed,
+                          wobble = FALSE, wobble.seed = wobble.seed,
                           var.test = var.test)
   if (!all(is.na(prep))) {
     x <- prep$x; y <- prep$y; delta <- prep$delta
