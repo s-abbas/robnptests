@@ -390,9 +390,9 @@ compute_results_asymptotic <- function(x, y, alternative, delta, type) {
     dens <- stats::approxfun(stats::density(diff))
     med <- dens(0)
 
-    # Test statistic and location estimates
-    statistic <- sqrt(m*n/(m+n)) * 2 * med * (estimates[1] - estimates[2])
+    # Location estimates and test statistic
     estimates <- c(med.x, med.y - delta)
+    statistic <- sqrt(m*n/(m+n)) * 2 * med * (estimates[1] - estimates[2])
   }
 
   ## Compute p-value ----
