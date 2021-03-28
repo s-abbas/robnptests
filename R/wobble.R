@@ -83,7 +83,7 @@ wobble <- function(x, y, check = TRUE) {
 }
 
 
-wobble_observations <- function(x, y, wobble.seed) {
+wobble_observations <- function(x, y, wobble.seed = NULL) {
   # Set seed for wobbling
   if (is.null(wobble.seed)) {
     wobble.seed <- sample(1e6, 1)
