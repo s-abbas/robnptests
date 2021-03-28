@@ -17,7 +17,7 @@
 #' @template n_rep
 #' @template na_rm
 #' @template var_test
-#' @template wobble
+#' @template wobble_seed
 #' @template scaleTau2
 #'
 #' @details
@@ -102,6 +102,7 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
                    var.test = FALSE, wobble = FALSE, wobble.seed = NULL, ...) {
 
   ## Check input arguments ----
+  psi <- match.arg(psi)
   check_test_input(x = x, y = y, alternative = alternative, delta = delta,
                    method = method, scale = scale, n.rep = n.rep, na.rm = na.rm,
                    var.test = var.test, wobble = wobble, wobble.seed = wobble.seed,
@@ -114,7 +115,6 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   # 'method' not matched because computation of p-value depends on sample sizes
   # if no value is specified by the user
   alternative <- match.arg(alternative)
-  psi <- match.arg(psi)
 
   prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
                           wobble = wobble, wobble.seed = wobble.seed,
