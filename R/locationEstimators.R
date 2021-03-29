@@ -31,28 +31,12 @@
 trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 
   ## Check input arguments ----
-  stopifnot(
-    "'x' is missing." = !missing(x),
-    "'x' must not be NULL." = !is.null(x),
-    "'gamma' must not be NULL." = !is.null(gamma),
-    "'na.rm' must not be NULL." = !is.null(na.rm),
-    "'gamma' must not be NA." = !is.na(gamma),
-    "'na.rm' must not be NA." = !is.na(na.rm),
-    "'x' has to a numeric vector." = is.numeric(x),
-    "'gamma' has to be a numeric value." = is.numeric(gamma),
-    "'na.rm' has to be a logical value." = is.logical(na.rm),
-    "'gamma' has to be a single value, not a vector of length >= 1." = identical(length(gamma), 1L),
-    "'na.rm' has to be a single value, not a vector of length >= 1." = identical(length(na.rm), 1L)
-  )
-
-  if ((gamma < 0) || (gamma > 0.5)) {
-    stop("'gamma' has to be a numeric value in [0, 0.5].")
-  }
+  checkmate::assert_numeric(x, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_number(gamma, na.ok = FALSE, lower = 0, upper = 0.5, finite = TRUE, null.ok = FALSE)
+  checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
 
   ## Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
-    return(NA_real_)
-  } else if (all(is.na(x))) {
     return(NA_real_)
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
@@ -61,7 +45,6 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
   ## Calculate trimmed mean ----
   return(mean(x, trim = gamma))
 }
-
 
 #' @title Winsorized mean
 #'
@@ -87,28 +70,12 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 
   ## Check input arguments ----
-  stopifnot(
-    "'x' is missing." = !missing(x),
-    "'x' must not be NULL." = !is.null(x),
-    "'gamma' must not be NULL." = !is.null(gamma),
-    "'na.rm' must not be NULL." = !is.null(na.rm),
-    "'gamma' must not be NA." = !is.na(gamma),
-    "'na.rm' must not be NA." = !is.na(na.rm),
-    "'x' has to a numeric vector." = is.numeric(x),
-    "'gamma' has to be a numeric value." = is.numeric(gamma),
-    "'na.rm' has to be a logical value." = is.logical(na.rm),
-    "'gamma' has to be a single value, not a vector of length >= 1." = identical(length(gamma), 1L),
-    "'na.rm' has to be a single value, not a vector of length >= 1." = identical(length(na.rm), 1L)
-  )
-
-  if ((gamma < 0) || (gamma > 0.5)) {
-    stop("'gamma' has to be a numeric value in [0, 0.5].")
-  }
+  checkmate::assert_numeric(x, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_number(gamma, na.ok = FALSE, lower = 0, upper = 0.5, finite = TRUE, null.ok = FALSE)
+  checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
 
   ## Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
-    return(NA_real_)
-  } else if (all(is.na(x))) {
     return(NA_real_)
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
@@ -166,21 +133,11 @@ win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 hodges_lehmann <- function(x, na.rm = FALSE) {
 
   ## Check input arguments ----
-  stopifnot(
-    "'x' is missing." = !missing(x),
-    "'x' must not be NULL." = !is.null(x),
-    "'na.rm' must not be NULL." = !is.null(na.rm),
-    "'na.rm' must not be NA." = !is.na(na.rm),
-    "'x' has to a numeric vector." = is.numeric(x),
-    "'na.rm' has to be a logical value." = is.logical(na.rm),
-    "'x' needs at least 2 values." = (length(x) > 1),
-    "'na.rm' has to be a single value, not a vector of length >= 1." = identical(length(na.rm), 1L)
-  )
+  checkmate::assert_numeric(x, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
 
   ## Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
-    return(NA_real_)
-  } else if (all(is.na(x))) {
     return(NA_real_)
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
@@ -233,23 +190,12 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
 hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 
   ## Check input arguments ----
-  stopifnot(
-    "'x' is missing." = !missing(x),
-    "'y' is missing." = !missing(y),
-    "'x' must not be NULL." = !is.null(x),
-    "'y' must not be NULL." = !is.null(y),
-    "'na.rm' must not be NULL." = !is.null(na.rm),
-    "'na.rm' must not be NA." = !is.na(na.rm),
-    "'x' has to a numeric vector." = is.numeric(x),
-    "'y' has to a numeric vector." = is.numeric(y),
-    "'na.rm' has to be a logical value." = is.logical(na.rm),
-    "'na.rm' has to be a single value, not a vector of length >= 1." = identical(length(na.rm), 1L)
-  )
+  checkmate::assert_numeric(x, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_numeric(y, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
 
   # Remove missing values in 'x' and 'y' ----
   if (!na.rm & (any(is.na(x)) || any(is.na(y)))) {
-    return(NA_real_)
-  } else if (all(is.na(x)) || all(is.na(y))) {
     return(NA_real_)
   } else if (na.rm & (any(is.na(x)) || any(is.na(y)))) {
     x <- as.vector(stats::na.omit(x))
@@ -311,47 +257,19 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 m_est <- function(x, psi, k = robustbase::.Mpsi.tuning.default(psi), tol = 1e-6, max.it = 15, na.rm = FALSE) {
 
   ## Check input arguments ----
-  stopifnot(
-    "'x' is missing." = !missing(x),
-    "'psi' is missing." = !missing(psi),
-    "'x' must not be NULL." = !is.null(x),
-    "'psi' must not be NULL." = !is.null(psi),
-    "'k' must not be NULL." = !is.null(k),
-    "'tol' must not be NULL." = !is.null(tol),
-    "'max.it' must not be NULL." = !is.null(max.it),
-    "'na.rm' must not be NULL." = !is.null(na.rm),
-    "'psi' must not be NA." = !is.na(psi),
-    "'k' must not be NA." = !is.na(k),
-    "'tol' must not be NA." = !is.na(tol),
-    "'max.it' must not be NA." = !is.na(max.it),
-    "'na.rm' must not be NA." = !is.na(na.rm),
-    "'x' has to a numeric vector." = is.numeric(x),
-    "'psi' has to a character value." = is.character(psi),
-    "'k' has to be a numeric value." = is.numeric(k),
-    "'tol' has to be a numeric value." = is.numeric(tol),
-    "'max.it' has to be a numeric value." = is.numeric(max.it),
-    "'na.rm' has to be a logical value." = is.logical(na.rm),
-    "'psi' has to be a single value, not a vector of length >= 1." = identical(length(psi), 1L),
-    "'psi' must be one of 'huber', 'hampel', or 'bisquare'." = any(c("huber", "hampel", "bisquare") %in% psi),
-    # "'k' has to be a single value, not a vector of length >= 1." = identical(length(k), 1L),
-    "'tol' has to be a single value, not a vector of length >= 1." = identical(length(tol), 1L),
-    "'max.it' has to be a single value, not a vector of length >= 1." = identical(length(max.it), 1L),
-    "'na.rm' has to be a single value, not a vector of length >= 1." = identical(length(na.rm), 1L),
-    "'tol' has to be a positive value." = tol > 0,
-    "'max.it' has to be a positive value." = max.it > 0
-  )
+  checkmate::assert_numeric(x, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_choice(psi, choices = c("huber", "hampel", "bisquare"), null.ok = FALSE)
+  checkmate::assert_numeric(k, lower = 0, len = ifelse(psi == "hampel", 3, 1), finite = TRUE, any.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_number(tol, na.ok = FALSE, lower = 1e-6, finite = TRUE, null.ok = FALSE)
+  checkmate::assert_count(max.it, na.ok = FALSE, positive = TRUE, null.ok = FALSE)
+  checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
 
   ## Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
     return(NA_real_)
-  } else if (all(is.na(x))) {
-    return(NA_real_)
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
   }
-
-  ## Remove decimal places from 'max.it' ----
-  max.it <- trunc(max.it)
 
   ## Calculate M-estimate ----
 

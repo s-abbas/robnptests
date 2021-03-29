@@ -30,6 +30,13 @@
 
 trimmed_t <- function(x, y, gamma = 0.2, delta = 0, na.rm = FALSE) {
 
+  ## Check input arguments ----
+  checkmate::assert_numeric(x, finite = TRUE, all.missing = FALSE, min.len = 5, null.ok = FALSE)
+  checkmate::assert_numeric(y, finite = TRUE, all.missing = FALSE, min.len = 5, null.ok = FALSE)
+  checkmate::assert_number(gamma, na.ok = FALSE, lower = 0, upper = 0.5, finite = TRUE, null.ok = FALSE)
+  checkmate::assert_numeric(delta, finite = TRUE, any.missing = FALSE, len = 1, null.ok = FALSE)
+  checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
+
   ## Trimmed means
   x.trim <- trim_mean(x, gamma = gamma, na.rm = na.rm)
   y.trim <- trim_mean(y - delta, gamma = gamma, na.rm = na.rm)
@@ -58,7 +65,6 @@ trimmed_t <- function(x, y, gamma = 0.2, delta = 0, na.rm = FALSE) {
 
   return(res)
 }
-
 
 
 #' @title Robust permutation statistics based on robust location estimators
@@ -98,12 +104,17 @@ trimmed_t <- function(x, y, gamma = 0.2, delta = 0, na.rm = FALSE) {
 rob_perm_statistic <- function(x, y,
                           type = c("HL11", "HL12", "HL21", "HL22", "MED1", "MED2"),
                           na.rm = FALSE) {
+
+  ## Check input arguments ----
+  checkmate::assert_numeric(x, finite = TRUE, all.missing = FALSE, min.len = 5, null.ok = FALSE)
+  checkmate::assert_numeric(y, finite = TRUE, all.missing = FALSE, min.len = 5, null.ok = FALSE)
+  checkmate::assert_subset(type, choices = c("HL11", "HL12", "HL21", "HL22", "MED1", "MED2"), empty.ok = FALSE)
+  checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
+
+  ## Match type ----
   type <- match.arg(type)
 
-  if(!(type %in% c("HL11", "HL12", "HL21", "HL22", "MED1", "MED2"))) {
-    stop("type needs to be one of 'HL11', 'HL12', 'HL21', 'HL22', 'MED1', 'MED2'.")
-  }
-
+  ## Compute value of test statistic ----
   switch(type,
          HL11 = {
             est.x <- hodges_lehmann(x, na.rm = na.rm)
@@ -158,6 +169,7 @@ rob_perm_statistic <- function(x, y,
 #' @template y
 #' @template psi
 #' @template k_mest
+#' @template na_rm
 #' @template scaleTau2
 #'
 #' @return A list containing the following components:
@@ -167,17 +179,29 @@ rob_perm_statistic <- function(x, y,
 #' @export
 
 
-m_test_statistic <- function(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi),
+m_test_statistic <- function(x,
+                             y,
+                             psi,
+                             k = robustbase::.Mpsi.tuning.default(psi),
+                             na.rm = FALSE,
                              ...) {
-  ## Sample sizes
+
+  ## Check input arguments ----
+  checkmate::assert_numeric(x, finite = TRUE, all.missing = FALSE, min.len = 5, null.ok = FALSE)
+  checkmate::assert_numeric(y, finite = TRUE, all.missing = FALSE, min.len = 5, null.ok = FALSE)
+  checkmate::assert_choice(psi, choices = c("huber", "hampel", "bisquare"), null.ok = FALSE)
+  checkmate::assert_numeric(k, lower = 0, len = ifelse(psi == "hampel", 3, 1), finite = TRUE, any.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
+
+  ## Sample sizes ----
   m <- length(x)
   n <- length(y)
 
-  ## M-estimates for both samples
-  est.x <- m_est(x = x, psi = psi, k = k)$est
-  est.y <- m_est(x = y, psi = psi, k = k)$est
+  ## M-estimates for both samples ----
+  est.x <- m_est(x = x, psi = psi, k = k, na.rm = na.rm)$est
+  est.y <- m_est(x = y, psi = psi, k = k, na.rm = na.rm)$est
 
-  ## Estimator for \nu
+  ## Estimator for \nu ----
   psi.x <- robustbase::Mpsi((x - est.x)/stats::mad(x), psi = psi, cc = k)
   rho.x <- robustbase::Mpsi((x - est.x)/stats::mad(x), psi = psi, cc = k, deriv = 1)
 
@@ -187,7 +211,7 @@ m_test_statistic <- function(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi
   nu.x <- mean(psi.x^2)/(mean(rho.x)^2)
   nu.y <- mean(psi.y^2)/(mean(rho.y)^2)
 
-  ## Test statistic
+  ## Test statistic ----
   return(list(statistic = (est.x - est.y) / sqrt((n * robustbase::scaleTau2(x, consistency = TRUE, ...)^2 * nu.x + m * robustbase::scaleTau2(y, consistency = TRUE, ...)^2 * nu.y) / (m * n)),
               estimates = c(est.x, est.y)))
 }
