@@ -1,6 +1,6 @@
 #' @title Preprocess data for the robust two sample tests
 #'
-#' @details
+#' @description
 #' \code{preprocess_data} is a helper function that performs several
 #' preprocessing steps on the data to perform the two-sample tests.
 #'
