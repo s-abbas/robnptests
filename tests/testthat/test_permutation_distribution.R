@@ -287,4 +287,39 @@ testthat::test_that("calc_perm_p_value works correctly", {
   checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = m, n = n, randomization = TRUE, n.rep = 250, alternative = "two.sided"), lower = 0, upper = 1)
   checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = m, n = n, randomization = TRUE, n.rep = 250, alternative = "greater"), lower = 0, upper = 1)
   checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = m, n = n, randomization = TRUE, n.rep = 250, alternative = "less"), lower = 0, upper = 1)
+
+
+  ##################
+  ##################
+
+
+  distribution <- 1:252
+  statistic <- 50
+
+  # Do the tests return the right p-value, if permutation is present?
+  testthat::expect_equal(calc_perm_p_value(
+    statistic = statistic, distribution = distribution, m = 5,
+    n = 5, randomization = FALSE, n.rep = 100, alternative = "less"), 50 / 252)
+
+  testthat::expect_equal(calc_perm_p_value(
+    statistic = statistic, distribution = distribution, m = 5,
+    n = 5, randomization = FALSE, n.rep = 100, alternative = "greater"), 203 / 252)
+
+  testthat::expect_equal(calc_perm_p_value(
+    statistic = statistic, distribution = distribution, m = 5,
+    n = 5, randomization = FALSE, n.rep = 100, alternative = "two.sided"), 203 / 252)
+
+  # Do p.greater and p.less sum up to 1?
+  testthat::expect_equal(calc_perm_p_value(
+    statistic = statistic, distribution = distribution, m = 5,
+    n = 5, randomization = FALSE, n.rep = 100, alternative = "less") + calc_perm_p_value(
+    statistic = statistic, distribution = distribution, m = 5,
+    n = 5, randomization = FALSE, n.rep = 100, alternative = "greater") - 1/252, 1)
+
+  # Does the relationship p.two.sided = 2 * min(p.greater, p.less) hold?
+  # In this case it doesn't as the permutation distribution is not symmetric
+
+  # We trust the permp-function from statmod for calculation of the randomization p-value
 })
+
+
