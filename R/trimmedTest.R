@@ -58,7 +58,7 @@ trimmed_test <- function(x, y, gamma = 0.2,
   ## Check input arguments ----
   check_test_input(x = x, y = y, alternative = alternative, delta = delta,
                    method = method, scale = scale, n.rep = n.rep, na.rm = na.rm,
-                   var.test = var.test, wobble = wobble, wobble.seed = wobble.seed,
+                   var.test = var.test, wobble = FALSE, wobble.seed = wobble.seed,
                    test.name = "trimmed_test", gamma = gamma)
 
   # Extract names of data sets ----
