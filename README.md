@@ -87,6 +87,10 @@ win_var(x)$var
 #> [1] 1.099881
 ```
 
+# Contributions
+
+We are grateful for any contribution to the further development of the R package. If you experience any problems using the package or have suggestions for new features, please open an issue in the [issue tracker](https://github.com/s-abbas/robTests/issues). 
+
 Authors
 -------
 
