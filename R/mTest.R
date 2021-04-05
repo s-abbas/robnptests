@@ -131,9 +131,10 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   ## ___________________________________________________________________________
 
   ## Test statistic and location estimates for both samples
-  stats <- m_test_statistic(x, y - delta, psi = psi, k = k, ...)
+  stats <- m_test_statistic(x, y + delta, psi = psi, k = k, ...)
   statistic <- stats$statistic
   estimates <- stats$estimates
+  estimates[2] <- stats$estimates[2] - delta
 
   if (method %in% c("permutation", "randomization")) {
     ## _________________________________________________________________________
@@ -177,10 +178,10 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
 
   ## Name of method to compute p-value
   if (method == "randomization") {
-    method = paste("Randomization test based on the ", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
+    method <- paste("Randomization test based on the ", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
   } else if (method == "permutation") {
-    method = paste("Exact permutation test based on the", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
-  } else method = paste("Asymptotic test based on the", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
+    method <- paste("Exact permutation test based on the", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
+  } else method <- paste("Asymptotic test based on the", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
 
   ## Output
   res <- list(statistic = statistic, parameter = NULL, p.value = p.value,
