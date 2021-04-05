@@ -62,7 +62,7 @@ testthat::test_that("hl1_test works correctly", {
   res.randomized <- hl1_test(x, y)
   res.method <- res.randomized$method
 
-  testthat::expect_equal(res.method, "Randomization test based on the one-sample Hodges-Lehmann estimator")
+  testthat::expect_equal(res.method, "Randomization test based on the one-sample Hodges-Lehmann estimator using 10000 random permutations")
 
   ## ___________________________________________________________________________
   ## Throw error when one or both samples consist of less than five observations

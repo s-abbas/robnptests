@@ -63,7 +63,7 @@ testthat::test_that("med_test works correctly", {
   res.randomized <- med_test(x, y)
   res.method <- res.randomized$method
 
-  testthat::expect_equal(res.method, "Randomization test based on sample medians")
+  testthat::expect_equal(res.method, "Randomization test based on sample medians using 10000 random permutations")
 
   ## ___________________________________________________________________________
   ## Throw error when one or both samples consist of less than five observations
