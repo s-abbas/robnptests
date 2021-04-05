@@ -276,17 +276,17 @@ testthat::test_that("calc_perm_p_value works correctly", {
   ## The output should be a numeric scalar
 
   # Permutation distribution
-  checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = m, n = n, randomization = FALSE, n.rep = 10000, alternative = "two.sided"), lower = 0, upper = 1)
-  checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = m, n = n, randomization = FALSE, n.rep = 10000, alternative = "greater"), lower = 0, upper = 1)
-  checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = m, n = n, randomization = FALSE, n.rep = 10000, alternative = "less"), lower = 0, upper = 1)
-  testthat::expect_equal(calc_perm_p_value(statistic = statistic, distribution = distribution, m = m, n = n, randomization = FALSE, n.rep = 10000, alternative = "two.sided"), expected = 203/252)
-  testthat::expect_equal(calc_perm_p_value(statistic = statistic, distribution = distribution, m = m, n = n, randomization = FALSE, n.rep = 10000, alternative = "greater"), expected = 203/252)
-  testthat::expect_equal(calc_perm_p_value(statistic = statistic, distribution = distribution, m = m, n = n, randomization = FALSE, n.rep = 10000, alternative = "less"), expected = 50/252)
+  checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = 5, n = 5, randomization = FALSE, n.rep = 10000, alternative = "two.sided"), lower = 0, upper = 1)
+  checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = 5, n = 5, randomization = FALSE, n.rep = 10000, alternative = "greater"), lower = 0, upper = 1)
+  checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = 5, n = 5, randomization = FALSE, n.rep = 10000, alternative = "less"), lower = 0, upper = 1)
+  testthat::expect_equal(calc_perm_p_value(statistic = statistic, distribution = distribution, m = 5, n = 5, randomization = FALSE, n.rep = 10000, alternative = "two.sided"), expected = 203/252)
+  testthat::expect_equal(calc_perm_p_value(statistic = statistic, distribution = distribution, m = 5, n = 5, randomization = FALSE, n.rep = 10000, alternative = "greater"), expected = 203/252)
+  testthat::expect_equal(calc_perm_p_value(statistic = statistic, distribution = distribution, m = 5, n = 5, randomization = FALSE, n.rep = 10000, alternative = "less"), expected = 50/252)
 
   # Randomization distribution
-  checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = m, n = n, randomization = TRUE, n.rep = 250, alternative = "two.sided"), lower = 0, upper = 1)
-  checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = m, n = n, randomization = TRUE, n.rep = 250, alternative = "greater"), lower = 0, upper = 1)
-  checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = m, n = n, randomization = TRUE, n.rep = 250, alternative = "less"), lower = 0, upper = 1)
+  checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = 5, n = 5, randomization = TRUE, n.rep = 250, alternative = "two.sided"), lower = 0, upper = 1)
+  checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = 5, n = 5, randomization = TRUE, n.rep = 250, alternative = "greater"), lower = 0, upper = 1)
+  checkmate::expect_number(calc_perm_p_value(statistic = statistic, distribution = distribution, m = 5, n = 5, randomization = TRUE, n.rep = 250, alternative = "less"), lower = 0, upper = 1)
 
 
   ##################
