@@ -28,18 +28,23 @@
 #'
 #' @export
 
-trimmed_t <- function(x, y, gamma = 0.2, delta = 0, na.rm = FALSE) {
+trimmed_t <- function(x, y, gamma = 0.2, na.rm = FALSE) {
 
   ## Check input arguments ----
   checkmate::assert_numeric(x, finite = TRUE, all.missing = FALSE, min.len = 5, null.ok = FALSE)
   checkmate::assert_numeric(y, finite = TRUE, all.missing = FALSE, min.len = 5, null.ok = FALSE)
   checkmate::assert_number(gamma, na.ok = FALSE, lower = 0, upper = 0.5, finite = TRUE, null.ok = FALSE)
-  checkmate::assert_numeric(delta, finite = TRUE, any.missing = FALSE, len = 1, null.ok = FALSE)
   checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
 
+  ## Remove missing values in 'x' and 'y'----
+  if (na.rm) {
+    x <- as.vector(na.omit(x))
+    y <- as.vector(na.omit(y))
+  }
+
   ## Trimmed means
-  x.trim <- trim_mean(x, gamma = gamma, na.rm = na.rm)
-  y.trim <- trim_mean(y - delta, gamma = gamma, na.rm = na.rm)
+  x.trim <- trim_mean(x, gamma = gamma)
+  y.trim <- trim_mean(y, gamma = gamma)
   estimates <- c(x.trim, y.trim)
 
   ## Scale estimator
@@ -114,46 +119,52 @@ rob_perm_statistic <- function(x, y,
   ## Match type ----
   type <- match.arg(type)
 
+  ## Remove missing values in 'x' and 'y'----
+  if (na.rm) {
+    x <- as.vector(na.omit(x))
+    y <- as.vector(na.omit(y))
+  }
+
   ## Compute value of test statistic ----
   switch(type,
          HL11 = {
-            est.x <- hodges_lehmann(x, na.rm = na.rm)
-            est.y <- hodges_lehmann(y, na.rm = na.rm)
+            est.x <- hodges_lehmann(x)
+            est.y <- hodges_lehmann(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, na.rm = na.rm, type = "S1")
+            sd <- rob_var(x, y, type = "S1")
             res <- loc/sd
          },
          HL12 = {
-            est.x <- hodges_lehmann(x, na.rm = na.rm)
-            est.y <- hodges_lehmann(y, na.rm = na.rm)
+            est.x <- hodges_lehmann(x)
+            est.y <- hodges_lehmann(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, na.rm = na.rm, type = "S2")
+            sd <- rob_var(x, y, type = "S2")
             res <- loc/sd
          },
          HL21 = {
             est.x <- est.y <- NULL
-            loc <- hodges_lehmann_2sample(x, y, na.rm = na.rm)
-            sd <- rob_var(x, y, na.rm = na.rm, type = "S1")
+            loc <- hodges_lehmann_2sample(x, y)
+            sd <- rob_var(x, y, type = "S1")
             res <- loc/sd
          },
          HL22 = {
             est.x <- est.y <- NULL
-            loc <- hodges_lehmann_2sample(x, y, na.rm = na.rm)
-            sd <- rob_var(x, y, na.rm = na.rm, type = "S2")
+            loc <- hodges_lehmann_2sample(x, y)
+            sd <- rob_var(x, y, type = "S2")
             res <- loc/sd
          },
          MED1 = {
-            est.x <- stats::median(x, na.rm = na.rm)
-            est.y <- stats::median(y, na.rm = na.rm)
+            est.x <- stats::median(x)
+            est.y <- stats::median(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, na.rm = na.rm, type = "S3")
+            sd <- rob_var(x, y, type = "S3")
             res <- loc/sd
         },
          MED2 = {
-            est.x <- stats::median(x, na.rm = na.rm)
-            est.y <- stats::median(y, na.rm = na.rm)
+            est.x <- stats::median(x)
+            est.y <- stats::median(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, na.rm = na.rm, type = "S4")
+            sd <- rob_var(x, y, type = "S4")
             res <- loc/sd
       })
 
@@ -193,27 +204,31 @@ m_test_statistic <- function(x,
   checkmate::assert_numeric(k, lower = 0, len = ifelse(psi == "hampel", 3, 1), finite = TRUE, any.missing = FALSE, null.ok = FALSE)
   checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
 
+  ## Remove missing values in 'x' and 'y'----
+  if (na.rm) {
+    x <- as.vector(na.omit(x))
+    y <- as.vector(na.omit(y))
+  }
+
   ## Sample sizes ----
   m <- length(x)
   n <- length(y)
 
   ## M-estimates for both samples ----
-  est.x <- m_est(x = x, psi = psi, k = k, na.rm = na.rm)$est
-  est.y <- m_est(x = y, psi = psi, k = k, na.rm = na.rm)$est
+  est.x <- m_est(x = x, psi = psi, k = k)$est
+  est.y <- m_est(x = y, psi = psi, k = k)$est
 
   ## Estimator for \nu ----
-  psi.x <- robustbase::Mpsi((x - est.x)/stats::mad(x), psi = psi, cc = k)
-  rho.x <- robustbase::Mpsi((x - est.x)/stats::mad(x), psi = psi, cc = k, deriv = 1)
+  psi.x <- robustbase::Mpsi((x - est.x)/robustbase::scaleTau2(x, consistency = TRUE, ...), psi = psi, cc = k)
+  rho.x <- robustbase::Mpsi((x - est.x)/robustbase::scaleTau2(x, consistency = TRUE, ...), psi = psi, cc = k, deriv = 1)
 
-  psi.y <- robustbase::Mpsi((y - est.y)/stats::mad(y), psi = psi, cc = k)
-  rho.y <- robustbase::Mpsi((y - est.y)/stats::mad(y), psi = psi, cc = k, deriv = 1)
+  psi.y <- robustbase::Mpsi((y - est.y)/robustbase::scaleTau2(x, consistency = TRUE, ...), psi = psi, cc = k)
+  rho.y <- robustbase::Mpsi((y - est.y)/robustbase::scaleTau2(x, consistency = TRUE, ...), psi = psi, cc = k, deriv = 1)
 
   nu.x <- mean(psi.x^2)/(mean(rho.x)^2)
   nu.y <- mean(psi.y^2)/(mean(rho.y)^2)
 
   ## Test statistic ----
-  return(list(statistic = (est.x - est.y) / sqrt((n * robustbase::scaleTau2(x, consistency = TRUE, ...)^2 * nu.x + m * robustbase::scaleTau2(y, consistency = TRUE, ...)^2 * nu.y) / (m * n)),
+  return(list(statistic = (est.x - est.y) / sqrt((n * robustbase::scaleTau2(x, consistency = TRUE, ...)^2 * nu.x + m * robustbase::scaleTau2(x, consistency = TRUE, ...)^2 * nu.y) / (m * n)),
               estimates = c(est.x, est.y)))
 }
-
-
