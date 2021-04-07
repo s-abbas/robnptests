@@ -12,7 +12,7 @@ testthat::test_that("perm_distribution works correctly", {
 
   ## Check output ----
 
-  ## The output should be a numeric vector
+  ## The output should be a numeric vector of the specified length for all tests
 
   # Permutation distribution
   checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "HL11"), len = choose(m + n, m))
@@ -22,6 +22,21 @@ testthat::test_that("perm_distribution works correctly", {
   checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "MED1"), len = choose(m + n, m))
   checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "MED2"), len = choose(m + n, m))
 
+  # Check that it does not accidentally calculate a randomization distribution if
+  # we e.g. hand over n.rep
+  testthat::expect_equal(perm_distribution(x = x, y = y, type = "HL11", randomization = FALSE),
+                         perm_distribution(x = x, y = y, type = "HL11", n.rep = 1000))
+  testthat::expect_equal(perm_distribution(x = x, y = y, type = "HL12", randomization = FALSE),
+                         perm_distribution(x = x, y = y, type = "HL12", n.rep = 1000))
+  testthat::expect_equal(perm_distribution(x = x, y = y, type = "HL21", randomization = FALSE),
+                         perm_distribution(x = x, y = y, type = "HL21", n.rep = 1000))
+  testthat::expect_equal(perm_distribution(x = x, y = y, type = "HL22", randomization = FALSE),
+                         perm_distribution(x = x, y = y, type = "HL22", n.rep = 1000))
+  testthat::expect_equal(perm_distribution(x = x, y = y, type = "MED1", randomization = FALSE),
+                         perm_distribution(x = x, y = y, type = "MED1", n.rep = 1000))
+  testthat::expect_equal(perm_distribution(x = x, y = y, type = "MED2", randomization = FALSE),
+                         perm_distribution(x = x, y = y, type = "MED2", n.rep = 1000))
+
   # Randomization distribution
   checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "HL11", randomization = TRUE, n.rep = 100), len = 100)
   checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "HL12", randomization = TRUE, n.rep = 100), len = 100)
@@ -29,6 +44,33 @@ testthat::test_that("perm_distribution works correctly", {
   checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "HL22", randomization = TRUE, n.rep = 100), len = 100)
   checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "MED1", randomization = TRUE, n.rep = 100), len = 100)
   checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "MED2", randomization = TRUE, n.rep = 100), len = 100)
+
+  # Are randomization distributions reproducible? I.e. do we get the same randomization distribution
+  # if we set the same seed?
+  testthat::expect_equal(
+    { set.seed(710); perm_distribution(x = x, y = y, type = "HL11", randomization = TRUE, n.rep = 100) },
+    { set.seed(710); perm_distribution(x = x, y = y, type = "HL11", randomization = TRUE, n.rep = 100) }
+  )
+  testthat::expect_equal(
+    { set.seed(710); perm_distribution(x = x, y = y, type = "HL12", randomization = TRUE, n.rep = 100) },
+    { set.seed(710); perm_distribution(x = x, y = y, type = "HL12", randomization = TRUE, n.rep = 100) }
+  )
+  testthat::expect_equal(
+    { set.seed(710); perm_distribution(x = x, y = y, type = "HL21", randomization = TRUE, n.rep = 100) },
+    { set.seed(710); perm_distribution(x = x, y = y, type = "HL21", randomization = TRUE, n.rep = 100) }
+  )
+  testthat::expect_equal(
+    { set.seed(710); perm_distribution(x = x, y = y, type = "HL22", randomization = TRUE, n.rep = 100) },
+    { set.seed(710); perm_distribution(x = x, y = y, type = "HL22", randomization = TRUE, n.rep = 100) }
+  )
+  testthat::expect_equal(
+    { set.seed(710); perm_distribution(x = x, y = y, type = "MED1", randomization = TRUE, n.rep = 100) },
+    { set.seed(710); perm_distribution(x = x, y = y, type = "MED1", randomization = TRUE, n.rep = 100) }
+  )
+  testthat::expect_equal(
+    { set.seed(710); perm_distribution(x = x, y = y, type = "MED2", randomization = TRUE, n.rep = 100) },
+    { set.seed(710); perm_distribution(x = x, y = y, type = "MED2", randomization = TRUE, n.rep = 100) }
+  )
 })
 
 ## Computation of permutation distribution for M-test statistics ----
@@ -41,98 +83,6 @@ testthat::test_that("m_est_perm_distribution works correctly", {
   y <- 6:10
   m <- length(x)
   n <- length(y)
-
-  ## Checks for input arguments ----
-  # 'x'
-  testthat::expect_error(m_est_perm_distribution(y = y, psi = "huber", k = 1.345),
-                         regexp = "'x' is missing.")
-  testthat::expect_error(m_est_perm_distribution(x = c(x, NA), y = y, psi = "huber", k = 1.345),
-                         regexp = "Assertion on 'x' failed: Contains missing values.")
-  testthat::expect_error(m_est_perm_distribution(x = NULL, y = y, psi = "huber", k = 1.345),
-                         regexp = "Assertion on 'x' failed: Must be of type 'numeric', not 'NULL'.")
-  testthat::expect_error(m_est_perm_distribution(x = c(x, Inf), y = y, psi = "huber", k = 1.345),
-                         regexp = "Assertion on 'x' failed: Must be finite.")
-  testthat::expect_error(m_est_perm_distribution(x = x[1:2], y = y, psi = "huber", k = 1.345),
-                         regexp = "Assertion on 'x' failed: Must have length >= 5, but has length 2.")
-
-  # 'y'
-  testthat::expect_error(m_est_perm_distribution(x = x, psi = "huber", k = 1.345),
-                         regexp = "'y' is missing.")
-  testthat::expect_error(m_est_perm_distribution(x = x, y = c(y, NA), psi = "huber", k = 1.345),
-                         regexp = "Assertion on 'y' failed: Contains missing values.")
-  testthat::expect_error(m_est_perm_distribution(x = x, y = NULL, psi = "huber", k = 1.345),
-                         regexp = "Assertion on 'y' failed: Must be of type 'numeric', not 'NULL'.")
-  testthat::expect_error(m_est_perm_distribution(x = x, y = c(-Inf, y), psi = "huber", k = 1.345),
-                         regexp = "Assertion on 'y' failed: Must be finite.")
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y[3:5], psi = "huber", k = 1.345),
-                         regexp = "Assertion on 'y' failed: Must have length >= 5, but has length 3.")
-
-  # 'psi'
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, k = 1.345),
-                         regexp = "'psi' is missing.")
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = 1, k = 1.345),
-                         regexp = "Assertion on 'psi' failed: Must be element of set {'huber','hampel','bisquare'}, but types do not match (numeric != character).", fixed = TRUE)
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = c("huber", "hampel"), k = 1.345),
-                         regexp = "Assertion on 'psi' failed: Must be element of set {'huber','hampel','bisquare'}, but is not atomic scalar.", fixed = TRUE)
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "tukey", k = 1.345), regexp = "Assertion on 'psi' failed: Must be element of set {'huber','hampel','bisquare'}, but is 'tukey'.", fixed = TRUE)
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = NA, k = 1.345), regexp = "Assertion on 'psi' failed: Must be element of set {'huber','hampel','bisquare'}, but is 'NA'.", fixed = TRUE)
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = NULL, k = 1.345), regexp = "Assertion on 'psi' failed: Must be a subset of {'huber','hampel','bisquare'}, not 'NULL'.", fixed = TRUE)
-
-  # 'k'
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber"),
-                         regexp = "'k' is missing.")
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = NA),
-                         regexp = "Assertion on 'k' failed: Contains missing values.")
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = NULL),
-                         regexp = "Assertion on 'k' failed: Must be of type 'numeric', not 'NULL'.")
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = Inf),
-                         regexp = "Assertion on 'k' failed: Must be finite.")
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = c(1, 1.345)),
-                         regexp = "Assertion on 'k' failed: Must have length 1, but has length 2.")
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "hampel", k = 1.345),
-                         regexp = "Assertion on 'k' failed: Must have length 3, but has length 1.")
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = -1),
-                         regexp = "Assertion on 'k' failed: Element 1 is not >= 0.")
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "hampel", k = c(1, 1.2, -1)),
-                         regexp = "Assertion on 'k' failed: Element 3 is not >= 0.")
-
-  # 'randomization'
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = NA),
-                         regexp = "Assertion on 'randomization' failed: May not be NA.",
-                         fixed = TRUE)
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = 1),
-                         regexp = "Assertion on 'randomization' failed: Must be of type 'logical flag', not 'double'.",
-                         fixed = TRUE)
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = c(TRUE, TRUE)),
-                         regexp = "Assertion on 'randomization' failed: Must have length 1.",
-                         fixed = TRUE)
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = NULL),
-                         regexp = "Assertion on 'randomization' failed: Must be of type 'logical flag', not 'NULL'.",
-                         fixed = TRUE)
-
-  # 'n.rep'
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = FALSE, n.rep = NA),
-                         regexp = "Assertion on 'n.rep' failed: May not be NA.",
-                         fixed = TRUE)
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = FALSE, n.rep = "10000"),
-                         regexp = "Assertion on 'n.rep' failed: Must be of type 'count', not 'character'.",
-                         fixed = TRUE)
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = FALSE, n.rep = c(1, 100)),
-                         regexp = "Assertion on 'n.rep' failed: Must have length 1.",
-                         fixed = TRUE)
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = FALSE, n.rep = NULL),
-                         regexp = "Assertion on 'n.rep' failed: Must be of type 'count', not 'NULL'.",
-                         fixed = TRUE)
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = FALSE, n.rep = -100),
-                         regexp = "Assertion on 'n.rep' failed: Must be >= 1.",
-                         fixed = TRUE)
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = FALSE, n.rep = Inf),
-                         regexp = "Assertion on 'n.rep' failed: Must be of type 'count', not 'double'.",
-                         fixed = TRUE)
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = TRUE, n.rep = 1000),
-                         regexp = "'n.rep' may not be larger than 252, the number of all splits.",
-                         fixed = TRUE)
-
 
   ## Check output ----
 
@@ -223,6 +173,8 @@ testthat::test_that("calc_perm_p_value works correctly", {
 
   # Randomization distribution
   # We trust the permp-function from statmod for calculation of the randomization p-value
+
+  # Check that the output is between 0 and 1
   checkmate::expect_number(calc_perm_p_value(
     statistic = statistic, distribution = distribution, m = 5, n = 5,
     randomization = TRUE, n.rep = 250, alternative = "two.sided"), lower = 0, upper = 1)
