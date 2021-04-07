@@ -45,8 +45,7 @@ testthat::test_that("perm_distribution works correctly", {
   checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "MED1", randomization = TRUE, n.rep = 100), len = 100)
   checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "MED2", randomization = TRUE, n.rep = 100), len = 100)
 
-  # Are randomization distributions reproducible? I.e. do we get the same randomization distribution
-  # if we set the same seed?
+  # Are randomization distributions reproducible?
   testthat::expect_equal(
     { set.seed(710); perm_distribution(x = x, y = y, type = "HL11", randomization = TRUE, n.rep = 100) },
     { set.seed(710); perm_distribution(x = x, y = y, type = "HL11", randomization = TRUE, n.rep = 100) }
@@ -97,6 +96,28 @@ testthat::test_that("m_est_perm_distribution works correctly", {
   checkmate::expect_numeric(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = TRUE, n.rep = 100), len = 100)
   checkmate::expect_numeric(m_est_perm_distribution(x = x, y = y, psi = "hampel", k = c(1, 2, 3), randomization = TRUE, n.rep = 100), len = 100)
   checkmate::expect_numeric(m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345, randomization = TRUE, n.rep = 100), len = 100)
+
+  # Check that we actually get the permutation distribution if we expect it
+  testthat::expect_equal(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = FALSE),
+                         m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, n.rep = 1000))
+  testthat::expect_equal(m_est_perm_distribution(x = x, y = y, psi = "hampel", k = c(1, 2, 3), randomization = FALSE),
+                         m_est_perm_distribution(x = x, y = y, psi = "hampel", k = c(1, 2, 3), n.rep = 1000))
+  testthat::expect_equal(m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345, randomization = FALSE),
+                         m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345, n.rep = 1000))
+
+  # Check reproducibility of randomization distribution:
+  testthat::expect_equal(
+    { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = TRUE, n.rep = 100) },
+    { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = TRUE, n.rep = 100) }
+  )
+  testthat::expect_equal(
+    { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = "hampel", k = c(1, 2, 3), randomization = TRUE, n.rep = 100) },
+    { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = "hampel", k = c(1, 2, 3), randomization = TRUE, n.rep = 100) }
+  )
+  testthat::expect_equal(
+    { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345, randomization = TRUE, n.rep = 100) },
+    { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345, randomization = TRUE, n.rep = 100) }
+  )
 })
 
 ## Computation of permutation p-value ----
