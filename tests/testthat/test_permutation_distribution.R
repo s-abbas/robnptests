@@ -70,6 +70,15 @@ testthat::test_that("perm_distribution works correctly", {
     { set.seed(710); perm_distribution(x = x, y = y, type = "MED2", randomization = TRUE, n.rep = 100) },
     { set.seed(710); perm_distribution(x = x, y = y, type = "MED2", randomization = TRUE, n.rep = 100) }
   )
+
+  # Check that we get an error if n.rep exceeds choose(m + n, n)
+  testthat::expect_error(perm_distribution(x = x, y = y, type = "HL11", randomization = TRUE, n.rep = 1000))
+  testthat::expect_error(perm_distribution(x = x, y = y, type = "HL12", randomization = TRUE, n.rep = 1000))
+  testthat::expect_error(perm_distribution(x = x, y = y, type = "HL21", randomization = TRUE, n.rep = 1000))
+  testthat::expect_error(perm_distribution(x = x, y = y, type = "HL22", randomization = TRUE, n.rep = 1000))
+  testthat::expect_error(perm_distribution(x = x, y = y, type = "MED1", randomization = TRUE, n.rep = 1000))
+  testthat::expect_error(perm_distribution(x = x, y = y, type = "MED2", randomization = TRUE, n.rep = 1000))
+
 })
 
 ## Computation of permutation distribution for M-test statistics ----
@@ -118,6 +127,11 @@ testthat::test_that("m_est_perm_distribution works correctly", {
     { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345, randomization = TRUE, n.rep = 100) },
     { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345, randomization = TRUE, n.rep = 100) }
   )
+
+  # Check that we get an error if n.rep exceeds choose(m + n, n)
+  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = TRUE, n.rep = 1000))
+  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "hampel", k = c(1, 2, 3), randomization = TRUE, n.rep = 1000))
+  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345, randomization = TRUE, n.rep = 1000))
 })
 
 ## Computation of permutation p-value ----
