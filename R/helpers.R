@@ -302,7 +302,6 @@ select_method <- function(x, y, method, test.name) {
 compute_results_finite <- function(x, y, alternative, delta, method, n.rep, type) {
 
   ## Compute value of the test statistic ----
-  y <- ifelse(alternative == "two.sided")
   perm.stats <- rob_perm_statistic(x, y + delta, type = type, na.rm = TRUE)
   statistic <- perm.stats$statistic
 
