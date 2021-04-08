@@ -166,7 +166,7 @@ calc_perm_p_value <- function(statistic, distribution, m, n, randomization, n.re
   stopifnot("'alternative' is missing." = !missing(alternative))
 
   checkmate::assert_number(statistic, na.ok = FALSE, finite = TRUE, null.ok = FALSE)
-  checkmate::assert_numeric(distribution, finite = TRUE, any.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_numeric(distribution, finite = FALSE, any.missing = TRUE, null.ok = FALSE)
   checkmate::assert_count(m, na.ok = FALSE, positive = TRUE, null.ok = FALSE)
   checkmate::assert_count(n, na.ok = FALSE, positive = TRUE, null.ok = FALSE)
   checkmate::assert_flag(randomization, na.ok = FALSE, null.ok = FALSE)
@@ -182,9 +182,9 @@ calc_perm_p_value <- function(statistic, distribution, m, n, randomization, n.re
   ## Number of permutations leading to test statistic at least as extreme
   ## as the observed value
   A <- switch(alternative,
-              two.sided = sum(abs(distribution) >= abs(statistic)),
-              greater = sum(distribution >= statistic),
-              less = sum(distribution <= statistic)
+              two.sided = sum(abs(distribution) >= abs(statistic), na.rm = TRUE),
+              greater = sum(distribution >= statistic, na.rm = TRUE),
+              less = sum(distribution <= statistic, na.rm = TRUE)
   )
 
   ## For the approximation of the p-value to work, at 'n.rep' needs to be
