@@ -40,7 +40,7 @@
 #' However, this assumption is only justified under the normality assumption. In
 #' case of a non-normal distribution, the test might not keep the desired significance
 #' level. The test keeps the level under several distributions as long as the
-#' variance exists. However, under skewed distributions, it tends to be conservative.
+#' variance exists. However, under skewed distributions, it tends to be anti-conservative.
 #' The test statistic can be corrected by a factor which has to be determined
 #' individually for a specific distribution.
 #'
