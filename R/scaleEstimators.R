@@ -35,17 +35,13 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
   stopifnot("'x' is missing." = !missing(x))
 
   checkmate::assert_numeric(x, min.len = 2, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
-  checkmate::assert_number(gamma, na.ok = FALSE, finite = TRUE, null.ok = FALSE)
+  checkmate::assert_number(gamma, lower = 0, upper = 0.5, na.ok = FALSE, finite = TRUE, null.ok = FALSE)
   checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
-
-  if ((gamma < 0) || (gamma > 0.5)) {
-    stop("'gamma' has to be a numeric value in [0, 0.5].")
-  }
 
   ## Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
     return(list(var = NA_real_, h = NA_real_))
-  } else if (na.rm & any(is.na(x))) {
+  } else if (na.rm) {
     x <- as.vector(stats::na.omit(x))
   }
 
@@ -103,23 +99,17 @@ rob_var <- function(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE) {
 
   checkmate::assert_numeric(x, min.len = 2, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
   checkmate::assert_numeric(y, min.len = 2, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
+  checkmate::assert_subset(type, choices = c("S1", "S2", "S3", "S4"), empty.ok = FALSE)
   checkmate::assert_character(type, min.chars = 1, ignore.case = FALSE, all.missing = FALSE, min.len = 1, null.ok = FALSE)
   checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
 
   ## Match 'type' ----
-  if (length(type) == 4) {
-    type <- type[1]
-  } else {
-    type <- type
-  }
-  checkmate::assert_choice(type, choices = c("S1", "S2", "S3", "S4"))
+  type <- match.arg(type)
 
   # Remove missing values in 'x' and 'y' ----
   if (!na.rm & (any(is.na(x)) || any(is.na(y)))) {
     return(NA_real_)
-  } else if (all(is.na(x)) || all(is.na(y))) {
-    return(NA_real_)
-  } else if (na.rm & (any(is.na(x)) || any(is.na(y)))) {
+  } else if (na.rm) {
     x <- as.vector(stats::na.omit(x))
     y <- as.vector(stats::na.omit(y))
   }

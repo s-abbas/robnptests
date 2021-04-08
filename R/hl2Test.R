@@ -156,11 +156,11 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   names(statistic) <- ifelse(var.test, "S", "D")
 
   if (method == "randomization") {
-    method = paste("Randomization test based on the two-sample Hodges-Lehmann estimator using",
+    method <- paste("Randomization test based on the two-sample Hodges-Lehmann estimator using",
                    n.rep, "random permutations")
   } else if (method == "permutation") {
-    method = "Exact permutation test based on the two-sample Hodges-Lehmann estimator"
-  } else method = "Asymptotic test based on the two-sample Hodges-Lehmann estimator"
+    method <- "Exact permutation test based on the two-sample Hodges-Lehmann estimator"
+  } else method <- "Asymptotic test based on the two-sample Hodges-Lehmann estimator"
 
 
   res <- list(statistic = statistic, parameter = NULL, p.value = p.value,

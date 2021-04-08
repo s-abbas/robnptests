@@ -71,8 +71,6 @@
 #'
 #' \insertRef{Fri12onli}{robTests}
 #'
-#' @import utils
-#'
 #' @examples
 #' ## Generate random samples
 #' set.seed(108)

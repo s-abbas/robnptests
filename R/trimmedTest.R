@@ -79,12 +79,12 @@ trimmed_test <- function(x, y, gamma = 0.2,
 
   method <- select_method(x = x, y = y, method = method, test.name = "trimmed_test")
 
-
   ## Results of trimmed_t
-  t.stats <- trimmed_t(x, y, delta = delta, gamma = gamma, na.rm = na.rm)
+  t.stats <- trimmed_t(x, y + delta, gamma = gamma, na.rm = na.rm)
 
   statistic <- t.stats$statistic
   estimates <- t.stats$estimates
+  estimates[2] <- t.stats$estimates[2] - delta
   df <- t.stats$df
 
   m <- length(x); n <- length(y)
@@ -100,7 +100,7 @@ trimmed_test <- function(x, y, gamma = 0.2,
       splits <- gtools::combinations((m + n), m, 1:(m + n))
 
       distribution <- apply(splits, 1, function(s) {
-        trimmed_t(x = complete[s], y = complete[-s], gamma = gamma, delta = 0)$statistic
+        trimmed_t(x = complete[s], y = complete[-s], gamma = gamma)$statistic
       })
     } else if (method == "randomization") {
       ## Computation of the randomization distribution
@@ -109,7 +109,7 @@ trimmed_test <- function(x, y, gamma = 0.2,
       splits <- replicate(n.rep, sample(complete))
 
       distribution <- apply(splits, 2, function(s) {
-        trimmed_t(x = s[1:m], y = s[(m + 1):(m + n)], gamma = gamma, delta = 0)$statistic
+        trimmed_t(x = s[1:m], y = s[(m + 1):(m + n)], gamma = gamma)$statistic
       }
       )
     }

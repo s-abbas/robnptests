@@ -1,6 +1,5 @@
 Package: robTests
 Version: 0.1.0
-Date: 2020-11-20
 Type: Package
 Title: Robust Non-Parametric Two-Sample Tests for Location/Scale
 Authors@R: c(person("Sermad", "Abbas", 
@@ -11,6 +10,7 @@ Author: Sermad Abbas [aut, cre],
   Barbara Brune [aut],
   Roland Fried [aut]
 Maintainer: Sermad Abbas <abbas@statistik.tu-dortmund.de>
+BugReports: https://github.com/s-abbas/robTests/issues
 Description: Implementations of several robust non-parametric two-sample tests
     for location or scale differences. The test statistics are based on robust
     location and scale estimators, e.g. the sample median or the Hodges-Lehmann estimators
@@ -29,11 +29,18 @@ URL: https://github.com/s-abbas/robTests
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
-Imports: Rdpack, gtools, robustbase, statmod, stats, utils
+Imports: 
+    Rdpack,
+    gtools,
+    robustbase,
+    statmod,
+    stats,
+    utils,
+    checkmate
 RdMacros: Rdpack
 Suggests: 
     testthat,
     knitr,
     rmarkdown,
-    checkmate
+    usethis
 VignetteBuilder: knitr

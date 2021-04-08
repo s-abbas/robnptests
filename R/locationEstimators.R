@@ -146,7 +146,7 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
   ## Calculate one-sample Hodges-Lehmann estimate ----
 
   # Compute pairwise means
-  x.grid <- cbind(rep(1:length(x), each = length(x)), 1:length(x))
+  x.grid <- cbind(rep(seq_along(x), each = length(x)), seq_along(x))
   x.diffs <- x.grid[x.grid[, 1] < x.grid[, 2], , drop = FALSE]
   mean.pairwise.sums <- (x[x.diffs[, 1]] + x[x.diffs[, 2]])/2
 

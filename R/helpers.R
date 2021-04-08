@@ -2,7 +2,7 @@
 #'
 #' @description
 #' \code{preprocess_data} is a helper function that performs several
-#' preprocessing steps on the data to perform the two-sample tests.
+#' preprocessing steps on the data before performing the two-sample tests.
 #'
 #' @template x
 #' @template y
@@ -11,6 +11,11 @@
 #' @template wobble
 #' @template wobble_seed
 #' @template var_test
+#'
+#' @details
+#' The preprocessing steps include the removal of missing values and, if
+#' specified, wobbling and a transformation of the observations to test for
+#' differences in scale.
 #'
 #' @return A named list containing the following components:
 #'         \item{\code{x}}{the (possibly transformed) input vector \code{x}.}
@@ -23,28 +28,31 @@
 preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, var.test) {
 
   ## Remove missing values ----
-  nas.removed <- remove_missing_values(x = x, y = y, na.rm = na.rm)
+  if (na.rm) {
+    x <- as.vector(na.omit(x))
+    y <- as.vector(na.omit(y))
+  }
 
-  if (!is.list(nas.removed)) {
-    return(NA_real_)
-  } else {
-    x <- nas.removed$x
-    y <- nas.removed$y
+  ## Check sample sizes ----
+  if (length(x) < 5 || length(y) < 5) {
+    stop("Both samples need at least 5 non-missing values.")
   }
 
   ## Wobbling ----
   if (wobble) {
-
+    # Random noise is only added, if 'wobbling' = TRUE and there is at least
+    # one duplicated value in the single samples or the joint sample
     if (!(length(unique(x)) == length(x) &
           length(unique(y)) == length(y) &
           length(unique(c(x, y))) == length(c(x, y)))) {
 
+      # Set seed for generating random noise
       if (missing(wobble.seed) | is.null(wobble.seed)) {
         wobble.seed <- sample(1e6, 1)
       }
       set.seed(wobble.seed)
 
-
+      # Add random noise
       xy <- wobble(x, y, check = FALSE)
       x <- xy$x
       y <- xy$y
@@ -54,11 +62,16 @@ preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, var.test) {
     }
   }
 
-  # Transformation of observations for variance test ----
+  ## Transformation of observations for variance test ----
   if (var.test) {
 
-    if (any(c(x, y) == 0)) {
+    if (delta == 0) {
+      ## 'delta' needs to be larger than zero
+      stop("The logarithm of 0 is not defined. Please use another value for 'delta'.")
+    }
 
+    if (any(c(x, y) == 0)) {
+      # The log-transformation only works for non-zero values
       if (missing(wobble.seed) | is.null(wobble.seed)) wobble.seed <- sample(1e6, 1)
 
       set.seed(wobble.seed)
@@ -74,9 +87,8 @@ preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, var.test) {
     x <- log(x^2)
     y <- log(y^2)
     delta <- log(delta^2)
-    ## The transform of Delta needs to be done in the function!!
+    ## The transformation of Delta needs to be done in the function!!
   }
-
 
   return(list(x = x, y = y, delta = delta))
 }
@@ -144,7 +156,7 @@ check_test_input <- function(x,
   checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
   checkmate::assert_flag(var.test, na.ok = FALSE, null.ok = FALSE)
   if (var.test) {
-    checkmate::assert_numeric(delta, lower = 0, finite = TRUE, any.missing = FALSE, len = 1, null.ok = FALSE)
+    checkmate::assert_numeric(delta, lower = 1e-6, finite = TRUE, any.missing = FALSE, len = 1, null.ok = FALSE)
   } else if (!var.test) {
     checkmate::assert_numeric(delta, finite = TRUE, any.missing = FALSE, len = 1, null.ok = FALSE)
   }
@@ -172,49 +184,43 @@ check_test_input <- function(x,
   }
 }
 
-#' @title Remove missing values in \code{x} and \code{y}
-#'
-#' @description
-#' \code{remove_missing_values} is a helper function that removes missing values
-#' from the input sample vectors.
-#'
-#' @template x
-#' @template y
-#' @template na_rm
-#'
-#' @details
-#' Both samples need at least five non-NA observations.
-#'
-#' @return
-#' If one of the sample contains a missing value and \code{na.rm = FALSE},
-#' \code{NA_real_} is returned. If the number of non-missing observations
-#' in one of the samples is less than five, the function stops with an error
-#' message. Otherwise, the function returns a named list
-#' containing the following compoents:
-#' \item{\code{x}}{input vector \code{x} without missing values.}
-#' \item{\code{y}}{input vector \code{y} without missing values.}
-#'
-#' @keywords internal
-
-remove_missing_values <- function(x, y, na.rm) {
-
-  # Treatment of missing values ----
-  if (!na.rm & (any(is.na(x)) || any(is.na(y)))) {
-    # The data contain missing values that should not be removed
-    return(NA_real_)
-  } else if (na.rm & (any(is.na(x)) || any(is.na(y)))) {
-    # The data contain missing values and they should be removed
-    x <- as.vector(stats::na.omit(x))
-    y <- as.vector(stats::na.omit(y))
-
-    # After removing missing values, both samples need at lest length 5
-    if (length(x) < 5 || length(y) < 5) {
-      stop("Both samples need at least 5 non-missing values.")
-    }
-  }
-
-  return(list(x = x, y = y))
-}
+# #' @title Remove missing values in \code{x} and \code{y}
+# #'
+# #' @description
+# #' \code{remove_missing_values} is a helper function that removes missing values
+# #' from the input sample vectors.
+# #'
+# #' @template x
+# #' @template y
+# #' @template na_rm
+# #'
+# #' @details
+# #' Both samples need at least five non-NA observations.
+# #'
+# #' @return
+# #' If one of the sample contains a missing value and \code{na.rm = FALSE},
+# #' \code{NA_real_} is returned. If the number of non-missing observations
+# #' in one of the samples is less than five, the function stops with an error
+# #' message. Otherwise, the function returns a named list
+# #' containing the following compoents:
+# #' \item{\code{x}}{input vector \code{x} without missing values.}
+# #' \item{\code{y}}{input vector \code{y} without missing values.}
+# #'
+# #' @keywords internal
+#
+# remove_missing_values <- function(x, y) {
+#
+#   # Remove missing values ----
+#   x <- as.vector(stats::na.omit(x))
+#   y <- as.vector(stats::na.omit(y))
+#
+#   # After removing missing values, both samples need at lest length 5
+#   if (length(x) < 5 || length(y) < 5) {
+#     stop("Both samples need at least 5 non-missing values.")
+#   }
+#
+#   return(list(x = x, y = y))
+# }
 
 #' @title Select principle for computing null distribution
 #'
@@ -245,13 +251,15 @@ remove_missing_values <- function(x, y, na.rm) {
 select_method <- function(x, y, method, test.name) {
 
   ## Select principle for computing the null distribution ----
+  ## If 'method' contains only one entry, the principle is specified by the
+  ## user
   if (length(method) == 1) {
     # User-specified principle
     return(method)
   }
 
   if (test.name %in% c("hl1_test", "hl2_test", "med_test", "trimmed_test", "m_test")) {
-    # Automatic selection of the principle
+    # Automatic selection of the principle, if not specified by the user
     if (length(method) > 1 & identical(method, c("asymptotic", "permutation", "randomization"))) {
       if (length(x) >= 30 & length(y) >= 30) {
         method <- "asymptotic"
@@ -260,6 +268,10 @@ select_method <- function(x, y, method, test.name) {
       }
     }
     return(method)
+  } else {
+    stop(paste("Automatic selection not implemented for test",
+               paste0("'", test.name, "'."),
+               "Please specify 'method' explictly."))
   }
 }
 

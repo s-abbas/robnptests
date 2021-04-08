@@ -39,10 +39,12 @@ A named list containing the following components:
                             \code{delta}.}
 }
 \description{
-Preprocess data for the robust two sample tests
+\code{preprocess_data} is a helper function that performs several
+preprocessing steps on the data before performing the two-sample tests.
 }
 \details{
-\code{preprocess_data} is a helper function that performs several
-preprocessing steps on the data to perform the two-sample tests.
+The preprocessing steps include the removal of missing values and, if
+specified, wobbling and a transformation of the observations to test for
+differences in scale.
 }
 \keyword{internal}
