@@ -87,7 +87,6 @@ preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, var.test) {
     x <- log(x^2)
     y <- log(y^2)
     delta <- log(delta^2)
-    ## The transformation of Delta needs to be done in the function!!
   }
 
   return(list(x = x, y = y, delta = delta))
@@ -156,7 +155,7 @@ check_test_input <- function(x,
   checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
   checkmate::assert_flag(var.test, na.ok = FALSE, null.ok = FALSE)
   if (var.test) {
-    checkmate::assert_numeric(delta, lower = 1e-6, finite = TRUE, any.missing = FALSE, len = 1, null.ok = FALSE)
+    checkmate::assert_numeric(delta, lower = 0, finite = TRUE, any.missing = FALSE, len = 1, null.ok = FALSE)
   } else if (!var.test) {
     checkmate::assert_numeric(delta, finite = TRUE, any.missing = FALSE, len = 1, null.ok = FALSE)
   }
@@ -260,7 +259,7 @@ select_method <- function(x, y, method, test.name) {
 
   if (test.name %in% c("hl1_test", "hl2_test", "med_test", "trimmed_test", "m_test")) {
     # Automatic selection of the principle, if not specified by the user
-    if (length(method) > 1 & identical(method, c("asymptotic", "permutation", "randomization"))) {
+    if (length(method) > 1 & all(c("asymptotic", "permutation", "randomization") %in% method)) {
       if (length(x) >= 30 & length(y) >= 30) {
         method <- "asymptotic"
       } else {

@@ -131,5 +131,10 @@ rob_var <- function(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE) {
     est <- stats::median(abs(x - stats::median(x)) + stats::median(abs(y - stats::median(y))))
   }
 
+  if (est == 0 & (length(unique(x)) > 1 & length(unique(y)) > 1)) {
+    stop("Estimate of scale is 0 although the data is not constant. Consider using a different estimator or setting wobble = TRUE in the function call.",
+         call. = FALSE)
+  }
+
   return(est)
 }
