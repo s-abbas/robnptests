@@ -45,6 +45,11 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
     x <- as.vector(stats::na.omit(x))
   }
 
+  ## Error message if all values in 'x' are equal ----
+  if (length(unique(x)) == 1) {
+    stop("All values in '", deparse(substitute(x)), "' are equal. The scale estimate is '0' and the test statistic cannot be computed.")
+  }
+
   ## Calculate winsorized variance ----
   n <- length(x)
 
@@ -62,8 +67,6 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
   return(list(var = res, h = h))
 }
 
-
-
 #' @title Robust scale estimators based on median absolute deviation
 #'
 #' @description
@@ -75,10 +78,8 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
 #' @template scale_type
 #' @template na_rm
 #'
-#'
 #' @details
 #' For definitions of the scale estimators see Fried and Dehling (2011).
-#'
 #'
 #' @return
 #' An estimate of the pooled variance of the two samples.
@@ -87,7 +88,6 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
 #'
 #' @references
 #' \insertRef{FriDeh11robu}{robTests}
-#'
 #'
 #' @export
 
@@ -112,6 +112,11 @@ rob_var <- function(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE) {
   } else if (na.rm) {
     x <- as.vector(stats::na.omit(x))
     y <- as.vector(stats::na.omit(y))
+  }
+
+  ## Error message if all values in 'x' are equal ----
+  if (length(unique(x)) == 1 & length(unique(y)) == 1) {
+    stop("All values in '", deparse(substitute(x)), "' ", "and '", deparse(substitue(y)), "' ", "are equal. The scale estimate is '0' and the test statistic cannot be computed.")
   }
 
   ## Compute scale estimates ----
