@@ -18,6 +18,14 @@ testthat::test_that("win_var works correctly", {
   testthat::expect_equal(win_var(x = c(x, NA)),
                          win_var(x = c(x, NA), na.rm = FALSE))
 
+  ## All values in 'x' are equal ----
+
+  # No NAs in 'x'
+  testthat::expect_error(win_var(x = rep(0, 5)))
+
+  # NAs in 'x'
+  testthat::expect_error(win_var(x = c(NA, rep(0, 5)), na.rm = TRUE))
+
   ## Location invariance, scale equivariance, and permutation invariance ----
 
   # Location invariance
@@ -83,6 +91,15 @@ testthat::test_that("Robust scale estimators work correctly", {
 
   testthat::expect_equal(rob_var(x = c(x, NA), y = c(y, NA)),
                          rob_var(x = c(x, NA), y = c(y, NA), na.rm = FALSE))
+
+  ## All values in 'x' and 'y' are equal ----
+
+  # No NAs in 'x' and 'y'
+  testthat::expect_error(rob_var(x = rep(0, 5), y = rep(5, 5)))
+
+  # NAs in 'x' and 'y'
+  testthat::expect_error(rob_var(x = c(NA, rep(0, 5)), y = c(NA, rep(5, 5)),
+                                 na.rm = TRUE))
 
   ## Location invariance, scale equivariance, and permutation invariance ----
   types <- c("S1", "S2", "S3", "S4")
