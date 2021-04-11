@@ -8,3 +8,4 @@ man-roxygen
 ^R/XXX_performTest\.R$
 ^doc$
 ^Meta$
+^codecov\.yml$
