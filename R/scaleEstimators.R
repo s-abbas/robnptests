@@ -45,6 +45,11 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
     x <- as.vector(stats::na.omit(x))
   }
 
+  ## Error message if all values in 'x' are equal ----
+  if (length(unique(x)) == 1) {
+    stop("All values in '", deparse(substitute(x)), "' are equal. The scale estimate is '0' and the test statistic cannot be computed.")
+  }
+
   ## Calculate winsorized variance ----
   n <- length(x)
 
@@ -62,8 +67,6 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
   return(list(var = res, h = h))
 }
 
-
-
 #' @title Robust scale estimators based on median absolute deviation
 #'
 #' @description
@@ -75,10 +78,8 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
 #' @template scale_type
 #' @template na_rm
 #'
-#'
 #' @details
 #' For definitions of the scale estimators see Fried and Dehling (2011).
-#'
 #'
 #' @return
 #' An estimate of the pooled variance of the two samples.
@@ -87,7 +88,6 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
 #'
 #' @references
 #' \insertRef{FriDeh11robu}{robTests}
-#'
 #'
 #' @export
 
@@ -114,6 +114,11 @@ rob_var <- function(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE) {
     y <- as.vector(stats::na.omit(y))
   }
 
+  ## Error message if all values in 'x' are equal ----
+  if (length(unique(x)) == 1 & length(unique(y)) == 1) {
+    stop("All values in '", deparse(substitute(x)), "' ", "and '", deparse(substitue(y)), "' ", "are equal. The scale estimate is '0' and the test statistic cannot be computed.")
+  }
+
   ## Compute scale estimates ----
   if (type == "S1") {
     xcomb <- utils::combn(x, 2)
@@ -132,8 +137,8 @@ rob_var <- function(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE) {
   }
 
   if (est == 0 & (length(unique(x)) > 1 & length(unique(y)) > 1)) {
-    stop("Estimate of scale is 0 although the data is not constant. Consider using a different estimator or setting wobble = TRUE in the function call.",
-         call. = FALSE)
+    stop( "Estimate of scale is '0' although the data are not constant.
+          Consider using a different estimator or setting wobble = TRUE in the function call. Otherwise, the test statistic cannot be computed.")
   }
 
   return(est)

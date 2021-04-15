@@ -42,5 +42,6 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    usethis
+    usethis,
+    covr
 VignetteBuilder: knitr

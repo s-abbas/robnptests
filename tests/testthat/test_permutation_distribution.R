@@ -10,75 +10,34 @@ testthat::test_that("perm_distribution works correctly", {
   m <- length(x)
   n <- length(y)
 
-  ## Check output ----
 
-  ## The output should be a numeric vector of the specified length for all tests
 
-  # Permutation distribution
-  checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "HL11"), len = choose(m + n, m))
-  checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "HL12"), len = choose(m + n, m))
-  checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "HL21"), len = choose(m + n, m))
-  checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "HL22"), len = choose(m + n, m))
-  checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "MED1"), len = choose(m + n, m))
-  checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "MED2"), len = choose(m + n, m))
+  types <- c("HL11", "HL12", "HL21", "HL22", "MED1", "MED2")
 
-  # Check that it does not accidentally calculate a randomization distribution if
-  # we e.g. hand over n.rep
-  testthat::expect_equal(perm_distribution(x = x, y = y, type = "HL11", randomization = FALSE),
-                         perm_distribution(x = x, y = y, type = "HL11", n.rep = 1000))
-  testthat::expect_equal(perm_distribution(x = x, y = y, type = "HL12", randomization = FALSE),
-                         perm_distribution(x = x, y = y, type = "HL12", n.rep = 1000))
-  testthat::expect_equal(perm_distribution(x = x, y = y, type = "HL21", randomization = FALSE),
-                         perm_distribution(x = x, y = y, type = "HL21", n.rep = 1000))
-  testthat::expect_equal(perm_distribution(x = x, y = y, type = "HL22", randomization = FALSE),
-                         perm_distribution(x = x, y = y, type = "HL22", n.rep = 1000))
-  testthat::expect_equal(perm_distribution(x = x, y = y, type = "MED1", randomization = FALSE),
-                         perm_distribution(x = x, y = y, type = "MED1", n.rep = 1000))
-  testthat::expect_equal(perm_distribution(x = x, y = y, type = "MED2", randomization = FALSE),
-                         perm_distribution(x = x, y = y, type = "MED2", n.rep = 1000))
+  for (type in types) {
 
-  # Randomization distribution
-  checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "HL11", randomization = TRUE, n.rep = 100), len = 100)
-  checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "HL12", randomization = TRUE, n.rep = 100), len = 100)
-  checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "HL21", randomization = TRUE, n.rep = 100), len = 100)
-  checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "HL22", randomization = TRUE, n.rep = 100), len = 100)
-  checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "MED1", randomization = TRUE, n.rep = 100), len = 100)
-  checkmate::expect_numeric(perm_distribution(x = x, y = y, type = "MED2", randomization = TRUE, n.rep = 100), len = 100)
+    ## Check output ----
 
-  # Are randomization distributions reproducible?
-  testthat::expect_equal(
-    { set.seed(710); perm_distribution(x = x, y = y, type = "HL11", randomization = TRUE, n.rep = 100) },
-    { set.seed(710); perm_distribution(x = x, y = y, type = "HL11", randomization = TRUE, n.rep = 100) }
-  )
-  testthat::expect_equal(
-    { set.seed(710); perm_distribution(x = x, y = y, type = "HL12", randomization = TRUE, n.rep = 100) },
-    { set.seed(710); perm_distribution(x = x, y = y, type = "HL12", randomization = TRUE, n.rep = 100) }
-  )
-  testthat::expect_equal(
-    { set.seed(710); perm_distribution(x = x, y = y, type = "HL21", randomization = TRUE, n.rep = 100) },
-    { set.seed(710); perm_distribution(x = x, y = y, type = "HL21", randomization = TRUE, n.rep = 100) }
-  )
-  testthat::expect_equal(
-    { set.seed(710); perm_distribution(x = x, y = y, type = "HL22", randomization = TRUE, n.rep = 100) },
-    { set.seed(710); perm_distribution(x = x, y = y, type = "HL22", randomization = TRUE, n.rep = 100) }
-  )
-  testthat::expect_equal(
-    { set.seed(710); perm_distribution(x = x, y = y, type = "MED1", randomization = TRUE, n.rep = 100) },
-    { set.seed(710); perm_distribution(x = x, y = y, type = "MED1", randomization = TRUE, n.rep = 100) }
-  )
-  testthat::expect_equal(
-    { set.seed(710); perm_distribution(x = x, y = y, type = "MED2", randomization = TRUE, n.rep = 100) },
-    { set.seed(710); perm_distribution(x = x, y = y, type = "MED2", randomization = TRUE, n.rep = 100) }
-  )
+    ## The output should be a numeric vector of the specified length for all tests
 
-  # Check that we get an error if n.rep exceeds choose(m + n, n)
-  testthat::expect_error(perm_distribution(x = x, y = y, type = "HL11", randomization = TRUE, n.rep = 1000))
-  testthat::expect_error(perm_distribution(x = x, y = y, type = "HL12", randomization = TRUE, n.rep = 1000))
-  testthat::expect_error(perm_distribution(x = x, y = y, type = "HL21", randomization = TRUE, n.rep = 1000))
-  testthat::expect_error(perm_distribution(x = x, y = y, type = "HL22", randomization = TRUE, n.rep = 1000))
-  testthat::expect_error(perm_distribution(x = x, y = y, type = "MED1", randomization = TRUE, n.rep = 1000))
-  testthat::expect_error(perm_distribution(x = x, y = y, type = "MED2", randomization = TRUE, n.rep = 1000))
+    # Permutation distribution
+    checkmate::expect_numeric(perm_distribution(x = x, y = y, type = type), len = choose(m + n, m))
 
+    # Check that it does not accidentally calculate a randomization distribution if
+
+    # we e.g. hand over n.rep
+    testthat::expect_equal(perm_distribution(x = x, y = y, type = type, randomization = FALSE),
+                           perm_distribution(x = x, y = y, type = type, n.rep = 1000))
+    # Randomization distribution
+    checkmate::expect_numeric(perm_distribution(x = x, y = y, type = type, randomization = TRUE, n.rep = 100), len = 100)
+
+    # Are randomization distributions reproducible?
+    testthat::expect_equal(
+      { set.seed(710); perm_distribution(x = x, y = y, type = type, randomization = TRUE, n.rep = 100) },
+      { set.seed(710); perm_distribution(x = x, y = y, type = type, randomization = TRUE, n.rep = 100) }
+    )
+    testthat::expect_error(perm_distribution(x = x, y = y, type = type, randomization = TRUE, n.rep = 1000))
+  }
 })
 
 ## Computation of permutation distribution for M-test statistics ----
@@ -92,46 +51,35 @@ testthat::test_that("m_est_perm_distribution works correctly", {
   m <- length(x)
   n <- length(y)
 
-  ## Check output ----
 
-  ## The output should be a numeric vector
+  psis <- c("huber", "hampel", "bisquare")
+  ks <- list("huber" = 1.345, "hampel" = c(1, 2, 3), "bisquare" = 1.345)
 
-  # Permutation distribution
-  checkmate::expect_numeric(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345), len = choose(m + n, m))
-  checkmate::expect_numeric(m_est_perm_distribution(x = x, y = y, psi = "hampel", k = c(1, 2, 3)), len = choose(m + n, m))
-  checkmate::expect_numeric(m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345), len = choose(m + n, m))
+  for (psi in psis) {
 
-  # Randomization distribution
-  checkmate::expect_numeric(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = TRUE, n.rep = 100), len = 100)
-  checkmate::expect_numeric(m_est_perm_distribution(x = x, y = y, psi = "hampel", k = c(1, 2, 3), randomization = TRUE, n.rep = 100), len = 100)
-  checkmate::expect_numeric(m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345, randomization = TRUE, n.rep = 100), len = 100)
+    ## Check output ----
 
-  # Check that we actually get the permutation distribution if we expect it
-  testthat::expect_equal(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = FALSE),
-                         m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, n.rep = 1000))
-  testthat::expect_equal(m_est_perm_distribution(x = x, y = y, psi = "hampel", k = c(1, 2, 3), randomization = FALSE),
-                         m_est_perm_distribution(x = x, y = y, psi = "hampel", k = c(1, 2, 3), n.rep = 1000))
-  testthat::expect_equal(m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345, randomization = FALSE),
-                         m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345, n.rep = 1000))
+    ## The output should be a numeric vector
 
-  # Check reproducibility of randomization distribution:
-  testthat::expect_equal(
-    { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = TRUE, n.rep = 100) },
-    { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = TRUE, n.rep = 100) }
-  )
-  testthat::expect_equal(
-    { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = "hampel", k = c(1, 2, 3), randomization = TRUE, n.rep = 100) },
-    { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = "hampel", k = c(1, 2, 3), randomization = TRUE, n.rep = 100) }
-  )
-  testthat::expect_equal(
-    { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345, randomization = TRUE, n.rep = 100) },
-    { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345, randomization = TRUE, n.rep = 100) }
-  )
+    # Permutation distribution
+    checkmate::expect_numeric(m_est_perm_distribution(x = x, y = y, psi = psi, k = ks[[psi]]), len = choose(m + n, m))
+    # Randomization distribution
+    checkmate::expect_numeric(m_est_perm_distribution(x = x, y = y, psi = psi, k = ks[[psi]], randomization = TRUE, n.rep = 100), len = 100)
 
-  # Check that we get an error if n.rep exceeds choose(m + n, n)
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "huber", k = 1.345, randomization = TRUE, n.rep = 1000))
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "hampel", k = c(1, 2, 3), randomization = TRUE, n.rep = 1000))
-  testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = "bisquare", k = 1.345, randomization = TRUE, n.rep = 1000))
+    # Check that we actually get the permutation distribution if we expect it
+    testthat::expect_equal(m_est_perm_distribution(x = x, y = y, psi = psi, k = ks[[psi]], randomization = FALSE),
+                           m_est_perm_distribution(x = x, y = y, psi = psi, k = ks[[psi]], n.rep = 1000))
+
+    # Check reproducibility of randomization distribution:
+    testthat::expect_equal(
+      { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = psi, k = ks[[psi]], randomization = TRUE, n.rep = 100) },
+      { set.seed(710); m_est_perm_distribution(x = x, y = y, psi = psi, k = ks[[psi]], randomization = TRUE, n.rep = 100) }
+    )
+
+    # Check that we get an error if n.rep exceeds choose(m + n, n)
+    testthat::expect_error(m_est_perm_distribution(x = x, y = y, psi = psi, k = ks[[psi]], randomization = TRUE, n.rep = 1000))
+  }
+
 })
 
 ## Computation of permutation p-value ----
@@ -148,20 +96,18 @@ testthat::test_that("calc_perm_p_value works correctly", {
 
   # Permutation distribution
 
+  alternatives <- c("two.sided", "greater", "less")
+
   # Check that p-values are between 0 and 1
-  checkmate::expect_number(calc_perm_p_value(
-    statistic = statistic, distribution = distribution, m = 5, n = 5,
-    randomization = FALSE, n.rep = 10000, alternative = "two.sided"), lower = 0, upper = 1)
+  for(alternative in alternatives) {
 
-  checkmate::expect_number(calc_perm_p_value(
-    statistic = statistic, distribution = distribution, m = 5, n = 5,
-    randomization = FALSE, n.rep = 10000, alternative = "greater"), lower = 0, upper = 1)
+    checkmate::expect_number(calc_perm_p_value(
+      statistic = statistic, distribution = distribution, m = 5, n = 5,
+      randomization = FALSE, n.rep = 10000, alternative = alternative), lower = 0, upper = 1)
 
-  checkmate::expect_number(calc_perm_p_value(
-    statistic = statistic, distribution = distribution, m = 5, n = 5,
-    randomization = FALSE, n.rep = 10000, alternative = "less"), lower = 0, upper = 1)
+  }
 
-  # Is the p-value we expect returned
+  # Is the p-value we expect returned?
   testthat::expect_equal(calc_perm_p_value(
     statistic = statistic, distribution = distribution, m = 5,
     n = 5, randomization = FALSE, n.rep = 100, alternative = "less"), 50 / 252)
@@ -179,8 +125,8 @@ testthat::test_that("calc_perm_p_value works correctly", {
   testthat::expect_equal(calc_perm_p_value(
     statistic = statistic, distribution = distribution, m = 5,
     n = 5, randomization = FALSE, n.rep = 100, alternative = "less") + calc_perm_p_value(
-    statistic = statistic, distribution = distribution, m = 5,
-    n = 5, randomization = FALSE, n.rep = 100, alternative = "greater") - 1/252, 1)
+      statistic = statistic, distribution = distribution, m = 5,
+      n = 5, randomization = FALSE, n.rep = 100, alternative = "greater") - 1/252, 1)
 
   # Does the relationship p.two.sided = 2 * min(p.greater, p.less) hold?
   # In this case it doesn't as the permutation distribution is not symmetric
@@ -207,18 +153,7 @@ testthat::test_that("calc_perm_p_value works correctly", {
 
 
   # Randomization distribution
-  # We trust the permp-function from statmod for calculation of the randomization p-value
-
-  # Check that the output is between 0 and 1
-  checkmate::expect_number(calc_perm_p_value(
-    statistic = statistic, distribution = distribution, m = 5, n = 5,
-    randomization = TRUE, n.rep = 250, alternative = "two.sided"), lower = 0, upper = 1)
-  checkmate::expect_number(calc_perm_p_value(
-    statistic = statistic, distribution = distribution, m = 5, n = 5,
-    randomization = TRUE, n.rep = 250, alternative = "greater"), lower = 0, upper = 1)
-  checkmate::expect_number(calc_perm_p_value(
-    statistic = statistic, distribution = distribution, m = 5, n = 5,
-    randomization = TRUE, n.rep = 250, alternative = "less"), lower = 0, upper = 1)
+  # We trust the permp-function from statmod for calculation of the randomization p-values
 })
 
 

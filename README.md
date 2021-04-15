@@ -2,6 +2,10 @@
 robTests
 ========
 
+<!-- badges: start -->
+[![Codecov test coverage](https://codecov.io/gh/s-abbas/robTests/branch/master/graph/badge.svg)](https://codecov.io/gh/s-abbas/robTests?branch=master)
+<!-- badges: end -->
+
 The R-package robTests contains different functions for robust two-sample tests for location.
 
 Installation
