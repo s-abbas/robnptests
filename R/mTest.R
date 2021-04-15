@@ -21,20 +21,29 @@
 #' @template scaleTau2
 #'
 #' @details
-#' When computing a randomization distribution based on randomly drawn splits
-#' with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
-#' is used to calculate the p-value. The psi function for the the M-estimate
-#' is computed via the implementations in the package \code{\link[=Mpsi]{robustbase}}.
-#' #'
-#' The test statistic is the difference of the M-estimates for both samples scaled
-#' by a pooled estimate for the standard deviation. This estimate is based on the
+#'
+#' The test statistic for this test is based on the difference of the M-estimates
+#' of location of \code{x} and \code{y}. We implemented three different psi-functions:
+#' \code{huber},\code{hampel} and \code{bisquare}. The according tuning parameter(s) can
+#' be set in the \code{k} argument of the function.
+
+#' The estimate of the location difference is scaled by a pooled estimate for
+#' the standard deviation. This estimate is based on the
 #' tau scale estimator. The tau scale estimate is computed with the default parameter settings
 #' of the function \code{\link[robustbase]{scaleTau2}}. These can be changed if necessary
 #' by setting \code{c1} and \code{c2}.
 #' More details are given in the vignette, which can be
 #' called by \code{vignette{"robTests-vignette"}}.
 #'
-#' The distribution of the test statistic is approximated by a standard normal distribution.
+#' We offer three versions of the test: randomization, permutation and asymptotic.
+#'
+#' When computing the randomization distribution based on randomly drawn splits
+#' with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+#' is used to calculate the p-value. The psi function for the the M-estimate
+#' is computed via the implementations in the package \code{\link[=Mpsi]{robustbase}}.
+#'
+#' For the asymptotic test, the distribution of the test statistic is approximated
+#' by a standard normal distribution.
 #' However, this assumption is only justified under the normality assumption. In
 #' case of a non-normal distribution, the test might not keep the desired significance
 #' level. The test keeps the level under several distributions as long as the

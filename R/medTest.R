@@ -21,15 +21,14 @@
 #' @template wobble_seed
 #'
 #' @details
-#' When computing a randomization distribution based on randomly drawn splits with
-#' replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
-#' is used to calculate the p-value. The test statistics and the asymptotic distribution
-#' are taken from \insertCite{FriDeh11robu;textual}{robTests}.
 #'
-#' The estimator of the location shift is the difference of the medians of \code{x} and \code{y}.
+#' The test statistic for this test is based on the difference of
+#' sample medians of \code{x} and \code{y}.
+#' We offer three versions of the test: randomization, permutation and asymptotic.
 #'
-#' The test statistics for the permutation and randomization version of the test is standardized
-#' using a robust scale estimator.
+#' The test statistic for the permutation and randomization version of the test
+#' is standardized using a robust scale estimator.
+#'
 #' The argument \code{scale = "S3"} represents use of
 #'
 #' \deqn{S = 2 * ( |X_1 - med(X)|,...,|X_m - med(X)|, |Y_1 - med(Y)|,...,|Y_n - med(Y)| ),}
@@ -38,6 +37,10 @@
 #'
 #' \deqn{S = ( med( |X_1 - med(X)|,...,|X_m - med(X)| ) + med( |Y_1 - med(Y)|,...,|Y_n - med(Y)| ).}
 #'
+#' When computing the randomization distribution based on randomly drawn splits with
+#' replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+#' is used to calculate the p-value. For the asymptotic test, a transformed version
+#' of the the difference of the HL1 estimators is compared to the standard normal distribution.
 #' For more details see \insertCite{FriDeh11robu;textual}{robTests}.
 #'
 #' For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
