@@ -233,7 +233,7 @@ check_test_input <- function(x,
 #'
 #' @details
 #' When the principle is specified by the user, i.e. method contains only
-#' one element, the selected method is returned. Otherwisse, if the user
+#' one element, the selected method is returned. Otherwise, if the user
 #' does not specify the principle, it depends on the sample size: When both
 #' samples contain more than 30 observations, an asymptotic test is perfomed.
 #' If one of the samples contains less than 30 observations, the null

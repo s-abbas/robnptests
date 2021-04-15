@@ -26,7 +26,8 @@
 #' is used to calculate the p-value. The test statistics and the asymptotic distribution
 #' are taken from \insertCite{FriDeh11robu;textual}{robTests}.
 #'
-#' The test statistics for the permutation and randomization version of the test is standardized using a robust scale estimator.
+#' The test statistic for the permutation and randomization version of the test
+#' is standardized using a robust scale estimator.
 #'
 #' Setting \code{scale = "S1"} represents use of
 #'
@@ -48,9 +49,11 @@
 #' printed.
 #'
 #' If the sample has been modified (either because of zeros for \code{var.test = TRUE}, or
-#' \code{wobble = TRUE}, the modified samples can be retrieved using
+#' \code{wobble = TRUE}), the modified samples can be retrieved using
 #'
 #' \code{set.seed(wobble.seed); wobble(x, y)}
+#'
+#' Both samples need to contain at least 5 non-missing values.
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:
@@ -161,7 +164,6 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   } else if (method == "permutation") {
     method <- "Exact permutation test based on the two-sample Hodges-Lehmann estimator"
   } else method <- "Asymptotic test based on the two-sample Hodges-Lehmann estimator"
-
 
   res <- list(statistic = statistic, parameter = NULL, p.value = p.value,
               estimate = estimates, null.value = delta, alternative = alternative,

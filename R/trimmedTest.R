@@ -16,7 +16,34 @@
 #' @template n_rep
 #' @template na_rm
 #' @template var_test
-#' @template wobble_seed
+#' @template wobble_seed_mtest
+#'
+#' @details
+#' The function performs Yuen's t-test based on the trimmed mean and winsorized
+#' variance \insertCite{YueDix73appr}{robTests}.
+#' The amount of trimming / winsorization is set in \code{gamma} and
+#' defaults to 0.2, i.e. 20\% of the values are removed / replaced.
+#' In addition to the asymptotic distribution we provide a permutation and a randomization
+#' version of the test.
+#'
+#' When computing a randomization distribution based on randomly drawn splits
+#' with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+#' is used to calculate the p-value.
+#'
+#' For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
+#' This is achieved by log-transforming the original observations so that a potential
+#' scale difference appears as a location difference between the transformed samples;
+#' see \insertCite{Fri12onli;textual}{robTests}. The sample should not contain zeros
+#' to prevent problems with the necessary log-transformation. If it contains zeros,
+#' uniform noise is added to all variables in order to remove zeros. A warning is
+#' printed.
+#'
+#' If the sample has been modified because of zeros when \code{var.test = TRUE},
+#' the modified samples can be retrieved using
+#'
+#' \code{set.seed(wobble.seed); wobble(x, y)}
+#'
+#' Both samples need to contain at least 5 non-missing values.
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:

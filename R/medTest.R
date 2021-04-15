@@ -28,7 +28,8 @@
 #'
 #' The estimator of the location shift is the difference of the medians of \code{x} and \code{y}.
 #'
-#' The test statistics for the permutation and randomization version of the test is standardized using a robust scale estimator.
+#' The test statistics for the permutation and randomization version of the test is standardized
+#' using a robust scale estimator.
 #' The argument \code{scale = "S3"} represents use of
 #'
 #' \deqn{S = 2 * ( |X_1 - med(X)|,...,|X_m - med(X)|, |Y_1 - med(Y)|,...,|Y_n - med(Y)| ),}
@@ -48,9 +49,11 @@
 #' printed.
 #'
 #' If the sample has been modified (either because of zeros for \code{var.test = TRUE}, or
-#' \code{wobble = TRUE}, the modified samples can be retrieved using
+#' \code{wobble = TRUE}), the modified samples can be retrieved using
 #'
 #' \code{set.seed(wobble.seed); wobble(x, y)}
+#'
+#' Both samples need to contain at least 5 non-missing values.
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:

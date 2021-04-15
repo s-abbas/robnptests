@@ -17,23 +17,21 @@
 #' @template n_rep
 #' @template na_rm
 #' @template var_test
-#' @template wobble_seed
+#' @template wobble_seed_mtest
 #' @template scaleTau2
 #'
 #' @details
-#' The test statistic is the difference of M-estimates for both samples
-#' divided by a pooled tau-estimate for the within-sample variance.
-#'
 #' When computing a randomization distribution based on randomly drawn splits
 #' with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
 #' is used to calculate the p-value. The psi function for the the M-estimate
 #' is computed via the implementations in the package \code{\link[=Mpsi]{robustbase}}.
-#' The tau scale estimate is computed with the default parameter settings
-#' of the function \code{\link[robustbase]{scaleTau2}}. These can be changed if necessary.
-#'
+#' #'
 #' The test statistic is the difference of the M-estimates for both samples scaled
 #' by a pooled estimate for the standard deviation. This estimate is based on the
-#' tau scale estimator. More details are given in the vignette, which can be
+#' tau scale estimator. The tau scale estimate is computed with the default parameter settings
+#' of the function \code{\link[robustbase]{scaleTau2}}. These can be changed if necessary
+#' by setting \code{c1} and \code{c2}.
+#' More details are given in the vignette, which can be
 #' called by \code{vignette{"robTests-vignette"}}.
 #'
 #' The distribution of the test statistic is approximated by a standard normal distribution.
@@ -52,10 +50,12 @@
 #' uniform noise is added to all variables in order to remove zeros. A warning is
 #' printed.
 #'
-#' If the sample has been modified (either because of zeros for \code{var.test = TRUE}, or
-#' \code{wobble = TRUE}, the modified samples can be retrieved using
+#' If the sample has been modified because of zeros when \code{var.test = TRUE},
+#' the modified samples can be retrieved using
 #'
 #' \code{set.seed(wobble.seed); wobble(x, y)}
+#'
+#' Both samples need to contain at least 5 non-missing values.
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:

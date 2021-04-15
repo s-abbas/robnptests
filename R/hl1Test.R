@@ -21,12 +21,12 @@
 #' @template wobble_seed
 #'
 #' @details
-#' When computing a randomization distribution based on randomly drawn splits with
-#' replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
-#' is used to calculate the p-value. The test statistics and the asymptotic distribution
-#' are taken from \insertCite{FriDeh11robu;textual}{robTests}.
+#' The test statistic for this test is based on the difference of the
+#' one-sample Hodges-Lehmann estimators of \code{x} and \code{y}.
+#' We offer three versions of the test: randomization, permutation and asymptotic.
 #'
-#' The test statistics for the permutation and randomization version of the test is standardized using a robust scale estimator.
+#' The test statistic for the permutation and randomization version of the test
+#' is standardized using a robust scale estimator.
 #'
 #' Setting \code{scale = "S1"} represents use of
 #'
@@ -39,6 +39,12 @@
 #' Here, \eqn{ Z = ( X_1 - med(X),...,X_m - med(X), Y_1 - med(Y),...,Y_n - med(Y) )'}
 #' is the median-corrected sample. For more details see \insertCite{FriDeh11robu;textual}{robTests}.
 #'
+#' When computing the randomization distribution based on randomly drawn splits with
+#' replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+#' is used to calculate the p-value. For the asymptotic test, a transformed version
+#' of the the difference of the HL1 estimators is compared to the standard normal distribution.
+#' For more details see \insertCite{FriDeh11robu;textual}{robTests}.
+#'
 #' For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
 #' This is achieved by log-transforming the original observations so that a potential
 #' scale difference appears as a location difference between the transformed samples;
@@ -48,9 +54,11 @@
 #' printed.
 #'
 #' If the sample has been modified (either because of zeros for \code{var.test = TRUE}, or
-#' \code{wobble = TRUE}, the modified samples can be retrieved using
+#' \code{wobble = TRUE}), the modified samples can be retrieved using
 #'
 #' \code{set.seed(wobble.seed); wobble(x, y)}
+#'
+#' Both samples need to contain at least 5 non-missing values.
 #'
 #' @return
 #' A list with class "\code{htest}" containing the following components:
