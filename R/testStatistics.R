@@ -84,7 +84,6 @@ trimmed_t <- function(x, y, gamma = 0.2, na.rm = FALSE) {
 #'
 #' @return A list containing the following components:
 #'         \item{statistic}{the selected test statistic.}
-#'         \item{abs.statistic}{the absolute value of the selected test statistic.}
 #'         \item{estimates}{estimate of location for each sample if available.}
 #'
 #' @details The test statistics returned by \code{rob_perm_statistic} are of the form
@@ -167,7 +166,7 @@ rob_perm_statistic <- function(x, y,
             res <- loc/sd
       })
 
-  return(list(statistic = res, abs.statistic = abs(res), estimates = c(est.x, est.y)))
+  return(list(statistic = res, estimates = c(est.x, est.y)))
 }
 
 
