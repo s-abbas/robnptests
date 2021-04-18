@@ -52,7 +52,7 @@ testthat::test_that("hl2_test works correctly", {
   res.method <- res.asymptotic$method
 
   testthat::expect_equal(res.statistic, sqrt(12 * lambda * (1 - lambda)) * int * sqrt(m + n) * est)
-  testthat::expect_equal(res.method, "Asymptotic test based on the two-sample Hodges-Lehmann estimator")
+  testthat::expect_equal(res.method, "Asymptotic test based on HL2-estimator")
 
   ## ___________________________________________________________________________
   ## If no method is given, the randomized test should be performed automatically
@@ -66,7 +66,7 @@ testthat::test_that("hl2_test works correctly", {
   res.randomized <- hl2_test(x, y)
   res.method <- res.randomized$method
 
-  testthat::expect_equal(res.method, "Randomization test based on the two-sample Hodges-Lehmann estimator using 10000 random permutations")
+  testthat::expect_equal(res.method, "Randomization test based on HL2-estimator (10000 random permutations)")
 
   ## ___________________________________________________________________________
   ## Throw error when one or both samples consist of less than five observations
@@ -198,7 +198,11 @@ testthat::test_that("hl2_test works correctly", {
   x <- c(0, 0, 0, 0, 0, 1, 0, 0, 0, 0)
   y <- c(0, 1, 2, 0, 1, 2, 0, 1, 2, 0)
 
-  testthat::expect_error(hl2_test(x, y, method = "randomization", n.rep = 1000))
+  testthat::expect_error(
+    suppressWarnings(
+      hl2_test(x, y, method = "randomization", n.rep = 1000)
+    )
+  )
 
   testthat::expect_warning(hl2_test(x, y, method = "randomization", n.rep = 1000,
                                     wobble = TRUE, wobble.seed = 1234))
