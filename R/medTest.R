@@ -130,7 +130,8 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     type <- "MED2"
   }
 
-  method <- select_method(x = x, y = y, method = method, test.name = "med_test")
+  method <- select_method(x = x, y = y, method = method, test.name = "med_test",
+                          n.rep = n.rep)
 
   if (method %in% c("permutation", "randomization")) {
     ## Set n.rep

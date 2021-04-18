@@ -229,7 +229,9 @@ check_test_input <- function(x,
 #'
 #' @template x
 #' @template y
+#' @template method
 #' @template test_name
+#' @template n_rep
 #'
 #' @details
 #' When the principle is specified by the user, i.e. method contains only
@@ -247,14 +249,19 @@ check_test_input <- function(x,
 #'
 #' @keywords internal
 
-select_method <- function(x, y, method, test.name) {
+select_method <- function(x, y, method, test.name, n.rep) {
 
   ## Select principle for computing the null distribution ----
   ## If 'method' contains only one entry, the principle is specified by the
   ## user
   if (length(method) == 1) {
-    # User-specified principle
-    return(method)
+    if (method == "randomization" & n.rep >= choose(length(x) + length(y), length(y))) {
+      # if n.rep is larger than the maximum number of permutations, automatically
+      # perform a permutation test
+      return("permutation")
+    } else { # User-specified principle
+      return(method)
+    }
   }
 
   if (test.name %in% c("hl1_test", "hl2_test", "med_test", "trimmed_test", "m_test")) {
@@ -262,10 +269,13 @@ select_method <- function(x, y, method, test.name) {
     if (length(method) > 1 & all(c("asymptotic", "permutation", "randomization") %in% method)) {
       if (length(x) >= 30 & length(y) >= 30) {
         method <- "asymptotic"
+      } else if (n.rep >= choose(length(x) + length(y), length(y))) {
+        method <- "permutation"
       } else {
         method <- "randomization"
       }
     }
+
     return(method)
   } else {
     stop(paste("Automatic selection not implemented for test",

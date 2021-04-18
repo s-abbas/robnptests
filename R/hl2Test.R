@@ -130,7 +130,8 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     type <- "HL22"
   }
 
-  method <- select_method(x = x, y = y, method = method, test.name = "hl2_test")
+  method <- select_method(x = x, y = y, method = method, test.name = "hl2_test",
+                          n.rep = n.rep)
 
 
   if (method %in% c("permutation", "randomization")) {
