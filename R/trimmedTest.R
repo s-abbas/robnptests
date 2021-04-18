@@ -16,7 +16,7 @@
 #' @template n_rep
 #' @template na_rm
 #' @template var_test
-#' @template wobble_seed_mtest
+#' @template wobble_seed
 #'
 #' @details
 #' The function performs Yuen's t-test based on the trimmed mean and winsorized
@@ -175,6 +175,15 @@ trimmed_test <- function(x, y, gamma = 0.2,
     method <- paste("Trimmed two-sample t-test based on",
                     method, "using",n.rep, "random permutations")
     } else  method <- paste("Trimmed two-sample t-test based on", method, "distribution")
+
+  # Information on applied test
+  if (method == "randomization") {
+    method <- paste0("Randomization test based on trimmed means ", "(", n.rep, " random permutations)")
+  } else if (method == "permutation") {
+    method <- "Exact permutation test based on trimmed means"
+  } else {
+    method <- "Yuen t-test"
+  }
 
 
   res <- list(statistic = statistic, parameter = df, p.value = p.value,
