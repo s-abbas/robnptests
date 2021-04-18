@@ -12,7 +12,6 @@
 #' @template gamma_winsorized_variance
 #' @template na_rm
 #'
-#'
 #' @return A list containing the following items:
 #' \item{var}{winsorized variance.}
 #' \item{h}{degrees of freedom used for tests based on trimmed means and the
@@ -77,9 +76,17 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
 #' @template y
 #' @template scale_type
 #' @template na_rm
+#' @template check_for_zero
 #'
 #' @details
 #' For definitions of the scale estimators see Fried and Dehling (2011).
+#'
+#' If \code{check.for.zero = TRUE}, a warning is printed when the scale estimate
+#' is zero. This argument is only included as the function is used in
+#' \code{\link{rob_perm_statistic}} to computed values of robust test statistics
+#' where the scale estimate is a standardization. A scale estimate of zero leads
+#' to a non-existing test statistic, so that the corresponding test cannot be
+#' performed.
 #'
 #' @return
 #' An estimate of the pooled variance of the two samples.
@@ -91,7 +98,7 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
 #'
 #' @export
 
-rob_var <- function(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE) {
+rob_var <- function(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE, check.for.zero = FALSE) {
 
   ## Check input arguments
   stopifnot("'x' is missing." = !missing(x))
@@ -114,11 +121,6 @@ rob_var <- function(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE) {
     y <- as.vector(stats::na.omit(y))
   }
 
-  ## Error message if all values in 'x' are equal ----
-  if (length(unique(x)) == 1 & length(unique(y)) == 1) {
-    stop("All values in '", deparse(substitute(x)), "' ", "and '", deparse(substitue(y)), "' ", "are equal. The scale estimate is '0' and the test statistic cannot be computed.")
-  }
-
   ## Compute scale estimates ----
   if (type == "S1") {
     xcomb <- utils::combn(x, 2)
@@ -136,9 +138,15 @@ rob_var <- function(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE) {
     est <- stats::median(abs(x - stats::median(x)) + stats::median(abs(y - stats::median(y))))
   }
 
-  if (est == 0 & (length(unique(x)) > 1 & length(unique(y)) > 1)) {
-    stop( "Estimate of scale is '0' although the data are not constant.
-          Consider using a different estimator or setting wobble = TRUE in the function call. Otherwise, the test statistic cannot be computed.")
+  ## Error message, if 'est' = 0 ----
+  if (check.for.zero & est == 0) {
+    if (length(unique(c(x, y))) == 1) {
+      # All values in 'x' and 'y' are equal
+      warning("All values in '", deparse(substitute(x)), "' ", "and '", deparse(substitute(y)), "' ", "are equal. The scale estimate is '0' and the test statistic cannot be computed.")
+    } else {
+      # Scale estimate is zero although data are not constant
+      warning("Estimate of scale is '0' although the data are not constant. Consider using a different estimator or setting 'wobble = TRUE' in the function call. Otherwise, the test statistic cannot be computed.")
+    }
   }
 
   return(est)
