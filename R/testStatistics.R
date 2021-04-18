@@ -129,40 +129,40 @@ rob_perm_statistic <- function(x, y,
             est.x <- hodges_lehmann(x)
             est.y <- hodges_lehmann(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, type = "S1")
+            sd <- rob_var(x, y, type = "S1", check.for.zero = TRUE)
             res <- loc/sd
          },
          HL12 = {
             est.x <- hodges_lehmann(x)
             est.y <- hodges_lehmann(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, type = "S2")
+            sd <- rob_var(x, y, type = "S2", check.for.zero = TRUE)
             res <- loc/sd
          },
          HL21 = {
             est.x <- est.y <- NULL
             loc <- hodges_lehmann_2sample(x, y)
-            sd <- rob_var(x, y, type = "S1")
+            sd <- rob_var(x, y, type = "S1", check.for.zero = TRUE)
             res <- loc/sd
          },
          HL22 = {
             est.x <- est.y <- NULL
             loc <- hodges_lehmann_2sample(x, y)
-            sd <- rob_var(x, y, type = "S2")
+            sd <- rob_var(x, y, type = "S2", check.for.zero = TRUE)
             res <- loc/sd
          },
          MED1 = {
             est.x <- stats::median(x)
             est.y <- stats::median(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, type = "S3")
+            sd <- rob_var(x, y, type = "S3", check.for.zero = TRUE)
             res <- loc/sd
         },
          MED2 = {
             est.x <- stats::median(x)
             est.y <- stats::median(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, type = "S4")
+            sd <- rob_var(x, y, type = "S4", check.for.zero = TRUE)
             res <- loc/sd
       })
 
@@ -192,7 +192,6 @@ m_test_statistic <- function(x,
                              y,
                              psi,
                              k = robustbase::.Mpsi.tuning.default(psi),
-                             na.rm = FALSE,
                              ...) {
 
   ## Check input arguments ----
@@ -200,12 +199,17 @@ m_test_statistic <- function(x,
   checkmate::assert_numeric(y, finite = TRUE, all.missing = FALSE, min.len = 5, null.ok = FALSE)
   checkmate::assert_choice(psi, choices = c("huber", "hampel", "bisquare"), null.ok = FALSE)
   checkmate::assert_numeric(k, lower = 0, len = ifelse(psi == "hampel", 3, 1), finite = TRUE, any.missing = FALSE, null.ok = FALSE)
-  checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
 
   ## Remove missing values in 'x' and 'y'----
-  if (na.rm) {
+  if (any(is.na(c(x, y)))) {
     x <- as.vector(na.omit(x))
     y <- as.vector(na.omit(y))
+
+    warning("Removed missing values from the samples.")
+  }
+
+  if (length(x) < 5 | length(y) < 5) {
+    stop("Both samples need at least 5 non-missing values.")
   }
 
   ## Sample sizes ----
