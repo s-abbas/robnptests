@@ -77,7 +77,7 @@ testthat::test_that("win_var works correctly", {
 ## ----
 
 ## Robust variance for 'hl1_test', 'hl2_test', and 'med_test' ----
-testthat::test_that("Robust scale estimators work correctly", {
+testthat::test_that("rob_var works correctly", {
 
   ## Exemplary input vectors ----
   x <- c(7, 2, 1, 6, 8)
@@ -95,11 +95,16 @@ testthat::test_that("Robust scale estimators work correctly", {
   ## All values in 'x' and 'y' are equal ----
 
   # No NAs in 'x' and 'y'
-  testthat::expect_error(rob_var(x = rep(0, 5), y = rep(5, 5)))
+  testthat::expect_equal(rob_var(x = rep(0, 5), y = rep(0, 5)), 0)
+  testthat::expect_warning(rob_var(x = rep(0, 5), y = rep(0, 5),
+                                   check.for.zero = TRUE))
 
   # NAs in 'x' and 'y'
-  testthat::expect_error(rob_var(x = c(NA, rep(0, 5)), y = c(NA, rep(5, 5)),
-                                 na.rm = TRUE))
+  testthat::expect_equal(rob_var(x = c(NA, rep(0, 5)), y = c(NA, rep(0, 5)),
+                                 na.rm = TRUE), 0)
+
+  testthat::expect_warning(rob_var(x = c(NA, rep(0, 5)), y = c(NA, rep(0, 5)),
+                                 na.rm = TRUE, check.for.zero = TRUE))
 
   ## Location invariance, scale equivariance, and permutation invariance ----
   types <- c("S1", "S2", "S3", "S4")
@@ -108,22 +113,16 @@ testthat::test_that("Robust scale estimators work correctly", {
   for (i in seq_along(types)) {
     testthat::expect_equal(rob_var(x = x + 2, y = y + 3, type = types[i]),
                            rob_var(x = x, y = y, type = types[i]))
-  }
 
-  # Scale equivariance
-  for (i in seq_along(types)) {
+    # Scale equivariance
     testthat::expect_equal(rob_var(x = 2 * x, y = 2 * y, type = types[i]),
                            2 * rob_var(x = x, y = y, type = types[i]))
-  }
 
-  # Permutation invariance
-  for (i in seq_along(types)) {
+    # Permutation invariance
     testthat::expect_equal(rob_var(x = sort(x), y = sort(y), type = types[i]),
                            rob_var(x = x, y = y, type = types[i]))
-  }
 
-  # Switch 'x' and 'y'
-  for (i in seq_along(types)) {
+    # Switch 'x' and 'y'
     testthat::expect_equal(rob_var(x = y, y = x, type = types[i]),
                            rob_var(x = x, y = y, type = types[i]))
   }
@@ -142,24 +141,18 @@ testthat::test_that("Robust scale estimators work correctly", {
   # For 'type' = 'S4', the output should be 3
   testthat::expect_equal(rob_var(x = x, y = y, type = "S4"), 3)
 
-  # The output should be a numeric scalar
-  checkmate::expect_numeric(rob_var(x = x, y = y, type = "S1"), len = 1)
-  checkmate::expect_numeric(rob_var(x = x, y = y, type = "S2"), len = 1)
-  checkmate::expect_numeric(rob_var(x = x, y = y, type = "S3"), len = 1)
-  checkmate::expect_numeric(rob_var(x = x, y = y, type = "S4"), len = 1)
+  for (i in seq_along(types)) {
+    # The output should be a numeric scalar
+    checkmate::expect_numeric(rob_var(x = x, y = y, type = types[i]), len = 1)
 
-  checkmate::expect_numeric(rob_var(x = c(x, NA_real_), y = y, type = "S1"),
-                            len = 1)
-  checkmate::expect_numeric(rob_var(x = c(x, NA_real_), y = y, type = "S2"),
-                            len = 1)
-  checkmate::expect_numeric(rob_var(x = c(x, NA_real_), y = y, type = "S3"),
-                            len = 1)
-  checkmate::expect_numeric(rob_var(x = c(x, NA_real_), y = y, type = "S4"),
-                            len = 1)
+    checkmate::expect_numeric(rob_var(x = c(x, NA_real_), y = y,
+                                      type = types[i]),
+                              len = 1)
+  }
 
   # An error is expected when the scale estimate is zero even though the data
   # are not constant
   x1 <- c(7, 2, 1, 2, 2)
   y1 <- c(5, 9, 2, 2, 2)
-  testthat::expect_error(rob_var(x = x1, y = y1, type = "S3"))
+  testthat::expect_warning(rob_var(x = x1, y = y1, type = "S3", check.for.zero = TRUE))
 })
