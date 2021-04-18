@@ -131,7 +131,8 @@ hl1_test <- function(x,
   } else return(NA)
 
 
-  method <- select_method(x = x, y = y, method = method, test.name = "hl1_test")
+  method <- select_method(x = x, y = y, method = method, test.name = "hl1_test",
+                          n.rep = n.rep)
 
   if (scale == "S1") {
     type <- "HL11"

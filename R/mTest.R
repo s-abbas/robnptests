@@ -133,7 +133,8 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   } else return(NA)
 
 
-  method <- select_method(x = x, y = y, method = method, test.name = "m_test")
+  method <- select_method(x = x, y = y, method = method, test.name = "m_test",
+                          n.rep = n.rep)
 
   ## ___________________________________________________________________________
   ## Test decision

@@ -99,7 +99,7 @@ testthat::test_that("select_method works correctly", {
 
   ## Principle specified by user ----
   testthat::expect_equal(select_method(x = x1, y = y1, method = "randomization",
-                                       test.name = "hl1_test"),
+                                       test.name = "hl1_test", n.rep = 10000),
                          "randomization")
 
   ## Automatic selection of the principle ----
@@ -109,21 +109,28 @@ testthat::test_that("select_method works correctly", {
   testthat::expect_equal(select_method(x = x1, y = y1,
                                        method = c("asymptotic", "permutation",
                                                   "randomization"),
-                                       test.name = "hl1_test"),
+                                       test.name = "hl1_test", n.rep = 10000),
                          "randomization")
+
+  # m = n = 5 and n.rep >= choose(m+n, n) -> permutation test
+  testthat::expect_equal(select_method(x = x1, y = y1,
+                                      method = c("asymptotic", "permutation",
+                                                 "randomization"),
+                                      test.name = "hl1_test", n.rep = 200000),
+                        "permutation")
 
   # m = n = 30 -> asymptotic test
   testthat::expect_equal(select_method(x = x2, y = y2,
                                        method = c("asymptotic", "permutation",
                                                   "randomization"),
-                                       test.name = "hl1_test"),
+                                       test.name = "hl1_test", n.rep = 10000),
                          "asymptotic")
 
   # Automatic selection is not implemented for the test
   testthat::expect_error(select_method(x = x1, y = y1,
                                        method = c("asymptotic", "permutation",
                                                   "randomization"),
-                                       test.name = "m_test1")
+                                       test.name = "m_test1", n.rep = 10000)
   )
 
 

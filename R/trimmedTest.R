@@ -104,7 +104,8 @@ trimmed_test <- function(x, y, gamma = 0.2,
     x <- prep$x; y <- prep$y; delta <- prep$delta
   } else return(NA)
 
-  method <- select_method(x = x, y = y, method = method, test.name = "trimmed_test")
+  method <- select_method(x = x, y = y, method = method, test.name = "trimmed_test",
+                          n.rep = n.rep)
 
   ## Results of trimmed_t
   t.stats <- trimmed_t(x, y + delta, gamma = gamma, na.rm = na.rm)
