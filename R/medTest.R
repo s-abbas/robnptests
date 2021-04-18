@@ -165,11 +165,10 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   names(statistic) <- ifelse(var.test, "S", "D")
 
   if (method == "randomization") {
-    method <- paste("Randomization test based on sample medians using", n.rep,
-                   "random permutations")
+    method <- paste0("Randomization test based on sample median", " (", n.rep, " random permutations)")
   } else if (method == "permutation") {
-    method <- "Exact permutation test based on sample medians"
-  } else method <- "Asymptotic test based on sample medians"
+    method <- "Exact permutation test based on sample median"
+  } else method <- "Asymptotic test based on sample median"
 
 
   res <- list(statistic = statistic, parameter = NULL, p.value = p.value,

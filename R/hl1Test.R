@@ -173,11 +173,11 @@ hl1_test <- function(x,
 
   # Information on applied test
   if (method == "randomization") {
-    method <- paste("Randomization test based on the one-sample Hodges-Lehmann estimator using", n.rep, "random permutations")
+    method <- paste0("Randomization test based on HL1-estimator ", "(", n.rep, " random permutations)")
   } else if (method == "permutation") {
-    method <- "Exact permutation test based on the one-sample Hodges-Lehmann estimator"
+    method <- "Exact permutation test based on HL1-estimator"
   } else {
-    method <- "Asymptotic test based on the one-sample Hodges-Lehmann estimator"
+    method <- "Asymptotic test based on HL1-estimator"
   }
 
   # Results
