@@ -17,7 +17,7 @@
 #' @template n_rep
 #' @template na_rm
 #' @template var_test
-#' @template wobble_seed_mtest
+#' @template wobble_seed
 #' @template scaleTau2
 #'
 #' @details
@@ -149,6 +149,8 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     ## _________________________________________________________________________
     ## Test decision for permutation and randomization test
     ## _________________________________________________________________________
+    ## Set n.rep
+    n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
 
     ## Permutation or randomization distribution
     distribution <- m_est_perm_distribution(x = x, y = y - delta, randomization = (method == "randomization"),
@@ -187,10 +189,10 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
 
   ## Name of method to compute p-value
   if (method == "randomization") {
-    method <- paste("Randomization test based on the ", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
+    method <- paste0("Randomization test based on ", toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi)), " M-estimator ", "(", n.rep, " random permutations)")
   } else if (method == "permutation") {
-    method <- paste("Exact permutation test based on the", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
-  } else method <- paste("Asymptotic test based on the", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
+    method <- paste("Exact permutation test based on ", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
+  } else method <- paste("Asymptotic test based on ", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
 
   ## Output
   res <- list(statistic = statistic, parameter = NULL, p.value = p.value,
