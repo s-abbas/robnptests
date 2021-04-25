@@ -29,8 +29,8 @@ preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, var.test) {
 
   ## Remove missing values ----
   if (na.rm) {
-    x <- as.vector(na.omit(x))
-    y <- as.vector(na.omit(y))
+    x <- as.vector(stats::na.omit(x))
+    y <- as.vector(stats::na.omit(y))
   }
 
   ## Check sample sizes ----

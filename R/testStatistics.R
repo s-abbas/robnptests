@@ -37,8 +37,8 @@ trimmed_t <- function(x, y, gamma = 0.2, na.rm = FALSE) {
 
   ## Remove missing values in 'x' and 'y'----
   if (na.rm) {
-    x <- as.vector(na.omit(x))
-    y <- as.vector(na.omit(y))
+    x <- as.vector(stats::na.omit(x))
+    y <- as.vector(stats::na.omit(y))
   }
 
   ## Trimmed means
@@ -119,8 +119,8 @@ rob_perm_statistic <- function(x, y,
 
   ## Remove missing values in 'x' and 'y'----
   if (na.rm) {
-    x <- as.vector(na.omit(x))
-    y <- as.vector(na.omit(y))
+    x <- as.vector(stats::na.omit(x))
+    y <- as.vector(stats::na.omit(y))
   }
 
   ## Compute value of test statistic ----
@@ -178,7 +178,6 @@ rob_perm_statistic <- function(x, y,
 #' @template y
 #' @template psi
 #' @template k_mest
-#' @template na_rm
 #' @template scaleTau2
 #'
 #' @return A list containing the following components:
@@ -202,8 +201,8 @@ m_test_statistic <- function(x,
 
   ## Remove missing values in 'x' and 'y'----
   if (any(is.na(c(x, y)))) {
-    x <- as.vector(na.omit(x))
-    y <- as.vector(na.omit(y))
+    x <- as.vector(stats::na.omit(x))
+    y <- as.vector(stats::na.omit(y))
 
     warning("Removed missing values from the samples.")
   }
