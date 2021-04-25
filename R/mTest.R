@@ -17,7 +17,7 @@
 #' @template n_rep
 #' @template na_rm
 #' @template var_test
-#' @template wobble_seed
+#' @template wobble_seed_mtest
 #' @template scaleTau2
 #'
 #' @details
@@ -32,8 +32,8 @@
 #' tau scale estimator. The tau scale estimate is computed with the default parameter settings
 #' of the function \code{\link[robustbase]{scaleTau2}}. These can be changed if necessary
 #' by setting \code{c1} and \code{c2}.
-#' More details are given in the vignette, which can be
-#' called by \code{vignette{"robTests-vignette"}}.
+#' More details are given in the vignettes \code{vignette{"robTests-vignette"}}
+#' and \code{vignette{"mTest-vignette"}}.
 #'
 #' We offer three versions of the test: randomization, permutation and asymptotic.
 #'
