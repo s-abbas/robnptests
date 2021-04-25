@@ -11,3 +11,4 @@ man-roxygen
 ^codecov\.yml$
 ^vignettes/robTests\.Rmd\.orig
 ^vignettes/robTests-vignette\.Rmd
+data-raw
