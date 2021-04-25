@@ -37,7 +37,13 @@ approximation, \code{"permutation"} for a permutation test and
 \code{"randomization"} for a randomization test.
 The permutation test uses all splits of the joint sample into two samples
 of sizes \code{m} and \code{n}, while the randomization test draws
-\code{n.rep} random splits with replacement.}
+\code{n.rep} random splits with replacement. If not specified explicitly,
+defaults to
+\code{"permutation"},  if \code{m < 30}, \code{n < 30} and
+ \code{n.rep >= choose(m+n, m)},
+\code{"randomization"}, if \code{m < 30}, \code{n < 30} and
+ \code{n.rep < choose(m+n, m)}, and
+ \code{"asymptotic"}, if \code{m >= 30} and \code{n >= 30}.}
 
 \item{psi}{kernel used for optimization.
 Must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"}.
@@ -57,11 +63,11 @@ The default is \code{n.rep = 10000}.}
 \item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
 
 \item{wobble.seed}{integer value used as a seed for the random number
-generation in case of \code{wobble = TRUE} or when the
-\code{var.test = TRUE} and on of the vectors \code{x} and
+generation in case that \code{var.test = TRUE}
+and one of the vectors \code{x} and
 \code{y} contains zeros. When no seed is specified, it is
-set randomly. The argument is ignored if
-\code{var.test = FALSE} and \code{wobble = FALSE}.}
+set randomly and printed in a warning The argument is ignored if
+\code{var.test = FALSE}.}
 
 \item{...}{further parameters \code{c1} and \code{c2} that can be passed to
 the scale estimator \code{scaleTau2()} in order to account for
@@ -83,26 +89,31 @@ A list with class "\code{htest}" containing the following components:
              based on M-estimators.
 }
 \details{
-The test statistic is the difference of M-estimates for both samples
-divided by a pooled tau-estimate for the within-sample variance.
+The test statistic for this test is based on the difference of the M-estimates
+of location of \code{x} and \code{y}. We implemented three different psi-functions:
+\code{huber},\code{hampel} and \code{bisquare}. The according tuning parameter(s) can
+be set in the \code{k} argument of the function.
+The estimate of the location difference is scaled by a pooled estimate for
+the standard deviation. This estimate is based on the
+tau scale estimator. The tau scale estimate is computed with the default parameter settings
+of the function \code{\link[robustbase]{scaleTau2}}. These can be changed if necessary
+by setting \code{c1} and \code{c2}.
+More details are given in the vignette, which can be
+called by \code{vignette{"robTests-vignette"}}.
 
-When computing a randomization distribution based on randomly drawn splits
+We offer three versions of the test: randomization, permutation and asymptotic.
+
+When computing the randomization distribution based on randomly drawn splits
 with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
 is used to calculate the p-value. The psi function for the the M-estimate
 is computed via the implementations in the package \code{\link[=Mpsi]{robustbase}}.
-The tau scale estimate is computed with the default parameter settings
-of the function \code{\link[robustbase]{scaleTau2}}. These can be changed if necessary.
 
-The test statistic is the difference of the M-estimates for both samples scaled
-by a pooled estimate for the standard deviation. This estimate is based on the
-tau scale estimator. More details are given in the vignette, which can be
-called by \code{vignette{"robTests-vignette"}}.
-
-The distribution of the test statistic is approximated by a standard normal distribution.
+For the asymptotic test, the distribution of the test statistic is approximated
+by a standard normal distribution.
 However, this assumption is only justified under the normality assumption. In
 case of a non-normal distribution, the test might not keep the desired significance
 level. The test keeps the level under several distributions as long as the
-variance exists. However, under skewed distributions, it tends to be conservative.
+variance exists. However, under skewed distributions, it tends to be anti-conservative.
 The test statistic can be corrected by a factor which has to be determined
 individually for a specific distribution.
 
@@ -114,10 +125,12 @@ to prevent problems with the necessary log-transformation. If it contains zeros,
 uniform noise is added to all variables in order to remove zeros. A warning is
 printed.
 
-If the sample has been modified (either because of zeros for \code{var.test = TRUE}, or
-\code{wobble = TRUE}, the modified samples can be retrieved using
+If the sample has been modified because of zeros when \code{var.test = TRUE},
+the modified samples can be retrieved using
 
 \code{set.seed(wobble.seed); wobble(x, y)}
+
+Both samples need to contain at least 5 non-missing values.
 }
 \examples{
 ## Generate random samples

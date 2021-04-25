@@ -36,7 +36,13 @@ approximation, \code{"permutation"} for a permutation test and
 \code{"randomization"} for a randomization test.
 The permutation test uses all splits of the joint sample into two samples
 of sizes \code{m} and \code{n}, while the randomization test draws
-\code{n.rep} random splits with replacement.}
+\code{n.rep} random splits with replacement. If not specified explicitly,
+defaults to
+\code{"permutation"},  if \code{m < 30}, \code{n < 30} and
+ \code{n.rep >= choose(m+n, m)},
+\code{"randomization"}, if \code{m < 30}, \code{n < 30} and
+ \code{n.rep < choose(m+n, m)}, and
+ \code{"asymptotic"}, if \code{m >= 30} and \code{n >= 30}.}
 
 \item{scale}{a character string specifying the scale estimator used for standardization
 in the test statistic; must be one of \code{"S1"} and \code{"S2"}.
@@ -52,16 +58,18 @@ The default is \code{n.rep = 10000}.}
 
 \item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
 
-\item{wobble}{logical value indicating whether uniform noise should be added to the sample before
-proceeding with the test, in order to make sure there are no duplicate values in the
-sample that can cause the scale estimate to be 0. Only necessary for the permutation and
-randomization version of the test. The default is \code{wobble = FALSE}.}
+\item{wobble}{logical value indicating whether the sample should be checked for
+duplicated values that can cause the scale estimate to be zero.
+If such values are present, uniform noise is added to the sample,
+see \code{\link[robTests]{wobble()}}.
+Only necessary for the permutation and randomization version of the test.
+The default is \code{wobble = FALSE}.}
 
 \item{wobble.seed}{integer value used as a seed for the random number
-generation in case of \code{wobble = TRUE} or when the
-\code{var.test = TRUE} and on of the vectors \code{x} and
+generation in case of \code{wobble = TRUE} or when
+\code{var.test = TRUE} and one of the vectors \code{x} and
 \code{y} contains zeros. When no seed is specified, it is
-set randomly. The argument is ignored if
+set randomly and printed in a warning The argument is ignored if
 \code{var.test = FALSE} and \code{wobble = FALSE}.}
 }
 \value{
@@ -79,12 +87,12 @@ A list with class "\code{htest}" containing the following components:
 the difference of the one-sample Hodges-Lehmann estimators of both samples.
 }
 \details{
-When computing a randomization distribution based on randomly drawn splits with
-replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
-is used to calculate the p-value. The test statistics and the asymptotic distribution
-are taken from \insertCite{FriDeh11robu;textual}{robTests}.
+The test statistic for this test is based on the difference of the
+one-sample Hodges-Lehmann estimators of \code{x} and \code{y}.
+We offer three versions of the test: randomization, permutation and asymptotic.
 
-The test statistics for the permutation and randomization version of the test is standardized using a robust scale estimator.
+The test statistic for the permutation and randomization version of the test
+is standardized using a robust scale estimator.
 
 Setting \code{scale = "S1"} represents use of
 
@@ -97,6 +105,12 @@ whereas \code{scale = "S2"} uses
 Here, \eqn{ Z = ( X_1 - med(X),...,X_m - med(X), Y_1 - med(Y),...,Y_n - med(Y) )'}
 is the median-corrected sample. For more details see \insertCite{FriDeh11robu;textual}{robTests}.
 
+When computing the randomization distribution based on randomly drawn splits with
+replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+is used to calculate the p-value. For the asymptotic test, a transformed version
+of the the difference of the HL1 estimators is compared to the standard normal distribution.
+For more details see \insertCite{FriDeh11robu;textual}{robTests}.
+
 For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
 This is achieved by log-transforming the original observations so that a potential
 scale difference appears as a location difference between the transformed samples;
@@ -106,9 +120,11 @@ uniform noise is added to all variables in order to remove zeros. A warning is
 printed.
 
 If the sample has been modified (either because of zeros for \code{var.test = TRUE}, or
-\code{wobble = TRUE}, the modified samples can be retrieved using
+\code{wobble = TRUE}), the modified samples can be retrieved using
 
 \code{set.seed(wobble.seed); wobble(x, y)}
+
+Both samples need to contain at least 5 non-missing values.
 }
 \examples{
 ## Generate random samples

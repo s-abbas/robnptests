@@ -40,7 +40,8 @@ A list containing the components:
 for different psi functions.
 }
 \details{
-To compute the M-estimate, the iterative algorithm described in \insertCite{MarMarYoh06robu;textual}{robTests} is used.
+To compute the M-estimate, the iterative algorithm described in
+\insertCite{MarMarYoh06robu;textual}{robTests} is used.
 The variance is estimated as in \insertCite{Hub81robu;textual}{robTests}.
 
 If \code{max.it} contains decimal places, it is truncated.

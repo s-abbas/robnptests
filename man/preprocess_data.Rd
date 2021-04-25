@@ -17,16 +17,18 @@ The default is \code{delta = 0} for location test and \code{delta = 1} for scale
 
 \item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 
-\item{wobble}{logical value indicating whether uniform noise should be added to the sample before
-proceeding with the test, in order to make sure there are no duplicate values in the
-sample that can cause the scale estimate to be 0. Only necessary for the permutation and
-randomization version of the test. The default is \code{wobble = FALSE}.}
+\item{wobble}{logical value indicating whether the sample should be checked for
+duplicated values that can cause the scale estimate to be zero.
+If such values are present, uniform noise is added to the sample,
+see \code{\link[robTests]{wobble()}}.
+Only necessary for the permutation and randomization version of the test.
+The default is \code{wobble = FALSE}.}
 
 \item{wobble.seed}{integer value used as a seed for the random number
-generation in case of \code{wobble = TRUE} or when the
-\code{var.test = TRUE} and on of the vectors \code{x} and
+generation in case of \code{wobble = TRUE} or when
+\code{var.test = TRUE} and one of the vectors \code{x} and
 \code{y} contains zeros. When no seed is specified, it is
-set randomly. The argument is ignored if
+set randomly and printed in a warning The argument is ignored if
 \code{var.test = FALSE} and \code{wobble = FALSE}.}
 
 \item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}

@@ -35,7 +35,13 @@ approximation, \code{"permutation"} for a permutation test and
 \code{"randomization"} for a randomization test.
 The permutation test uses all splits of the joint sample into two samples
 of sizes \code{m} and \code{n}, while the randomization test draws
-\code{n.rep} random splits with replacement.}
+\code{n.rep} random splits with replacement. If not specified explicitly,
+defaults to
+\code{"permutation"},  if \code{m < 30}, \code{n < 30} and
+ \code{n.rep >= choose(m+n, m)},
+\code{"randomization"}, if \code{m < 30}, \code{n < 30} and
+ \code{n.rep < choose(m+n, m)}, and
+ \code{"asymptotic"}, if \code{m >= 30} and \code{n >= 30}.}
 
 \item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
 on whether the test should be performed for a difference in location or in scale.
@@ -51,11 +57,11 @@ The default is \code{n.rep = 10000}.}
 \item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
 
 \item{wobble.seed}{integer value used as a seed for the random number
-generation in case of \code{wobble = TRUE} or when the
-\code{var.test = TRUE} and on of the vectors \code{x} and
+generation in case that \code{var.test = TRUE}
+and one of the vectors \code{x} and
 \code{y} contains zeros. When no seed is specified, it is
-set randomly. The argument is ignored if
-\code{var.test = FALSE} and \code{wobble = FALSE}.}
+set randomly and printed in a warning The argument is ignored if
+\code{var.test = FALSE}.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:
@@ -70,6 +76,33 @@ A list with class "\code{htest}" containing the following components:
 }
 \description{
 \code{trimmed_test} performs the two-sample Yuen t-test.
+}
+\details{
+The function performs Yuen's t-test based on the trimmed mean and winsorized
+variance \insertCite{YueDix73appr}{robTests}.
+The amount of trimming / winsorization is set in \code{gamma} and
+defaults to 0.2, i.e. 20\% of the values are removed / replaced.
+In addition to the asymptotic distribution we provide a permutation and a randomization
+version of the test.
+
+When computing a randomization distribution based on randomly drawn splits
+with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+is used to calculate the p-value.
+
+For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
+This is achieved by log-transforming the original observations so that a potential
+scale difference appears as a location difference between the transformed samples;
+see \insertCite{Fri12onli;textual}{robTests}. The sample should not contain zeros
+to prevent problems with the necessary log-transformation. If it contains zeros,
+uniform noise is added to all variables in order to remove zeros. A warning is
+printed.
+
+If the sample has been modified because of zeros when \code{var.test = TRUE},
+the modified samples can be retrieved using
+
+\code{set.seed(wobble.seed); wobble(x, y)}
+
+Both samples need to contain at least 5 non-missing values.
 }
 \examples{
 ## Generate random samples

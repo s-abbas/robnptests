@@ -9,3 +9,5 @@ man-roxygen
 ^doc$
 ^Meta$
 ^codecov\.yml$
+^vignettes/robTests\.Rmd\.orig
+^vignettes/robTests-vignette\.Rmd

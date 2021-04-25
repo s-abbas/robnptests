@@ -4,15 +4,34 @@
 \alias{select_method}
 \title{Select principle for computing null distribution}
 \usage{
-select_method(x, y, method, test.name)
+select_method(x, y, method, test.name, n.rep)
 }
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
 
 \item{y}{a (non-empty) numeric vector of data values.}
 
+\item{method}{a character string specifying how the p-value is computed,
+\code{"asymptotic"} for an asymptotic test based on a normal
+approximation, \code{"permutation"} for a permutation test and
+\code{"randomization"} for a randomization test.
+The permutation test uses all splits of the joint sample into two samples
+of sizes \code{m} and \code{n}, while the randomization test draws
+\code{n.rep} random splits with replacement. If not specified explicitly,
+defaults to
+\code{"permutation"},  if \code{m < 30}, \code{n < 30} and
+ \code{n.rep >= choose(m+n, m)},
+\code{"randomization"}, if \code{m < 30}, \code{n < 30} and
+ \code{n.rep < choose(m+n, m)}, and
+ \code{"asymptotic"}, if \code{m >= 30} and \code{n >= 30}.}
+
 \item{test.name}{character string specifying the two-sample test for which
 the helper function is used.}
+
+\item{n.rep}{an integer value specifying the number of random splits used to
+calculate the randomization distribution if \code{method = "randomization"}.
+This argument is ignored if \code{method = "permutation"} or \code{method = "asymptotic"}.
+The default is \code{n.rep = 10000}.}
 }
 \value{
 A character string which contains the principle for computing the
@@ -24,7 +43,7 @@ computing the null distribution of a two-sample test.
 }
 \details{
 When the principle is specified by the user, i.e. method contains only
-one element, the selected method is returned. Otherwisse, if the user
+one element, the selected method is returned. Otherwise, if the user
 does not specify the principle, it depends on the sample size: When both
 samples contain more than 30 observations, an asymptotic test is perfomed.
 If one of the samples contains less than 30 observations, the null
