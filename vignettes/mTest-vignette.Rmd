@@ -3,7 +3,7 @@ title: "Construction of the M-tests"
 date: "`r Sys.Date()`"
 author: Sermad Abbas, Barbara Brune, Roland Fried 
 output: 
-  rmarkdown::html_vignette:
+  rmarkdown::pdf_document:
     toc: true
 bibliography: ../inst/REFERENCES.bib
 csl: csda.csl
@@ -25,11 +25,11 @@ comment = "#>"
 In this vignette, we will briefly describe and motivate how we constructed the test statistics used by the function `m_test` and how it derives a test decision.
 
 # Asymptotic distribution of the M-test statistics
-For a more thoroughly description of the asymptotic behaviour of M-estimators, we refer to @MarMarYoh06robu[p. 36ff.], which we use as the main reference for the following motivation.
+For a more detailed description of the asymptotic behaviour of M-estimators, we refer to @MarMarYoh06robu[p. 36ff.], which we use as the main reference for the following motivation.
 
 We consider two independent samples $X_1, \ldots, X_m$ and $Y_1, \ldots, Y_n$ of i.i.d. random variables which are symmetrically distributed with variances $\sigma^2_X$ and $\sigma^2_Y$.
 
-For M-estimators $\hat{\mu}_X$ and $\hat{\mu}_Y$ with a $\psi$-function $\psi$ and $\rho$-function $\rho = \psi'$, it can be shown that
+For M-estimators $\hat{\mu}_X$ and $\hat{\mu}_Y$ with a $\psi$-function $\psi$, it can be shown that
 \begin{align*}
 \sqrt{m} \cdot \left(\hat{\mu}_X - \mu_X\right) \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, \sigma_X^2 \cdot \nu_X\right) \quad
 \text{and} \quad
@@ -44,8 +44,8 @@ where $\mu_X \in \mathbb{R}$ and $\mu_Y \in \mathbb{R}$ are the values for which
 and
 
 \begin{align*}
-\nu_X = \frac{\text{E}\left(\psi\left(\frac{X - \mu_X}{\sigma_X}\right)^2\right)}{\left(\text{E}\left(\rho\left(\frac{X - \mu_X}{\sigma_X}\right)\right)\right)^2} \quad \text{and} \quad
-\nu_Y = \frac{\text{E}\left(\psi\left(\frac{Y - \mu_Y}{\sigma_Y}\right)^2\right)}{\left(\text{E}\left(\rho\left(\frac{Y - \mu_Y}{\sigma_Y}\right)\right)\right)^2}.
+\nu_X = \frac{\text{E}\left(\psi\left(\frac{X - \mu_X}{\sigma_X}\right)^2\right)}{\left(\text{E}\left(\psi'\left(\frac{X - \mu_X}{\sigma_X}\right)\right)\right)^2} \quad \text{and} \quad
+\nu_Y = \frac{\text{E}\left(\psi\left(\frac{Y - \mu_Y}{\sigma_Y}\right)^2\right)}{\left(\text{E}\left(\psi'\left(\frac{Y - \mu_Y}{\sigma_Y}\right)\right)\right)^2}.
 \end{align*}
 
 From this follows
@@ -64,9 +64,9 @@ In order to use this statistic as a test statistic for our M-tests, we need to e
 We use the $\tau$-scale estimator [@MarZam02robu] to estimate $\sigma^2_X$ and $\sigma^2_Y$ by $\hat{\sigma}_X$ and $\hat{\sigma}_Y$ robustly and estimate $\nu_X$ and $\nu_Y$ by
 
 \begin{align*}
-\hat{\nu}_X = \frac{\frac{1}{m} \sum_{i = 1}^m \psi\left(\frac{X_i - \hat{\mu}_X}{\hat{\sigma}_X}\right)^2}{\left(\frac{1}{m} \sum_{i = 1}^m \rho\left(\frac{X_i - \hat{\mu}_X}{\hat{\sigma}_X}\right)\right)^2} \quad
+\hat{\nu}_X = \frac{\frac{1}{m} \sum_{i = 1}^m \psi\left(\frac{X_i - \hat{\mu}_X}{\hat{\sigma}_X}\right)^2}{\left(\frac{1}{m} \sum_{i = 1}^m \psi'\left(\frac{X_i - \hat{\mu}_X}{\hat{\sigma}_X}\right)\right)^2} \quad
 \text{and} \quad
-\hat{\nu}_Y = \frac{\frac{1}{m} \sum_{i = 1}^m \psi\left(\frac{Y_i - \hat{\mu}_Y}{\hat{\sigma}_Y}\right)^2}{\left(\frac{1}{m} \sum_{i = 1}^m \rho\left(\frac{Y_i - \hat{\mu}_Y}{\hat{\sigma}_Y}\right)\right)^2}.
+\hat{\nu}_Y = \frac{\frac{1}{n} \sum_{j = 1}^n \psi\left(\frac{Y_j - \hat{\mu}_Y}{\hat{\sigma}_Y}\right)^2}{\left(\frac{1}{n} \sum_{j = 1}^n \psi'\left(\frac{Y_j - \hat{\mu}_Y}{\hat{\sigma}_Y}\right)\right)^2}.
 \end{align*}
 
 Within the function `m_test`, we use the function `scaleTau2` from the `R` package [robustbase](https://cran.r-project.org/package=robustbase) [@MaeRouCro20robu].
