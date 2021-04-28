@@ -221,13 +221,13 @@ m_test_statistic <- function(x,
 
   ## Estimator for \nu ----
   psi.x <- robustbase::Mpsi((x - est.x)/robustbase::scaleTau2(x, consistency = TRUE, ...), psi = psi, cc = k)
-  rho.x <- robustbase::Mpsi((x - est.x)/robustbase::scaleTau2(x, consistency = TRUE, ...), psi = psi, cc = k, deriv = 1)
+  psi.deriv.x <- robustbase::Mpsi((x - est.x)/robustbase::scaleTau2(x, consistency = TRUE, ...), psi = psi, cc = k, deriv = 1)
 
   psi.y <- robustbase::Mpsi((y - est.y)/robustbase::scaleTau2(x, consistency = TRUE, ...), psi = psi, cc = k)
-  rho.y <- robustbase::Mpsi((y - est.y)/robustbase::scaleTau2(x, consistency = TRUE, ...), psi = psi, cc = k, deriv = 1)
+  psi.deriv.y <- robustbase::Mpsi((y - est.y)/robustbase::scaleTau2(x, consistency = TRUE, ...), psi = psi, cc = k, deriv = 1)
 
-  nu.x <- mean(psi.x^2)/(mean(rho.x)^2)
-  nu.y <- mean(psi.y^2)/(mean(rho.y)^2)
+  nu.x <- mean(psi.x^2)/(mean(psi.deriv.x)^2)
+  nu.y <- mean(psi.y^2)/(mean(psi.deriv.y)^2)
 
   ## Test statistic ----
   return(list(statistic = (est.x - est.y) / sqrt((n * robustbase::scaleTau2(x, consistency = TRUE, ...)^2 * nu.x + m * robustbase::scaleTau2(x, consistency = TRUE, ...)^2 * nu.y) / (m * n)),
