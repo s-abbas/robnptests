@@ -1,14 +1,14 @@
 ---
 title: "Getting started with `robTests`"
 date: "`r Sys.Date()`"
-author: Sermad Abbas, Barbara Brune, Roland Fried 
-output: 
-  rmarkdown::html_vignette:
+author: Sermad Abbas, Barbara Brune, Roland Fried
+output:
+  rmarkdown::pdf_document:
     toc: true
 bibliography: ../inst/REFERENCES.bib
 csl: csda.csl
 vignette: >
-  %\VignetteIndexEntry{robTests}
+  %\VignetteIndexEntry{Getting started with `robTests`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -48,10 +48,10 @@ The following hypotheses can be tested:
 \end{align*}
 where $\Delta_0 \in \mathbb{R}$ is a value to which $\Delta$ is set into relation.
 
-A popular test for this scenario is the ordinary two-sample $t$-test, which uses the normality assumption. For large samples, the central limit theorem ensures that the test keeps the desired significance level $\alpha \in \left(0, 1\right)$, even if the underlying distributions are not normal. However, relying on the central limit theorem is often not appropriate in small samples. 
-Moreover, the test is known to be vulnerable to outlying values as they can mask existing location shifts or lead to wrong rejections of the null hypothesis. 
+A popular test for this scenario is the ordinary two-sample $t$-test, which uses the normality assumption. For large samples, the central limit theorem ensures that the test keeps the desired significance level $\alpha \in \left(0, 1\right)$, even if the underlying distributions are not normal. However, relying on the central limit theorem is often not appropriate in small samples.
+Moreover, the test is known to be vulnerable to outlying values as they can mask existing location shifts or lead to wrong rejections of the null hypothesis.
 
-The Wilcoxon-Mann-Whitney test is a popular distribution-free test which is nearly as powerful as the $t$-test under normality, but can be more powerful under non-normal distributions. It is often preferred over the $t$-test when the normality assumption cannot be justified. 
+The Wilcoxon-Mann-Whitney test is a popular distribution-free test which is nearly as powerful as the $t$-test under normality, but can be more powerful under non-normal distributions. It is often preferred over the $t$-test when the normality assumption cannot be justified.
 However, it can be equally vulnerable to outliers [@FriGat07rank].
 
 We implemented tests for the outlined situation with the following objectives in mind:
@@ -62,7 +62,7 @@ We implemented tests for the outlined situation with the following objectives in
 
 In this vignette, we describe the basic functionality of the package and the implemented tests.
 
-In addition to the two-sample location problem, the tests can be used to detect scale differences between two independent samples. 
+In addition to the two-sample location problem, the tests can be used to detect scale differences between two independent samples.
 This will be briefly discussed at the end of the vignette.
 
 In the remainder, let $\boldsymbol{x} = \left(x_1, \ldots, x_m\right)$ and $\boldsymbol{y} = \left(y_1, \ldots, y_n\right)$ be observed samples from both distributions.
@@ -76,7 +76,7 @@ sessionInfo()
 # Overview of implemented tests
 
 The package contains the following two-sample tests:
-  
+
 Function name | Test names | Description | Literature
 ------------- | --------- | ----------- | ----------
 `med_test`    | MED1-test, MED2-test | Tests based on the difference of the sample medians | @FriDeh11robu
@@ -85,7 +85,7 @@ Function name | Test names | Description | Literature
 `m_test`      | M-estimator test | Tests based on M-estimators | e.g. @Abo92robu
 `trimmed_test`| Yuen's trimmed t-test | Test based on trimmed means | @YueDix73appr
 
-We describe the test statistics in detail in the next subsection. 
+We describe the test statistics in detail in the next subsection.
 All functions contain several arguments to adjust the functions to certain data situations and objectives.
 
 ## Test statistics
@@ -97,11 +97,11 @@ statistics of the form
   T = \frac{\hat{\Delta} - \Delta_0}{\hat{S}}.
 \end{align*}
 
-In the $t$-statistic, $\hat{\Delta}$ is estimated by $\overline{x} - \overline{y}$, where $\overline{x}$ and $\overline{y}$ are the sample means of $\boldsymbol{x}$ and $\boldsymbol{y}$, respectively. 
-The denominator $\hat{S}$ is the pooled empirical standard deviation. 
+In the $t$-statistic, $\hat{\Delta}$ is estimated by $\overline{x} - \overline{y}$, where $\overline{x}$ and $\overline{y}$ are the sample means of $\boldsymbol{x}$ and $\boldsymbol{y}$, respectively.
+The denominator $\hat{S}$ is the pooled empirical standard deviation.
 We replace both estimators by the robust estimators described in the following subsections.
 
-For each test, the argument `alternative` specifies which hypothesis pair is tested. 
+For each test, the argument `alternative` specifies which hypothesis pair is tested.
 The following table shows the different options for the simplified case $\Delta_0 = 0$.
 
 Value of argument `alternative` | Alternative hypothesis | Meaning of the alternative hypothesis
@@ -122,7 +122,7 @@ is an obvious way to estimate the location difference $\Delta$ robustly.
 
 Tests based on this estimator can be called with the function `med_test`.
 
-Two different options for estimating the within-sample variability are available. 
+Two different options for estimating the within-sample variability are available.
 Setting the argument `scale = S3`, it is estimated by the median of the absolute deviations of each observation from its corresponding sample median, namely
 
 \begin{align*}
@@ -145,7 +145,7 @@ Another possibility is `scale = S4` to estimate the scale by the sum of the medi
 
 ### HL1-tests
 
-A disadvantage of the sample median is its low efficiency under normality compared to the sample mean. 
+A disadvantage of the sample median is its low efficiency under normality compared to the sample mean.
 Estimators that provide a compromise between robustness and efficiency are the Hodges-Lehmann estimators [@HodLeh63esti].
 
 An estimator for the location difference based on the one-sample Hodges-Lehmann estimator (HL1-estimator) is given by
@@ -193,37 +193,14 @@ An M-estimator $\hat{\mu}^{(M)}_X$ for the location parameter of the $x$-sample 
   \hat{\mu}^{(M)}_X = \arg\underset{\mu_X}{\min} \sum_{i = 1}^m \rho\left(\frac{x_i - \mu_X}{\sigma_X}\right),
 \end{equation*}
 
-where $\rho:\ \mathbb{R} \to \mathbb{R}$ is a function chosen to achieve a \enquote{nearly optimal} location estimate when the $X_i$ are normally or approximately normally distributed [@MarMarYoh06robu, p. 22].
+where $\rho:\ \mathbb{R} \to \mathbb{R}$ is a function chosen to achieve a ``nearly optimal'' location estimate when the $X_i$ are normally or approximately normally distributed [@MarMarYoh06robu, p. 22].
 For differentiable functions $\rho$ with $\rho' = \psi$, the optimization problem can be translated to finding the value of $\mu_X$, for which
 
 \begin{equation*}
   \sum_{i = 1}^m \psi\left(\frac{x_i - \mu_X}{\sigma_X}\right) \overset{!}{=} 0.
 \end{equation*}
 
-If $\psi$ is an increasing function, it can be shown that
-
-\begin{equation*}
-  \sqrt{m} \left(\hat{\mu}^{(M)}_X - \mu_X\right) \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, \sigma_X^2 \cdot \nu_X\right),
-\end{equation*}
-
-with
-
-\begin{equation*}
-  \nu_X = \frac{\text{E}\left(\psi\left(\frac{X - \mu_X}{\sigma_X}\right)^2\right)}{\left(\text{E}\left(\psi\left(\frac{X - \mu_X}{\sigma_X}\right)\right)\right)^2}.
-\end{equation*}
-
-We estimate $\nu_X$ by replacing the expected values by the sample means, i.e.
-
-\begin{equation*}
-\hat{\nu}_X = \frac{\frac{1}{m} \sum_{i = 1}^m \psi\left(\frac{x_i - \hat{\mu}^{(M)}_X}{\sigma_X}\right)^2}{\left(\frac{1}{m} \sum_{i = 1}^m \psi\left(\frac{x_i - \hat{\mu}^{(M)}_X}{\sigma_X}\right)\right)^2}.
-\end{equation*}
-
-The only estimator $\hat{\sigma}_X$ for $\sigma_X$ that ensures the asymptotical normality stated before is the empirical standard deviation, which, however, is not robust.
-In our package, we use the $\tau$-scale estimator as implemented in the package [robustbase](https://cran.r-project.org/package=robustbase) [@MaeRouCro20robu].
-The quality of the normal approximation depends on the true data-generating distribution. 
-In some simulations, we found that the approximation works quite well for symmetrical distributions as long as the variance exists.
-However, it becomes worse for very skewed distributions, under which the resulting two-sample tests become conservative.
-Larger samples are necessary for an acceptable approximation.
+For a motivation on how this test statistic is constructed, we refer to the vignette [\underline{Construction of the M-tests}](mTest-vignette.pdf).
 
 The test statistic of the two-sample $M$-estimator test in the package is
 \begin{equation*}
@@ -244,9 +221,9 @@ where, for $k_x = \lfloor \gamma m\rfloor$ and $x_{(1)},...,x_{(m)}$ the ordered
 \begin{align}
   \bar{x}_{m,\gamma} = \frac{1}{m - k_x} \sum_{i=k_x+1}^{m-k_x} x_{(i)} , \quad \gamma\in[0, 1].
 \end{align}
-The winsorized variance is obtained by replacing the smallest and largest $k_x$ observations by $x_{(k_x)}$ and $x_{(m-k_x)}$, obtaining the modified sample $\tilde{x}_1,...,\tilde{x}_m$. Then:
+The winsorized variance is obtained by replacing the smallest and largest $k_x$ observations by $x_{(k_x)}$ and $x_{(m-k_x)}$, obtaining the modified sample $x^*_1,..., x^*_m$. Then:
 \begin{align}
-  s_{x,\gamma} = \frac{1}{m-1}  \sum_{i=1}^{m} (\tilde{x}_i - \bar{\tilde{x}})^2
+  s_{x,\gamma} = \frac{1}{m-1}  \sum_{i=1}^{m} (x^*_i - \bar{x^*})^2
 \end{align}
 (analogously for $y$). $h_x$ denotes the number of samples used, i.e.\ $h_x = m - 2k_x$.
 
@@ -254,13 +231,13 @@ The winsorized variance is obtained by replacing the smallest and largest $k_x$ 
 
 In this section, we describe briefly how the $p$-values of the tests are computed.
 
-The argument `method` can be set to `"permutation"` for a permutation test, 
+The argument `method` can be set to `"permutation"` for a permutation test,
 `"randomization"` for a randomization test, and `"asymptotic"` for an asymptotic test.
 
 ### Permutation test
 
 When using the permutation principle, the $p$-value is obtained by computing the value of the test statistic for all possible $B = \binom{m}{m + n}$ splits of the joint sample $\left(x_1, \ldots, x_m, y_1, \ldots, y_n\right)$ into two samples of sizes $m$ and $n$.
-The underlying idea is that all splits occur with equal probability under $H_0$. 
+The underlying idea is that all splits occur with equal probability under $H_0$.
 
 The permutation principle allows for an exact computation of the $p$-value and leads to distribution-free tests, i.e. a permutation test keeps $\alpha$ under every continuous distribution.
 
@@ -278,14 +255,14 @@ We recommend this approach only for very small sample sizes or when sufficient c
 
 ### Randomization
 
-The randomization principle can be used to deal with the aforementioned computational shortcomings of the permutation principle. 
-Instead of computing all possible splits, only a random subset of $b \ll B$ splits is selected. 
+The randomization principle can be used to deal with the aforementioned computational shortcomings of the permutation principle.
+Instead of computing all possible splits, only a random subset of $b \ll B$ splits is selected.
 As commonly proposed in the literature (e.g. [@PhiSmy10perm]), we draw these random subsets with replacement, i.e. a single permutation may be drawn repeatedly.
 
-The $p$-value can then be estimated by $\frac{A + 1}{b + 1}$, where $A$ now relates to the drawn subsets of the splits. 
+The $p$-value can then be estimated by $\frac{A + 1}{b + 1}$, where $A$ now relates to the drawn subsets of the splits.
 In the numerator and the denominator, the number $1$ is added as the observed samples are also a legitimate split.
 
-This estimator will overestimate the true $p$-value because the observed sample may be drawn several times. 
+This estimator will overestimate the true $p$-value because the observed sample may be drawn several times.
 Following [@PhiSmy10perm], we correct the $p$-value using the function `permp` from their R package [statmod](https://cran.r-project.org/package=statmod).
 
 ### Asymptotic
@@ -300,7 +277,7 @@ Using the asymptotic distribution of the sample median, the test statistic of th
   T_a^{(\text{MED})} = \sqrt{\frac{m \cdot n}{m + n}} \cdot 2 \cdot f\left(F^{-1}\left(0.5\right)\right) \cdot  \hat{\Delta}^{(\text{MED})} \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, 1\right),
 \end{align*}
 
-where $f$ is the density function belonging to the cumulative distribution function $F$. The value $f\left(F^{-1}\left(0.5\right)\right)$ can be estimated by a kernel-density estimator on the sample $x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n - \tilde{y}$. 
+where $f$ is the density function belonging to the cumulative distribution function $F$. The value $f\left(F^{-1}\left(0.5\right)\right)$ can be estimated by a kernel-density estimator on the sample $x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n - \tilde{y}$.
 We use the R function `density` from the [stats](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/00Index.html) package with its default settings for the kernel-density estimation.
 
 #### Asymptotic HL1-/HL2-test
@@ -311,16 +288,15 @@ With $\lambda = \frac{m}{m + n} \in \left(0, 1\right)$, the asymptotic HL2-test 
 T_a^{(\text{HL2})} = \sqrt{12 \cdot \lambda \cdot \left(1 - \lambda\right)} \int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x \cdot \left(m + n\right) \cdot \hat{\Delta}^{(\text{HL2})} \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, 1\right),
 \end{align*}
 
-where $\int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x$ can be interpreted as the value of the density of $X - Y$ at zero. 
+where $\int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x$ can be interpreted as the value of the density of $X - Y$ at zero.
 In practice, it can be estimated by a kernel-density estimator on the within-sample pairwise differences $x_2 - x_1, \ldots, x_m - x_1, \ldots, x_m - x_{m - 1}, y_2 - y_1, \ldots, y_n - y_1, \ldots, y_n - y_{n - 1}$.
 
 Replacing $\hat{\Delta}^{(\text{HL2})}$ by $\hat{\Delta}^{(\text{HL1})}$ gives us the test statistic of the asymptotic HL1-test.
-[@FriDeh11robu] recommend the asymptotic tests for sample sizes $m, n \geq 30$ to hold the significance level $\alpha = 0.05$. 
+[@FriDeh11robu] recommend the asymptotic tests for sample sizes $m, n \geq 30$ to hold the significance level $\alpha = 0.05$.
 
 #### Asymptotic M-test
 
-As stated before, the test statistic of the two-sample $M$-test follows an asymptotic normal distribution under certain assumptions.
-However, as we estimate some parameters, this is only valid approximately and greatly depends on the data-generating distribution.
+For details on the asymptotic M-test see the vignette [\underline{Construction of the M-tests}](mTest-vignette.pdf).
 
 #### Asymptotic trimmed t-test
 
@@ -353,7 +329,7 @@ hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "permutati
 ```
 
 The output is an object of the class `htest` and contains all relevant information on the performed test.
-The $p$-value can be accessed via `hl1.res$p.value`. 
+The $p$-value can be accessed via `hl1.res$p.value`.
 To extract the value of the test statistic, we use `hl1.res$statistic`, and for the HL1-estimates of each sample `hl1.res$estimate`.
 
 ### Randomization test
@@ -389,7 +365,7 @@ x1 <- x + 5
 hl1_test(x = x1, y = y, alternative = "two.sided", delta = 5, method = "asymptotic")
 ```
 
-As expected, the $p$-value is the same as the one from the previous test. 
+As expected, the $p$-value is the same as the one from the previous test.
 
 ## Discrete data
 
@@ -399,7 +375,7 @@ This can lead to several problems:
 * If there is no location difference, the scale estimate, i.e. the denominator of the test statistic, may be zero so that the test statistic cannot be computed.
 * The test has only little power, i.e. location differences between the samples may not be found.
 
-Following the suggestion of [@FriGat07rank], we implemented a procedure called wobbling, where we add random noise from a uniform distribution to the observations. 
+Following the suggestion of [@FriGat07rank], we implemented a procedure called wobbling, where we add random noise from a uniform distribution to the observations.
 To keep the alterations small, the scale of the noise depends on the number of decimal places of the observations.
 This is controlled by the argument `wobble`, where `TRUE` means that noise is added and `FALSE` means that no noise is added.
 
@@ -469,7 +445,7 @@ Setting `var.test = TRUE` transforms the observations so that a possible varianc
 In terms of the power, the resulting variance tests can outperform classical tests like the $F$-test, the Mood test, or the Ansary-Bradley test under outliers and asymmetry.
 
 ## Idea
-Again, we start with two samples $X_1, \ldots, X_m$ and $Y_1, \ldots, Y_n$, each of which consists of i.i.d. random variables. 
+Again, we start with two samples $X_1, \ldots, X_m$ and $Y_1, \ldots, Y_n$, each of which consists of i.i.d. random variables.
 However, now we assume that we can write the random variables as
 
 \begin{align*}
@@ -495,7 +471,7 @@ With these transformed samples, we are in the data situation described in the in
 
 ```{r, cache = TRUE}
 set.seed(108)
-  
+
 x <- rnorm(30)
 y <- rnorm(30)
 
