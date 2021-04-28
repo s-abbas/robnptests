@@ -98,4 +98,5 @@ We are grateful for any contribution to the further development of the R package
 Authors
 -------
 
-**Sermad Abbas** ( [s-abbas](https://github.com/s-abbas) ) and **Barbara Brune** ( [b-brune](https://github.com/b-brune) ) - *TU Dortmund University, Germany*
+**Sermad Abbas** ( [s-abbas](https://github.com/s-abbas) ) - *TU Dortmund University, Dortmund, Germany*, and 
+**Barbara Brune** ( [b-brune](https://github.com/b-brune) ) - *TU Wien, Vienna, Austria*
