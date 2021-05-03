@@ -45,3 +45,4 @@ Suggests:
     usethis,
     covr
 VignetteBuilder: knitr
+Config/testthat/edition: 3
