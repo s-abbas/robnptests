@@ -12,3 +12,4 @@ man-roxygen
 ^vignettes/robTests\.Rmd\.orig
 ^vignettes/robTests-vignette\.Rmd
 data-raw
+cache
