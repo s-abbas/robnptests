@@ -10,8 +10,7 @@
 #'
 #' @template x
 #' @template y
-#' @param check logical value indicating whether the samples should be checked for bindings prior to
-#'              adding uniform noise or not, defaults to \code{TRUE}
+#' @template check_wobble
 #'
 #' @details
 #' If \code{check = TRUE} the function checks whether all values in the two numeric input vectors are distinct.
