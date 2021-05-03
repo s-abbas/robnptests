@@ -2,7 +2,7 @@
 ## Two-sample Hodges-Lehmann test
 ## ----------------------------------------------------------------------------
 
-#' Two-sample location tests based on two-sample Hodges-Lehmann estimator.
+#' @title Two-sample location tests based on two-sample Hodges-Lehmann estimator.
 #'
 #' @description
 #' \code{hl2_test} performs a two-sample location test based on
@@ -117,41 +117,50 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   alternative <- match.arg(alternative)
   scale <- match.arg(scale)
 
+  # Data preprocessing ----
   prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
                           wobble = wobble, wobble.seed = wobble.seed,
                           var.test = var.test)
-  if (!all(is.na(prep))) {
-    x <- prep$x; y <- prep$y; delta <- prep$delta
-  } else return(NA)
 
+  if (!all(is.na(prep))) {
+    x <- prep$x
+    y <- prep$y
+    delta <- prep$delta
+  } else {
+    return(NA)
+  }
+
+  # Select scale estimator ----
   if (scale == "S1") {
     type <- "HL21"
   } else if (scale == "S2") {
     type <- "HL22"
   }
 
+  # Select method for computing the p-value ----
   method <- select_method(x = x, y = y, method = method, test.name = "hl2_test",
                           n.rep = n.rep)
 
-
+  # Test decision ----
   if (method %in% c("permutation", "randomization")) {
-    ## Set n.rep
+    # Test decision for permutation or randomization test
     n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
-    ## Test decision for permutation or randomization test ----
     test.results <- compute_results_finite(x = x, y = y, alternative = alternative,
                                            delta = delta, method = method, type = type,
                                            n.rep = n.rep)
 
   } else if (method == "asymptotic") {
-    ## Test decision for asymptotic test ----
+    # Test decision for asymptotic test
     test.results <- compute_results_asymptotic(x = x, y = y, alternative = alternative,
                                                delta = delta, type = type)
   }
 
+  # Test statistic, location estimates for both samples, and p-value
   statistic <- test.results$statistic
   estimates <- test.results$estimates
   p.value   <- test.results$p.value
 
+  # Prepare output ----
 
   ## Assign names to results
   if (var.test) {
@@ -165,12 +174,14 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
 
   names(statistic) <- ifelse(var.test, "S", "D")
 
+  # Information on applied test
   if (method == "randomization") {
     method <- paste0("Randomization test based on HL2-estimator ", "(", n.rep, " random permutations)")
   } else if (method == "permutation") {
     method <- "Exact permutation test based on HL2-estimator"
   } else method <- "Asymptotic test based on HL2-estimator"
 
+  # Results
   res <- list(statistic = statistic, parameter = NULL, p.value = p.value,
               estimate = estimates, null.value = delta, alternative = alternative,
               method = method, data.name = dname)
