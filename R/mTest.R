@@ -110,74 +110,66 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
                    n.rep = 10000, na.rm = FALSE,
                    var.test = FALSE, wobble.seed = NULL, ...) {
 
-  ## Check input arguments ----
+  # Check input arguments ----
   psi <- match.arg(psi)
   check_test_input(x = x, y = y, alternative = alternative, delta = delta,
-                   method = method, scale = scale, n.rep = n.rep, na.rm = na.rm,
-                   var.test = var.test, wobble = wobble, wobble.seed = wobble.seed,
-                   test.name = "m_test", psi = psi, k = k)
+                   method = method, psi = psi, k = k, n.rep = n.rep,
+                   na.rm = na.rm, var.test = var.test,
+                   wobble.seed = wobble.seed, wobble = FALSE,
+                   test.name = "m_test")
 
   # Extract names of data sets ----
   dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
-  ## Match 'alternative' and 'scale' ----
+  # Match 'alternative' ----
   # 'method' not matched because computation of p-value depends on sample sizes
   # if no value is specified by the user
   alternative <- match.arg(alternative)
 
+  # Data preprocessing ----
   prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
                           wobble = FALSE, wobble.seed = wobble.seed,
                           var.test = var.test)
+
   if (!all(is.na(prep))) {
-    x <- prep$x; y <- prep$y; delta <- prep$delta
-  } else return(NA)
+    x <- prep$x
+    y <- prep$y
+    delta <- prep$delta
+  } else {
+    return(NA)
+  }
 
-
+  # Select method for computing the p-value ----
   method <- select_method(x = x, y = y, method = method, test.name = "m_test",
                           n.rep = n.rep)
 
-  ## ___________________________________________________________________________
-  ## Test decision
-  ## ___________________________________________________________________________
+  # Test decision ----
 
-  ## Test statistic and location estimates for both samples
+  # Test statistic and location estimates for both samples
   stats <- m_test_statistic(x, y + delta, psi = psi, k = k, ...)
   statistic <- stats$statistic
   estimates <- stats$estimates
   estimates[2] <- stats$estimates[2] - delta
 
   if (method %in% c("permutation", "randomization")) {
-    ## _________________________________________________________________________
-    ## Test decision for permutation and randomization test
-    ## _________________________________________________________________________
-    ## Set n.rep
+    # Test decision for permutation or randomization test
     n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
-
-    ## Permutation or randomization distribution
     distribution <- m_est_perm_distribution(x = x, y = y - delta, randomization = (method == "randomization"),
-                                           n.rep = n.rep, psi = psi, k = k)
-
-    ## p-value
+                                            n.rep = n.rep, psi = psi, k = k)
     p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y),
                                  randomization = (method == "randomization"), n.rep = n.rep, alternative = alternative)
   } else if (method == "asymptotic") {
-    ## _________________________________________________________________________
-    ## Test decision for asymptotic test
-    ## _________________________________________________________________________
-
-    ## p-value
-    p.value <- switch (alternative,
-                       two.sided = 2 * stats::pnorm(abs(statistic), lower.tail = FALSE),
-                       greater = stats::pnorm(statistic, lower.tail = FALSE),
-                       less = stats::pnorm(statistic, lower.tail = TRUE)
+    # Test decision for asymptotic test
+    p.value <- switch(alternative,
+                      two.sided = 2 * stats::pnorm(abs(statistic), lower.tail = FALSE),
+                      greater = stats::pnorm(statistic, lower.tail = FALSE),
+                      less = stats::pnorm(statistic, lower.tail = TRUE)
     )
   }
 
-  ## ___________________________________________________________________________
-  ## Specify output
-  ## ___________________________________________________________________________
+  # Prepare output ----
 
-  ## Names of estimates
+  # Assign names to results
   if (var.test) {
     names(estimates) <- c("M-est. of log(x^2)", "M-est. of log(y^2)")
     names(delta) <- "ratio of variances"
@@ -186,16 +178,17 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     names(estimates) <- c("M-est. of x", "M-est. of y")
     names(delta) <- "location shift"
   }
+
   names(statistic) <- ifelse(var.test, "S", "D")
 
-  ## Name of method to compute p-value
+  # Information on applied test
   if (method == "randomization") {
-    method <- paste0("Randomization test based on ", toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi)), " M-estimator ", "(", n.rep, " random permutations)")
+    method <- paste("Randomization test based on", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), " M-estimator ", "(", n.rep, "random permutations)")
   } else if (method == "permutation") {
-    method <- paste("Exact permutation test based on ", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
-  } else method <- paste("Asymptotic test based on ", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
+    method <- paste("Exact permutation test based on", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
+  } else method <- paste("Asymptotic test based on", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
 
-  ## Output
+  # Results
   res <- list(statistic = statistic, parameter = NULL, p.value = p.value,
               estimate = estimates, null.value = delta, alternative = alternative,
               method = method, data.name = dname)
@@ -204,4 +197,3 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
 
   return(res)
 }
-
