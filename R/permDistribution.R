@@ -176,7 +176,7 @@ calc_perm_p_value <- function(statistic, distribution, m, n, randomization, n.re
   ## For the randomization distribution, the value of 'n.rep' is bounded by the
   ## number of possible splits into two samples
   if (randomization & (n.rep > choose(m + n, m))) {
-    stop (paste0("'n.rep' may not be larger than ", choose(m + n, m), ", the number of all splits."))
+    stop (paste0("'n.rep' should not be larger than ", choose(m + n, m), ", the number of all splits."))
   }
 
   ## Number of permutations leading to test statistic at least as extreme
