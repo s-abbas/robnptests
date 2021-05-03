@@ -4,14 +4,7 @@
 \alias{m_test_statistic}
 \title{Calculate the M-test-statistic}
 \usage{
-m_test_statistic(
-  x,
-  y,
-  psi,
-  k = robustbase::.Mpsi.tuning.default(psi),
-  na.rm = FALSE,
-  ...
-)
+m_test_statistic(x, y, psi, k = robustbase::.Mpsi.tuning.default(psi), ...)
 }
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
@@ -25,8 +18,6 @@ The default is \code{"huber"}.}
 \item{k}{tuning parameter(s) for the respective kernel function,
 defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}}
 in the package \href{https://cran.r-project.org/package=robustbase}{robustbase}.}
-
-\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
 
 \item{...}{further parameters \code{c1} and \code{c2} that can be passed to
 the scale estimator \code{scaleTau2()} in order to account for

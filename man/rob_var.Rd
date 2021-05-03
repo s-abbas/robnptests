@@ -4,7 +4,13 @@
 \alias{rob_var}
 \title{Robust scale estimators based on median absolute deviation}
 \usage{
-rob_var(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE)
+rob_var(
+  x,
+  y,
+  type = c("S1", "S2", "S3", "S4"),
+  na.rm = FALSE,
+  check.for.zero = FALSE
+)
 }
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
@@ -16,6 +22,10 @@ rob_var(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE)
 see details for description of the scale estimators.}
 
 \item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+
+\item{check.for.zero}{logical value indicating a warning should be triggered
+if the scale estimate is zero. The default is
+\code{FALSE}.}
 }
 \value{
 An estimate of the pooled variance of the two samples.
@@ -26,6 +36,13 @@ based on two samples.
 }
 \details{
 For definitions of the scale estimators see Fried and Dehling (2011).
+
+If \code{check.for.zero = TRUE}, a warning is printed when the scale estimate
+is zero. This argument is only included as the function is used in
+\code{\link{rob_perm_statistic}} to computed values of robust test statistics
+where the scale estimate is a standardization. A scale estimate of zero leads
+to a non-existing test statistic, so that the corresponding test cannot be
+performed.
 }
 \references{
 \insertRef{FriDeh11robu}{robTests}

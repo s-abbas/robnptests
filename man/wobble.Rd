@@ -11,8 +11,9 @@ wobble(x, y, check = TRUE)
 
 \item{y}{a (non-empty) numeric vector of data values.}
 
-\item{check}{logical value indicating whether the samples should be checked for bindings prior to
-adding uniform noise or not, defaults to \code{TRUE}}
+\item{check}{logical value indicating whether the samples should be checked
+for bindings prior to adding uniform noise or not, defaults to
+\code{TRUE}.}
 }
 \value{
 A list of length two containing the modified \code{x} and \code{y}.

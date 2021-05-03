@@ -28,7 +28,6 @@ rob_perm_statistic(
 \value{
 A list containing the following components:
         \item{statistic}{the selected test statistic.}
-        \item{abs.statistic}{the absolute value of the selected test statistic.}
         \item{estimates}{estimate of location for each sample if available.}
 }
 \description{

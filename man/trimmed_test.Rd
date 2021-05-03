@@ -2,7 +2,7 @@
 % Please edit documentation in R/trimmedTest.R
 \name{trimmed_test}
 \alias{trimmed_test}
-\title{Two-sample Trimmed t-test (Yuen's t-Test)}
+\title{Two-sample trimmed t-test (Yuen's t-Test)}
 \usage{
 trimmed_test(
   x,
@@ -57,11 +57,11 @@ The default is \code{n.rep = 10000}.}
 \item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
 
 \item{wobble.seed}{integer value used as a seed for the random number
-generation in case that \code{var.test = TRUE}
-and one of the vectors \code{x} and
+generation in case of \code{wobble = TRUE} or when
+\code{var.test = TRUE} and one of the vectors \code{x} and
 \code{y} contains zeros. When no seed is specified, it is
 set randomly and printed in a warning The argument is ignored if
-\code{var.test = FALSE}.}
+\code{var.test = FALSE} and \code{wobble = FALSE}.}
 }
 \value{
 A list with class "\code{htest}" containing the following components:
@@ -75,7 +75,7 @@ A list with class "\code{htest}" containing the following components:
 \item{data.name}{a character string giving the names of the data.}
 }
 \description{
-\code{trimmed_test} performs the two-sample Yuen t-test.
+\code{trimmed_test} performs the two-sample trimmed t-test.
 }
 \details{
 The function performs Yuen's t-test based on the trimmed mean and winsorized
