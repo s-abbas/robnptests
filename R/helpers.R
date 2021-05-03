@@ -92,6 +92,7 @@ preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, var.test) {
   return(list(x = x, y = y, delta = delta))
 }
 
+#nocov start
 #' @title Checks for input arguments
 #'
 #' @description
@@ -182,44 +183,7 @@ check_test_input <- function(x,
     checkmate::assert_numeric(k, lower = 0, len = ifelse(psi == "hampel", 3, 1), finite = TRUE, any.missing = FALSE, null.ok = FALSE)
   }
 }
-
-# #' @title Remove missing values in \code{x} and \code{y}
-# #'
-# #' @description
-# #' \code{remove_missing_values} is a helper function that removes missing values
-# #' from the input sample vectors.
-# #'
-# #' @template x
-# #' @template y
-# #' @template na_rm
-# #'
-# #' @details
-# #' Both samples need at least five non-NA observations.
-# #'
-# #' @return
-# #' If one of the sample contains a missing value and \code{na.rm = FALSE},
-# #' \code{NA_real_} is returned. If the number of non-missing observations
-# #' in one of the samples is less than five, the function stops with an error
-# #' message. Otherwise, the function returns a named list
-# #' containing the following compoents:
-# #' \item{\code{x}}{input vector \code{x} without missing values.}
-# #' \item{\code{y}}{input vector \code{y} without missing values.}
-# #'
-# #' @keywords internal
-#
-# remove_missing_values <- function(x, y) {
-#
-#   # Remove missing values ----
-#   x <- as.vector(stats::na.omit(x))
-#   y <- as.vector(stats::na.omit(y))
-#
-#   # After removing missing values, both samples need at lest length 5
-#   if (length(x) < 5 || length(y) < 5) {
-#     stop("Both samples need at least 5 non-missing values.")
-#   }
-#
-#   return(list(x = x, y = y))
-# }
+#nocov end
 
 #' @title Select principle for computing null distribution
 #'
