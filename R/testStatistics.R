@@ -63,7 +63,7 @@ trimmed_t <- function(x, y, gamma = 0.2, na.rm = FALSE) {
   df <- h.x + h.y - 2
 
   ## Test statistic
-  statistic <- (x.trim - y.trim) / sqrt(pool.var * (1/h.x + 1/h.y))
+  statistic <- (x.trim - y.trim)/sqrt(pool.var * (1/h.x + 1/h.y))
 
   res <- list(statistic = statistic, estimates = estimates, df = df)
 
