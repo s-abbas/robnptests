@@ -2,7 +2,7 @@
 ## Two sample test based on median differences
 ## ----------------------------------------------------------------------------
 
-#' Two-sample location tests based on the sample median
+#' @title Two-sample location tests based on the sample median
 #'
 #' @description
 #' \code{med_test} performs a two-sample location test based on
@@ -116,13 +116,18 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   alternative <- match.arg(alternative)
   scale <- match.arg(scale)
 
+  # Data preprocessing ----
   prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
                           wobble = wobble, wobble.seed = wobble.seed,
                           var.test = var.test)
 
   if (!all(is.na(prep))) {
-    x <- prep$x; y <- prep$y; delta <- prep$delta
-  } else return(NA)
+    x <- prep$x
+    y <- prep$y
+    delta <- prep$delta
+  } else {
+    return(NA)
+  }
 
   if (scale == "S3") {
     type <- "MED1"
@@ -130,30 +135,31 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     type <- "MED2"
   }
 
+  # Select method for computing the p-value ----
   method <- select_method(x = x, y = y, method = method, test.name = "med_test",
                           n.rep = n.rep)
 
+  # Test decision ----
   if (method %in% c("permutation", "randomization")) {
-    ## Set n.rep
+    # Test decision for permutation or randomization test
     n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
-    ## Test decision for permutation or randomization test ----
     test.results <- compute_results_finite(x = x, y = y, alternative = alternative,
                                            delta = delta, method = method, type = type,
                                            n.rep = n.rep)
-
   } else if (method == "asymptotic") {
-    ## Test decision for asymptotic test ----
+    # Test decision for asymptotic test
     test.results <- compute_results_asymptotic(x = x, y = y, alternative = alternative,
                                                delta = delta, type = type)
   }
 
+  # Test statistic, location estimates for both samples, and p-value
   statistic <- test.results$statistic
   estimates <- test.results$estimates
   p.value   <- test.results$p.value
 
+  # Prepare output ----
 
   ## Assign names to results
-
   if (var.test) {
     names(estimates) <- c("Median of log(x^2)", "Median of log(y^2)")
     names(delta) <- "ratio of variances"
@@ -165,13 +171,14 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
 
   names(statistic) <- ifelse(var.test, "S", "D")
 
+  # Information on applied test
   if (method == "randomization") {
-    method <- paste0("Randomization test based on sample median", " (", n.rep, " random permutations)")
+    method <- paste0("Randomization test based on sample medians", " (", n.rep, " random permutations)")
   } else if (method == "permutation") {
-    method <- "Exact permutation test based on sample median"
-  } else method <- "Asymptotic test based on sample median"
+    method <- "Exact permutation test based on sample medians"
+  } else method <- "Asymptotic test based on sample medians"
 
-
+  # Results
   res <- list(statistic = statistic, parameter = NULL, p.value = p.value,
               estimate = estimates, null.value = delta, alternative = alternative,
               method = method, data.name = dname)
@@ -180,4 +187,3 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
 
   return(res)
 }
-
