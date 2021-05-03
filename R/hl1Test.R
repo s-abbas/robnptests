@@ -2,7 +2,7 @@
 ## Two-sample location tests based on one-sample Hodges-Lehmann estimator
 ## ----------------------------------------------------------------------------
 
-#' Two-sample location tests based on one-sample Hodges-Lehmann estimator
+#' @title Two-sample location tests based on one-sample Hodges-Lehmann estimator
 #'
 #' @description
 #' \code{hl1_test} performs a two-sample location test based on
@@ -117,48 +117,56 @@ hl1_test <- function(x,
   # Extract names of data sets ----
   dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
-  ## Match 'alternative' and 'scale' ----
+  # Match 'alternative' and 'scale' ----
   # 'method' not matched because computation of p-value depends on sample sizes
   # if no value is specified by the user
   alternative <- match.arg(alternative)
   scale <- match.arg(scale)
 
+  # Data preprocessing ----
   prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
                     wobble = wobble, wobble.seed = wobble.seed,
                     var.test = var.test)
+
   if (!all(is.na(prep))) {
-    x <- prep$x; y <- prep$y; delta <- prep$delta
-  } else return(NA)
+    x <- prep$x
+    y <- prep$y
+    delta <- prep$delta
+  } else {
+    return(NA)
+  }
 
-
+  # Select method for computing the p-value ----
   method <- select_method(x = x, y = y, method = method, test.name = "hl1_test",
                           n.rep = n.rep)
 
+  # Select scale estimator ----
   if (scale == "S1") {
     type <- "HL11"
   } else if (scale == "S2") {
     type <- "HL12"
   }
 
+  # Compute test decision ----
   if (method %in% c("permutation", "randomization")) {
-    ## Set n.rep
+    # Test decision for permutation or randomization test ----
     n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
-    ## Test decision for permutation or randomization test ----
     test.results <- compute_results_finite(x = x, y = y, alternative = alternative,
                                            delta = delta, method = method, type = type,
                                            n.rep = n.rep)
 
   } else if (method == "asymptotic") {
-    ## Test decision for asymptotic test ----
+    # Test decision for asymptotic test ----
     test.results <- compute_results_asymptotic(x = x, y = y, alternative = alternative,
                                                delta = delta, type = type)
   }
 
+  # Test statistic, location estimates for both samples, and p-value
   statistic <- test.results$statistic
   estimates <- test.results$estimates
   p.value   <- test.results$p.value
 
-  ## Prepare output ----
+  # Prepare output ----
 
   # Assign names to results
   if (var.test) {
