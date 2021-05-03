@@ -57,15 +57,15 @@ testthat::test_that("win_var works correctly", {
 
   # For 'gamma' = 0.2, the winsorized variance of 'x' is equal to 218.4556
   testthat::expect_equal(win_var(x = x, gamma = 0.2),
-                         list(var = 218.4556, h = 6), tol = 1e-6)
+                         list(var = 218.4556, h = 6), tolerance = 1e-6)
 
   # For 'gamma' = 0.3, the winsorized variance of 'x' is equal to 90.05556
   testthat::expect_equal(win_var(x = x, gamma = 0.3),
-                         list(var = 90.05556, h = 4), tol = 1e-6)
+                         list(var = 90.05556, h = 4), tolerance = 1e-6)
 
   # For 'gamma' = 0.25, the winsorized variance of 'x1' is equal to 90.05556
   testthat::expect_equal(win_var(x = x1, gamma = 0.25),
-                         list(var = 258.9636, h = 7), tol = 1e-6)
+                         list(var = 258.9636, h = 7), tolerance = 1e-6)
 
   # The output should be a list of numeric scalars
   checkmate::expect_list(win_var(x = x), types = rep("numeric", 2))

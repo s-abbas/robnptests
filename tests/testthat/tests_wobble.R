@@ -1,5 +1,3 @@
-context("wobbling")
-
 testthat::test_that("wobbling works correctly", {
 
   x <- c(1, 2, 3, 4, 4)

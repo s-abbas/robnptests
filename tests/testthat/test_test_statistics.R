@@ -1,7 +1,7 @@
-## Trimmed t ----
+# Trimmed t ----
 testthat::test_that("trimmed_t works correctly", {
 
-  ## Generate exemplary input vectors ----
+  # Exemplary input vectors ----
   x <- c(22, 23, 31, 71, 74)
   y <- c(4, 4, 8, 19, 26, 74)
 
@@ -17,7 +17,7 @@ testthat::test_that("trimmed_t works correctly", {
   #
   # Test statistic: 1.451922
 
-  ## Removal of missing values ----
+  # Removal of missing values ----
   testthat::expect_equal(trimmed_t(x = c(x, NA), y = y, na.rm = TRUE),
                          trimmed_t(x = x, y = y))
 
@@ -26,11 +26,11 @@ testthat::test_that("trimmed_t works correctly", {
                               estimates = c(NA_real_, trim_mean(y)),
                               df = NA_real_))
 
-  ## Location and scale invariance of the test statistic ----
+  # Location and scale invariance of the test statistic ----
   testthat::expect_equal(trimmed_t(x = 2 * x + 3, y = 2 * y + 3)$statistic,
                          trimmed_t(x = x, y = y)$statistic)
 
-  ## Output check ----
+  # Output check ----
 
   # The output should be a list of numeric scalars
   checkmate::expect_list(trimmed_t(x = x, y = y), types = rep("numeric", 3))
@@ -43,14 +43,14 @@ testthat::test_that("trimmed_t works correctly", {
                          list(statistic = 1.451922,
                               estimates = c(41.66667, 14.25),
                               df = 5),
-                         tol = 1e-07)
+                         tolerance = 1e-07)
 
 })
 
-## Test statistics of robust permutation tests ----
+# Test statistics of robust permutation tests ----
 testthat::test_that("rob_perm_statistic works correctly", {
 
-  ## Generate exemplary input vectors ----
+  # Exemplary input vectors ----
   x <- c(22, 23, 31, 71, 74)
   y <- c(4, 4, 8, 19, 26, 74)
 
@@ -84,7 +84,7 @@ testthat::test_that("rob_perm_statistic works correctly", {
   # Test statistic for 'type = MED1': 0.9210526
   # Test statistic for 'type = MED2': 0.9459459
 
-  ## Removal of missing values ----
+  # Removal of missing values ----
   testthat::expect_equal(rob_perm_statistic(x = c(x, NA), y = y, na.rm = TRUE),
                          rob_perm_statistic(x = x, y = y))
 
@@ -98,7 +98,7 @@ testthat::test_that("rob_perm_statistic works correctly", {
                          list(statistic = NA_real_,
                               estimates = c(NULL, NULL)))
 
-  ## Location and scale invariance of the test statistic ----
+  # Location and scale invariance of the test statistic ----
   types <- c("HL11", "HL12", "HL21", "HL22", "MED1", "MED2")
 
   for (i in seq_along(types)) {
@@ -108,7 +108,7 @@ testthat::test_that("rob_perm_statistic works correctly", {
                                               type = types[i])$statistic)
   }
 
-  ## Output check ----
+  # Output check ----
 
   # The output should be a list of numeric scalars
   for (i in seq_along(types)) {
@@ -135,57 +135,49 @@ testthat::test_that("rob_perm_statistic works correctly", {
 
   # The output should be equal to the manually computed values
 
-  # Trimmed t-statistic
-  testthat::expect_equal(trimmed_t(x = x, y = y, gamma = 0.2),
-                         list(statistic = 1.451922,
-                              estimates = c(41.66667, 14.25),
-                              df = 5),
-                         tol = 1e-06)
-
   # HL1-statistics
   testthat::expect_equal(rob_perm_statistic(x = x, y = y, type = "HL11"),
                          list(statistic = 1.477273,
                               estimates = c(47.5, 15)),
-                         tol = 1e-06)
+                         tolerance = 1e-06)
 
   testthat::expect_equal(rob_perm_statistic(x = x, y = y, type = "HL12"),
                          list(statistic = 1.585366,
                               estimates = c(47.5, 15)),
-                         tol = 1e-06)
+                         tolerance = 1e-06)
 
   # HL2-statistics
   testthat::expect_equal(rob_perm_statistic(x = x, y = y, type = "HL21"),
                          list(statistic = 0.8409091,
                               estimates = NULL),
-                         tol = 1e-06)
+                         tolerance = 1e-06)
 
   testthat::expect_equal(rob_perm_statistic(x = x, y = y, type = "HL22"),
                          list(statistic = 0.902439,
                               estimates = NULL),
-                         tol = 1e-06)
+                         tolerance = 1e-06)
 
   # MED-statistics
   testthat::expect_equal(rob_perm_statistic(x = x, y = y, type = "MED1"),
                          list(statistic = 0.9210526,
                               estimates = c(31, 13.5)),
-                         tol = 1e-06)
+                         tolerance = 1e-06)
 
   testthat::expect_equal(rob_perm_statistic(x = x, y = y, type = "MED2"),
                          list(statistic = 0.9459459,
                               estimates = c(31, 13.5)),
-                         tol = 1e-06)
+                         tolerance = 1e-06)
 })
 
-## M-tests ----
+# M-tests ----
 testthat::test_that("m_test_statistic works correctly", {
+  psi.funs <- c("huber", "hampel", "bisquare")
 
-  ## Generate exemplary input vectors ----
+  # Exemplary input vectors ----
   x <- c(22, 23, 31, 71, 74)
   y <- c(4, 4, 8, 19, 26, 74)
 
-  ## Removal of missing values ----
-  psi.funs <- c("huber", "hampel", "bisquare")
-
+  # Removal of missing values ----
   for (i in seq_along(psi.funs)) {
     suppressWarnings(
       testthat::expect_equal(m_test_statistic(x = c(x, NA), y = y,
@@ -194,30 +186,31 @@ testthat::test_that("m_test_statistic works correctly", {
     )
 
     suppressWarnings(
-    testthat::expect_error(m_test_statistic(x = c(x[1:2], NA, NA, NA), y = y,
-                                            psi = psi.funs[i]))
+      testthat::expect_error(m_test_statistic(x = c(x[1:2], NA, NA, NA), y = y,
+                                              psi = psi.funs[i]))
     )
-  }
 
-  ## Location and scale invariance of the test statistic ----
-  for (i in seq_along(psi.funs)) {
+    # Location and scale invariance of the test statistic ----
     testthat::expect_equal(m_test_statistic(x = 2 * x + 3, y = 2 * y + 3,
                                             psi = psi.funs[i])$statistic,
                            m_test_statistic(x = x, y = y,
                                             psi = psi.funs[i])$statistic)
-  }
 
-  ## Output check ----
+    # Output check ----
 
-  # The output should be a list of numeric scalars
-  checkmate::expect_list(trimmed_t(x = x, y = y), types = rep("numeric", 2))
+    # The output should be a list of numeric scalars
+    checkmate::expect_list(trimmed_t(x = x, y = y), types = rep("numeric", 2))
 
-  for (i in seq_along(psi.funs)) {
     testthat::expect_warning(m_test_statistic(x = c(x, NA), y = y,
                                               psi = psi.funs[i]))
 
     testthat::expect_warning(m_test_statistic(x = x, y = c(y, NA),
                                               psi = psi.funs[i]))
-  }
 
+    # Create and compare snapshots of test output
+    # The output of the function cannot be computed manually
+
+    testthat::expect_snapshot_output(m_test_statistic(x = x, y = y,
+                                                      psi = psi.funs[i]))
+  }
 })
