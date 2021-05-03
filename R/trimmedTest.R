@@ -2,10 +2,10 @@
 ## Trimmed t-Test (Yuen's t-test)
 ## ----------------------------------------------------------------------------
 
-#' @title Two-sample Trimmed t-test (Yuen's t-Test)
+#' @title Two-sample trimmed t-test (Yuen's t-Test)
 #'
 #' @description
-#' \code{trimmed_test} performs the two-sample Yuen t-test.
+#' \code{trimmed_test} performs the two-sample trimmed t-test.
 #'
 #' @template x
 #' @template y
@@ -82,64 +82,69 @@ trimmed_test <- function(x, y, gamma = 0.2,
                          na.rm = FALSE, var.test = FALSE,
                          wobble.seed = NULL) {
 
-  ## Check input arguments ----
-  check_test_input(x = x, y = y, alternative = alternative, delta = delta,
-                   method = method, scale = scale, n.rep = n.rep, na.rm = na.rm,
+  # Check input arguments ----
+  check_test_input(x = x, y = y, gamma = gamma, alternative = alternative,
+                   method = method, delta = delta, n.rep = n.rep, na.rm = na.rm,
                    var.test = var.test, wobble = FALSE, wobble.seed = wobble.seed,
-                   test.name = "trimmed_test", gamma = gamma)
+                   test.name = "trimmed_test")
 
   # Extract names of data sets ----
   dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
-  ## Match 'alternative' and 'scale' ----
+  # Match 'alternative' ----
   # 'method' not matched because computation of p-value depends on sample sizes
   # if no value is specified by the user
-
   alternative <- match.arg(alternative)
 
+  # Data preprocessing ----
   prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
                           wobble = FALSE, wobble.seed = wobble.seed,
                           var.test = var.test)
-  if (!all(is.na(prep))) {
-    x <- prep$x; y <- prep$y; delta <- prep$delta
-  } else return(NA)
 
+  if (!all(is.na(prep))) {
+    x <- prep$x
+    y <- prep$y
+    delta <- prep$delta
+  } else {
+    return(NA)
+  }
+
+  # Select method for computing the p-value ----
   method <- select_method(x = x, y = y, method = method, test.name = "trimmed_test",
                           n.rep = n.rep)
 
-  ## Results of trimmed_t
-  t.stats <- trimmed_t(x, y + delta, gamma = gamma, na.rm = na.rm)
+  # Test decision ----
 
+  # Test statistic, location estimates for both samples, and degrees of freedom
+  t.stats <- trimmed_t(x, y + delta, gamma = gamma, na.rm = na.rm)
   statistic <- t.stats$statistic
   estimates <- t.stats$estimates
   estimates[2] <- t.stats$estimates[2] - delta
   df <- t.stats$df
 
-  m <- length(x); n <- length(y)
+  if (method %in% c("permutation", "randomization")) {
+    # Test decision for permutation or randomization test
 
-
-  if (method %in% c("randomization", "permutation")) {
-
+    m <- length(x)
+    n <- length(y)
     y <- y + delta
     complete <- c(x, y)
 
     if (method == "permutation") {
-      ## Computation of the permutation distribution
+      # Compute permutation distribution
       splits <- gtools::combinations((m + n), m, 1:(m + n))
 
       distribution <- apply(splits, 1, function(s) {
         trimmed_t(x = complete[s], y = complete[-s], gamma = gamma)$statistic
       })
     } else if (method == "randomization") {
-      ## Computation of the randomization distribution
-
+      # Compute randomization distribution
       n.rep <- min(choose(length(x) + length(y), length(x)), n.rep)
       splits <- replicate(n.rep, sample(complete))
 
       distribution <- apply(splits, 2, function(s) {
         trimmed_t(x = s[1:m], y = s[(m + 1):(m + n)], gamma = gamma)$statistic
-      }
-      )
+      })
     }
 
     p.value <- calc_perm_p_value(statistic, distribution, m = m, n = n,
@@ -147,19 +152,17 @@ trimmed_test <- function(x, y, gamma = 0.2,
                                  n.rep = n.rep, alternative = alternative)
 
   } else if (method == "asymptotic") {
-
-    p.value <- switch (alternative,
-                       two.sided = 2 * stats::pt(abs(statistic), df = df, lower.tail = FALSE),
-                       greater = stats::pt(statistic, df = df, lower.tail = FALSE),
-                       less = stats::pt(statistic, df = df, lower.tail = TRUE)
+    # Test decision for asymptotic test
+    p.value <- switch(alternative,
+                      two.sided = 2 * stats::pt(abs(statistic), df = df, lower.tail = FALSE),
+                      greater = stats::pt(statistic, df = df, lower.tail = FALSE),
+                      less = stats::pt(statistic, df = df, lower.tail = TRUE)
     )
-
   }
 
-  ####
+  # Prepare output ----
 
-  ## Assign names to results
-
+  # Assign names to results
   if (var.test) {
     names(estimates) <- c("Trimmed mean of log(x^2)", "Trimmed mean of log(y^2)")
     names(delta) <- "ratio of variances"
@@ -172,21 +175,16 @@ trimmed_test <- function(x, y, gamma = 0.2,
   names(statistic) <- "trimmed t"
   names(df) <- "df"
 
-  if (method == "randomization") {
-    method <- paste("Trimmed two-sample t-test based on",
-                    method, "using",n.rep, "random permutations")
-    } else  method <- paste("Trimmed two-sample t-test based on", method, "distribution")
-
   # Information on applied test
   if (method == "randomization") {
     method <- paste0("Randomization test based on trimmed means ", "(", n.rep, " random permutations)")
   } else if (method == "permutation") {
     method <- "Exact permutation test based on trimmed means"
   } else {
-    method <- "Yuen t-test"
+    method <- "Yuen's t-test"
   }
 
-
+  # Results
   res <- list(statistic = statistic, parameter = df, p.value = p.value,
               estimate = estimates, null.value = delta, alternative = alternative,
               method = method, data.name = dname)
