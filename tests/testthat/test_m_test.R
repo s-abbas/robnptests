@@ -114,7 +114,7 @@
       p.less <- m_test(x = x[1:5], y = y[1:5], method = "permutation", psi = psi,
                        alternative = "less")$p.value
 
-      # testthat::expect_equal(p.two.sided, 2 * min(p.less, p.greater))
+      testthat::expect_equal(p.two.sided, 2 * min(p.less, p.greater))
 
       # In the comparison of the one-sided p-values, we need to add the number of
       # values in the permutation distribution that are equal to the value of the
