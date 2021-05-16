@@ -183,7 +183,7 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
 
   # Information on applied test
   if (method == "randomization") {
-    method <- paste("Randomization test based on", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), " M-estimator ", "(", n.rep, "random permutations)")
+    method <- paste0("Randomization test based on ", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), " M-estimator ", "(", n.rep, " random permutations)")
   } else if (method == "permutation") {
     method <- paste("Exact permutation test based on", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
   } else method <- paste("Asymptotic test based on", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
