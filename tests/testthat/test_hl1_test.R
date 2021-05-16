@@ -82,8 +82,7 @@ testthat::test_that("hl1_test works correctly", {
                                   n.rep = 100)$method,
                          "Randomization test based on HL1-estimator (100 random permutations)")
 
-  # Permutation test if sample size is small and 'n.rep' equals the number of
-  # possible splits
+  # Permutation test for small samples
   testthat::expect_equal(hl1_test(x = x[1:5], y = y[1:5], method = "permutation")$method,
                          "Exact permutation test based on HL1-estimator")
 
