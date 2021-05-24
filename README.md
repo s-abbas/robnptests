@@ -1,12 +1,12 @@
 
-robTests
+robnptests
 ========
 
 <!-- badges: start -->
-[![Codecov test coverage](https://codecov.io/gh/s-abbas/robTests/branch/master/graph/badge.svg)](https://codecov.io/gh/s-abbas/robTests?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/s-abbas/robnptests/branch/master/graph/badge.svg)](https://codecov.io/gh/s-abbas/robnptests?branch=develop)
 <!-- badges: end -->
 
-The `robTests` R-package contains different robust and non-parametric tests for the two-sample location problem. The tests allow for comparisons of either the means or the scales of two random samples.
+The R package `robnptests` contains different robust and non-parametric tests for the two-sample location problem. The tests allow for comparisons of either the location or the scale parameters of two random samples.
 
 Installation
 ------------
@@ -18,32 +18,36 @@ if (!require("devtools")) {
   install.packages("devtools")
 }
 
-devtools::install_github("s-abbas/robTests")
+devtools::install_github("s-abbas/robnptests")
 
-library(robTests)
+library(robnptests)
 ```
 
 Scope and Usage
 ---------------
 
-The robust and non-parametric tests contained in this R-package follow the construction principle of the popular t-test: An estimate for the location difference of the two samples is divided by an estimate of scale. Both estimators are robust. The p-values can either be computed using the permutation principle, the randomization principle, or the asymptotic distribution of the estimators. An appropriate test principle is selected automatically or may be specified by the user. 
-Functions that implement the estimators of scale and location used by the tests are made available as well.
+The robust and non-parametric tests in this R package follow the construction principle of the popular t-test: A robust estimate for the location difference of the two samples is divided by a robust estimate of scale. 
+The p-values can either be computed using the permutation principle, the randomization principle, or the asymptotic distribution of the estimators. 
+If the principle to compute the p-value is not specified by the user, it will be selected automatically depending on the sample size. 
+The functions used to compute the location and scale estimates are also made available to the user.
 
-The implemented tests are:
+The following list shows the currently implemented tests in the package:
 
-* tests based on the median (`med_test`) and one- and two-sample Hodges-Lehmann estimators (`hl1_test()`, resp. `hl2_test()`), scaled by appropriate robust estimators
-* tests based on the trimmed mean and winsorized variance (`trimmed_test()`) 
-* tests based on the Huber-, Hampel- or Bisquare-M-estimator (`m_test()`), if necessary divided by a pooled tau-estimate
+* tests based on the median (`med_test`), the one-sample Hodges-Lehmann estimator (`hl1_test`), and the two-sample Hodges-Lehmann estimator (`hl2_test`), scaled by  robust estimators
+* Yuen's t-test (`trimmed_test`) 
+* tests based on the Huber-, Hampel- or Bisquare-M-estimator (`m_test`).
 
-Tests for a difference in scale are performed by transforming the two samples prior to applying the test. For details on the tests and references see the documentation of the different functions as well as the accompanying vignettes.
+Even though the test statistics compare location estimates of the samples, they can be used to identify scale differences.
+This is achieved by setting the argument `var.test = TRUE`, with which the observations in the samples are log-transformed so that scale differences between the original samples correspond to location differences in the transformed samples.
 
-### Example: Performing the `hl2_test`
+Details on the tests and references can be found on the help pages of the functions and the vignette `vignette(robnptests)`.
+
+### Example 1: Asymptotic test for location difference using the two-sample Hodges-Lehmann estimator
 
 ``` r
 set.seed(121)
 x <- rnorm(50); y <- rnorm(50)
 
-## Perform an asymptotic test based on the two sample Hodges-Lehmann estimator
 hl2_test(x, y, method = "asymptotic")
 
 # 
@@ -55,8 +59,11 @@ hl2_test(x, y, method = "asymptotic")
 # sample estimates:
 # HL2 of x and y 
 #      0.2048249
+```
 
-## Perform an according asymptotic test for a difference in scale
+### Example 2: Asymptotic test for scale difference using the two-sample Hodges-Lehmann estimator
+
+``` r
 hl2_test(x, y, method = "asymptotic", var.test = TRUE)
 
 # 	Asymptotic test based on HL2-estimator
@@ -71,7 +78,7 @@ hl2_test(x, y, method = "asymptotic", var.test = TRUE)
 
 # Contributions
 
-We are grateful for any contribution to the further development of the R package. If you experience any problems using the package or have suggestions for new features, please open an issue in the [issue tracker](https://github.com/s-abbas/robTests/issues). 
+We are grateful for any contribution to the further development of the R package. If you experience any problems using the package or have suggestions for new features, please open an issue in the [issue tracker](https://github.com/s-abbas/robnptests/issues). 
 
 Authors
 -------
