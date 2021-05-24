@@ -21,9 +21,9 @@
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{YueDix73appr}{robTests}
+#' \insertRef{YueDix73appr}{robnptests}
 #'
-#' \insertRef{Yue74trim}{robTests}
+#' \insertRef{Yue74trim}{robnptests}
 #'
 #' @export
 
@@ -88,8 +88,8 @@ trimmed_t <- function(x, y, gamma = 0.2, na.rm = FALSE) {
 #'
 #' @details The test statistics returned by \code{rob_perm_statistic} are of the form
 #'          \deqn{D_i/S_j} where the D_i, i = 1,...,3, are different estimators of location and the S_j, j = 1,...,4 are
-#'          estimates for the mutual sample scale. See \insertCite{FriDeh11robu;textual}{robTests}
-#'          or the vignette (\code{vignette(robTests-vignette)}) for details.
+#'          estimates for the mutual sample scale. See \insertCite{FriDeh11robu;textual}{robnptests}
+#'          or the vignette (\code{vignette(robnptests-vignette)}) for details.
 #'
 #' @examples
 #' ## Generate random samples
@@ -100,7 +100,7 @@ trimmed_t <- function(x, y, gamma = 0.2, na.rm = FALSE) {
 #' #rob_perm_statistic(x, y, type = "HL21")
 #'
 #' @references
-#' \insertRef{FriDeh11robu}{robTests}
+#' \insertRef{FriDeh11robu}{robnptests}
 #'
 #' @export
 

@@ -87,12 +87,12 @@ huber_2sample <- function(x, y, k) {
 #' huber_test(x, y)
 #'
 #' @seealso
-#' \code{\link[robTests]{min_tc_test}}
-#' \code{\link[robTests]{min_t_test}}
+#' \code{\link[robnptests]{min_tc_test}}
+#' \code{\link[robnptests]{min_t_test}}
 #'
 #' @importFrom Rdpack reprompt
 #'
-#' @references \insertRef{WeiHot02robu}{robTests}
+#' @references \insertRef{WeiHot02robu}{robnptests}
 #'
 #' @export
 
@@ -290,9 +290,9 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{YueDix73appr}{robTests}
+#' \insertRef{YueDix73appr}{robnptests}
 #'
-#' \insertRef{Yue74trim}{robTests}
+#' \insertRef{Yue74trim}{robnptests}
 #'
 #' @export
 
@@ -365,9 +365,9 @@ trimmed_t <- function(x, y, gamma = 0.2, delta = 0, na.rm = FALSE) {
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{YueDix73appr}{robTests}
+#' \insertRef{YueDix73appr}{robnptests}
 #'
-#' \insertRef{Yue74trim}{robTests}
+#' \insertRef{Yue74trim}{robnptests}
 #'
 #' @export
 
@@ -481,13 +481,13 @@ trimmed_test <- function(x, y, gamma = 0.2,
 #' min_c_test(x, y, k = 1.8)
 #'
 #' @references
-#' \insertRef{WeiHot02robu}{robTests}
+#' \insertRef{WeiHot02robu}{robnptests}
 #'
-#' \insertRef{EfrTib98intr}{robTests}
+#' \insertRef{EfrTib98intr}{robnptests}
 #'
 #' @seealso
 #'  \code{\link[stats]{t.test}}
-#'  \code{\link[robTests]{huber_test}}
+#'  \code{\link[robnptests]{huber_test}}
 #'
 #' @export
 
@@ -587,14 +587,14 @@ min_c_test <- function(x, y, alternative = c("two.sided", "greater", "less"), de
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{WeiHot02robu}{robTests}
+#' \insertRef{WeiHot02robu}{robnptests}
 #'
-#' \insertRef{EfrTib98intr}{robTests}
+#' \insertRef{EfrTib98intr}{robnptests}
 #'
 #' @seealso
 #'  \code{\link[stats]{t.test}}
-#'  \code{\link[robTests]{trimmed_test}}
-#'  \code{\link[robTests]{huber_test}}
+#'  \code{\link[robnptests]{trimmed_test}}
+#'  \code{\link[robnptests]{huber_test}}
 #' @export
 #' @importFrom stats t.test
 
@@ -695,12 +695,12 @@ min_tc_test <- function(x, y, alternative = c("two.sided", "greater", "less"), d
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{PhiSmy10perm}{robTests}
-#' \insertRef{WeiHot02robu}{robTests}
+#' \insertRef{PhiSmy10perm}{robnptests}
+#' \insertRef{WeiHot02robu}{robnptests}
 #'
 #' @seealso
 #'  \code{\link[stats]{t.test}}
-#'  \code{\link[robTests]{trimmed_test}}
+#'  \code{\link[robnptests]{trimmed_test}}
 #'
 #' @export
 
@@ -810,13 +810,13 @@ min_t_test <- function(x, y, alternative = c("two.sided", "greater", "less"), de
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{WeiHot02robu}{robTests}
+#' \insertRef{WeiHot02robu}{robnptests}
 #'
-#' \insertRef{EfrTib98intr}{robTests}
+#' \insertRef{EfrTib98intr}{robnptests}
 #'
 #' @seealso
 #'  \code{\link[stats]{t.test}}
-#'  \code{\link[robTests]{huber_test}}
+#'  \code{\link[robnptests]{huber_test}}
 #'
 #' @export
 

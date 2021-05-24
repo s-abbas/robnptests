@@ -37,9 +37,9 @@ must be one of "two.sided" (default), "greater" or "less".}
 p-value for the specified alternative.
 }
 \description{
-\code{calc_perm_p_value} calculates the permutation p-value following \insertCite{PhiSmy10perm;textual}{robTests}.
+\code{calc_perm_p_value} calculates the permutation p-value following \insertCite{PhiSmy10perm;textual}{robnptests}.
 }
 \references{
-\insertRef{PhiSmy10perm}{robTests}
+\insertRef{PhiSmy10perm}{robnptests}
 }
 \keyword{internal}

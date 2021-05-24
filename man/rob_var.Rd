@@ -45,5 +45,5 @@ to a non-existing test statistic, so that the corresponding test cannot be
 performed.
 }
 \references{
-\insertRef{FriDeh11robu}{robTests}
+\insertRef{FriDeh11robu}{robnptests}
 }

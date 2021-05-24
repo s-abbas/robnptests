@@ -118,7 +118,7 @@ win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' The one-sample Hodges-Lehmann estimator.
 #'
 #' @references
-#' \insertRef{HodLeh63esti}{robTests}
+#' \insertRef{HodLeh63esti}{robnptests}
 #'
 #' @examples
 #' ## Generate random sample
@@ -175,7 +175,7 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{HodLeh63esti}{robTests}
+#' \insertRef{HodLeh63esti}{robnptests}
 #'
 #' @examples
 #' ## Generate random samples
@@ -226,8 +226,8 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 #'
 #' @details
 #' To compute the M-estimate, the iterative algorithm described in
-#' \insertCite{MarMarYoh06robu;textual}{robTests} is used.
-#' The variance is estimated as in \insertCite{Hub81robu;textual}{robTests}.
+#' \insertCite{MarMarYoh06robu;textual}{robnptests} is used.
+#' The variance is estimated as in \insertCite{Hub81robu;textual}{robnptests}.
 #'
 #' If \code{max.it} contains decimal places, it is truncated.
 #'
@@ -239,9 +239,9 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{MarMarYoh06robu}{robTests}
+#' \insertRef{MarMarYoh06robu}{robnptests}
 #'
-#' \insertRef{Hub81robu}{robTests}
+#' \insertRef{Hub81robu}{robnptests}
 #'
 #' @examples
 #'

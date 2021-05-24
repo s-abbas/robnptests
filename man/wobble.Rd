@@ -39,5 +39,5 @@ wobble(x, y)
 
 }
 \references{
-\insertRef{FriGat07rank}{robTests}
+\insertRef{FriGat07rank}{robnptests}
 }

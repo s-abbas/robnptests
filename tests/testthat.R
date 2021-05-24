@@ -1,4 +1,4 @@
 library(testthat)
-library(robTests)
+library(robnptests)
 
-testthat::test_check("robTests")
+testthat::test_check("robnptests")

@@ -1,5 +1,5 @@
 ---
-title: "Getting started with `robTests`"
+title: "Getting started with `robnptests`"
 date: "`r Sys.Date()`"
 author: Sermad Abbas, Barbara Brune, Roland Fried
 output:
@@ -8,7 +8,7 @@ output:
 bibliography: ../inst/REFERENCES.bib
 csl: csda.csl
 vignette: >
-  %\VignetteIndexEntry{Getting started with `robTests`}
+  %\VignetteIndexEntry{Getting started with `robnptests`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 
 # Introduction {#introduction}
 
-The package `robTests` contains robust (approximately) distribution-free tests for the two-sample location problem.
+The package `robnptests` contains robust (approximately) distribution-free tests for the two-sample location problem.
 
 We consider the following data situation: Let $\boldsymbol{X} = \left(X_1, \ldots, X_m\right)$ and $\boldsymbol{Y} = \left(Y_1, \ldots, Y_n\right)$ be two samples of sizes $m, n \in \mathbb{N}$.
 Each sample consists of independent and identically distributed (i.i.d.) random variables so that
@@ -68,7 +68,7 @@ This will be briefly discussed at the end of the vignette.
 In the remainder, let $\boldsymbol{x} = \left(x_1, \ldots, x_m\right)$ and $\boldsymbol{y} = \left(y_1, \ldots, y_n\right)$ be observed samples from both distributions.
 
 ```{r}
-library(robTests)
+library(robnptests)
 
 sessionInfo()
 ```

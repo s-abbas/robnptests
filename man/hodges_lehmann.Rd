@@ -34,5 +34,5 @@ hodges_lehmann(x)
 
 }
 \references{
-\insertRef{HodLeh63esti}{robTests}
+\insertRef{HodLeh63esti}{robnptests}
 }

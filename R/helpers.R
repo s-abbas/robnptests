@@ -57,7 +57,7 @@ preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, var.test) {
       x <- xy$x
       y <- xy$y
 
-      warning(paste0("Added random noise to x and y. The seed is ",
+      message(paste0("Added random noise to x and y. The seed is ",
                      wobble.seed, "."))
     }
   }
@@ -80,7 +80,7 @@ preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, var.test) {
       x <- xy$x
       y <- xy$y
 
-      warning(paste0("Added random noise before log transformation due to zeros in the sample. The seed is ",
+      message(paste0("Added random noise before log transformation due to zeros in the sample. The seed is ",
                      wobble.seed, "."))
     }
 

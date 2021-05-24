@@ -9,7 +9,7 @@ man-roxygen
 ^doc$
 ^Meta$
 ^codecov\.yml$
-^vignettes/robTests\.Rmd\.orig
-^vignettes/robTests-vignette\.Rmd
+^vignettes/robnptests\.Rmd\.orig
+^vignettes/robnptests-vignette\.Rmd
 data-raw
 cache

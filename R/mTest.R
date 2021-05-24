@@ -32,13 +32,13 @@
 #' tau scale estimator. The tau scale estimate is computed with the default parameter settings
 #' of the function \code{\link[robustbase]{scaleTau2}}. These can be changed if necessary
 #' by setting \code{c1} and \code{c2}.
-#' More details are given in the vignettes \code{vignette{"robTests-vignette"}}
+#' More details are given in the vignettes \code{vignette{"robnptests-vignette"}}
 #' and \code{vignette{"mTest-vignette"}}.
 #'
 #' We offer three versions of the test: randomization, permutation and asymptotic.
 #'
 #' When computing the randomization distribution based on randomly drawn splits
-#' with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+#' with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robnptests}
 #' is used to calculate the p-value. The psi function for the the M-estimate
 #' is computed via the implementations in the package \code{\link[=Mpsi]{robustbase}}.
 #'
@@ -54,7 +54,7 @@
 #' For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
 #' This is achieved by log-transforming the original observations so that a potential
 #' scale difference appears as a location difference between the transformed samples;
-#' see \insertCite{Fri12onli;textual}{robTests}. The sample should not contain zeros
+#' see \insertCite{Fri12onli;textual}{robnptests}. The sample should not contain zeros
 #' to prevent problems with the necessary log-transformation. If it contains zeros,
 #' uniform noise is added to all variables in order to remove zeros. A warning is
 #' printed.
@@ -79,11 +79,11 @@
 #'
 #' @references
 #'
-#' \insertRef{Fri12onli}{robTests}
+#' \insertRef{Fri12onli}{robnptests}
 #'
-#' \insertRef{MarZam02robu}{robTests}
+#' \insertRef{MarZam02robu}{robnptests}
 #'
-#' \insertRef{PhiSmy10perm}{robTests}
+#' \insertRef{PhiSmy10perm}{robnptests}
 #'
 #' @examples
 #' ## Generate random samples

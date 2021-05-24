@@ -36,5 +36,5 @@ hodges_lehmann_2sample(x, y)
 
 }
 \references{
-\insertRef{HodLeh63esti}{robTests}
+\insertRef{HodLeh63esti}{robnptests}
 }

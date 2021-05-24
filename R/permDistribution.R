@@ -81,7 +81,7 @@ perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) 
 #'         and \code{k}.
 #'
 #' @references
-#' \insertRef{MaeRouCro20robu}{robTests}
+#' \insertRef{MaeRouCro20robu}{robnptests}
 #'
 #' @keywords internal
 
@@ -136,7 +136,7 @@ m_est_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep =
 #' Calculation of permutation p-value
 #'
 #' @description
-#' \code{calc_perm_p_value} calculates the permutation p-value following \insertCite{PhiSmy10perm;textual}{robTests}.
+#' \code{calc_perm_p_value} calculates the permutation p-value following \insertCite{PhiSmy10perm;textual}{robnptests}.
 #'
 #' @template statistic
 #' @template distribution
@@ -150,7 +150,7 @@ m_est_perm_distribution <- function(x, y, psi, k, randomization = FALSE, n.rep =
 #' p-value for the specified alternative.
 #'
 #' @references
-#' \insertRef{PhiSmy10perm}{robTests}
+#' \insertRef{PhiSmy10perm}{robnptests}
 #'
 #' @keywords internal
 

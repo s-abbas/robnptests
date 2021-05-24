@@ -61,7 +61,7 @@ The default is \code{n.rep = 10000}.}
 \item{wobble}{logical value indicating whether the sample should be checked for
 duplicated values that can cause the scale estimate to be zero.
 If such values are present, uniform noise is added to the sample,
-see \code{\link[robTests]{wobble}}.
+see \code{\link[robnptests]{wobble}}.
 Only necessary for the permutation and randomization version of the test.
 The default is \code{wobble = FALSE}.}
 
@@ -103,18 +103,18 @@ whereas \code{scale = "S2"} uses
 \deqn{S = med(|Z_i - Z_j|: 1 \le i < j \le m+n).}
 
 Here, \eqn{ Z = ( X_1 - med(X),...,X_m - med(X), Y_1 - med(Y),...,Y_n - med(Y) )'}
-is the median-corrected sample. For more details see \insertCite{FriDeh11robu;textual}{robTests}.
+is the median-corrected sample. For more details see \insertCite{FriDeh11robu;textual}{robnptests}.
 
 When computing the randomization distribution based on randomly drawn splits with
-replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robnptests}
 is used to calculate the p-value. For the asymptotic test, a transformed version
 of the the difference of the HL1 estimators is compared to the standard normal distribution.
-For more details see \insertCite{FriDeh11robu;textual}{robTests}.
+For more details see \insertCite{FriDeh11robu;textual}{robnptests}.
 
 For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
 This is achieved by log-transforming the original observations so that a potential
 scale difference appears as a location difference between the transformed samples;
-see \insertCite{Fri12onli;textual}{robTests}. The sample should not contain zeros
+see \insertCite{Fri12onli;textual}{robnptests}. The sample should not contain zeros
 to prevent problems with the necessary log-transformation. If it contains zeros,
 uniform noise is added to all variables in order to remove zeros. A warning is
 printed.
@@ -143,9 +143,9 @@ hl1_test(x, y, method = "randomization", n.rep = 1000, scale = "S2")
 
 }
 \references{
-\insertRef{PhiSmy10perm}{robTests}
+\insertRef{PhiSmy10perm}{robnptests}
 
-\insertRef{FriDeh11robu}{robTests}
+\insertRef{FriDeh11robu}{robnptests}
 
-\insertRef{Fri12onli}{robTests}
+\insertRef{Fri12onli}{robnptests}
 }

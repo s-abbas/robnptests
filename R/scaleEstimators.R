@@ -94,7 +94,7 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{FriDeh11robu}{robTests}
+#' \insertRef{FriDeh11robu}{robnptests}
 #'
 #' @export
 
@@ -109,6 +109,7 @@ rob_var <- function(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE, check
   checkmate::assert_subset(type, choices = c("S1", "S2", "S3", "S4"), empty.ok = FALSE)
   checkmate::assert_character(type, min.chars = 1, ignore.case = FALSE, all.missing = FALSE, min.len = 1, null.ok = FALSE)
   checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
+  checkmate::assert_flag(check.for.zero, na.ok = FALSE, null.ok = FALSE)
 
   ## Match 'type' ----
   type <- match.arg(type)
@@ -142,10 +143,10 @@ rob_var <- function(x, y, type = c("S1", "S2", "S3", "S4"), na.rm = FALSE, check
   if (check.for.zero & est == 0) {
     if (length(unique(c(x, y))) == 1) {
       # All values in 'x' and 'y' are equal
-      warning("All values in '", deparse(substitute(x)), "' ", "and '", deparse(substitute(y)), "' ", "are equal. The scale estimate is '0' and the test statistic cannot be computed.")
+      stop("All values in '", deparse(substitute(x)), "' ", "and '", deparse(substitute(y)), "' ", "are equal. The scale estimate is zero and the test statistic cannot be computed.", call. = FALSE)
     } else {
       # Scale estimate is zero although data are not constant
-      warning("Estimate of scale is '0' although the data are not constant. Consider using a different estimator or setting 'wobble = TRUE' in the function call. Otherwise, the test statistic cannot be computed.")
+      stop("A scale estimate of zero occured although the data are not constant. Consider using a different scale estimator or set 'wobble = TRUE' in the function call.", call. = FALSE)
     }
   }
 

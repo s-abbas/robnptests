@@ -96,14 +96,14 @@ testthat::test_that("rob_var works correctly", {
 
   # No NAs in 'x' and 'y'
   testthat::expect_equal(rob_var(x = rep(0, 5), y = rep(0, 5)), 0)
-  testthat::expect_warning(rob_var(x = rep(0, 5), y = rep(0, 5),
+  testthat::expect_error(rob_var(x = rep(0, 5), y = rep(0, 5),
                                    check.for.zero = TRUE))
 
   # NAs in 'x' and 'y'
   testthat::expect_equal(rob_var(x = c(NA, rep(0, 5)), y = c(NA, rep(0, 5)),
                                  na.rm = TRUE), 0)
 
-  testthat::expect_warning(rob_var(x = c(NA, rep(0, 5)), y = c(NA, rep(0, 5)),
+  testthat::expect_error(rob_var(x = c(NA, rep(0, 5)), y = c(NA, rep(0, 5)),
                                  na.rm = TRUE, check.for.zero = TRUE))
 
   ## Location invariance, scale equivariance, and permutation invariance ----
@@ -154,5 +154,5 @@ testthat::test_that("rob_var works correctly", {
   # are not constant
   x1 <- c(7, 2, 1, 2, 2)
   y1 <- c(5, 9, 2, 2, 2)
-  testthat::expect_warning(rob_var(x = x1, y = y1, type = "S3", check.for.zero = TRUE))
+  testthat::expect_error(rob_var(x = x1, y = y1, type = "S3", check.for.zero = TRUE))
 })

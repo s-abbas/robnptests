@@ -206,7 +206,7 @@ For symmetric distributions, the asymptotic test should only be used for large s
 
 # Session Info
 ```{r}
-library(robTests)
+library(robnptests)
 
 sessionInfo()
 ```

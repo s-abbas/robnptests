@@ -20,7 +20,7 @@ rob_perm_statistic(
 \code{"HL12", "HL21", "HL22", "MED1"}, and \code{"MED2"},
  where "HL1", "HL2" and "MED" specify the location estimator
  and the numbers \code{1} and \code{2} the scale estimator.
- See the vignette (\code{vignette("robTests-vignette")}) for more
+ See the vignette (\code{vignette("robnptests-vignette")}) for more
  information.}
 
 \item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
@@ -38,8 +38,8 @@ Hodges-Lehmann estimator, or the two-sample Hodges-Lehmann estimator.
 \details{
 The test statistics returned by \code{rob_perm_statistic} are of the form
          \deqn{D_i/S_j} where the D_i, i = 1,...,3, are different estimators of location and the S_j, j = 1,...,4 are
-         estimates for the mutual sample scale. See \insertCite{FriDeh11robu;textual}{robTests}
-         or the vignette (\code{vignette(robTests-vignette)}) for details.
+         estimates for the mutual sample scale. See \insertCite{FriDeh11robu;textual}{robnptests}
+         or the vignette (\code{vignette(robnptests-vignette)}) for details.
 }
 \examples{
 ## Generate random samples
@@ -51,5 +51,5 @@ x <- rnorm(20); y <- rnorm(20)
 
 }
 \references{
-\insertRef{FriDeh11robu}{robTests}
+\insertRef{FriDeh11robu}{robnptests}
 }

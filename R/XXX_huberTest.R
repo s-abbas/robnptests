@@ -85,12 +85,12 @@ huber_2sample <- function(x, y, k) {
 #' huber_test(x, y)
 #'
 #' @seealso
-#' \code{\link[robTests]{min_tc_test}}
-#' \code{\link[robTests]{min_t_test}}
+#' \code{\link[robnptests]{min_tc_test}}
+#' \code{\link[robnptests]{min_t_test}}
 #'
 #' @importFrom Rdpack reprompt
 #'
-#' @references \insertRef{WeiHot02robu}{robTests}
+#' @references \insertRef{WeiHot02robu}{robnptests}
 #'
 #' @export
 

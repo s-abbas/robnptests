@@ -28,7 +28,7 @@ testthat::test_that("preprocess_data works correctly", {
                          list(x = c(x, NA_real_), y = c(y, NA_real_), delta = 0)
   )
 
-  ## Warning, if the samples contain less than five observations ----
+  ## Errors, if the samples contain less than five observations ----
 
   # No missing values
   testthat::expect_error(preprocess_data(x = x[1:4], y = y, delta = 0, na.rm = TRUE,
@@ -51,13 +51,13 @@ testthat::test_that("preprocess_data works correctly", {
   )
 
   # Duplicated values within each sample
-  testthat::expect_warning(preprocess_data(x = c(x, x[10]), y = c(y, y[10]),
+  testthat::expect_message(preprocess_data(x = c(x, x[10]), y = c(y, y[10]),
                                            delta = 0, na.rm = TRUE, wobble = TRUE,
                                            wobble.seed = 123, var.test = FALSE)
   )
 
   # Duplicated values between the samples
-  testthat::expect_warning(preprocess_data(x = c(x, x[10]), y = c(y, x[10]),
+  testthat::expect_message(preprocess_data(x = c(x, x[10]), y = c(y, x[10]),
                                            delta = 0, na.rm = TRUE, wobble = TRUE,
                                            wobble.seed = 123, var.test = FALSE)
   )
@@ -76,7 +76,7 @@ testthat::test_that("preprocess_data works correctly", {
   )
 
   # Zeros in samples and 'delta' != 0
-  testthat::expect_warning(preprocess_data(x = c(x, 0), y = c(y, 0), delta = 1,
+  testthat::expect_message(preprocess_data(x = c(x, 0), y = c(y, 0), delta = 1,
                                            na.rm = TRUE, wobble = FALSE,
                                            wobble.seed = 123, var.test = TRUE)
   )

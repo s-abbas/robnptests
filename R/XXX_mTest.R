@@ -33,7 +33,7 @@
 # #' @importFrom Rdpack reprompt
 # #'
 # #' @references
-# #' \insertRef{Abo92robu}{robTests}
+# #' \insertRef{Abo92robu}{robnptests}
 # #'
 # #' @examples
 # #' x <- rnorm(20); y <- rnorm(20)

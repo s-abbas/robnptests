@@ -31,7 +31,7 @@
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{ReeSta96hing}{robTests}
+#' \insertRef{ReeSta96hing}{robnptests}
 #'
 #' @examples
 #' ## Generate random sample
@@ -208,9 +208,9 @@ asym_win_var <- function(x, type = c("Q2", "SK2", "SK5"), na.rm = FALSE) {
 #' \item{df}{the degrees of freedom for the test statistic.}
 #'
 #' @references
-#' \insertRef{YueDix73appr}{robTests}
+#' \insertRef{YueDix73appr}{robnptests}
 #'
-#' \insertRef{Yue74trim}{robTests}
+#' \insertRef{Yue74trim}{robnptests}
 #'
 #' @export
 
@@ -299,7 +299,7 @@ asym_trimmed_perm_distribution <- function(x, y, type, randomization = FALSE, n.
 #' p.value for the specified alternative.
 #'
 #' @references
-#' \insertRef{PhiSmy10perm}{robTests}
+#' \insertRef{PhiSmy10perm}{robnptests}
 #'
 #' @export
 
@@ -383,7 +383,7 @@ calc_perm_p_value <- function(statistic, distribution, m, n, randomization, n.re
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{ReeSta04robu}{robTests}
+#' \insertRef{ReeSta04robu}{robnptests}
 #'
 #' @examples
 #' set.seed(108)

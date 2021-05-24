@@ -27,7 +27,7 @@ A list containing the following components:
 \code{trimmed_t} calculates the test statistic of the two-sample Yuen test.
 }
 \references{
-\insertRef{YueDix73appr}{robTests}
+\insertRef{YueDix73appr}{robnptests}
 
-\insertRef{Yue74trim}{robTests}
+\insertRef{Yue74trim}{robnptests}
 }
