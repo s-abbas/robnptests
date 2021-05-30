@@ -6,11 +6,19 @@
 #'
 #' @template x
 #' @template y
-#' @template delta
-#' @template na_rm
-#' @template wobble
+#' @param delta a numeric value indicating the true difference in the location
+#'              or scale parameter, depending on whether the test should be
+#'              performed for a difference in location or in scale.
+#' @param na.rm logical value indicating whether NA values in x and y should be
+#'              stripped before the computation proceeds. The default is
+#'              \code{na.rm = FALSE}.
+#' @param wobble logical value indicating whether the sample should be checked for
+#'               duplicated values that can cause the scale estimate to be zero.
+#'               If such values are present, uniform noise is added to the sample,
+#'               see \code{\link[robnptests]{wobble}}.
 #' @template wobble_seed
-#' @template var_test
+#' @param var.test logical value testing whether the samples should be compared
+#'                 for a difference in scale.
 #'
 #' @details
 #' The preprocessing steps include the removal of missing values and, if
@@ -27,21 +35,21 @@
 
 preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, var.test) {
 
-  ## Remove missing values ----
+  # Remove missing values ----
   if (na.rm) {
     x <- as.vector(stats::na.omit(x))
     y <- as.vector(stats::na.omit(y))
   }
 
-  ## Check sample sizes ----
+  # Check sample sizes ----
   if (length(x) < 5 || length(y) < 5) {
     stop("Both samples need at least 5 non-missing values.")
   }
 
-  ## Wobbling ----
+  # Wobbling ----
   if (wobble) {
     # Random noise is only added, if 'wobbling' = TRUE and there is at least
-    # one duplicated value in the single samples or the joint sample
+    # one duplicated value within each sample or in the joint sample
     if (!(length(unique(x)) == length(x) &
           length(unique(y)) == length(y) &
           length(unique(c(x, y))) == length(c(x, y)))) {
@@ -62,11 +70,11 @@ preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, var.test) {
     }
   }
 
-  ## Transformation of observations for variance test ----
+  # Transformation of observations for variance test ----
   if (var.test) {
 
     if (delta == 0) {
-      ## 'delta' needs to be larger than zero
+      # 'delta' needs to be larger than zero
       stop("The logarithm of 0 is not defined. Please use another value for 'delta'.")
     }
 
@@ -80,7 +88,7 @@ preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, var.test) {
       x <- xy$x
       y <- xy$y
 
-      message(paste0("Added random noise before log transformation due to zeros in the sample. The seed is ",
+      message(paste0("Added random noise before log transformation due to zero(s) in the samples. The seed is ",
                      wobble.seed, "."))
     }
 
@@ -101,19 +109,33 @@ preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, var.test) {
 #'
 #' @template x
 #' @template y
-#' @template alternative
-#' @template delta
+#' @param alternative a character string specifying the alternative hypothesis,
+#'                    must be one of "two.sided", "greater" or "less".
+#' @param delta a numeric value indicating the true difference in the location
+#'              or scale parameter, depending on whether the test should be
+#'              performed for a difference in location or in scale.
 #' @param scale a character string specifying the scale estimator used for
 #'              standardization in the test statistic; must be one of \code{"S1"},
 #'              \code{"S2"}, \code{"S3"}, and \code{"S4"}.
-#' @template n_rep
-#' @template na_rm
-#' @template var_test
-#' @template wobble
+#' @param n.rep an integer value specifying the number of random splits used to
+#'        calculate the randomization distribution if \code{method = "randomization"}.
+#' @param na.rm logical value indicating whether NA values in x and y should be
+#'              stripped before the computation proceeds. The default is
+#'              \code{na.rm = FALSE}.
+#' @param var.test logical value testing whether the samples should be compared
+#'                 for a difference in scale.
+#' @param wobble logical value indicating whether the sample should be checked for
+#'               duplicated values that can cause the scale estimate to be zero.
+#'               If such values are present, uniform noise is added to the sample,
+#'               see \code{\link[robnptests]{wobble}}.
 #' @template wobble_seed
-#' @template gamma_trimmed_test
-#' @template psi
-#' @template k_mest
+#' @param gamma numeric value in [0, 0.5] specifying the fraction of observations
+#'              to be trimmed from each end of the sample before calculating the
+#'              mean. The default value is 0.2.
+#' @param psi kernel used for optimization.
+#'            Must be one of \code{"bisquare"}, \code{"hampel"} and
+#'            \code{"huber"}.
+#' @param k tuning parameter(s) for the respective psi function.
 #' @template test_name
 #'
 #' @details
@@ -147,7 +169,7 @@ check_test_input <- function(x,
                              k = NULL,
                              test.name) {
 
-  ## Checks that are necessary for all tests ----
+  # Checks that are necessary for all tests ----
   checkmate::assert_numeric(x, finite = TRUE, all.missing = FALSE, min.len = 5, null.ok = FALSE)
   checkmate::assert_numeric(y, finite = TRUE, all.missing = FALSE, min.len = 5, null.ok = FALSE)
   checkmate::assert_subset(alternative, choices = c("two.sided", "greater", "less"), empty.ok = FALSE)
@@ -162,7 +184,7 @@ check_test_input <- function(x,
   }
   checkmate::assert_numeric(wobble.seed, finite = TRUE, any.missing = FALSE, len = 1, null.ok = TRUE)
 
-  ## Checks for HL1-, HL2-, and MED-tests ----
+  # Checks for HL1-, HL2-, and MED-tests ----
   if (test.name %in% c("hl1_test", "hl2_test")) {
     checkmate::assert_subset(scale, choices = c("S1", "S2"), empty.ok = FALSE)
   } else if (test.name == "med_test") {
@@ -172,12 +194,12 @@ check_test_input <- function(x,
     checkmate::assert_flag(wobble, na.ok = FALSE, null.ok = FALSE)
   }
 
-  ## Additional checks for trimmed t-test ---
+  # Additional checks for trimmed t-test ---
   if (test.name == "trimmed_test") {
     checkmate::assert_number(gamma, na.ok = FALSE, lower = 0, upper = 0.5, finite = TRUE, null.ok = FALSE)
   }
 
-  ## Additional checks for M-tests ----
+  # Additional checks for M-tests ----
   if (test.name == "m_test") {
     checkmate::assert_subset(psi, choices = c("huber", "hampel", "bisquare"), empty.ok = FALSE)
     checkmate::assert_numeric(k, lower = 0, len = ifelse(psi == "hampel", 3, 1), finite = TRUE, any.missing = FALSE, null.ok = FALSE)
@@ -193,12 +215,22 @@ check_test_input <- function(x,
 #'
 #' @template x
 #' @template y
-#' @template method
+#' @param method a character string specifying how the p-value is computed with
+#'               possible values  \code{"asymptotic"} for an asymptotic test
+#'               based on a normal approximation, \code{"permutation"} for a
+#'               permutation test, and \code{"randomization"} for a randomization
+#'               test. The permutation test uses all splits of the joint sample
+#'               into two samples of sizes \code{m} and \code{n}, while the
+#'               randomization test draws \code{n.rep} random splits with
+#'               replacement. The values \code{m} and \code{n} denote the
+#'               sample sizes.
 #' @template test_name
-#' @template n_rep
+#' @param n.rep an integer value specifying the number of random splits used to
+#'        calculate the randomization distribution if
+#'        \code{method = "randomization"}.
 #'
 #' @details
-#' When the principle is specified by the user, i.e. method contains only
+#' When the principle is specified by the user, i.e. \code{method} contains only
 #' one element, the selected method is returned. Otherwise, if the user
 #' does not specify the principle, it depends on the sample size: When both
 #' samples contain more than 30 observations, an asymptotic test is perfomed.
@@ -208,28 +240,32 @@ check_test_input <- function(x,
 #' outside of this function. Each test function contains the argument
 #' \code{n.rep} where this can be done.
 #'
-#' @return A character string which contains the principle for computing the
+#' If \code{n.rep} is larger than the maximum number of splits and
+#' \code{method = "randomization"}, a permutation test is performed.
+#'
+#' @return A character string which specifies the principle for computing the
 #'         null distribution.
 #'
 #' @keywords internal
 
 select_method <- function(x, y, method, test.name, n.rep) {
 
-  ## Select principle for computing the null distribution ----
-  ## If 'method' contains only one entry, the principle is specified by the
-  ## user
+  # Select principle for computing the null distribution ----
+  # If 'method' contains only one entry, the principle is specified by the
+  # user
   if (length(method) == 1) {
     if (method == "randomization" & n.rep >= choose(length(x) + length(y), length(y))) {
-      # if n.rep is larger than the maximum number of permutations, automatically
+      # if 'n.rep' is larger than the maximum number of permutations, automatically
       # perform a permutation test
       return("permutation")
-    } else { # User-specified principle
+    } else {
+      # User-specified principle
       return(method)
     }
   }
 
   if (test.name %in% c("hl1_test", "hl2_test", "med_test", "trimmed_test", "m_test")) {
-    # Automatic selection of the principle, if not specified by the user
+    # Automatic selection of the principle if not specified by the user
     if (length(method) > 1 & all(c("asymptotic", "permutation", "randomization") %in% method)) {
       if (length(x) >= 30 & length(y) >= 30) {
         method <- "asymptotic"
@@ -239,7 +275,6 @@ select_method <- function(x, y, method, test.name, n.rep) {
         method <- "randomization"
       }
     }
-
     return(method)
   } else {
     stop(paste("Automatic selection not implemented for test",
@@ -252,18 +287,35 @@ select_method <- function(x, y, method, test.name, n.rep) {
 #'
 #' @description
 #' \code{compute_results_finite} is a helper function to compute the test
-#' decision for the HL1-, HL2-, and MED-test, when \code{method = "randomization"}
+#' decision for the HL1-, HL2-, and MED-test when \code{method = "randomization"}
 #' or \code{method = "permutation"}.
 #'
 #' @template x
 #' @template y
-#' @template alternative
-#' @template delta
-#' @template method
-#' @template n_rep
-#' @template type_rob_perm
+#' @param alternative a character string specifying the alternative hypothesis,
+#'                    must be one of "two.sided", "greater" or "less".
+#' @param delta a numeric value indicating the true difference in the location
+#'              or scale parameter, depending on whether the test should be
+#'              performed for a difference in location or in scale.
+#' @param method a character string specifying how the p-value is computed with
+#'               possible values  \code{"asymptotic"} for an asymptotic test
+#'               based on a normal approximation, \code{"permutation"} for a
+#'               permutation test, and \code{"randomization"} for a randomization
+#'               test. The permutation test uses all splits of the joint sample
+#'               into two samples of sizes \code{m} and \code{n}, while the
+#'               randomization test draws \code{n.rep} random splits with
+#'               replacement. The values \code{m} and \code{n} denote the
+#'               sample sizes.
+#' @param n.rep an integer value specifying the number of random splits used to
+#'        calculate the randomization distribution if \code{method = "randomization"}.
+#' @param type character string specifying the desired test statistic. It must
+#'             be one of \code{"HL11"}, \code{"HL12", "HL21", "HL22", "MED1"},
+#'             and \code{"MED2"}, where \code{"HL1"}, \code{"HL2"} and
+#'             \code{"MED"} specify the location estimator and the numbers
+#'             \code{1} and \code{2} the scale estimator, see the vignette
+#'             (\code{vignette("robnptests-vignette")}) for more information.
 #'
-#' @return A list containing the following components:
+#' @return A named list containing the following components:
 #' \item{statistic}{the value of the test statistic.}
 #' \item{estimates}{the location estimates for both samples in case of the HL1-
 #'                 and the MED-tests. The estimate for the location difference
@@ -274,11 +326,11 @@ select_method <- function(x, y, method, test.name, n.rep) {
 
 compute_results_finite <- function(x, y, alternative, delta, method, n.rep, type) {
 
-  ## Compute value of the test statistic ----
+  # Compute value of the test statistic ----
   perm.stats <- rob_perm_statistic(x, y + delta, type = type, na.rm = TRUE)
   statistic <- perm.stats$statistic
 
-  ## Compute location estimates ----
+  # Compute location estimates ----
   # For HL1- and MED-tests: location estimates
   # For HL2-tests: Estimator for location difference
   if (type %in% c("HL11", "HL12", "MED1", "MED2")) {
@@ -298,7 +350,7 @@ compute_results_finite <- function(x, y, alternative, delta, method, n.rep, type
     )
   )
 
-  ## Compute p-value ----
+  # Compute p-value ----
   p.value <- calc_perm_p_value(
     statistic,
     distribution,
@@ -320,11 +372,19 @@ compute_results_finite <- function(x, y, alternative, delta, method, n.rep, type
 #'
 #' @template x
 #' @template y
-#' @template alternative
-#' @template delta
-#' @template type_rob_perm
+#' @param alternative a character string specifying the alternative hypothesis,
+#'                    must be one of "two.sided", "greater" or "less".
+#' @param delta a numeric value indicating the true difference in the location
+#'              or scale parameter, depending on whether the test should be
+#'              performed for a difference in location or in scale.
+#' @param type character string specifying the desired test statistic. It must
+#'             be one of \code{"HL11"}, \code{"HL12", "HL21", "HL22", "MED1"},
+#'             and \code{"MED2"}, where \code{"HL1"}, \code{"HL2"} and
+#'             \code{"MED"} specify the location estimator and the numbers
+#'             \code{1} and \code{2} the scale estimator, see the vignette
+#'             (\code{vignette("robnptests-vignette")}) for more information.
 #'
-#' @return A list containing the following components:
+#' @return A named list containing the following components:
 #' \item{statistic}{the value of the test statistic.}
 #' \item{estimates}{the location estimates for both samples in case of the HL1-
 #'                 and the MED-tests. The estimate for the location difference
@@ -335,12 +395,12 @@ compute_results_finite <- function(x, y, alternative, delta, method, n.rep, type
 
 compute_results_asymptotic <- function(x, y, alternative, delta, type) {
 
-  ## Sample sizes ----
+  # Sample sizes ----
   m <- length(x)
   n <- length(y)
   lambda <- m/(m + n)
 
-  ## Test statistic and estimates for HL1- and HL2-tests ----
+  # Test statistic and estimates for HL1- and HL2-tests ----
   if (type %in% c("HL11", "HL12", "HL21", "HL22")) {
     # Kernel-density estimation for density of pairwise differences
     xcomb <- utils::combn(x, 2)
@@ -352,8 +412,8 @@ compute_results_asymptotic <- function(x, y, alternative, delta, type) {
     # Density estimate at 0
     int <- dens(0)
 
-    ## Test statistic and location estimates (HL1)/estimate for location
-    ## difference (HL2)
+    # Test statistic and location estimates (HL1)/estimate for location
+    # difference (HL2)
     if (type %in% c("HL11", "HL12")) {
       estimates <- c(hodges_lehmann(x), hodges_lehmann(y + delta))
       statistic <- sqrt(12 * lambda * (1 - lambda)) * int * sqrt(m + n) * (estimates[1] - estimates[2])
@@ -364,7 +424,7 @@ compute_results_asymptotic <- function(x, y, alternative, delta, type) {
       estimates <- hodges_lehmann_2sample(x, y)
     }
   } else if (type %in% c("MED1", "MED2")) {
-    ## Test statistic and estimates for MED-tests ----
+    # Test statistic and estimates for MED-tests ----
 
     # Sample medians
     med.x <- stats::median(x, na.rm = TRUE)
@@ -380,7 +440,7 @@ compute_results_asymptotic <- function(x, y, alternative, delta, type) {
     statistic <- sqrt(m*n/(m+n)) * 2 * med * (estimates[1] - estimates[2])
   }
 
-  ## Compute p-value ----
+  # Compute p-value ----
   p.value <- switch (alternative,
                      two.sided = 2 * stats::pnorm(abs(statistic), lower.tail = FALSE),
                      greater = stats::pnorm(statistic, lower.tail = FALSE),
