@@ -90,11 +90,7 @@ In the remainder, let $\boldsymbol{x} = \left(x_1, \ldots, x_m\right)$ and $\bol
 
 ??? WAS WOLLEN WIR HIER BESCHREIBEN ????
 ```{r}
-<<<<<<< Updated upstream:vignettes/robnptests.Rmd.orig
 library(robnptests)
-=======
-library(robTests) # library(robnptests)
->>>>>>> Stashed changes:vignettes/robTests.Rmd.orig
 
 sessionInfo()
 ```
