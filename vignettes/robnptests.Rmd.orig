@@ -3,7 +3,7 @@ title: "Getting started with `robnptests`"
 date: "`r Sys.Date()`"
 author: Sermad Abbas, Barbara Brune, Roland Fried
 output:
-  rmarkdown::pdf_document:
+  rmarkdown::html_document:
     toc: true
 bibliography: ../inst/REFERENCES.bib
 csl: csda.csl
@@ -23,52 +23,78 @@ knitr::opts_chunk$set(
 
 # Introduction {#introduction}
 
-The package `robnptests` contains robust (approximately) distribution-free tests for the two-sample location problem.
+The package `robnptests` contains robust (approximately) distribution-free tests for the two-sample location problem. A transformation of the samples also allows for testing for a difference in scale.
 
-We consider the following data situation: Let $\boldsymbol{X} = \left(X_1, \ldots, X_m\right)$ and $\boldsymbol{Y} = \left(Y_1, \ldots, Y_n\right)$ be two samples of sizes $m, n \in \mathbb{N}$.
-Each sample consists of independent and identically distributed (i.i.d.) random variables so that
+We consider the following data situation: Let $\boldsymbol{X} = \left(X_1, \ldots, X_m\right)$ and $\boldsymbol{Y} = \left(Y_1, \ldots, Y_n\right)$ be two independent samples of sizes $m, n \in \mathbb{N}$.
+We assume the $X_i$, and $Y_j$ can be written as
+\begin{align*}
+  X_i = \mu_X + \sigma_X \cdot \varepsilon_{i},\ i = 1, \ldots, m \quad \text{and} \quad Y_j = \mu_Y + \sigma_Y \cdot \varepsilon_{m + j},\ j = 1, \ldots, n.
+\end{align*}
+Here, $\mu_X$ and $\mu_Y$ denote the location parameters, and $\sigma_X$ and $\sigma_Y$ are the scale parameters of the first and the second sample. The random variables $\varepsilon_{1}, \ldots, \varepsilon_{m+n}$ are i.i.d. random variables. Thus, $\boldsymbol{X}_i$ and $\boldsymbol{Y}_j$ are from the same location-scale family.
 
+### Differences in location
+
+Assuming $\sigma_X = \sigma_Y$, the distributions of the samples $\boldsymbol{X}$ and $\boldsymbol{Y}$ differ at most in location. We denote the location difference by $\Delta = \mu_X - \mu_y$ ???.
+Writing
 \begin{align*}
   X_1, \ldots, X_m \overset{i.i.d.}{\sim} F_X \quad \text{and} \quad Y_1, \ldots, Y_n \overset{i.i.d.}{\sim} F_Y,
 \end{align*}
-
-where $F_X, F_Y\colon\ \mathbb{R} \to \left[0, 1\right]$ are the CDFs of the underlying unknown continuous distributions. Let $G$ be a shifted version of $F$, i.e.
-
+where $F_X, F_Y\colon\ \mathbb{R} \to \left[0, 1\right]$ are the CDFs of the underlying unknown continuous distributions, we have
 \begin{align*}
-  F_Y\left(x\right) = F\left(x + \Delta\right) \quad \text{for all}\ x \in \mathbb{R},
+  F_Y\left(x\right) = F_X\left(x + \Delta\right) \quad \text{for all}\ x \in \mathbb{R},
 \end{align*}
-
-with $\Delta \in \mathbb{R}$ denoting the shift size. Hence, $F$ and $G$ differ at most in location and, in particular, have the same variance $\sigma^2 := \sigma_X^2 = \sigma_Y^2 > 0$ (homoscedasticity).
-
-The following hypotheses can be tested:
+Using the tests implemented in `robnptests`, the following hypotheses can be tested:
 \begin{align*}
   &H_0^{(=)}\colon\ \Delta = \Delta_0 \quad \text{vs.} \quad H_1^{(=)}\colon\ \Delta \neq \Delta_0 \\
   &H_0^{(\leq)}\colon\ \Delta \leq \Delta_0 \quad \text{vs.} \quad H_1^{(\leq)}\colon\ \Delta > \Delta_0 \\
   &H_0^{(\geq)}\colon\ \Delta \geq \Delta_0 \quad \text{vs.} \quad H_1^{(\geq)}\colon\ \Delta < \Delta_0,
 \end{align*}
-where $\Delta_0 \in \mathbb{R}$ is a value to which $\Delta$ is set into relation.
+where $\Delta_0 \in \mathbb{R}$ is a given possible value of $\Delta$ which is of particular interest (e.g. $\Delta_0 = 0$).
 
-A popular test for this scenario is the ordinary two-sample $t$-test, which uses the normality assumption. For large samples, the central limit theorem ensures that the test keeps the desired significance level $\alpha \in \left(0, 1\right)$, even if the underlying distributions are not normal. However, relying on the central limit theorem is often not appropriate in small samples.
+### Differences in scale
+
+When setting $\mu_x = \mu_y$, the samples $\boldsymbol{X}$ and $\boldsymbol{Y}$ differ at most in scale.
+
+We address the following hypotheses pairs:
+\begin{align*}
+  &H_0^{(=)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} = \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \neq \tilde{\Delta}_0  \\
+  &H_0^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \leq \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} > \tilde{\Delta}_0 \\
+  &H_0^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \geq \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} < \tilde{\Delta}_0.
+\end{align*}
+
+By log-transforming the random variables, we obtain
+
+\begin{align*}
+  & U_i = \log\left(X_i^2\right) = \log\left(\sigma_X^2\right) + \log\left(\varepsilon_{X, i}^2\right),\ i = 1, \ldots, m, \\ \text{and } & \quad V_i = \log\left(Y_j^2\right) = \log\left(\sigma_Y^2\right) + \log\left(\varepsilon_{Y, j}^2\right), j = 1, \ldots, n.
+\end{align*}
+
+With these transformed samples, we are again in the data situation described above as the distributions differ at most by  ß[ \Delta_0 = \log(F\tilde{\Delta}_0) = \log\left(\sigma_X^2\right) - \log\left(\sigma_Y^2\right)\] [see @Fri12onli].
+
+### Testing for differences in location or scale
+
+A popular test for the above scenario is the ordinary two-sample $t$-test, which uses the normality assumption. For large samples, the central limit theorem ensures that the test keeps the desired significance level $\alpha \in \left(0, 1\right)$ at least approximately, even if the underlying distributions are not normal. However, relying on the central limit theorem is often not appropriate in small samples. Also, there are distributions without existing variance for which the central limit theorem does not apply.
 Moreover, the test is known to be vulnerable to outlying values as they can mask existing location shifts or lead to wrong rejections of the null hypothesis.
 
 The Wilcoxon-Mann-Whitney test is a popular distribution-free test which is nearly as powerful as the $t$-test under normality, but can be more powerful under non-normal distributions. It is often preferred over the $t$-test when the normality assumption cannot be justified.
-However, it can be equally vulnerable to outliers [@FriGat07rank].
+However, it can be vulnerable to outliers as well [@FriGat07rank].
 
 We implemented tests for the outlined situation with the following objectives in mind:
 
 * robustness against outliers,
-* (approximately) distribution free, i.e. keep $\alpha$ under $H_0$ over many continuous distributions, and
-* have a large power over several distributions.
+* (approximately) distribution freeness, i.e. keep $\alpha$ under $H_0$ over a large class of continuous distributions,
+* and a large power over many distributions.
 
 In this vignette, we describe the basic functionality of the package and the implemented tests.
 
-In addition to the two-sample location problem, the tests can be used to detect scale differences between two independent samples.
-This will be briefly discussed at the end of the vignette.
-
 In the remainder, let $\boldsymbol{x} = \left(x_1, \ldots, x_m\right)$ and $\boldsymbol{y} = \left(y_1, \ldots, y_n\right)$ be observed samples from both distributions.
 
+??? WAS WOLLEN WIR HIER BESCHREIBEN ????
 ```{r}
+<<<<<<< Updated upstream:vignettes/robnptests.Rmd.orig
 library(robnptests)
+=======
+library(robTests) # library(robnptests)
+>>>>>>> Stashed changes:vignettes/robTests.Rmd.orig
 
 sessionInfo()
 ```
@@ -82,7 +108,7 @@ Function name | Test names | Description | Literature
 `med_test`    | MED1-test, MED2-test | Tests based on the difference of the sample medians | @FriDeh11robu
 `hl1_test`    | HL11-test, HL12-test | Tests based on the one-sample Hodges-Lehmann estimator | @FriDeh11robu
 `hl2_test`    | HL21-test, HL22-test | Tests based on the two-sample Hodges-Lehmann estimator | @FriDeh11robu
-`m_test`      | M-estimator test | Tests based on M-estimators | e.g. @Abo92robu
+`m_test`      | M-estimator test | Tests based on M-estimators | see vignette [\underline{Construction of the M-tests}](mTest-vignette.html).
 `trimmed_test`| Yuen's trimmed t-test | Test based on trimmed means | @YueDix73appr
 
 We describe the test statistics in detail in the next subsection.
@@ -106,7 +132,7 @@ The following table shows the different options for the simplified case $\Delta_
 
 Value of argument `alternative` | Alternative hypothesis | Meaning of the alternative hypothesis
 --------------------- | ------------ | -----------
-`two.sided`                     | $H_1^{(=)}\colon\ \Delta \neq 0$ | $X$ and $Y$ are stocastically unequal
+`two.sided`                     | $H_1^{(=)}\colon\ \Delta \neq 0$ | $X$ and $Y$ differ in location, or more generally, one of the distributions is stochastically larger than the other
 `greater`                       | $H_1^{(\leq)}\colon\ \Delta > 0$ | $X$ is stochastically larger than $Y$
 `less`                          | $H_1^{(\geq)}\colon\ \Delta < 0$ | $X$ is stochastically smaller than $Y$
 
@@ -118,7 +144,7 @@ Using the difference of the sample medians, i.e.
    \hat{\Delta}^{(\text{MED})} = \text{median}\left(x_1, \ldots, x_m\right) - \text{median}\left(y_1, \ldots, y_n\right)
 \end{align*}
 
-is an obvious way to estimate the location difference $\Delta$ robustly.
+is an obvious cancidate to estimate the location difference $\Delta$ robustly.
 
 Tests based on this estimator can be called with the function `med_test`.
 
@@ -129,7 +155,7 @@ Setting the argument `scale = S3`, it is estimated by the median of the absolute
   \hat{S}^{(3)} = 2 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|, |y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\},
 \end{align*}
 
-where $\tilde{x}$ and $\tilde{y}$ are the sample medians.
+where $\tilde{x}$ and $\tilde{y}$ are the medians of the two samples.
 
 Another possibility is `scale = S4` to estimate the scale by the sum of the median absolute deviations from the sample median (MAD) of each sample, i.e.
 
@@ -176,7 +202,7 @@ with
 
 ### HL2-tests
 
-Instead of subtracting location estimates of both samples, the two-sample Hodges-Lehmann estimator (HL2-estimator) estimates the location difference directly:
+Instead of taking the difference of location estimates of the two samples, the two-sample Hodges-Lehmann estimator (HL2-estimator) estimates the location difference directly:
 
 \begin{align*}
    \hat{\Delta}^{(\text{HL2})} = \text{median}\left\{|x_i - y_j|\colon\ 1 \leq i \leq m,\ 1 \leq j \leq n\right\}.
@@ -200,7 +226,7 @@ For differentiable functions $\rho$ with $\rho' = \psi$, the optimization proble
   \sum_{i = 1}^m \psi\left(\frac{x_i - \mu_X}{\sigma_X}\right) \overset{!}{=} 0.
 \end{equation*}
 
-For a motivation on how this test statistic is constructed, we refer to the vignette [\underline{Construction of the M-tests}](mTest-vignette.pdf).
+For a motivation on how this test statistic is constructed, we refer to the vignette [\underline{Construction of the M-tests}](mTest-vignette.pdf), as well as to @YueLee85Some and @Abo92robu.
 
 The test statistic of the two-sample $M$-estimator test in the package is
 \begin{equation*}
@@ -213,19 +239,20 @@ We currently allow for Huber-, Hampel-, and Bisquare $\psi$-functions called fro
 
 A standard robust two-sample test is the trimmed t-Test as proposed in @YueDix73appr. The test statistic is based on trimmed means and winsorized variances given as follows:
 
-\begin{align}
+\begin{align*}
   t_{\text{trim}} = \frac{\bar{x}_{m,\gamma} - \bar{y}_{n,\gamma}}{\sqrt{\frac{(m - 1) s^2_{x,\gamma} + (n - 1) s^2_{y, \gamma}}{h.x + h.y - 2}}}
-\end{align}
+\end{align*}
 
-where, for $k_x = \lfloor \gamma m\rfloor$ and $x_{(1)},...,x_{(m)}$ the ordered sample, the trimmed mean is given by:
+where, for $k_x = \lfloor \gamma m\rfloor$ and $x_{(1)},...,x_{(m)}$ being the ordered sample, the trimmed mean is given by:
 \begin{align}
   \bar{x}_{m,\gamma} = \frac{1}{m - k_x} \sum_{i=k_x+1}^{m-k_x} x_{(i)} , \quad \gamma\in[0, 1].
 \end{align}
 The winsorized variance is obtained by replacing the smallest and largest $k_x$ observations by $x_{(k_x)}$ and $x_{(m-k_x)}$, obtaining the modified sample $x^*_1,..., x^*_m$. Then:
 \begin{align}
-  s_{x,\gamma} = \frac{1}{m-1}  \sum_{i=1}^{m} (x^*_i - \bar{x^*})^2
+  s_{x,\gamma} = \frac{1}{m-1}  \sum_{i=1}^{m} (x^*_i - \bar{x^*})^2.
 \end{align}
-(analogously for $y$). $h_x$ denotes the number of samples used, i.e.\ $h_x = m - 2k_x$.
+$h_x$ denotes the number of samples used, i.e. $h_x = m - 2k_x$.
+$k_y$, $h_y$, $\bar{y}_{n,\gamma}$ and $s_{y,\gamma}$ are defined analogously.
 
 ## Computation of p-values
 
@@ -250,8 +277,8 @@ Let $A$ be the number of theses values, $t_i$ the value of the test statistic fo
 
 and $p$-value $= \frac{A}{B}$.
 
-$B$ increases rapidly in $m$ and $n$, so using the permutation principle can lead to memory and computation time issues.
-We recommend this approach only for very small sample sizes or when sufficient computational resources are available.
+$B$ increases rapidly in $m$ and $n$, so using the permutation principle can lead to memory and computation time issues. E.g., for $m=n=20$ we already have $\binom{20}{10} = 184\,754$ possible splits.
+Thus, we recommend this approach only for small sample sizes or when sufficient computational resources are available.
 
 ### Randomization
 
@@ -265,7 +292,7 @@ In the numerator and the denominator, the number $1$ is added as the observed sa
 This estimator will overestimate the true $p$-value because the observed sample may be drawn several times.
 Following [@PhiSmy10perm], we correct the $p$-value using the function `permp` from their R package [statmod](https://cran.r-project.org/package=statmod).
 
-### Asymptotic
+### Asymptotics
 
 For large sample sizes ($m,n>30$), asymptotic $p$-values can be computed for each test using a normal approximation. This reduces the computation time further as compared to the randomization principle.
 
@@ -274,10 +301,10 @@ For large sample sizes ($m,n>30$), asymptotic $p$-values can be computed for eac
 Using the asymptotic distribution of the sample median, the test statistic of the asymptotic MED-test is
 
 \begin{align*}
-  T_a^{(\text{MED})} = \sqrt{\frac{m \cdot n}{m + n}} \cdot 2 \cdot f\left(F^{-1}\left(0.5\right)\right) \cdot  \hat{\Delta}^{(\text{MED})} \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, 1\right),
+  T_a^{(\text{MED})} = \sqrt{\frac{m \cdot n}{m + n}} \cdot 2 \cdot f\left(F^{-1}\left(0.5\right)\right) \cdot  \hat{\Delta}^{(\text{MED})} \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, 1\right) \text{ under } H_0,
 \end{align*}
 
-where $f$ is the density function belonging to the cumulative distribution function $F$. The value $f\left(F^{-1}\left(0.5\right)\right)$ can be estimated by a kernel-density estimator on the sample $x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n - \tilde{y}$.
+where $f$ is the density function belonging to the cumulative distribution function $F$. The value $f\left(F^{-1}\left(0.5\right)\right)$ can be estimated by a kernel-density estimation on the sample $x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n - \tilde{y}$.
 We use the R function `density` from the [stats](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/00Index.html) package with its default settings for the kernel-density estimation.
 
 #### Asymptotic HL1-/HL2-test
@@ -285,7 +312,7 @@ We use the R function `density` from the [stats](https://stat.ethz.ch/R-manual/R
 With $\lambda = \frac{m}{m + n} \in \left(0, 1\right)$, the asymptotic HL2-test has the test statistic
 
 \begin{align*}
-T_a^{(\text{HL2})} = \sqrt{12 \cdot \lambda \cdot \left(1 - \lambda\right)} \int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x \cdot \left(m + n\right) \cdot \hat{\Delta}^{(\text{HL2})} \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, 1\right),
+T_a^{(\text{HL2})} = \sqrt{12 \cdot \lambda \cdot \left(1 - \lambda\right)} \int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x \cdot \left(m + n\right) \cdot \hat{\Delta}^{(\text{HL2})} \overset{\text{asympt.}}{\sim} \mathcal{N}\left(0, 1\right) \text{ under } H_0,
 \end{align*}
 
 where $\int_{-\infty}^{\infty} f^2\left(x\right) \mathrm{d}x$ can be interpreted as the value of the density of $X - Y$ at zero.
@@ -304,11 +331,11 @@ The trimmed t-statistic is compared to the respective quantile of the $t_{h_x + 
 
 # Testing for a location difference
 
-We will now show how to use the functions to test for location difference between two samples.
+We will now show how to use the functions to test for a location difference between two samples.
 
 ## Continuous data
 
-Let $x_1, \ldots, x_m$ and $y_1, \ldots, y_m$ be observations from a continuous distributions.
+Let $x_1, \ldots, x_m$ and $y_1, \ldots, y_n$ be observations from a continuous distributions.
 
 ```{r}
 set.seed(108)
@@ -322,7 +349,7 @@ y
 ### Permutation test
 
 In this example, we use the two-sided HL1-test with the scale estimator $\hat{S}^{(2)}$ and
-assume that $\Delta_0 = 0$.
+set $\Delta_0 = 0$.
 
 ```{r, cache = TRUE}
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "permutation", scale = "S2")
@@ -369,17 +396,17 @@ As expected, the $p$-value is the same as the one from the previous test.
 
 ## Discrete data
 
-In many applications the data may be rounded to a small number of digits or the data-generating process may be discrete.
+In many applications the data are rounded to a small number of digits or the data-generating process is discrete.
 This can lead to several problems:
 
-* If there is no location difference, the scale estimate, i.e. the denominator of the test statistic, may be zero so that the test statistic cannot be computed.
+* The scale estimate, i.e. the denominator of the test statistic, may be zero so that the test statistic cannot be computed.
 * The test has only little power, i.e. location differences between the samples may not be found.
 
-Following the suggestion of [@FriGat07rank], we implemented a procedure called wobbling, where we add random noise from a uniform distribution to the observations.
-To keep the alterations small, the scale of the noise depends on the number of decimal places of the observations.
-This is controlled by the argument `wobble`, where `TRUE` means that noise is added and `FALSE` means that no noise is added.
+Following the suggestion of @FriGat07rank, we implemented a procedure called wobbling, where we add random noise from a uniform distribution to the observations.
+To keep the changes small, the scale of the noise depends on the number of decimal places of the observations.
+The logical argument `wobble` specifies whether random noise should be added to the observations or not. The wobbling procedure is only carried out if bindings are present in the observations (for the location test), or if zeros occur in the observations (for the scale test).
 
-In the following example, we round the previously generated observations and perform the HL12-test.
+In the following example, we round the previously generated observations and perform the HL12-test for location.
 
 ```{r, error = TRUE, cache = TRUE}
 x1 <- round(x)
@@ -392,7 +419,7 @@ set.seed(47)
 hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2")
 ```
 
-Although the value of the scale estimator in the original sample is `rob_var(x1, y1, type = "S2")`, there exists at least one split used to compute the randomization distribution, which leads to the estimated scale `0`.
+Although the value of the scale estimator in the original sample is `r rob_var(x1, y1, type = "S2")`, there exists at least one split used to compute the randomization distribution, which leads to the estimated scale `0`.
 We follow the advice in the error message and set `wobble = TRUE`. To enable the reproducibility of the results, the argument `wobble.seed` can be set, otherwise a random seed is chosen.
 
 ```{r, cache = TRUE}
@@ -401,7 +428,7 @@ hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S
 ```
 
 The $p$-value deviates quite strongly from the $p$-value obtained for the original observations.
-This is because we cannot reproduce them exactly.
+We cannot reproduce them exactly.
 If we chose to wobble on the original observations, the $p$-value would again be quite close to the one for the unrounded values.
 
 ```{r, cache = TRUE}
@@ -438,36 +465,11 @@ wobble(x1, y1, check = FALSE)
 
 # Testing for a difference in scale
 
-Following [@Fri12onli] the argument `var.test` allows to decide whether the samples should be tested for a location difference (`var.test = FALSE`), which is the default, or for different variances (`var.test = TRUE`), i.e. $\sigma^2_X \neq \sigma^2_Y$.
+The argument `var.test` allows to decide whether the samples should be tested for a location difference (`var.test = FALSE`), which is the default, or for different scale parameters (`var.test = TRUE`), i.e. $\sigma^2_X \neq \sigma^2_Y$.
 
-Setting `var.test = TRUE` transforms the observations so that a possible variance difference between the samples appears as a location difference between the transformed samples.
+As described in the introduction, setting `var.test = TRUE` transforms the observations so that a possible variance difference between the samples appears as a location difference between the transformed samples.
 
 In terms of the power, the resulting variance tests can outperform classical tests like the $F$-test, the Mood test, or the Ansary-Bradley test under outliers and asymmetry.
-
-## Idea
-Again, we start with two samples $X_1, \ldots, X_m$ and $Y_1, \ldots, Y_n$, each of which consists of i.i.d. random variables.
-However, now we assume that we can write the random variables as
-
-\begin{align*}
-  X_i = \sigma_X \cdot \varepsilon_{X, i},\ i = 1, \ldots, m \quad \text{and} \quad Y_j = \sigma_Y \cdot \varepsilon_{Y, j},\ j = 1, \ldots, n.
-\end{align*}
-
-Here, $\sigma_X$ is the standard deviation of the first sample and $\sigma_Y$ is the standard deviation of the second sample. The random variables $\varepsilon_{X, 1}, \ldots, \varepsilon_{X, m}$ and $\varepsilon_{Y, 1}, \ldots, \varepsilon_{Y, m}$ are i.i.d. random variables with expectation zero and unit variance.
-
-We address the following hypotheses pairs:
-\begin{align*}
-  &H_0^{(=)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} = 1 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \neq 1 \\
-  &H_0^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \leq 1 \quad \text{vs.} \quad H_1^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} > 1 \\
-  &H_0^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \geq 1 \quad \text{vs.} \quad H_1^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} < 1.
-\end{align*}
-
-By log-transforming the random variables, we obtain
-
-\begin{align*}
-  & U_i = \log\left(X_i^2\right) = \log\left(\sigma_X^2\right) + \log\left(\varepsilon_{X, i}^2\right),\ i = 1, \ldots, m, \\ \text{and } & \quad V_i = \log\left(Y_j^2\right) = \log\left(\sigma_Y^2\right) + \log\left(\varepsilon_{Y, j}^2\right), j = 1, \ldots, n.
-\end{align*}
-
-With these transformed samples, we are in the data situation described in the introduction as the distributions differ at most by $\Delta = \log\left(\sigma_X^2\right) - \log\left(\sigma_Y^2\right)$.
 
 ```{r, cache = TRUE}
 set.seed(108)
@@ -486,7 +488,7 @@ hl1_test(x = x * 5, y = y, alternative = "two.sided", delta = 5, method = "asymp
 ```
 
 ## Other packages
-The tests in this package are constructed assuming homoscedasticity. Robust two-sample tests for the heteroscedastic scenario can be found in R package [WRS2](https://cran.r-project.org/package=WRS2) [@MaiWil20robu].
+The tests in this package are constructed assuming homoscedasticity. Robust two-sample tests for the heteroscedastic scenario can be found in the R package [WRS2](https://cran.r-project.org/package=WRS2) [@MaiWil20robu].
 
 ## References
 
