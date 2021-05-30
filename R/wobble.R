@@ -73,7 +73,8 @@ wobble <- function(x, y, check = TRUE) {
   # Instead:
   digits <- as.vector(sapply(as.character(z),
                              function(x) nchar(unlist(strsplit(x, "\\."))[2])))
-  digits[is.na(digits)] <- 0 # if the values are discrete we will get NA from the strsplit
+  # if the values are discrete, 'strsplit' returns NA
+  digits[is.na(digits)] <- 0
 
   z.wobble <- z + stats::runif(length(z),
                         -0.5*10^(-min(digits)), 0.5*10^(-min(digits)))
