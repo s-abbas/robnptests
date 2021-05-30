@@ -177,7 +177,7 @@ huber_test <- function(x, y, delta = ifelse(var.test, 1, 0), k = 1.8,
 #'
 #'
 #' @template x
-#' @template gamma_winsorized_variance
+#' @template gamma_winsorized
 #' @template na_rm
 #'
 #'
@@ -233,7 +233,7 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
 #' \code{trim_mean} calculates a trimmed mean of a sample.
 #'
 #' @template x
-#' @template gamma_trimmed_mean
+#' @template gamma_trimmed
 #' @template na_rm
 #'
 #' @details
@@ -277,7 +277,7 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #'
 #' @template x
 #' @template y
-#' @template gamma_trimmed_test
+#' @template gamma_trimmed
 #' @template delta
 #' @template na_rm
 #'
@@ -338,7 +338,7 @@ trimmed_t <- function(x, y, gamma = 0.2, delta = 0, na.rm = FALSE) {
 #'
 #' @template x
 #' @template y
-#' @template gamma_trimmed_test
+#' @template gamma_trimmed
 #' @template alternative
 #' @template delta
 #' @template na_rm

@@ -9,7 +9,7 @@
 #'
 #'
 #' @template x
-#' @template gamma_winsorized_variance
+#' @template gamma_winsorized
 #' @template na_rm
 #'
 #' @return A list containing the following items:

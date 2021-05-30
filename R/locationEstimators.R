@@ -9,7 +9,7 @@
 #' \code{trim_mean} calculates a trimmed mean of a sample.
 #'
 #' @template x
-#' @template gamma_trimmed_mean
+#' @template gamma_trimmed
 #' @template na_rm
 #'
 #' @details
@@ -51,7 +51,7 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' @description \code{win_mean} calculates the winsorized mean of a sample.
 #'
 #' @template x
-#' @template gamma_winsorized_mean
+#' @template gamma_winsorized
 #' @template na_rm
 #'
 #' @return

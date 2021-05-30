@@ -9,7 +9,7 @@
 #'
 #' @template x
 #' @template y
-#' @template gamma_trimmed_test
+#' @template gamma_trimmed
 #' @template alternative
 #' @template delta
 #' @template method
