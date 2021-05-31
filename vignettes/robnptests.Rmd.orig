@@ -28,13 +28,13 @@ The package `robnptests` contains robust (approximately) distribution-free tests
 We consider the following data situation: Let $\boldsymbol{X} = \left(X_1, \ldots, X_m\right)$ and $\boldsymbol{Y} = \left(Y_1, \ldots, Y_n\right)$ be two independent samples of sizes $m, n \in \mathbb{N}$.
 We assume the $X_i$, and $Y_j$ can be written as
 \begin{align*}
-  X_i = \mu_X + \sigma_X \cdot \varepsilon_{i},\ i = 1, \ldots, m \quad \text{and} \quad Y_j = \mu_Y + \sigma_Y \cdot \varepsilon_{m + j},\ j = 1, \ldots, n.
+  X_i = \mu_X + \theta_X \cdot \varepsilon_{i},\ i = 1, \ldots, m \quad \text{and} \quad Y_j = \mu_Y + \theta_Y \cdot \varepsilon_{m + j},\ j = 1, \ldots, n.
 \end{align*}
-Here, $\mu_X$ and $\mu_Y$ denote the location parameters, and $\sigma_X$ and $\sigma_Y$ are the scale parameters of the first and the second sample. The random variables $\varepsilon_{1}, \ldots, \varepsilon_{m+n}$ are i.i.d. random variables. Thus, $\boldsymbol{X}_i$ and $\boldsymbol{Y}_j$ are from the same location-scale family.
+Here, $\mu_X$ and $\mu_Y$ denote the location parameters, and $\theta_X$ and $\theta_Y$ are the scale parameters of the first and the second sample. The random variables $\varepsilon_{1}, \ldots, \varepsilon_{m+n}$ are i.i.d. random variables. Thus, $\boldsymbol{X}_i$ and $\boldsymbol{Y}_j$ are from the same location-scale family.
 
 ### Differences in location
 
-Assuming $\sigma_X = \sigma_Y$, the distributions of the samples $\boldsymbol{X}$ and $\boldsymbol{Y}$ differ at most in location. We denote the location difference by $\Delta = \mu_X - \mu_Y$ ???.
+Assuming $\theta_X = \theta_Y$, the distributions of the samples $\boldsymbol{X}$ and $\boldsymbol{Y}$ differ at most in location. We denote the location difference by $\Delta = \mu_X - \mu_Y$.
 Writing
 \begin{align*}
   X_1, \ldots, X_m \overset{i.i.d.}{\sim} F_X \quad \text{and} \quad Y_1, \ldots, Y_n \overset{i.i.d.}{\sim} F_Y,
@@ -57,18 +57,18 @@ When setting $\mu_X = \mu_Y$, the samples $\boldsymbol{X}$ and $\boldsymbol{Y}$ 
 
 We address the following hypothesis pairs:
 \begin{align*}
-  &H_0^{(=)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} = \tilde{\Delta}_0^2 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \neq \tilde{\Delta}_0^2  \\
-  &H_0^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \leq \tilde{\Delta}_0^2 \quad \text{vs.} \quad H_1^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} > \tilde{\Delta}_0^2 \\
-  &H_0^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \geq \tilde{\Delta}_0^2 \quad \text{vs.} \quad H_1^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} < \tilde{\Delta}_0^2.
+  &H_0^{(=)}\colon\ \frac{\theta^2_X}{\theta^2_Y} = \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\theta^2_X}{\theta^2_Y} \neq \tilde{\Delta}_0 \\
+  &H_0^{(>)}\colon\ \frac{\theta^2_X}{\theta^2_Y} \leq \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(>)}\colon\ \frac{\theta^2_X}{\theta^2_Y} > \tilde{\Delta}_0 \\
+  &H_0^{(<)}\colon\ \frac{\theta^2_X}{\theta^2_Y} \geq \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(<)}\colon\ \frac{\theta^2_X}{\theta^2_Y} < \tilde{\Delta}_0.
 \end{align*}
 
 By log-transforming the random variables, we obtain
 
 \begin{align*}
-  & U_i = \log\left(X_i^2\right) = \log\left(\sigma_X^2\right) + \log\left(\varepsilon_{ i}^2\right),\ i = 1, \ldots, m, \\ \text{and }  \quad & V_i = \log\left(Y_j^2\right) = \log\left(\sigma_Y^2\right) + \log\left(\varepsilon_{m+j}^2\right),\ j = 1, \ldots, n.
+  & U_i = \log\left(X_i^2\right) = \log\left(\theta_X^2\right) + \log\left(\varepsilon_{ i}^2\right),\ i = 1, \ldots, m, \\ \text{and }  \quad & V_i = \log\left(Y_j^2\right) = \log\left(\theta_Y^2\right) + \log\left(\varepsilon_{m+j}^2\right),\ j = 1, \ldots, n.
 \end{align*}
 
-With these transformed samples, we are again in the data situation described above as the distributions differ at most by  \[ \Delta_0 = \log(\tilde{\Delta}_0) = \log\left(\sigma_X^2\right) - \log\left(\sigma_Y^2\right)\] [see @Fri12onli].
+With these transformed samples, we are again in the data situation described above as the distributions differ at most by  \[ \Delta_0 = \log(\tilde{\Delta}_0) = \log\left(\theta_X^2\right) - \log\left(\theta_Y^2\right)\] [see @Fri12onli].
 
 ### Testing for differences in location or scale
 
@@ -105,7 +105,7 @@ All functions contain several arguments to adjust the functions to certain data 
 
 ## Test statistics
 
-The implemented test statistics follow the construction principle of the $t$-statistic, i.e. an estimator $\hat{\Delta}$ for the true location difference $\Delta$ between both samples is divided by a pooled estimator $\hat{S}$ for the unknown standard deviation $\sigma$, leading to test
+The implemented test statistics follow the construction principle of the $t$-statistic, i.e. an estimator $\hat{\Delta}$ for the true location difference $\Delta$ between both samples is divided by a pooled estimate $\hat{S}$ of the variability of the two samples, leading to test
 statistics of the form
 
 \begin{align*}
@@ -205,21 +205,21 @@ Very flexible location estimators can be derived via M-estimation.
 An M-estimator $\hat{\mu}^{(M)}_X$ for the location parameter of the $x$-sample (and analogously for the $y$-sample) can be obtained by solving the minimization problem
 
 \begin{equation*}
-  \hat{\mu}^{(M)}_X = \arg\underset{\mu_X}{\min} \sum_{i = 1}^m \rho\left(\frac{x_i - \mu_X}{\sigma_X}\right),
+  \hat{\mu}^{(M)}_X = \arg\underset{\mu_X}{\min} \sum_{i = 1}^m \rho\left(\frac{x_i - \mu_X}{\theta_X}\right),
 \end{equation*}
 
 where $\rho:\ \mathbb{R} \to \mathbb{R}$ is a function chosen to achieve a ``nearly optimal'' location estimate when the $X_i$ are normally or approximately normally distributed [@MarMarYoh06robu, p. 22].
 For differentiable functions $\rho$ with $\rho' = \psi$, the optimization problem can be translated to finding the value of $\mu_X$, for which
 
 \begin{equation*}
-  \sum_{i = 1}^m \psi\left(\frac{x_i - \mu_X}{\sigma_X}\right) \overset{!}{=} 0.
+  \sum_{i = 1}^m \psi\left(\frac{x_i - \mu_X}{\theta_X}\right) \overset{!}{=} 0.
 \end{equation*}
 
 For a motivation on how this test statistic is constructed, we refer to the vignette [\underline{Construction of the M-tests}](mTest-vignette.pdf). Similar test statistics were proposed in @YueLee85Some and @Abo92robu.
 
 The test statistic of the two-sample $M$-estimator test in the package is
 \begin{equation*}
-  \sqrt{\frac{m \cdot n}{n \cdot \hat{\sigma}^2_X \cdot \hat{\nu}_X + m \cdot \hat{\sigma}^2_Y \cdot \hat{\nu}_Y}} \cdot \left( \hat{\mu}^{(M)}_X - \hat{\mu}^{(M)}_Y \right).
+  \sqrt{\frac{m \cdot n}{n \cdot \hat{\theta}^2_X \cdot \hat{\nu}_X + m \cdot \hat{\theta}^2_Y \cdot \hat{\nu}_Y}} \cdot \left( \hat{\mu}^{(M)}_X - \hat{\mu}^{(M)}_Y \right).
 \end{equation*}
 
 We currently allow for Huber-, Hampel-, and Bisquare $\psi$-functions called from [robustbase](https://cran.r-project.org/package=robustbase).
@@ -477,7 +477,7 @@ hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptoti
 Including a scale ratio of 5 yields
 ```{r, cache = TRUE}
 ## Asymptotic two-sided test assuming a scale ratio of 5 between both samples
-hl1_test(x = x * 5, y = y, alternative = "two.sided", delta = 5, method = "asymptotic", var.test = TRUE)
+hl1_test(x = x * sqrt(5), y = y, alternative = "two.sided", delta = 5, method = "asymptotic", var.test = TRUE)
 ```
 
 # Other packages
