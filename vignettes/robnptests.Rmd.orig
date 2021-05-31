@@ -57,9 +57,9 @@ When setting $\mu_X = \mu_Y$, the samples $\boldsymbol{X}$ and $\boldsymbol{Y}$ 
 
 We address the following hypothesis pairs:
 \begin{align*}
-  &H_0^{(=)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} = \tilde{\Delta}_0^2 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \neq \tilde{\Delta}_0^2  \\
-  &H_0^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \leq \tilde{\Delta}_0^2 \quad \text{vs.} \quad H_1^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} > \tilde{\Delta}_0^2 \\
-  &H_0^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \geq \tilde{\Delta}_0^2 \quad \text{vs.} \quad H_1^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} < \tilde{\Delta}_0^2.
+  &H_0^{(=)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} = \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \neq \tilde{\Delta}_0 \\
+  &H_0^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \leq \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} > \tilde{\Delta}_0 \\
+  &H_0^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \geq \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} < \tilde{\Delta}_0.
 \end{align*}
 
 By log-transforming the random variables, we obtain
