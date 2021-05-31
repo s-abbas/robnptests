@@ -34,7 +34,7 @@ Here, $\mu_X$ and $\mu_Y$ denote the location parameters, and $\sigma_X$ and $\s
 
 ### Differences in location
 
-Assuming $\sigma_X = \sigma_Y$, the distributions of the samples $\boldsymbol{X}$ and $\boldsymbol{Y}$ differ at most in location. We denote the location difference by $\Delta = \mu_X - \mu_y$ ???.
+Assuming $\sigma_X = \sigma_Y$, the distributions of the samples $\boldsymbol{X}$ and $\boldsymbol{Y}$ differ at most in location. We denote the location difference by $\Delta = \mu_X - \mu_Y$ ???.
 Writing
 \begin{align*}
   X_1, \ldots, X_m \overset{i.i.d.}{\sim} F_X \quad \text{and} \quad Y_1, \ldots, Y_n \overset{i.i.d.}{\sim} F_Y,
@@ -53,26 +53,26 @@ where $\Delta_0 \in \mathbb{R}$ is a given possible value of $\Delta$ which is o
 
 ### Differences in scale
 
-When setting $\mu_x = \mu_y$, the samples $\boldsymbol{X}$ and $\boldsymbol{Y}$ differ at most in scale.
+When setting $\mu_X = \mu_Y$, the samples $\boldsymbol{X}$ and $\boldsymbol{Y}$ differ at most in scale.
 
 We address the following hypothesis pairs:
 \begin{align*}
-  &H_0^{(=)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} = \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \neq \tilde{\Delta}_0  \\
-  &H_0^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \leq \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} > \tilde{\Delta}_0 \\
-  &H_0^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \geq \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} < \tilde{\Delta}_0.
+  &H_0^{(=)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} = \tilde{\Delta}_0^2 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \neq \tilde{\Delta}_0^2  \\
+  &H_0^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \leq \tilde{\Delta}_0^2 \quad \text{vs.} \quad H_1^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} > \tilde{\Delta}_0^2 \\
+  &H_0^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \geq \tilde{\Delta}_0^2 \quad \text{vs.} \quad H_1^{(<)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} < \tilde{\Delta}_0^2.
 \end{align*}
 
 By log-transforming the random variables, we obtain
 
 \begin{align*}
-  & U_i = \log\left(X_i^2\right) = \log\left(\sigma_X^2\right) + \log\left(\varepsilon_{X, i}^2\right),\ i = 1, \ldots, m, \\ \text{and }  \quad & V_i = \log\left(Y_j^2\right) = \log\left(\sigma_Y^2\right) + \log\left(\varepsilon_{Y, j}^2\right),\ j = 1, \ldots, n.
+  & U_i = \log\left(X_i^2\right) = \log\left(\sigma_X^2\right) + \log\left(\varepsilon_{ i}^2\right),\ i = 1, \ldots, m, \\ \text{and }  \quad & V_i = \log\left(Y_j^2\right) = \log\left(\sigma_Y^2\right) + \log\left(\varepsilon_{m+j}^2\right),\ j = 1, \ldots, n.
 \end{align*}
 
-With these transformed samples, we are again in the data situation described above as the distributions differ at most by  \[ \Delta_0 = \log(F\tilde{\Delta}_0) = \log\left(\sigma_X^2\right) - \log\left(\sigma_Y^2\right)\] [see @Fri12onli].
+With these transformed samples, we are again in the data situation described above as the distributions differ at most by  \[ \Delta_0 = \log(\tilde{\Delta}_0) = \log\left(\sigma_X^2\right) - \log\left(\sigma_Y^2\right)\] [see @Fri12onli].
 
 ### Testing for differences in location or scale
 
-A popular test for the above scenario is the ordinary two-sample $t$-test, which uses the normality assumption. For large samples, the central limit theorem ensures that the test keeps the desired significance level $\alpha \in \left(0, 1\right)$ at least approximately, even if the underlying distributions are not normal. However, relying on the central limit theorem is often not appropriate in small samples. Also, there are distributions without existing variance for which the central limit theorem does not apply.
+A popular test for the location scenario described above is the ordinary two-sample $t$-test, which uses the normality assumption. For large samples, the central limit theorem ensures that the test keeps the desired significance level $\alpha \in \left(0, 1\right)$ at least approximately, even if the underlying distributions are not normal. However, relying on the central limit theorem is often not appropriate in small samples. Also, there are distributions without existing variance for which the central limit theorem does not apply.
 Moreover, the test is known to be vulnerable to outlying values as they can mask existing location shifts or lead to wrong rejections of the null hypothesis.
 
 The Wilcoxon-Mann-Whitney test is a popular distribution-free test which is nearly as powerful as the $t$-test under normality, but can be more powerful under non-normal distributions. It is often preferred over the $t$-test when the normality assumption cannot be justified.
@@ -86,14 +86,7 @@ We implemented tests for the outlined situation with the following objectives in
 
 In this vignette, we describe the basic functionality of the package and the implemented tests.
 
-In the remainder, let $\boldsymbol{x} = \left(x_1, \ldots, x_m\right)$ and $\boldsymbol{y} = \left(y_1, \ldots, y_n\right)$ be observed samples from both distributions.
-
-??? WAS WOLLEN WIR HIER BESCHREIBEN ????
-```{r}
-library(robnptests)
-
-sessionInfo()
-```
+In the remainder, let $\boldsymbol{x} = \left(x_1, \ldots, x_m\right)$ and $\boldsymbol{y} = \left(y_1, \ldots, y_n\right)$ be observed samples from both distributions
 
 # Overview of implemented tests
 
@@ -222,7 +215,7 @@ For differentiable functions $\rho$ with $\rho' = \psi$, the optimization proble
   \sum_{i = 1}^m \psi\left(\frac{x_i - \mu_X}{\sigma_X}\right) \overset{!}{=} 0.
 \end{equation*}
 
-For a motivation on how this test statistic is constructed, we refer to the vignette [\underline{Construction of the M-tests}](mTest-vignette.pdf), as well as to @YueLee85Some and @Abo92robu.
+For a motivation on how this test statistic is constructed, we refer to the vignette [\underline{Construction of the M-tests}](mTest-vignette.pdf). Similar test statistics were proposed in @YueLee85Some and @Abo92robu.
 
 The test statistic of the two-sample $M$-estimator test in the package is
 \begin{equation*}
@@ -328,6 +321,10 @@ The trimmed t-statistic is compared to the respective quantile of the $t_{h_x + 
 # Testing for a location difference
 
 We will now show how to use the functions to test for a location difference between two samples.
+
+```{r}
+library(robnptests)
+```
 
 ## Continuous data
 
@@ -461,7 +458,7 @@ wobble(x1, y1, check = FALSE)
 
 # Testing for a difference in scale
 
-The argument `var.test` allows to decide whether the samples should be tested for a location difference (`var.test = FALSE`), which is the default, or for different scale parameters (`var.test = TRUE`), i.e. $\sigma^2_X \neq \sigma^2_Y$.
+The argument `var.test` allows to decide whether the samples should be tested for a location difference (`var.test = FALSE`), which is the default, or for different scale parameters (`var.test = TRUE`).
 
 As described in the introduction, setting `var.test = TRUE` transforms the observations so that a possible variance difference between the samples appears as a location difference between the transformed samples.
 
@@ -473,18 +470,26 @@ set.seed(108)
 x <- rnorm(30)
 y <- rnorm(30)
 
-## Asymptotic two-sided test assuming no scale difference between both samples
+## Asymptotic two-sided test assuming equal scales for both samples
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", var.test = TRUE)
 ```
 
-Including a scale difference of 5 yields
+Including a scale ratio of 5 yields
 ```{r, cache = TRUE}
-## Asymptotic two-sided test assuming a scale difference of 5 between both samples
+## Asymptotic two-sided test assuming a scale ratio of 5 between both samples
 hl1_test(x = x * 5, y = y, alternative = "two.sided", delta = 5, method = "asymptotic", var.test = TRUE)
 ```
 
-## Other packages
+# Other packages
 The tests in this package are constructed assuming homoscedasticity. Robust two-sample tests for the heteroscedastic scenario can be found in the R package [WRS2](https://cran.r-project.org/package=WRS2) [@MaiWil20robu].
 
-## References
+# Session info
+
+Here is the information about the R-session used for creating this vignette.
+
+```{r}
+sessionInfo()
+```
+
+# References
 
