@@ -94,7 +94,7 @@ preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, var.test) {
 
     x <- log(x^2)
     y <- log(y^2)
-    delta <- log(delta^2)
+    delta <- log(delta)
   }
 
   return(list(x = x, y = y, delta = delta))
