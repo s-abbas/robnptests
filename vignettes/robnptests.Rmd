@@ -1,6 +1,6 @@
 ---
 title: "Getting started with `robnptests`"
-date: "2021-05-30"
+date: "2021-05-31"
 author: Sermad Abbas, Barbara Brune, Roland Fried
 output:
   rmarkdown::html_document:
@@ -49,7 +49,7 @@ where $\Delta_0 \in \mathbb{R}$ is a given possible value of $\Delta$ which is o
 
 When setting $\mu_x = \mu_y$, the samples $\boldsymbol{X}$ and $\boldsymbol{Y}$ differ at most in scale.
 
-We address the following hypotheses pairs:
+We address the following hypothesis pairs:
 \begin{align*}
   &H_0^{(=)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} = \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \neq \tilde{\Delta}_0  \\
   &H_0^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} \leq \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(>)}\colon\ \frac{\sigma^2_X}{\sigma^2_Y} > \tilde{\Delta}_0 \\
@@ -59,10 +59,10 @@ We address the following hypotheses pairs:
 By log-transforming the random variables, we obtain
 
 \begin{align*}
-  & U_i = \log\left(X_i^2\right) = \log\left(\sigma_X^2\right) + \log\left(\varepsilon_{X, i}^2\right),\ i = 1, \ldots, m, \\ \text{and } & \quad V_i = \log\left(Y_j^2\right) = \log\left(\sigma_Y^2\right) + \log\left(\varepsilon_{Y, j}^2\right), j = 1, \ldots, n.
+  & U_i = \log\left(X_i^2\right) = \log\left(\sigma_X^2\right) + \log\left(\varepsilon_{X, i}^2\right),\ i = 1, \ldots, m, \\ \text{and }  \quad & V_i = \log\left(Y_j^2\right) = \log\left(\sigma_Y^2\right) + \log\left(\varepsilon_{Y, j}^2\right),\ j = 1, \ldots, n.
 \end{align*}
 
-With these transformed samples, we are again in the data situation described above as the distributions differ at most by  ß[ \Delta_0 = \log(F\tilde{\Delta}_0) = \log\left(\sigma_X^2\right) - \log\left(\sigma_Y^2\right)\] [see @Fri12onli].
+With these transformed samples, we are again in the data situation described above as the distributions differ at most by  \[ \Delta_0 = \log(F\tilde{\Delta}_0) = \log\left(\sigma_X^2\right) - \log\left(\sigma_Y^2\right)\] [see @Fri12onli].
 
 ### Testing for differences in location or scale
 
