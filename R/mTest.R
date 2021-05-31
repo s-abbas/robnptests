@@ -172,7 +172,7 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   # Assign names to results
   if (var.test) {
     names(estimates) <- c("M-est. of log(x^2)", "M-est. of log(y^2)")
-    names(delta) <- "ratio of variances"
+    names(delta) <- "ratio of squared scale parameters"
     delta <- exp(delta)
   } else {
     names(estimates) <- c("M-est. of x", "M-est. of y")

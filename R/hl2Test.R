@@ -165,7 +165,7 @@ hl2_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   ## Assign names to results
   if (var.test) {
     names(estimates) <- c("HL2 of log(x^2) and log(y^2)")
-    names(delta) <- "ratio of variances"
+    names(delta) <- "ratio of squared scale parameters"
     delta <- exp(delta)
   } else {
     names(estimates) <- c("HL2 of x and y")

@@ -165,7 +165,7 @@ trimmed_test <- function(x, y, gamma = 0.2,
   # Assign names to results
   if (var.test) {
     names(estimates) <- c("Trimmed mean of log(x^2)", "Trimmed mean of log(y^2)")
-    names(delta) <- "ratio of variances"
+    names(delta) <- "ratio of squared scale parameters"
     delta <- exp(delta)
   } else {
     names(estimates) <- c("Trimmed mean of x", "Trimmed mean of y")

@@ -171,7 +171,7 @@ hl1_test <- function(x,
   # Assign names to results
   if (var.test) {
     names(estimates) <- c("HL1 of log(x^2)", "HL1 of log(y^2)")
-    names(delta) <- "ratio of variances"
+    names(delta) <- "ratio of squared scale parameters"
     delta <- exp(delta)
   } else {
     names(estimates) <- c("HL1 of x", "HL1 of y")
