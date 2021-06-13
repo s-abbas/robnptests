@@ -1,1 +1,1 @@
-#' @param m integer value giving size of first sample.
+#' @param m an integer value giving size of first sample.

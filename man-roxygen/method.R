@@ -1,5 +1,5 @@
 #' @param method a character string specifying how the p-value is computed with
-#'               possible values  \code{"asymptotic"} for an asymptotic test
+#'               possible values \code{"asymptotic"} for an asymptotic test
 #'               based on a normal approximation, \code{"permutation"} for a
 #'               permutation test, and \code{"randomization"} for a randomization
 #'               test. The permutation test uses all splits of the joint sample

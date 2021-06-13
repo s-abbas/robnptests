@@ -1,2 +1,2 @@
-#' @param var.test logical value testing whether the samples should be compared
+#' @param var.test a logical value to specify if the samples should be compared
 #'                 for a difference in scale. The default is \code{var.test = FALSE}.
