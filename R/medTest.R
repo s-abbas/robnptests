@@ -21,49 +21,54 @@
 #' @template wobble_seed
 #'
 #' @details
-#'
-#' The test statistic for this test is based on the difference of
-#' sample medians of \code{x} and \code{y}.
-#' We offer three versions of the test: randomization, permutation and asymptotic.
+#' The test statistic for this test is based on the difference of the sample
+#' medians of \code{x} and \code{y}. Three versions of the test are implemented:
+#' randomization, permutation, and asymptotic.
 #'
 #' The test statistic for the permutation and randomization version of the test
-#' is standardized using a robust scale estimator.
+#' is standardized using a robust scale estimator, see
+#' \insertCite{FriDeh11robu}{robnptests}.
 #'
-#' The argument \code{scale = "S3"} represents use of
+#' With \code{scale = "S3"}, the scale is estimated by
 #'
-#' \deqn{S = 2 * ( |X_1 - med(X)|,...,|X_m - med(X)|, |Y_1 - med(Y)|,...,|Y_n - med(Y)| ),}
+#' \deqn{S = 2 * (|x_1 - med(x)|, ..., |x_m - med(x)|, |y_1 - med(y)|, ..., |y_n - med(y)|),}
 #'
 #' whereas \code{scale = "S4"} uses
 #'
-#' \deqn{S = ( med( |X_1 - med(X)|,...,|X_m - med(X)| ) + med( |Y_1 - med(Y)|,...,|Y_n - med(Y)| ).}
+#' \deqn{S = (med(|x_1 - med(x)|, ..., |x_m - med(x)|) + med(|y_1 - med(y)|, ..., |y_n - med(y)|).}
 #'
 #' When computing the randomization distribution based on randomly drawn splits with
 #' replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robnptests}
 #' is used to calculate the p-value. For the asymptotic test, a transformed version
-#' of the the difference of the HL1 estimators is compared to the standard normal distribution.
-#' For more details see \insertCite{FriDeh11robu;textual}{robnptests}.
+#' of the difference of the sample medians, which asymptotically follows a normal
+#' distribution, is used. For more details on the asymptotic test, see
+#' \insertCite{FriDeh11robu;textual}{robnptests}.
 #'
-#' For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
-#' This is achieved by log-transforming the original observations so that a potential
-#' scale difference appears as a location difference between the transformed samples;
-#' see \insertCite{Fri12onli;textual}{robnptests}. The sample should not contain zeros
-#' to prevent problems with the necessary log-transformation. If it contains zeros,
-#' uniform noise is added to all variables in order to remove zeros. A warning is
-#' printed.
+#' For \code{var.test = TRUE}, the test compares the two samples for a difference
+#' in scale. This is achieved by log-transforming the original squared observations,
+#' i.e. \code{x} is replaced by \code{log(x^2)} and \code{y} by \code{log(y^2)}.
+#' A potential scale difference then appears as a location difference between
+#' the transformed samples, see \insertCite{Fri12onli;textual}{robnptests}.
+#' The sample should not contain zeros to prevent problems with the necessary
+#' log-transformation. If it contains zeros, uniform noise is added to all
+#' variables in order to remove zeros and warning is printed.
 #'
-#' If the sample has been modified (either because of zeros for \code{var.test = TRUE}, or
-#' \code{wobble = TRUE}), the modified samples can be retrieved using
+#' If the sample has been modified (either because of zeros for \code{var.test = TRUE},
+#' or \code{wobble = TRUE}), the modified samples can be retrieved using
 #'
 #' \code{set.seed(wobble.seed); wobble(x, y)}
 #'
 #' Both samples need to contain at least 5 non-missing values.
 #'
 #' @return
-#' A list with class "\code{htest}" containing the following components:
+#' A named list with class "\code{htest}" containing the following components:
 #' \item{statistic}{the value of the test statistic.}
 #' \item{p.value}{the p-value for the test.}
-#' \item{estimate}{the sample medians of \code{x} and \code{y}.}
-#' \item{null.value}{the specified hypothesized value of the mean difference.}
+#' \item{estimate}{the sample medians of \code{x} and \code{y}
+#'                 (if \code{var.test = FALSE}) or of \code{log(x^2)} and
+#'                 \code{log(y^2)} (if \code{var.test = TRUE}).}
+#' \item{null.value}{the specified hypothesized value of the mean difference/squared
+#'                   scale ratio.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
 #' \item{method}{a character string indicating how the p-value was computed.}
 #' \item{data.name}{a character string giving the names of the data.}
@@ -78,16 +83,16 @@
 #' \insertRef{Fri12onli}{robnptests}
 #'
 #' @examples
-#' ## Generate random samples
+#' # Generate random samples
 #' set.seed(108)
 #' x <- rnorm(20); y <- rnorm(20)
 #'
-#' ## Asymptotic MED test
+#' # Asymptotic MED test
 #' med_test(x, y, method = "asymptotic", scale = "S3")
 #'
 #' \dontrun{
-#' ## MED2 test using randomization principle by drawing 1000 random permutations
-#' ## with replacement
+#' # MED2 test using randomization principle by drawing 1000 random permutations
+#' # with replacement
 #'
 #' med_test(x, y, method = "randomization", n.rep = 1000, scale = "S4")
 #' }
@@ -101,7 +106,7 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
                      na.rm = FALSE, var.test = FALSE,
                      wobble = FALSE, wobble.seed = NULL) {
 
-  ## Check input arguments ----
+  # Check input arguments ----
   check_test_input(x = x, y = y, alternative = alternative, delta = delta,
                    method = method, scale = scale, n.rep = n.rep, na.rm = na.rm,
                    var.test = var.test, wobble = wobble, wobble.seed = wobble.seed,
@@ -110,7 +115,7 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   # Extract names of data sets ----
   dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
-  ## Match 'alternative' and 'scale' ----
+  # Match 'alternative' and 'scale' ----
   # 'method' not matched because computation of p-value depends on sample sizes
   # if no value is specified by the user
   alternative <- match.arg(alternative)
@@ -159,7 +164,7 @@ med_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
 
   # Prepare output ----
 
-  ## Assign names to results
+  # Assign names to results
   if (var.test) {
     names(estimates) <- c("Median of log(x^2)", "Median of log(y^2)")
     names(delta) <- "ratio of squared scale parameters"
