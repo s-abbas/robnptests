@@ -11,30 +11,25 @@ select_method(x, y, method, test.name, n.rep)
 
 \item{y}{a (non-empty) numeric vector of data values.}
 
-\item{method}{a character string specifying how the p-value is computed,
-\code{"asymptotic"} for an asymptotic test based on a normal
-approximation, \code{"permutation"} for a permutation test and
-\code{"randomization"} for a randomization test.
-The permutation test uses all splits of the joint sample into two samples
-of sizes \code{m} and \code{n}, while the randomization test draws
-\code{n.rep} random splits with replacement. If not specified explicitly,
-defaults to
-\code{"permutation"},  if \code{m < 30}, \code{n < 30} and
- \code{n.rep >= choose(m+n, m)},
-\code{"randomization"}, if \code{m < 30}, \code{n < 30} and
- \code{n.rep < choose(m+n, m)}, and
- \code{"asymptotic"}, if \code{m >= 30} and \code{n >= 30}.}
+\item{method}{a character string specifying how the p-value is computed with
+possible values \code{"asymptotic"} for an asymptotic test
+based on a normal approximation, \code{"permutation"} for a
+permutation test, and \code{"randomization"} for a randomization
+test. The permutation test uses all splits of the joint sample
+into two samples of sizes \code{m} and \code{n}, while the
+randomization test draws \code{n.rep} random splits with
+replacement. The values \code{m} and \code{n} denote the
+sample sizes.}
 
 \item{test.name}{character string specifying the two-sample test for which
 the helper function is used.}
 
 \item{n.rep}{an integer value specifying the number of random splits used to
-calculate the randomization distribution if \code{method = "randomization"}.
-This argument is ignored if \code{method = "permutation"} or \code{method = "asymptotic"}.
-The default is \code{n.rep = 10000}.}
+calculate the randomization distribution if
+\code{method = "randomization"}.}
 }
 \value{
-A character string which contains the principle for computing the
+A character string, which specifies the principle for computing the
         null distribution.
 }
 \description{
@@ -42,7 +37,7 @@ A character string which contains the principle for computing the
 computing the null distribution of a two-sample test.
 }
 \details{
-When the principle is specified by the user, i.e. method contains only
+When the principle is specified by the user, i.e. \code{method} contains only
 one element, the selected method is returned. Otherwise, if the user
 does not specify the principle, it depends on the sample size: When both
 samples contain more than 30 observations, an asymptotic test is perfomed.
@@ -51,5 +46,8 @@ distribution is computed via the randomization principle. The number of
 replications \code{n.rep} for the randomization test needs to be specified
 outside of this function. Each test function contains the argument
 \code{n.rep} where this can be done.
+
+If \code{n.rep} is larger than the maximum number of splits and
+\code{method = "randomization"}, a permutation test is performed.
 }
 \keyword{internal}

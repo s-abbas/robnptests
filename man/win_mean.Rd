@@ -9,10 +9,13 @@ win_mean(x, gamma = 0.2, na.rm = FALSE)
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
 
-\item{gamma}{numeric value in [0, 0.5] specifying the fraction of observations to be replaced
-at each end of the sample before calculating the mean.}
+\item{gamma}{a numeric value in [0, 0.5] specifying the fraction of observations
+to be replaced at each end of the sample before calculating the
+mean. The default value is 0.2.}
 
-\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether NA values in \code{x} and
+\code{y} should be stripped before the computation proceeds. The
+default is \code{na.rm = FALSE}.}
 }
 \value{
 The winsorized mean.
@@ -21,11 +24,11 @@ The winsorized mean.
 \code{win_mean} calculates the winsorized mean of a sample.
 }
 \examples{
-## Generate random samples
+# Generate random samples
 set.seed(108)
 x <- rnorm(10)
 
-## Compute 20\% winsorized mean
+# Compute 20\% winsorized mean
 win_mean(x, gamma = 0.2)
 
 }
