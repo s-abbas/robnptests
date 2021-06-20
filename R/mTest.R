@@ -35,8 +35,8 @@
 #' by setting \code{c1} and \code{c2}.
 #'
 #' More details on the construction of the test statistic are given in the
-#' vignettes \code{vignette{"robnptests-vignette"}} and
-#' \code{vignette{"mTest-vignette"}}.
+#' vignettes \code{vignette("robnptests")} and
+#' \code{vignette("mTest-vignette")}.
 #'
 #' Three versions of the test are implemented: randomization, permutation, and
 #' asymptotic.
