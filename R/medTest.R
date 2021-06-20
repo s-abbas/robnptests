@@ -51,7 +51,7 @@
 #' the transformed samples, see \insertCite{Fri12onli;textual}{robnptests}.
 #' The sample should not contain zeros to prevent problems with the necessary
 #' log-transformation. If it contains zeros, uniform noise is added to all
-#' variables in order to remove zeros and warning is printed.
+#' variables in order to remove zeros and a warning is printed.
 #'
 #' If the sample has been modified (either because of zeros for \code{var.test = TRUE},
 #' or \code{wobble = TRUE}), the modified samples can be retrieved using
