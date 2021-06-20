@@ -61,7 +61,7 @@ implying
 \end{align*}
 
 In order to use this statistic as a test statistic for our M-tests, we need to estimate $\sigma_X$, $\sigma_Y$, $\nu_X$, and $\nu_Y$.
-We use the $\tau$-scale estimator [@MarZam02robu] to estimate $\sigma^2_X$ and $\sigma^2_Y$ by $\hat{\sigma}_X$ and $\hat{\sigma}_Y$ robustly and estimate $\nu_X$ and $\nu_Y$ by
+We use the $\tau$-scale estimator [@MarZam02robu] to estimate $\sigma^2_X$ and $\sigma^2_Y$ by $\hat{\sigma}_X^2$ and $\hat{\sigma}_Y^2$ robustly and estimate $\nu_X$ and $\nu_Y$ by
 
 \begin{align*}
 \hat{\nu}_X = \frac{\frac{1}{m} \sum_{i = 1}^m \psi\left(\frac{X_i - \hat{\mu}_X}{\hat{\sigma}_X}\right)^2}{\left(\frac{1}{m} \sum_{i = 1}^m \psi'\left(\frac{X_i - \hat{\mu}_X}{\hat{\sigma}_X}\right)\right)^2} \quad
