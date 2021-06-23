@@ -1,6 +1,6 @@
 ---
 title: "Getting started with `robnptests`"
-date: "2021-06-22"
+date: "2021-06-23"
 author: Sermad Abbas, Barbara Brune, Roland Fried
 output:
   rmarkdown::html_document:
@@ -48,7 +48,7 @@ Using the tests implemented in `robnptests`, the following hypotheses can be tes
 where $\Delta_0 \in \mathbb{R}$ represents the assumed location difference under $H_0$.
 
 ### Differences in scale
-When setting $\mu_X = \mu_Y = 0, both data-generating distributions have the location parameter zero but the values of the scale parameter might be unequal.
+When setting $\mu_X = \mu_Y = 0$, both data-generating distributions have the location parameter zero but the values of the scale parameter might be unequal.
 We address the following hypothesis pairs:
 \begin{align*}
   &H_0^{(=)}\colon\ \frac{\theta^2_X}{\theta^2_Y} = \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\theta^2_X}{\theta^2_Y} \neq \tilde{\Delta}_0 \\
@@ -322,9 +322,11 @@ x <- rnorm(10)
 y <- rnorm(10)
 
 x
-#>  [1] -0.112892122 -0.381819373 -0.091691759  0.036045206  0.002060011  1.254923407  0.589883973  0.302208595  0.905741048  0.054724887
+#>  [1] -0.112892122 -0.381819373 -0.091691759  0.036045206  0.002060011  1.254923407  0.589883973  0.302208595
+#>  [9]  0.905741048  0.054724887
 y
-#>  [1] -0.8130825  1.3807136 -0.4387136 -1.2788213 -0.6058519  0.9234760  0.5656956 -0.0586360  0.1578270 -0.3858708
+#>  [1] -0.8130825  1.3807136 -0.4387136 -1.2788213 -0.6058519  0.9234760  0.5656956 -0.0586360  0.1578270
+#> [10] -0.3858708
 ```
 
 ### Permutation test
@@ -526,10 +528,12 @@ The wobbled samples can be retrieved using the seed printed in the output and th
 set.seed(2187)
 wobble(x1, y1, check = FALSE)
 #> $x
-#>  [1] -0.44559409  0.25924234  0.18034432 -0.42507561 -0.07607574  0.68780214  0.17812437 -0.22174378  0.19595295 -0.14095250
+#>  [1] -0.44559409  0.25924234  0.18034432 -0.42507561 -0.07607574  0.68780214  0.17812437 -0.22174378
+#>  [9]  0.19595295 -0.14095250
 #> 
 #> $y
-#>  [1] -0.04372255  2.22220106  1.23878909  0.16253680 -0.13902692  2.43266503  1.86621893  1.41821762  0.71976748  1.36813320
+#>  [1] -0.04372255  2.22220106  1.23878909  0.16253680 -0.13902692  2.43266503  1.86621893  1.41821762
+#>  [9]  0.71976748  1.36813320
 ```
 
 The argument `check` is used to inspect the samples for duplicated values.
@@ -563,7 +567,7 @@ hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptoti
 #>       -1.731838       -1.215280
 ```
 
-Setting the squared scale ratio of 5 yields
+Including a scale ratio of 5 yields
 
 ```r
 ## Asymptotic two-sided test assuming a scale ratio of 5 between both samples
@@ -589,17 +593,16 @@ Here is the information about the R-session used for creating this vignette.
 
 ```r
 sessionInfo()
-#> R version 4.0.3 (2020-10-10)
-#> Platform: x86_64-pc-linux-gnu (64-bit)
-#> Running under: Linux Mint 19.1
+#> R version 4.0.4 (2021-02-15)
+#> Platform: x86_64-w64-mingw32/x64 (64-bit)
+#> Running under: Windows 10 x64 (build 19042)
 #> 
 #> Matrix products: default
-#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
-#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
 #> 
 #> locale:
-#>  [1] LC_CTYPE=de_DE.UTF-8       LC_NUMERIC=C               LC_TIME=de_DE.UTF-8        LC_COLLATE=de_DE.UTF-8     LC_MONETARY=de_DE.UTF-8    LC_MESSAGES=de_DE.UTF-8   
-#>  [7] LC_PAPER=de_DE.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C             LC_MEASUREMENT=de_DE.UTF-8 LC_IDENTIFICATION=C       
+#> [1] LC_COLLATE=English_Austria.65001  LC_CTYPE=C                        LC_MONETARY=English_Austria.65001
+#> [4] LC_NUMERIC=C                      LC_TIME=English_Austria.65001    
+#> system code page: 65001
 #> 
 #> attached base packages:
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
@@ -608,9 +611,11 @@ sessionInfo()
 #> [1] robnptests_0.1.0
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] codetools_0.2-16  gtools_3.8.2      packrat_0.6.0     digest_0.6.27     rbibutils_2.1     backports_1.2.1   magrittr_2.0.1    evaluate_0.14     Rdpack_2.1.1     
-#> [10] rlang_0.4.10      stringi_1.5.3     checkmate_2.0.0   rmarkdown_2.7     statmod_1.4.35    tools_4.0.3       stringr_1.4.0     rsconnect_0.8.17  yaml_2.2.1       
-#> [19] xfun_0.22         compiler_4.0.3    htmltools_0.5.1.1 knitr_1.33
+#>  [1] codetools_0.2-18  gtools_3.8.2      digest_0.6.27     rbibutils_2.2.1   backports_1.2.1  
+#>  [6] magrittr_2.0.1    evaluate_0.14     Rdpack_2.1.2      rlang_0.4.10      stringi_1.5.3    
+#> [11] robustbase_0.93-8 checkmate_2.0.0   rmarkdown_2.7     statmod_1.4.35    tools_4.0.4      
+#> [16] stringr_1.4.0     DEoptimR_1.0-9    xfun_0.21         yaml_2.2.1        compiler_4.0.4   
+#> [21] htmltools_0.5.1.1 knitr_1.31
 ```
 
 # References
