@@ -93,7 +93,7 @@ trimmed_t <- function(x, y, gamma = 0.2, na.rm = FALSE) {
 #'          form \deqn{D_i/S_j} where the D_i, i = 1,...,3, are different
 #'          estimators of location and the S_j, j = 1,...,4, are estimates for
 #'          the mutual sample scale. See \insertCite{FriDeh11robu;textual}{robnptests}
-#'          or the vignette (\code{vignette(robnptests-vignette)}) for details.
+#'          or the vignette (\code{vignette("robnptests")}) for details.
 #'
 #' @return A named list containing the following components:
 #'         \item{statistic}{the selected test statistic.}
