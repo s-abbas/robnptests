@@ -1,6 +1,6 @@
 ---
 title: "Getting started with `robnptests`"
-date: "2021-06-24"
+date: "`r Sys.Date()`"
 author: Sermad Abbas, Barbara Brune, Roland Fried
 output:
   rmarkdown::html_document:
@@ -13,7 +13,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
 
 # Introduction {#introduction}
 The package `robnptests` contains robust (approximately) distribution-free tests for the two-sample location problem.
@@ -308,42 +314,28 @@ For the trimmed t-test, the asymptotic distribution of the test statistic is app
 # Testing for a location difference
 We will now show how to use the functions to test for a location difference between two samples.
 
-
-```r
+```{r}
 library(robnptests)
 ```
 
 ## Continuous data
 Let $x_1, \ldots, x_m$ and $y_1, \ldots, y_n$ be observations from a continuous distributions.
 
-
-```r
+```{r}
 set.seed(108)
 x <- rnorm(10)
 y <- rnorm(10)
 
 x
-#>  [1] -0.112892122 -0.381819373 -0.091691759  0.036045206  0.002060011  1.254923407  0.589883973  0.302208595  0.905741048  0.054724887
 y
-#>  [1] -0.8130825  1.3807136 -0.4387136 -1.2788213 -0.6058519  0.9234760  0.5656956 -0.0586360  0.1578270 -0.3858708
 ```
 
 ### Permutation test
 In this example, we use the two-sided HL1-test with the scale estimator $\hat{S}^{(2)}$ and
 set $\Delta_0 = 0$.
 
-
-```r
+```{r, cache = TRUE}
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "permutation", scale = "S2")
-#> 
-#> 	Exact permutation test based on HL1-estimator
-#> 
-#> data:  x and y
-#> D = 0.55524, p-value = 0.27
-#> alternative hypothesis: true location shift is not equal to 0
-#> sample estimates:
-#>   HL1 of x   HL1 of y 
-#>  0.2384959 -0.1140219
 ```
 
 The output is an object of the class `htest` and contains all relevant information on the performed test.
@@ -353,20 +345,10 @@ To extract the value of the test statistic, we use `hl1.res$statistic`, and for 
 ### Randomization test
 We draw $10\,000$ splits randomly with replacement from the observed joint sample to use the randomization principle on the HL1-test.
 
-
-```r
+```{r, cache = TRUE}
 set.seed(47)
 
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "randomization", scale = "S2", n.rep = 10000)
-#> 
-#> 	Randomization test based on HL1-estimator (10000 random permutations)
-#> 
-#> data:  x and y
-#> D = 0.55524, p-value = 0.2757
-#> alternative hypothesis: true location shift is not equal to 0
-#> sample estimates:
-#>   HL1 of x   HL1 of y 
-#>  0.2384959 -0.1140219
 ```
 
 The $p$-value is close to the one we have calculated with the permutation principle.
@@ -374,18 +356,8 @@ The $p$-value is close to the one we have calculated with the permutation princi
 ### Asymptotic test
 Although the sample sizes in our example are rather small, we use the samples to demonstrate how to perform an asymptotic HL1-test.
 
-
-```r
+```{r}
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "asymptotic")
-#> 
-#> 	Asymptotic test based on HL1-estimator
-#> 
-#> data:  x and y
-#> D = 1.0366, p-value = 0.2999
-#> alternative hypothesis: true location shift is not equal to 0
-#> sample estimates:
-#>   HL1 of x   HL1 of y 
-#>  0.2384959 -0.1140219
 ```
 
 The $p$-value is not too far away from those obtained by the permutation and randomization principles.
@@ -395,20 +367,10 @@ We can also perform the test when assuming a certain location difference between
 In this example, we use $\Delta_0 = 5$, i.e. under $H_0$, we assume that the location parameter of the distribution of $X_i$, $i = 1, \ldots, m$, is five units larger than that of the distribution of $Y_j$, $j = 1, \ldots, n$.
 We shift $x_1, \ldots, x_m$ by five units so that $H_0$ should not be rejected.
 
-
-```r
+```{r}
 x1 <- x + 5
 
 hl1_test(x = x1, y = y, alternative = "two.sided", delta = 5, method = "asymptotic")
-#> 
-#> 	Asymptotic test based on HL1-estimator
-#> 
-#> data:  x1 and y
-#> D = 1.0366, p-value = 0.2999
-#> alternative hypothesis: true location shift is not equal to 5
-#> sample estimates:
-#>   HL1 of x   HL1 of y 
-#>  5.2384959 -0.1140219
 ```
 
 As could be expected, the $p$-value is the same as the one from the asymptotic test in the previous subsection.
@@ -426,46 +388,30 @@ The logical argument `wobble` specifies whether random noise should be added to 
 
 In the following example, we round the previously generated observations and perform the HL12-test for location.
 
-
-```r
+```{r, error = TRUE, cache = TRUE}
 x1 <- round(x)
 y1 <- round(y)
 
 x1
-#>  [1] 0 0 0 0 0 1 1 0 1 0
 y1
-#>  [1] -1  1  0 -1 -1  1  1  0  0  0
 
 set.seed(47)
 hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2")
-#> Error: A scale estimate of zero occured although the data are not constant. Consider using a different scale estimator or set 'wobble = TRUE' in the function call.
 ```
 
-Although the value of the scale estimator in the original sample is 1, there exists at least one split used to compute the randomization distribution, which leads to the estimated scale `0`.
+Although the value of the scale estimator in the original sample is `r robnptests:::rob_var(x1, y1, type = "S2")`, there exists at least one split used to compute the randomization distribution, which leads to the estimated scale `0`.
 We follow the advice in the error message and set `wobble = TRUE`. To enable the reproducibility of the results, the argument `wobble.seed` can be set, otherwise a random seed is chosen.
 
-
-```r
+```{r, cache = TRUE}
 set.seed(47)
 hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2", wobble = TRUE, wobble.seed = 2187)
-#> Added random noise to x and y. The seed is 2187.
-#> 
-#> 	Randomization test based on HL1-estimator (10000 random permutations)
-#> 
-#> data:  x1 and y1
-#> D = 0.15486, p-value = 0.7359
-#> alternative hypothesis: true location shift is not equal to 0
-#> sample estimates:
-#>   HL1 of x   HL1 of y 
-#> 0.21979333 0.08923926
 ```
 
 The $p$-value deviates quite strongly from the $p$-value obtained for the original observations because we cannot reproduce them exactly.
 
 We now consider an example, where a location difference of size $\Delta = 1.5$ exists between the samples.
 
-
-```r
+```{r, cache = TRUE}
 y <- y + 1.5
 
 x1 <- trunc(x)
@@ -474,42 +420,17 @@ y1 <- trunc(y)
 ## HL12-test on original observations
 set.seed(47)
 hl1_test(x, y, alternative = "two.sided", method = "randomization", scale = "S2")
-#> 
-#> 	Randomization test based on HL1-estimator (10000 random permutations)
-#> 
-#> data:  x and y
-#> D = -1.8074, p-value = 0.002394
-#> alternative hypothesis: true location shift is not equal to 0
-#> sample estimates:
-#>  HL1 of x  HL1 of y 
-#> 0.2384959 1.3859781
 
 ## HL12-test on truncated observations with wobbling
 set.seed(47)
 hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2", wobble = TRUE, wobble.seed = 2187)
-#> Added random noise to x and y. The seed is 2187.
-#> 
-#> 	Randomization test based on HL1-estimator (10000 random permutations)
-#> 
-#> data:  x1 and y1
-#> D = -1.6304, p-value = 0.005194
-#> alternative hypothesis: true location shift is not equal to 0
-#> sample estimates:
-#>   HL1 of x   HL1 of y 
-#> 0.01874928 1.08923926
 ```
 
 The wobbled samples can be retrieved using the seed printed in the output and the function `wobble`.
 
-
-```r
+```{r, cache=TRUE}
 set.seed(2187)
 wobble(x1, y1, check = FALSE)
-#> $x
-#>  [1] -0.44559409  0.25924234  0.18034432 -0.42507561 -0.07607574  0.68780214  0.17812437 -0.22174378  0.19595295 -0.14095250
-#> 
-#> $y
-#>  [1] -0.04372255  2.22220106  1.23878909  0.16253680 -0.13902692  2.43266503  1.86621893  1.41821762  0.71976748  1.36813320
 ```
 
 The argument `check` is used to inspect the samples for duplicated values.
@@ -523,8 +444,7 @@ As described in the introduction, setting `var.test = TRUE` transforms the obser
 In terms of the power, the resulting tests can outperform classical tests like the $F$-test, the Mood test, or the Ansary-Bradley test under outliers and asymmetry
 [@Fri12onli].
 
-
-```r
+```{r, cache = TRUE}
 set.seed(108)
 
 x <- rnorm(30)
@@ -532,64 +452,20 @@ y <- rnorm(30)
 
 ## Asymptotic two-sided test assuming equal scales for both samples
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", var.test = TRUE)
-#> 
-#> 	Asymptotic test based on HL1-estimator
-#> 
-#> data:  x and y
-#> S = -0.95431, p-value = 0.3399
-#> alternative hypothesis: true ratio of squared scale parameters is not equal to 1
-#> sample estimates:
-#> HL1 of log(x^2) HL1 of log(y^2) 
-#>       -1.731838       -1.215280
 ```
 
 Including a squared scale ratio of 5 yields
-
-```r
+```{r, cache = TRUE}
 ## Asymptotic two-sided test assuming a scale ratio of 5 between both samples
 hl1_test(x = x * sqrt(5), y = y, alternative = "two.sided", delta = 5, method = "asymptotic", var.test = TRUE)
-#> 
-#> 	Asymptotic test based on HL1-estimator
-#> 
-#> data:  x * sqrt(5) and y
-#> S = -0.95431, p-value = 0.3399
-#> alternative hypothesis: true ratio of squared scale parameters is not equal to 5
-#> sample estimates:
-#> HL1 of log(x^2) HL1 of log(y^2) 
-#>        -0.12240        -1.21528
 ```
 
 # Session info
 
 Here is the information about the R-session used for creating this vignette.
 
-
-```r
+```{r}
 sessionInfo()
-#> R version 4.0.3 (2020-10-10)
-#> Platform: x86_64-pc-linux-gnu (64-bit)
-#> Running under: Linux Mint 19.1
-#> 
-#> Matrix products: default
-#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
-#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
-#> 
-#> locale:
-#>  [1] LC_CTYPE=de_DE.UTF-8       LC_NUMERIC=C               LC_TIME=de_DE.UTF-8        LC_COLLATE=de_DE.UTF-8     LC_MONETARY=de_DE.UTF-8    LC_MESSAGES=de_DE.UTF-8   
-#>  [7] LC_PAPER=de_DE.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C             LC_MEASUREMENT=de_DE.UTF-8 LC_IDENTIFICATION=C       
-#> 
-#> attached base packages:
-#> [1] stats     graphics  grDevices utils     datasets  methods   base     
-#> 
-#> other attached packages:
-#> [1] robnptests_0.1.0 testthat_3.0.2  
-#> 
-#> loaded via a namespace (and not attached):
-#>  [1] compiler_4.0.3    DEoptimR_1.0-8    prettyunits_1.1.1 remotes_2.3.0     tools_4.0.3       digest_0.6.27     packrat_0.6.0     pkgbuild_1.2.0    pkgload_1.2.1     statmod_1.4.35   
-#> [11] evaluate_0.14     memoise_2.0.0     lifecycle_1.0.0   checkmate_2.0.0   rlang_0.4.10      cli_2.4.0         rstudioapi_0.13   xfun_0.22         fastmap_1.1.0     withr_2.4.2      
-#> [21] stringr_1.4.0     knitr_1.33        desc_1.3.0        fs_1.5.0          gtools_3.8.2      devtools_2.4.0    rprojroot_2.0.2   glue_1.4.2        robustbase_0.93-7 R6_2.5.0         
-#> [31] processx_3.5.1    Rdpack_2.1.1      sessioninfo_1.1.1 callr_3.7.0       purrr_0.3.4       magrittr_2.0.1    codetools_0.2-16  backports_1.2.1   ps_1.6.0          ellipsis_0.3.1   
-#> [41] rbibutils_2.1     usethis_2.0.1     stringi_1.5.3     cachem_1.0.1      crayon_1.4.1
 ```
 
 # References
