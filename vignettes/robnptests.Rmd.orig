@@ -54,7 +54,7 @@ Using the tests implemented in `robnptests`, the following hypotheses can be tes
 where $\Delta_0 \in \mathbb{R}$ represents the assumed location difference under $H_0$.
 
 ### Differences in scale
-When setting $\mu_X = \mu_Y = 0, both data-generating distributions have the location parameter zero but the values of the scale parameter might be unequal.
+When setting $\mu_X = \mu_Y = 0$, both data-generating distributions have the location parameter zero but the values of the scale parameter might be unequal.
 We address the following hypothesis pairs:
 \begin{align*}
   &H_0^{(=)}\colon\ \frac{\theta^2_X}{\theta^2_Y} = \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\theta^2_X}{\theta^2_Y} \neq \tilde{\Delta}_0 \\

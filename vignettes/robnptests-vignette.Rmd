@@ -1,6 +1,6 @@
 ---
 title: "Getting started with `robnptests`"
-date: "2021-06-24"
+date: "2021-06-23"
 author: Sermad Abbas, Barbara Brune, Roland Fried
 output:
   rmarkdown::html_document:
@@ -78,8 +78,7 @@ Moreover, the test is known to be vulnerable to outlying values as they can mask
 The Wilcoxon-Mann-Whitney test is a popular distribution-free test which is nearly as powerful as the $t$-test under normality, but can be more powerful under non-normal distributions. It is often preferred over the $t$-test when the normality assumption cannot be justified.
 However, it can be vulnerable to outliers as well [@FriGat07rank].
 
-The package contains tests for the outlined situation that have been proposed in the literature.
-Those were selected with the following objectives in mind:
+We implemented tests proposed in the literature for the outlined situation with the following objectives in mind:
 
 * robustness against outliers,
 * (approximate) distribution independence, i.e. keep $\alpha$ under $H_0$ over a large class of continuous distributions,
@@ -96,7 +95,7 @@ Function name | Test names | Description | Literature
 `med_test`    | MED1-test, MED2-test | Tests based on the difference of the sample medians | @FriDeh11robu
 `hl1_test`    | HL11-test, HL12-test | Tests based on the one-sample Hodges-Lehmann estimator | @FriDeh11robu
 `hl2_test`    | HL21-test, HL22-test | Tests based on the two-sample Hodges-Lehmann estimator | @FriDeh11robu
-`m_test`      | M-estimator test | Tests based on M-estimators | see vignette [Construction of the M-tests](mTest-vignette.html).
+`m_test`      | M-estimator test | Tests based on M-estimators | see vignette [\underline{Construction of the M-tests}](mTest-vignette.html).
 `trimmed_test`| Yuen's trimmed t-test | Test based on trimmed means | @YueDix73appr
 
 We describe the test statistics in detail in the next subsection.
@@ -209,7 +208,7 @@ For differentiable functions $\rho$ with $\rho' = \psi$, the optimization proble
   \sum_{i = 1}^m \psi\left(\frac{x_i - \mu_X}{\theta_X}\right) \overset{!}{=} 0.
 \end{equation*}
 
-For a motivation on how this test statistic is constructed, we refer to the vignette [Construction of the M-tests](mTest-vignette.html).
+For a motivation on how this test statistic is constructed, we refer to the vignette [\underline{Construction of the M-tests}](mTest-vignette.html). Similar test statistics were proposed in @YueLee85Some and @Abo92robu.
 
 The test statistic of the two-sample $M$-estimator test in the package is
 \begin{equation*}
@@ -273,8 +272,8 @@ This estimator can overestimate the true $p$-value because a single permutation 
 Following @PhiSmy10perm, we correct the $p$-value using the function `permp` from their R package [statmod](https://cran.r-project.org/package=statmod).
 
 ### Asymptotic test
-For large sample sizes, it is justified to compute asymptotic $p$-values using a normal approximation.
-This also reduces the computation time further compared to the randomization principle.
+For large sample sizes ($m, n>30$), it may be advisable to compute asymptotic $p$-values using a normal approximation to reduce the computation time further.
+Especially in situations, where the tests have to be applied repeatedly to several data sets within a certain time frame, this reduces the computational burden.
 
 #### Asymptotic MED-test
 Using the asymptotic distribution of the sample median, the test statistic of the asymptotic MED-test is
@@ -284,7 +283,7 @@ Using the asymptotic distribution of the sample median, the test statistic of th
 \end{align*}
 
 where $f$ is the density function belonging to the cumulative distribution function $F$. The value $f\left(F^{-1}\left(0.5\right)\right)$ can be estimated by a kernel-density estimation on the sample $x_1 - \tilde{x}, \ldots, x_m - \tilde{x}, y_1 - \tilde{y}, \ldots, y_n - \tilde{y}$.
-We use the function `density` from the [stats](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/00Index.html) package with its default settings for the kernel-density estimation.
+We use the  function `density` from the [stats](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/00Index.html) package with its default settings for the kernel-density estimation.
 
 #### Asymptotic HL1-/HL2-test
 With $\lambda = \frac{m}{m + n} \in \left(0, 1\right)$, the asymptotic HL2-test has the test statistic
@@ -300,7 +299,7 @@ Replacing $\hat{\Delta}^{(\text{HL2})}$ by $\hat{\Delta}^{(\text{HL1})}$ gives u
 @FriDeh11robu recommend the asymptotic tests for sample sizes $m, n \geq 30$ to hold the significance level $\alpha = 0.05$.
 
 #### Asymptotic M-test
-For details on the asymptotic M-test see the vignette [Construction of the M-tests](mTest-vignette.pdf).
+For details on the asymptotic M-test see the vignette [\underline{Construction of the M-tests}](mTest-vignette.pdf).
 
 #### Asymptotic trimmed t-test
 For the trimmed t-test, the asymptotic distribution of the test statistic is approximated by a $t_{h_x + h_y - 2}$-distribution. Details can be found in @YueDix73appr.
@@ -323,9 +322,11 @@ x <- rnorm(10)
 y <- rnorm(10)
 
 x
-#>  [1] -0.112892122 -0.381819373 -0.091691759  0.036045206  0.002060011  1.254923407  0.589883973  0.302208595  0.905741048  0.054724887
+#>  [1] -0.112892122 -0.381819373 -0.091691759  0.036045206  0.002060011  1.254923407  0.589883973  0.302208595
+#>  [9]  0.905741048  0.054724887
 y
-#>  [1] -0.8130825  1.3807136 -0.4387136 -1.2788213 -0.6058519  0.9234760  0.5656956 -0.0586360  0.1578270 -0.3858708
+#>  [1] -0.8130825  1.3807136 -0.4387136 -1.2788213 -0.6058519  0.9234760  0.5656956 -0.0586360  0.1578270
+#> [10] -0.3858708
 ```
 
 ### Permutation test
@@ -460,7 +461,23 @@ hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S
 #> 0.21979333 0.08923926
 ```
 
-The $p$-value deviates quite strongly from the $p$-value obtained for the original observations because we cannot reproduce them exactly.
+The $p$-value deviates quite strongly from the $p$-value obtained for the original observations because  we cannot reproduce them exactly.
+If we chose to wobble on the original observations, the $p$-value would again be quite close to the one for the unrounded values.
+
+
+```r
+set.seed(47)
+hl1_test(x, y, alternative = "two.sided", method = "randomization", scale = "S2", wobble = TRUE, wobble.seed = 2187)
+#> 
+#> 	Randomization test based on HL1-estimator (10000 random permutations)
+#> 
+#> data:  x and y
+#> D = 0.55524, p-value = 0.2757
+#> alternative hypothesis: true location shift is not equal to 0
+#> sample estimates:
+#>   HL1 of x   HL1 of y 
+#>  0.2384959 -0.1140219
+```
 
 We now consider an example, where a location difference of size $\Delta = 1.5$ exists between the samples.
 
@@ -484,6 +501,11 @@ hl1_test(x, y, alternative = "two.sided", method = "randomization", scale = "S2"
 #>  HL1 of x  HL1 of y 
 #> 0.2384959 1.3859781
 
+## HL12-test on truncated observations
+set.seed(47)
+hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2")
+#> Error: A scale estimate of zero occured although the data are not constant. Consider using a different scale estimator or set 'wobble = TRUE' in the function call.
+
 ## HL12-test on truncated observations with wobbling
 set.seed(47)
 hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2", wobble = TRUE, wobble.seed = 2187)
@@ -506,14 +528,16 @@ The wobbled samples can be retrieved using the seed printed in the output and th
 set.seed(2187)
 wobble(x1, y1, check = FALSE)
 #> $x
-#>  [1] -0.44559409  0.25924234  0.18034432 -0.42507561 -0.07607574  0.68780214  0.17812437 -0.22174378  0.19595295 -0.14095250
+#>  [1] -0.44559409  0.25924234  0.18034432 -0.42507561 -0.07607574  0.68780214  0.17812437 -0.22174378
+#>  [9]  0.19595295 -0.14095250
 #> 
 #> $y
-#>  [1] -0.04372255  2.22220106  1.23878909  0.16253680 -0.13902692  2.43266503  1.86621893  1.41821762  0.71976748  1.36813320
+#>  [1] -0.04372255  2.22220106  1.23878909  0.16253680 -0.13902692  2.43266503  1.86621893  1.41821762
+#>  [9]  0.71976748  1.36813320
 ```
 
 The argument `check` is used to inspect the samples for duplicated values.
-If `check = TRUE` and all values are unique, the wobbling is omitted.
+If `check = TRUE` and all values are unique, the wobbling is ommitted.
 
 # Testing for a difference in scale
 The argument `var.test` allows to decide whether the samples should be tested for a location difference (`var.test = FALSE`), which is the default, or for different scale parameters (`var.test = TRUE`).
@@ -543,7 +567,7 @@ hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptoti
 #>       -1.731838       -1.215280
 ```
 
-Including a squared scale ratio of 5 yields
+Including a scale ratio of 5 yields
 
 ```r
 ## Asymptotic two-sided test assuming a scale ratio of 5 between both samples
@@ -559,6 +583,9 @@ hl1_test(x = x * sqrt(5), y = y, alternative = "two.sided", delta = 5, method = 
 #>        -0.12240        -1.21528
 ```
 
+# Other packages
+The tests in this package are constructed assuming homoscedasticity. Robust two-sample tests for the heteroscedastic scenario can be found in the R package [WRS2](https://cran.r-project.org/package=WRS2) [@MaiWil20robu].
+
 # Session info
 
 Here is the information about the R-session used for creating this vignette.
@@ -566,30 +593,30 @@ Here is the information about the R-session used for creating this vignette.
 
 ```r
 sessionInfo()
-#> R version 4.0.3 (2020-10-10)
-#> Platform: x86_64-pc-linux-gnu (64-bit)
-#> Running under: Linux Mint 19.1
+#> R version 4.0.4 (2021-02-15)
+#> Platform: x86_64-w64-mingw32/x64 (64-bit)
+#> Running under: Windows 10 x64 (build 19042)
 #> 
 #> Matrix products: default
-#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
-#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
 #> 
 #> locale:
-#>  [1] LC_CTYPE=de_DE.UTF-8       LC_NUMERIC=C               LC_TIME=de_DE.UTF-8        LC_COLLATE=de_DE.UTF-8     LC_MONETARY=de_DE.UTF-8    LC_MESSAGES=de_DE.UTF-8   
-#>  [7] LC_PAPER=de_DE.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C             LC_MEASUREMENT=de_DE.UTF-8 LC_IDENTIFICATION=C       
+#> [1] LC_COLLATE=English_Austria.65001  LC_CTYPE=C                        LC_MONETARY=English_Austria.65001
+#> [4] LC_NUMERIC=C                      LC_TIME=English_Austria.65001    
+#> system code page: 65001
 #> 
 #> attached base packages:
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] robnptests_0.1.0 testthat_3.0.2  
+#> [1] robnptests_0.1.0
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] compiler_4.0.3    DEoptimR_1.0-8    prettyunits_1.1.1 remotes_2.3.0     tools_4.0.3       digest_0.6.27     packrat_0.6.0     pkgbuild_1.2.0    pkgload_1.2.1     statmod_1.4.35   
-#> [11] evaluate_0.14     memoise_2.0.0     lifecycle_1.0.0   checkmate_2.0.0   rlang_0.4.10      cli_2.4.0         rstudioapi_0.13   xfun_0.22         fastmap_1.1.0     withr_2.4.2      
-#> [21] stringr_1.4.0     knitr_1.33        desc_1.3.0        fs_1.5.0          gtools_3.8.2      devtools_2.4.0    rprojroot_2.0.2   glue_1.4.2        robustbase_0.93-7 R6_2.5.0         
-#> [31] processx_3.5.1    Rdpack_2.1.1      sessioninfo_1.1.1 callr_3.7.0       purrr_0.3.4       magrittr_2.0.1    codetools_0.2-16  backports_1.2.1   ps_1.6.0          ellipsis_0.3.1   
-#> [41] rbibutils_2.1     usethis_2.0.1     stringi_1.5.3     cachem_1.0.1      crayon_1.4.1
+#>  [1] codetools_0.2-18  gtools_3.8.2      digest_0.6.27     rbibutils_2.2.1   backports_1.2.1  
+#>  [6] magrittr_2.0.1    evaluate_0.14     Rdpack_2.1.2      rlang_0.4.10      stringi_1.5.3    
+#> [11] robustbase_0.93-8 checkmate_2.0.0   rmarkdown_2.7     statmod_1.4.35    tools_4.0.4      
+#> [16] stringr_1.4.0     DEoptimR_1.0-9    xfun_0.21         yaml_2.2.1        compiler_4.0.4   
+#> [21] htmltools_0.5.1.1 knitr_1.31
 ```
 
 # References
+
