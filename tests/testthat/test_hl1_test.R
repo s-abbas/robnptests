@@ -154,7 +154,7 @@ testthat::test_that("hl1_test works correctly", {
   # Test for scale difference ----
 
   # One of the samples contains zeros
-  testthat::expect_warning(hl1_test(x = x[1:10], y = c(y[1:9], 0),
+  testthat::expect_message(hl1_test(x = x[1:10], y = c(y[1:9], 0),
                                     method = "asymptotic", var.test = TRUE))
 
   # Wobbling ----
@@ -170,8 +170,8 @@ testthat::test_that("hl1_test works correctly", {
     )
   )
 
-  # Setting 'wobble' = TRUE only causes a warning
-  testthat::expect_warning(hl1_test(x = x, y = y, method = "randomization",
+  # Setting 'wobble' = TRUE only causes a message
+  testthat::expect_message(hl1_test(x = x, y = y, method = "randomization",
                                     n.rep = 1000, wobble = TRUE,
                                     wobble.seed = 1234))
 

@@ -52,7 +52,7 @@ testthat::test_that("m_test works correctly", {
 
     # Randomization test for small samples
     testthat::expect_equal(m_test(x = x[1:10], y = y[1:10], psi = psi, n.rep = 100)$method,
-                           paste("Randomization test based on", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), " M-estimator ", "(", 100, "random permutations)"))
+                           paste("Randomization test based on", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator", paste0("(", 100), "random permutations)"))
 
     # Permutation test if sample size is small and 'n.rep' equals the number of
     # possible splits
@@ -68,7 +68,7 @@ testthat::test_that("m_test works correctly", {
     # Randomization test for small samples
     testthat::expect_equal(m_test(x = x[1:5], y = y[1:5], method = "randomization",
                                   psi = psi, n.rep = 100)$method,
-                           paste("Randomization test based on", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), " M-estimator ", "(", 100, "random permutations)"))
+                           paste("Randomization test based on", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator", paste0("(", 100), "random permutations)"))
 
     # Permutation test if sample size is small and 'n.rep' equals the number of
     # possible splits
@@ -149,7 +149,7 @@ testthat::test_that("m_test works correctly", {
     # Test for scale difference ----
 
     # One of the samples contains zeros
-    testthat::expect_warning(m_test(x = x[1:10], y = c(y[1:9], 0),
+    testthat::expect_message(m_test(x = x[1:10], y = c(y[1:9], 0),
                                     method = "asymptotic", psi = psi, var.test = TRUE))
   }
 })

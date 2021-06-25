@@ -74,16 +74,16 @@ testthat::test_that("med_test works correctly", {
 
   # Asymptotic test
   testthat::expect_equal(med_test(x = x, y = y, method = "asymptotic")$method,
-                         "Asymptotic test based on sample median")
+                         "Asymptotic test based on sample medians")
 
   # Randomization test for small samples
   testthat::expect_equal(med_test(x = x[1:5], y = y[1:5], method = "randomization",
                                   n.rep = 100)$method,
-                         "Randomization test based on sample median (100 random permutations)")
+                         "Randomization test based on sample medians (100 random permutations)")
 
   # Permutation test for small samples
   testthat::expect_equal(med_test(x = x[1:5], y = y[1:5], method = "permutation")$method,
-                         "Exact permutation test based on sample median")
+                         "Exact permutation test based on sample medians")
 
   # One of the sample contains less than five non-missing observations ----
 
@@ -153,7 +153,7 @@ testthat::test_that("med_test works correctly", {
   # Test for scale difference ----
 
   # One of the samples contains zeros
-  testthat::expect_warning(med_test(x = x[1:10], y = c(y[1:9], 0),
+  testthat::expect_message(med_test(x = x[1:10], y = c(y[1:9], 0),
                                     method = "asymptotic", var.test = TRUE))
 
   # Wobbling ----
@@ -169,8 +169,8 @@ testthat::test_that("med_test works correctly", {
     )
   )
 
-  # Setting 'wobble' = TRUE only causes a warning
-  testthat::expect_warning(med_test(x = x, y = y, method = "randomization",
+  # Setting 'wobble' = TRUE only causes a message
+  testthat::expect_message(med_test(x = x, y = y, method = "randomization",
                                     n.rep = 1000, wobble = TRUE,
                                     wobble.seed = 1234))
 

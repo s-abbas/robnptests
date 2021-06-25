@@ -151,6 +151,6 @@ testthat::test_that("trimmed_test works correctly", {
   # Test for scale difference ----
 
   # One of the samples contains zeros
-  testthat::expect_warning(trimmed_test(x = x[1:10], y = c(y[1:9], 0),
+  testthat::expect_message(trimmed_test(x = x[1:10], y = c(y[1:9], 0),
                                         method = "asymptotic", var.test = TRUE))
 })
