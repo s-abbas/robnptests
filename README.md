@@ -40,7 +40,7 @@ The following list shows the currently implemented tests in the package:
 Even though the test statistics compare location estimates of the samples, they can be used to identify scale differences.
 This is achieved by setting the argument `var.test = TRUE`, with which the observations in the samples are log-transformed so that scale differences between the original samples correspond to location differences in the transformed samples.
 
-Details on the tests and references can be found on the help pages of the functions and the vignette `vignette(robnptests)`.
+Details on the tests and references can be found on the help pages of the functions and the vignette `vignette("robnptests")`.
 
 ### Example 1: Asymptotic test for location difference using the two-sample Hodges-Lehmann estimator
 
