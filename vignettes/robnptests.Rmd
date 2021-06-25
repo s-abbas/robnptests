@@ -1,6 +1,6 @@
 ---
 title: "Getting started with `robnptests`"
-date: "2021-06-24"
+date: "2021-06-25"
 author: Sermad Abbas, Barbara Brune, Roland Fried
 output:
   rmarkdown::html_document:
@@ -96,7 +96,7 @@ Function name | Test names | Description | Literature
 `med_test`    | MED1-test, MED2-test | Tests based on the difference of the sample medians | @FriDeh11robu
 `hl1_test`    | HL11-test, HL12-test | Tests based on the one-sample Hodges-Lehmann estimator | @FriDeh11robu
 `hl2_test`    | HL21-test, HL22-test | Tests based on the two-sample Hodges-Lehmann estimator | @FriDeh11robu
-`m_test`      | M-estimator test | Tests based on M-estimators | see vignette [Construction of the M-tests](mTest-vignette.html).
+`m_test`      | M-estimator test | Tests based on M-estimators | see vignette [Construction of the M-tests](m_tests.html).
 `trimmed_test`| Yuen's trimmed t-test | Test based on trimmed means | @YueDix73appr
 
 We describe the test statistics in detail in the next subsection.
@@ -209,7 +209,7 @@ For differentiable functions $\rho$ with $\rho' = \psi$, the optimization proble
   \sum_{i = 1}^m \psi\left(\frac{x_i - \mu_X}{\theta_X}\right) \overset{!}{=} 0.
 \end{equation*}
 
-For a motivation on how this test statistic is constructed, we refer to the vignette [Construction of the M-tests](mTest-vignette.html).
+For a motivation on how this test statistic is constructed, we refer to the vignette [Construction of the M-tests](m_tests.html).
 
 The test statistic of the two-sample $M$-estimator test in the package is
 \begin{equation*}
@@ -300,7 +300,7 @@ Replacing $\hat{\Delta}^{(\text{HL2})}$ by $\hat{\Delta}^{(\text{HL1})}$ gives u
 @FriDeh11robu recommend the asymptotic tests for sample sizes $m, n \geq 30$ to hold the significance level $\alpha = 0.05$.
 
 #### Asymptotic M-test
-For details on the asymptotic M-test see the vignette [Construction of the M-tests](mTest-vignette.pdf).
+For details on the asymptotic M-test see the vignette [Construction of the M-tests](m_tests.pdf).
 
 #### Asymptotic trimmed t-test
 For the trimmed t-test, the asymptotic distribution of the test statistic is approximated by a $t_{h_x + h_y - 2}$-distribution. Details can be found in @YueDix73appr.

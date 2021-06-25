@@ -79,7 +79,7 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
 #' @details
 #' For definitions of the scale estimators see Fried and Dehling (2011).
 #'
-#' If \code{check.for.zero = TRUE}, a warning is printed when the scale estimate
+#' If \code{check.for.zero = TRUE}, an error is thrown when the scale estimate
 #' is zero. This argument is only included because the function is used in
 #' \code{\link{rob_perm_statistic}} to compute values of robust test statistics
 #' where the scale estimate is used for standardization. A scale estimate of zero

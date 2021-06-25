@@ -42,5 +42,5 @@ tests based on M-estimators.
 }
 \details{
 For details on how the test statistic is constructed, we refer to the
-vignette  (\code{vignette(mTest-vignette)})
+vignette (\code{vignette("m_tests"})
 }

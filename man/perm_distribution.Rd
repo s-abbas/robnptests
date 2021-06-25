@@ -17,7 +17,7 @@ be one of \code{"HL11"} (default),
 \code{"HL1"}, \code{"HL2"} and \code{"MED"} specify the location
 estimator and the numbers \code{1} and \code{2} the scale
 estimator, see the vignette
-(\code{vignette("robnptests-vignette")}) for more information.}
+(\code{vignette("robnptests")}) for more information.}
 
 \item{randomization}{a logical value indicating whether the p-value should be
 computed from a permutation (\code{FALSE}, default) or a

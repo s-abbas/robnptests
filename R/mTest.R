@@ -36,7 +36,7 @@
 #'
 #' More details on the construction of the test statistic are given in the
 #' vignettes \code{vignette("robnptests")} and
-#' \code{vignette("mTest-vignette")}.
+#' \code{vignette("m_tests")}.
 #'
 #' Three versions of the test are implemented: randomization, permutation, and
 #' asymptotic.
@@ -44,7 +44,8 @@
 #' The randomization distribution is based on randomly drawn splits with
 #' replacement. The function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robnptests}
 #' is used to calculate the p-value. The psi function for the the M-estimate
-#' is computed with the implementations in the package \code{\link{robustbase}}.
+#' is computed with the implementations in the package
+#' \href{https://cran.r-project.org/package=robustbase}{robustbase}.
 #'
 #' For the asymptotic test, the distribution of the test statistic is approximated
 #' by a standard normal distribution.
@@ -53,7 +54,7 @@
 #' the desired significance level. Simulations indicate that the level is kept
 #' under symmetric distributions if the variance exists. Under skewed
 #' distributions, it tends to be anti-conservative, see the vignette
-#' \code{vignette{"mTest-vignette"}}. The test statistic can be corrected by a
+#' \code{vignette{"m_tests"}}. The test statistic can be corrected by a
 #' factor which has to be determined individually for a specific distribution in
 #' such cases.
 #'
@@ -64,7 +65,7 @@
 #' the transformed samples, see \insertCite{Fri12onli;textual}{robnptests}.
 #' The sample should not contain zeros to prevent problems with the necessary
 #' log-transformation. If it contains zeros, uniform noise is added to all
-#' variables in order to remove zeros and a warning is printed.
+#' variables in order to remove zeros and a message is printed.
 #'
 #' If the sample has been modified because of zeros when \code{var.test = TRUE},
 #' the modified samples can be retrieved using

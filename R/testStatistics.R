@@ -190,7 +190,7 @@ rob_perm_statistic <- function(x, y,
 #'
 #' @details
 #' For details on how the test statistic is constructed, we refer to the
-#' vignette  (\code{vignette(mTest-vignette)})
+#' vignette (\code{vignette("m_tests"})
 #'
 #' @return A named list containing the following components:
 #'         \item{statistic}{standardized test statistic.}
