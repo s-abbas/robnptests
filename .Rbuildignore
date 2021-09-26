@@ -13,3 +13,4 @@ man-roxygen
 ^vignettes/robnptests-vignette\.Rmd
 data-raw
 cache
+paper
