@@ -1,6 +1,6 @@
 testthat::test_that("trimmed_test works correctly", {
 
-  #testthat::skip_on_cran()
+  testthat::skip_on_cran()
 
   # Exemplary input vectors ----
   set.seed(108)

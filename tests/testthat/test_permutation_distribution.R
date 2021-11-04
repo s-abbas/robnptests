@@ -1,7 +1,7 @@
 # Computation of permutation distribution ----
 testthat::test_that("perm_distribution works correctly", {
 
-  # testthat::skip_on_cran()
+  testthat::skip_on_cran()
 
   # Exemplary input vectors ----
   x <- 1:5
@@ -39,7 +39,7 @@ testthat::test_that("perm_distribution works correctly", {
 # Computation of permutation distribution for M-test statistics ----
 testthat::test_that("m_est_perm_distribution works correctly", {
 
-  # testthat::skip_on_cran()
+  testthat::skip_on_cran()
 
   # Exemplary input vectors ----
   x <- 1:5
@@ -80,7 +80,7 @@ testthat::test_that("m_est_perm_distribution works correctly", {
 # Computation of permutation p-value ----
 testthat::test_that("calc_perm_p_value works correctly", {
 
-  # testthat::skip_on_cran()
+  testthat::skip_on_cran()
 
   # Check output ----
 
