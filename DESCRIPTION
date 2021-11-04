@@ -1,5 +1,5 @@
 Package: robnptests
-Version: 0.1.0
+Version: 1.0.0
 Type: Package
 Title: Robust Non-Parametric Two-Sample Tests for Location/Scale
 Authors@R: c(person("Sermad", "Abbas", 
