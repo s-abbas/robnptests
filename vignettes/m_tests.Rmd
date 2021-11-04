@@ -87,7 +87,7 @@ We chose the significance level $\alpha = 0.05$.
 The results are shown in the following figure.
 
 Under the $\mathcal{N}(0, 1)$- and the $t_2$-distribution we make similar observations: 
-For equal sample sizes $m = n \geq 30$, the simulated test size is quite close to the the specified value of $\alpha$. When $m \neq n$, it seems to be important that both values are rather large do not deviate too much from each other.
+For equal sample sizes $m = n \geq 30$, the simulated test size is quite close to the the specified value of $\alpha$. When $m \neq n$, it seems to be important that both values are rather large and do not deviate too much from each other.
 Otherwise, the tests may become very anti-conservative. 
 In general, the three test statistics lead to similar results for the considered sample sizes.
 

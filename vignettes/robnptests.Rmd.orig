@@ -333,6 +333,7 @@ y
 ### Permutation test
 In this example, we use the two-sided HL1-test with the scale estimator $\hat{S}^{(2)}$ and
 set $\Delta_0 = 0$.
+With an Intel Core i5-2500 processor with 3.3 GHz and 8 GB memory, the following computation takes about three minutes.
 
 ```{r, cache = TRUE}
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 0, method = "permutation", scale = "S2")

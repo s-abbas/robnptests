@@ -1,6 +1,6 @@
 ---
 title: "Getting started with `robnptests`"
-date: "2021-06-25"
+date: "2021-11-04"
 author: Sermad Abbas, Barbara Brune, Roland Fried
 output:
   rmarkdown::html_document:
@@ -331,6 +331,7 @@ y
 ### Permutation test
 In this example, we use the two-sided HL1-test with the scale estimator $\hat{S}^{(2)}$ and
 set $\Delta_0 = 0$.
+With an Intel Core i5-2500 processor with 3.3 GHz and 8 GB memory, the following computation takes about three minutes.
 
 
 ```r
