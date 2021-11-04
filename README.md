@@ -11,7 +11,13 @@ The R package `robnptests` contains different robust and non-parametric tests fo
 Installation
 ------------
 
-To install the package, the `devtools` package is required.
+The released version of `robnptests` can be installed from [CRAN](https://CRAN.R-project.org) with
+
+```{r}
+install.packages("robnptests")
+```
+
+To install the development version, the `devtools` package is required:
 
 ``` r
 if (!require("devtools")) {
@@ -79,9 +85,3 @@ hl2_test(x, y, method = "asymptotic", var.test = TRUE)
 # Contributions
 
 We are grateful for any contribution to the further development of the R package. If you experience any problems using the package or have suggestions for new features, please open an issue in the [issue tracker](https://github.com/s-abbas/robnptests/issues). 
-
-Authors
--------
-
-**Sermad Abbas** ( [s-abbas](https://github.com/s-abbas) ) - *TU Dortmund University, Dortmund, Germany*, and 
-**Barbara Brune** ( [b-brune](https://github.com/b-brune) ) - *TU Wien, Vienna, Austria*
