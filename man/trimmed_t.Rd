@@ -2,7 +2,7 @@
 % Please edit documentation in R/testStatistics.R
 \name{trimmed_t}
 \alias{trimmed_t}
-\title{Test statistic for the two-sample Yuen t-test}
+\title{Test statistic for the two-sample trimmed t-test (Yuen's t-test)}
 \usage{
 trimmed_t(x, y, gamma = 0.2, na.rm = FALSE)
 }
@@ -11,23 +11,34 @@ trimmed_t(x, y, gamma = 0.2, na.rm = FALSE)
 
 \item{y}{a (non-empty) numeric vector of data values.}
 
-\item{gamma}{numeric value in [0, 0.5] specifying the fraction of observations to be
-trimmed from each end of the sample before calculating the mean. Values
-of trim outside that range are taken as the nearest endpoint.}
+\item{gamma}{a numeric value in [0, 0.5] specifying the fraction of observations
+to be trimmed from each end of the sample before calculating the
+mean. The default value is 0.2.}
 
-\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether NA values in \code{x} and
+\code{y} should be stripped before the computation proceeds. The
+default is \code{na.rm = FALSE}.}
 }
 \value{
-A list containing the following components:
+A named list containing the following components:
 \item{statistic}{the value of the test statistic.}
 \item{estimates}{the trimmed means for both samples.}
 \item{df}{the degrees of freedom for the test statistic.}
 }
 \description{
-\code{trimmed_t} calculates the test statistic of the two-sample Yuen test.
+\code{trimmed_t} calculates the test statistic for the two-sample trimmed t-test.
+}
+\examples{
+# Generate random samples
+set.seed(108)
+x <- rnorm(20); y <- rnorm(20)
+
+# Compute trimmed t-statistic
+trimmed_t(x, y, gamma = 0.2)
+
 }
 \references{
-\insertRef{YueDix73appr}{robTests}
+\insertRef{YueDix73appr}{robnptests}
 
-\insertRef{Yue74trim}{robTests}
+\insertRef{Yue74trim}{robnptests}
 }

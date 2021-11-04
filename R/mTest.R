@@ -4,8 +4,8 @@
 
 #' @title Two sample location test based on M-estimators
 #'
-#' @description \code{m_test} performs a two-sample location test
-#'              based on M-estimators.
+#' @description
+#' \code{m_test} performs a two-sample location test based on an M-estimator.
 #'
 #' @template x
 #' @template y
@@ -21,43 +21,51 @@
 #' @template scaleTau2
 #'
 #' @details
-#'
 #' The test statistic for this test is based on the difference of the M-estimates
-#' of location of \code{x} and \code{y}. We implemented three different psi-functions:
-#' \code{huber},\code{hampel} and \code{bisquare}. The according tuning parameter(s) can
-#' be set in the \code{k} argument of the function.
-
-#' The estimate of the location difference is scaled by a pooled estimate for
+#' of location of \code{x} and \code{y}, see \code{\link[robnptests]{m_est}}.
+#'
+#' Three different psi-functions can be used: \code{huber},\code{hampel}, and
+#' \code{bisquare}. The corresponding tuning parameter(s) are set by the
+#' argument \code{k} of the function.
+#'
+#' The estimate for the location difference is scaled by a pooled estimate for
 #' the standard deviation. This estimate is based on the
-#' tau scale estimator. The tau scale estimate is computed with the default parameter settings
-#' of the function \code{\link[robustbase]{scaleTau2}}. These can be changed if necessary
+#' tau-estimate of scale and is computed with the default parameter settings
+#' of the function \code{\link[robustbase]{scaleTau2}}. These can be changed if
 #' by setting \code{c1} and \code{c2}.
-#' More details are given in the vignettes \code{vignette{"robTests-vignette"}}
-#' and \code{vignette{"mTest-vignette"}}.
 #'
-#' We offer three versions of the test: randomization, permutation and asymptotic.
+#' More details on the construction of the test statistic are given in the
+#' vignettes \code{vignette("robnptests")} and
+#' \code{vignette("m_tests")}.
 #'
-#' When computing the randomization distribution based on randomly drawn splits
-#' with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+#' Three versions of the test are implemented: randomization, permutation, and
+#' asymptotic.
+#'
+#' The randomization distribution is based on randomly drawn splits with
+#' replacement. The function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robnptests}
 #' is used to calculate the p-value. The psi function for the the M-estimate
-#' is computed via the implementations in the package \code{\link[=Mpsi]{robustbase}}.
+#' is computed with the implementations in the package
+#' \href{https://cran.r-project.org/package=robustbase}{robustbase}.
 #'
 #' For the asymptotic test, the distribution of the test statistic is approximated
 #' by a standard normal distribution.
-#' However, this assumption is only justified under the normality assumption. In
-#' case of a non-normal distribution, the test might not keep the desired significance
-#' level. The test keeps the level under several distributions as long as the
-#' variance exists. However, under skewed distributions, it tends to be anti-conservative.
-#' The test statistic can be corrected by a factor which has to be determined
-#' individually for a specific distribution.
+#' However, this is only justified under the normality assumption. When the
+#' observations do not come from a normal distribution, the tests might not keep
+#' the desired significance level. Simulations indicate that the level is kept
+#' under symmetric distributions if the variance exists. Under skewed
+#' distributions, it tends to be anti-conservative, see the vignette
+#' \code{vignette{"m_tests"}}. The test statistic can be corrected by a
+#' factor which has to be determined individually for a specific distribution in
+#' such cases.
 #'
-#' For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
-#' This is achieved by log-transforming the original observations so that a potential
-#' scale difference appears as a location difference between the transformed samples;
-#' see \insertCite{Fri12onli;textual}{robTests}. The sample should not contain zeros
-#' to prevent problems with the necessary log-transformation. If it contains zeros,
-#' uniform noise is added to all variables in order to remove zeros. A warning is
-#' printed.
+#' For \code{var.test = TRUE}, the test compares the two samples for a difference
+#' in scale. This is achieved by log-transforming the original squared observations,
+#' i.e. \code{x} is replaced by \code{log(x^2)} and \code{y} by \code{log(y^2)}.
+#' A potential scale difference then appears as a location difference between
+#' the transformed samples, see \insertCite{Fri12onli;textual}{robnptests}.
+#' The sample should not contain zeros to prevent problems with the necessary
+#' log-transformation. If it contains zeros, uniform noise is added to all
+#' variables in order to remove zeros and a message is printed.
 #'
 #' If the sample has been modified because of zeros when \code{var.test = TRUE},
 #' the modified samples can be retrieved using
@@ -67,35 +75,38 @@
 #' Both samples need to contain at least 5 non-missing values.
 #'
 #' @return
-#' A list with class "\code{htest}" containing the following components:
+#' A named list with class "\code{htest}" containing the following components:
 #' \item{statistic}{the value of the test statistic.}
 #' \item{parameter}{the degrees of freedom for the test statistic.}
 #' \item{p.value}{the p-value for the test.}
-#' \item{estimate}{the Huber M-estimates of \code{x} and \code{y}.}
-#' \item{null.value}{the specified hypothesized value of the mean difference.}
+#' \item{estimate}{the M-estimates of \code{x} and \code{y}
+#'                 (if \code{var.test = FALSE}) or of \code{log(x^2)} and
+#'                 \code{log(y^2)} (if \code{var.test = TRUE}).}
+#' \item{null.value}{the specified hypothesized value of the mean difference/squared
+#'                   scale ratio.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
 #' \item{method}{a character string indicating how the p-value was computed.}
 #' \item{data.name}{a character string giving the names of the data.}
 #'
 #' @references
 #'
-#' \insertRef{Fri12onli}{robTests}
+#' \insertRef{Fri12onli}{robnptests}
 #'
-#' \insertRef{MarZam02robu}{robTests}
+#' \insertRef{MarZam02robu}{robnptests}
 #'
-#' \insertRef{PhiSmy10perm}{robTests}
+#' \insertRef{PhiSmy10perm}{robnptests}
 #'
 #' @examples
-#' ## Generate random samples
+#' # Generate random samples
 #' set.seed(108)
 #' x <- rnorm(20); y <- rnorm(20)
 #'
-#' ## Asymptotic test based on Huber M-estimator
+#' # Asymptotic test based on Huber M-estimator
 #' m_test(x, y, method = "asymptotic", psi = "huber")
 #'
 #' \dontrun{
-#' ## Randomization test based on Hampel M-estimator with 1000 random permutations
-#' ## drawn with replacement
+#' # Randomization test based on Hampel M-estimator with 1000 random permutations
+#' # drawn with replacement
 #'
 #' m_test(x, y, method = "randomization", n.rep = 1000, psi = "hampel")
 #' }
@@ -172,7 +183,7 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   # Assign names to results
   if (var.test) {
     names(estimates) <- c("M-est. of log(x^2)", "M-est. of log(y^2)")
-    names(delta) <- "ratio of variances"
+    names(delta) <- "ratio of squared scale parameters"
     delta <- exp(delta)
   } else {
     names(estimates) <- c("M-est. of x", "M-est. of y")
@@ -183,7 +194,7 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
 
   # Information on applied test
   if (method == "randomization") {
-    method <- paste("Randomization test based on", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), " M-estimator ", "(", n.rep, "random permutations)")
+    method <- paste0("Randomization test based on ", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), " M-estimator ", "(", n.rep, " random permutations)")
   } else if (method == "permutation") {
     method <- paste("Exact permutation test based on", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")
   } else method <- paste("Asymptotic test based on", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")

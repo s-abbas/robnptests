@@ -12,21 +12,21 @@ compute_results_asymptotic(x, y, alternative, delta, type)
 \item{y}{a (non-empty) numeric vector of data values.}
 
 \item{alternative}{a character string specifying the alternative hypothesis,
-must be one of "two.sided" (default), "greater" or "less".}
+must be one of "two.sided", "greater", or "less".}
 
-\item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
-on whether the test should be performed for a difference in location or in scale.
-The default is \code{delta = 0} for location test and \code{delta = 1} for scale test.}
+\item{delta}{a numeric value indicating the true difference in the location
+or scale parameter, depending on whether the test should be
+performed for a difference in location or in scale.}
 
-\item{type}{desired test statistic. It must be one of \code{"HL11"} (default),
-\code{"HL12", "HL21", "HL22", "MED1"}, and \code{"MED2"},
- where "HL1", "HL2" and "MED" specify the location estimator
- and the numbers \code{1} and \code{2} the scale estimator.
- See the vignette (\code{vignette("robTests-vignette")}) for more
- information.}
+\item{type}{a character string specifying the desired test statistic. It must
+be one of \code{"HL11"}, \code{"HL12", "HL21", "HL22", "MED1"},
+and \code{"MED2"}, where \code{"HL1"}, \code{"HL2"} and
+\code{"MED"} specify the location estimator and the numbers
+\code{1} and \code{2} the scale estimator, see the vignette
+(\code{vignette("robnptests")}) for more information.}
 }
 \value{
-A list containing the following components:
+A named list containing the following components:
 \item{statistic}{the value of the test statistic.}
 \item{estimates}{the location estimates for both samples in case of the HL1-
                 and the MED-tests. The estimate for the location difference
@@ -35,6 +35,6 @@ A list containing the following components:
 }
 \description{
 \code{compute_results_asymptotic} is a helper function to compute the test
-decision for the HL1-, HL2-, and MED-test, when \code{method = "asymptotic"}.
+decision for the HL1-, HL2-, and MED-test when \code{method = "asymptotic"}.
 }
-\keyword{interal}
+\keyword{internal}

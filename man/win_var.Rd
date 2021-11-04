@@ -9,13 +9,16 @@ win_var(x, gamma = 0, na.rm = FALSE)
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
 
-\item{gamma}{numeric value in [0, 0.5] specifying the fraction of observations to be replaced
-at each end of the sample before calculating the mean.}
+\item{gamma}{a numeric value in [0, 0.5] specifying the fraction of observations
+to be replaced at each end of the sample before calculating the
+mean. The default value is 0.2.}
 
-\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether NA values in \code{x} and
+\code{y} should be stripped before the computation proceeds. The
+default is \code{na.rm = FALSE}.}
 }
 \value{
-A list containing the following items:
+A named list containing the following items:
 \item{var}{winsorized variance.}
 \item{h}{degrees of freedom used for tests based on trimmed means and the
 winsorized variance.}
@@ -24,11 +27,11 @@ winsorized variance.}
 \code{win_var} calculates the winsorized variance of a sample.
 }
 \examples{
-## Generate random sample
+# Generate random sample
 set.seed(108)
 x <- rnorm(10)
 
-## Compute 20\% winsorized variance
+# Compute 20\% winsorized variance
 win_var(x, gamma = 0.2)
 
 }

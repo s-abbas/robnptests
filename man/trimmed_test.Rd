@@ -22,54 +22,65 @@ trimmed_test(
 
 \item{y}{a (non-empty) numeric vector of data values.}
 
-\item{gamma}{numeric value in [0, 0.5] specifying the fraction of observations to be
-trimmed from each end of the sample before calculating the mean. Values
-of trim outside that range are taken as the nearest endpoint.}
+\item{gamma}{a numeric value in [0, 0.5] specifying the fraction of observations
+to be trimmed from each end of the sample before calculating the
+mean. The default value is 0.2.}
 
 \item{alternative}{a character string specifying the alternative hypothesis,
-must be one of "two.sided" (default), "greater" or "less".}
+must be one of "two.sided" (default), "greater", or "less".}
 
-\item{method}{a character string specifying how the p-value is computed,
-\code{"asymptotic"} for an asymptotic test based on a normal
-approximation, \code{"permutation"} for a permutation test and
-\code{"randomization"} for a randomization test.
-The permutation test uses all splits of the joint sample into two samples
-of sizes \code{m} and \code{n}, while the randomization test draws
-\code{n.rep} random splits with replacement. If not specified explicitly,
-defaults to
-\code{"permutation"},  if \code{m < 30}, \code{n < 30} and
- \code{n.rep >= choose(m+n, m)},
-\code{"randomization"}, if \code{m < 30}, \code{n < 30} and
- \code{n.rep < choose(m+n, m)}, and
- \code{"asymptotic"}, if \code{m >= 30} and \code{n >= 30}.}
+\item{method}{a character string specifying how the p-value is computed with
+possible values \code{"asymptotic"} for an asymptotic test
+based on a normal approximation, \code{"permutation"} for a
+permutation test, and \code{"randomization"} for a randomization
+test. The permutation test uses all splits of the joint sample
+into two samples of sizes \code{m} and \code{n}, while the
+randomization test draws \code{n.rep} random splits with
+replacement. The values \code{m} and \code{n} denote the
+sample sizes.
+If not specified explicitly, defaults to
+\code{"permutation"}  if \code{m < 30}, \code{n < 30} and
+ \code{n.rep >= choose(m + n, m)},
+\code{"randomization"} if \code{m < 30}, \code{n < 30} and
+ \code{n.rep < choose(m + n, m)}, and
+ \code{"asymptotic"} if \code{m >= 30} and \code{n >= 30}.}
 
-\item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
-on whether the test should be performed for a difference in location or in scale.
-The default is \code{delta = 0} for location test and \code{delta = 1} for scale test.}
+\item{delta}{a numeric value indicating the true difference in the location or
+scale parameter, depending on whether the test should be performed
+for a difference in location or in scale. The default is
+\code{delta = 0} for location test and \code{delta = 1} for scale
+test. In case of \code{var.test = TRUE}, \code{delta} represents
+the ratio of the squared scale parameters.}
 
 \item{n.rep}{an integer value specifying the number of random splits used to
 calculate the randomization distribution if \code{method = "randomization"}.
 This argument is ignored if \code{method = "permutation"} or \code{method = "asymptotic"}.
 The default is \code{n.rep = 10000}.}
 
-\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether NA values in \code{x} and
+\code{y} should be stripped before the computation proceeds. The
+default is \code{na.rm = FALSE}.}
 
-\item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
+\item{var.test}{a logical value to specify if the samples should be compared
+for a difference in scale. The default is \code{var.test = FALSE}.}
 
-\item{wobble.seed}{integer value used as a seed for the random number
+\item{wobble.seed}{an integer value used as a seed for the random number
 generation in case of \code{wobble = TRUE} or when
-\code{var.test = TRUE} and one of the vectors \code{x} and
-\code{y} contains zeros. When no seed is specified, it is
-set randomly and printed in a warning The argument is ignored if
-\code{var.test = FALSE} and \code{wobble = FALSE}.}
+\code{var.test = TRUE} with one of the vectors \code{x} and
+\code{y} containing zeros. When no seed is specified, it
+takes a random valueand printed in a message. The argument
+is ignored if \code{var.test = FALSE} and \code{wobble = FALSE}.}
 }
 \value{
-A list with class "\code{htest}" containing the following components:
+A named list with class "\code{htest}" containing the following components:
 \item{statistic}{the value of the test statistic.}
 \item{parameter}{the degrees of freedom for the test statistic.}
 \item{p.value}{the p-value for the test.}
-\item{estimate}{the trimmed means of \code{x} and \code{y}.}
-\item{null.value}{the specified hypothesized value of the mean difference.}
+\item{estimate}{the trimmed means of \code{x} and \code{y}
+                (if \code{var.test = FALSE}) or of \code{log(x^2)} and
+                \code{log(y^2)} (if \code{var.test = TRUE}).}
+\item{null.value}{the specified hypothesized value of the mean difference/squared
+                  scale ratio.}
 \item{alternative}{a character string describing the alternative hypothesis.}
 \item{method}{a character string indicating how the p-value was computed.}
 \item{data.name}{a character string giving the names of the data.}
@@ -79,23 +90,24 @@ A list with class "\code{htest}" containing the following components:
 }
 \details{
 The function performs Yuen's t-test based on the trimmed mean and winsorized
-variance \insertCite{YueDix73appr}{robTests}.
+variance \insertCite{YueDix73appr}{robnptests}.
 The amount of trimming / winsorization is set in \code{gamma} and
-defaults to 0.2, i.e. 20\% of the values are removed / replaced.
-In addition to the asymptotic distribution we provide a permutation and a randomization
-version of the test.
+defaults to 0.2, i.e. 20\% of the values are removed/replaced.
+In addition to the asymptotic distribution a permutation and a
+randomization version of the test are implemented.
 
 When computing a randomization distribution based on randomly drawn splits
-with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robnptests}
 is used to calculate the p-value.
 
-For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
-This is achieved by log-transforming the original observations so that a potential
-scale difference appears as a location difference between the transformed samples;
-see \insertCite{Fri12onli;textual}{robTests}. The sample should not contain zeros
-to prevent problems with the necessary log-transformation. If it contains zeros,
-uniform noise is added to all variables in order to remove zeros. A warning is
-printed.
+For \code{var.test = TRUE}, the test compares the two samples for a difference
+in scale. This is achieved by log-transforming the original squared observations,
+i.e. \code{x} is replaced by \code{log(x^2)} and \code{y} by \code{log(y^2)}.
+A potential scale difference then appears as a location difference between
+the transformed samples, see \insertCite{Fri12onli;textual}{robnptests}.
+The sample should not contain zeros to prevent problems with the necessary
+log-transformation. If it contains zeros, uniform noise is added to all
+variables in order to remove zeros and a message is printed.
 
 If the sample has been modified because of zeros when \code{var.test = TRUE},
 the modified samples can be retrieved using
@@ -105,17 +117,17 @@ the modified samples can be retrieved using
 Both samples need to contain at least 5 non-missing values.
 }
 \examples{
-## Generate random samples
+# Generate random samples
 x <- rnorm(20); y <- rnorm(20)
 
-## Trimmed t-test
+# Trimmed t-test
 trimmed_test(x, y, gamma = 0.1)
 
 }
 \references{
-\insertRef{YueDix73appr}{robTests}
+\insertRef{YueDix73appr}{robnptests}
 
-\insertRef{Yue74trim}{robTests}
+\insertRef{Yue74trim}{robnptests}
 
-\insertRef{Fri12onli}{robTests}
+\insertRef{Fri12onli}{robnptests}
 }

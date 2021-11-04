@@ -11,27 +11,27 @@ preprocess_data(x, y, delta, na.rm, wobble, wobble.seed, var.test)
 
 \item{y}{a (non-empty) numeric vector of data values.}
 
-\item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
-on whether the test should be performed for a difference in location or in scale.
-The default is \code{delta = 0} for location test and \code{delta = 1} for scale test.}
+\item{delta}{a numeric value indicating the true difference in the location
+or scale parameter, depending on whether the test should be
+performed for a difference in location or in scale.}
 
-\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether NA values in \code{x} and \code{y}
+should be stripped before the computation proceeds.}
 
-\item{wobble}{logical value indicating whether the sample should be checked for
+\item{wobble}{a logical value indicating whether the sample should be checked for
 duplicated values that can cause the scale estimate to be zero.
 If such values are present, uniform noise is added to the sample,
-see \code{\link[robTests]{wobble}}.
-Only necessary for the permutation and randomization version of the test.
-The default is \code{wobble = FALSE}.}
+see \code{\link[robnptests]{wobble}}.}
 
-\item{wobble.seed}{integer value used as a seed for the random number
+\item{wobble.seed}{an integer value used as a seed for the random number
 generation in case of \code{wobble = TRUE} or when
-\code{var.test = TRUE} and one of the vectors \code{x} and
-\code{y} contains zeros. When no seed is specified, it is
-set randomly and printed in a warning The argument is ignored if
-\code{var.test = FALSE} and \code{wobble = FALSE}.}
+\code{var.test = TRUE} with one of the vectors \code{x} and
+\code{y} containing zeros. When no seed is specified, it
+takes a random valueand printed in a message. The argument
+is ignored if \code{var.test = FALSE} and \code{wobble = FALSE}.}
 
-\item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
+\item{var.test}{a logical value to specify if the samples should be compared
+for a difference in scale.}
 }
 \value{
 A named list containing the following components:

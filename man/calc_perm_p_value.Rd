@@ -17,13 +17,16 @@ calc_perm_p_value(
 \arguments{
 \item{statistic}{observed value of the test statistic.}
 
-\item{distribution}{numeric vector with permutation distribution.}
+\item{distribution}{a numeric vector with the permutation/randomization
+distribution.}
 
-\item{m}{integer value giving size of first sample.}
+\item{m}{an integer value giving size of first sample.}
 
-\item{n}{integer value giving size of second sample.}
+\item{n}{an integer value giving size of second sample.}
 
-\item{randomization}{logical value indicating whether the p-value should be computed from a permutation (\code{FALSE}) or a randomization (\code{TRUE}) distribution.}
+\item{randomization}{a logical value indicating whether the p-value should be
+computed from a permutation (\code{FALSE}, default) or a
+randomization (\code{TRUE}) distribution.}
 
 \item{n.rep}{an integer value specifying the number of random splits used to
 calculate the randomization distribution if \code{method = "randomization"}.
@@ -31,15 +34,15 @@ This argument is ignored if \code{method = "permutation"} or \code{method = "asy
 The default is \code{n.rep = 10000}.}
 
 \item{alternative}{a character string specifying the alternative hypothesis,
-must be one of "two.sided" (default), "greater" or "less".}
+must be one of "two.sided" (default), "greater", or "less".}
 }
 \value{
 p-value for the specified alternative.
 }
 \description{
-\code{calc_perm_p_value} calculates the permutation p-value following \insertCite{PhiSmy10perm;textual}{robTests}.
+\code{calc_perm_p_value} calculates the permutation p-value following \insertCite{PhiSmy10perm;textual}{robnptests}.
 }
 \references{
-\insertRef{PhiSmy10perm}{robTests}
+\insertRef{PhiSmy10perm}{robnptests}
 }
 \keyword{internal}

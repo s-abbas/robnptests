@@ -12,40 +12,34 @@ compute_results_finite(x, y, alternative, delta, method, n.rep, type)
 \item{y}{a (non-empty) numeric vector of data values.}
 
 \item{alternative}{a character string specifying the alternative hypothesis,
-must be one of "two.sided" (default), "greater" or "less".}
+must be one of "two.sided", "greater", or "less".}
 
-\item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
-on whether the test should be performed for a difference in location or in scale.
-The default is \code{delta = 0} for location test and \code{delta = 1} for scale test.}
+\item{delta}{a numeric value indicating the true difference in the location
+or scale parameter, depending on whether the test should be
+performed for a difference in location or in scale.}
 
-\item{method}{a character string specifying how the p-value is computed,
-\code{"asymptotic"} for an asymptotic test based on a normal
-approximation, \code{"permutation"} for a permutation test and
-\code{"randomization"} for a randomization test.
-The permutation test uses all splits of the joint sample into two samples
-of sizes \code{m} and \code{n}, while the randomization test draws
-\code{n.rep} random splits with replacement. If not specified explicitly,
-defaults to
-\code{"permutation"},  if \code{m < 30}, \code{n < 30} and
- \code{n.rep >= choose(m+n, m)},
-\code{"randomization"}, if \code{m < 30}, \code{n < 30} and
- \code{n.rep < choose(m+n, m)}, and
- \code{"asymptotic"}, if \code{m >= 30} and \code{n >= 30}.}
+\item{method}{a character string specifying how the p-value is computed with
+possible values \code{"asymptotic"} for an asymptotic test
+based on a normal approximation, \code{"permutation"} for a
+permutation test, and \code{"randomization"} for a randomization
+test. The permutation test uses all splits of the joint sample
+into two samples of sizes \code{m} and \code{n}, while the
+randomization test draws \code{n.rep} random splits with
+replacement. The values \code{m} and \code{n} denote the
+sample sizes.}
 
 \item{n.rep}{an integer value specifying the number of random splits used to
-calculate the randomization distribution if \code{method = "randomization"}.
-This argument is ignored if \code{method = "permutation"} or \code{method = "asymptotic"}.
-The default is \code{n.rep = 10000}.}
+calculate the randomization distribution if \code{method = "randomization"}.}
 
-\item{type}{desired test statistic. It must be one of \code{"HL11"} (default),
-\code{"HL12", "HL21", "HL22", "MED1"}, and \code{"MED2"},
- where "HL1", "HL2" and "MED" specify the location estimator
- and the numbers \code{1} and \code{2} the scale estimator.
- See the vignette (\code{vignette("robTests-vignette")}) for more
- information.}
+\item{type}{a character string specifying the desired test statistic. It must
+be one of \code{"HL11"}, \code{"HL12", "HL21", "HL22", "MED1"},
+and \code{"MED2"}, where \code{"HL1"}, \code{"HL2"} and
+\code{"MED"} specify the location estimator and the numbers
+\code{1} and \code{2} the scale estimator, see the vignette
+(\code{vignette("robnptests")}) for more information.}
 }
 \value{
-A list containing the following components:
+A named list containing the following components:
 \item{statistic}{the value of the test statistic.}
 \item{estimates}{the location estimates for both samples in case of the HL1-
                 and the MED-tests. The estimate for the location difference
@@ -54,7 +48,7 @@ A list containing the following components:
 }
 \description{
 \code{compute_results_finite} is a helper function to compute the test
-decision for the HL1-, HL2-, and MED-test, when \code{method = "randomization"}
+decision for the HL1-, HL2-, and MED-test when \code{method = "randomization"}
 or \code{method = "permutation"}.
 }
-\keyword{interal}
+\keyword{internal}

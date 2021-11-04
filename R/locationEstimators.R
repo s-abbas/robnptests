@@ -9,7 +9,7 @@
 #' \code{trim_mean} calculates a trimmed mean of a sample.
 #'
 #' @template x
-#' @template gamma_trimmed_mean
+#' @template gamma_trimmed
 #' @template na_rm
 #'
 #' @details
@@ -19,31 +19,24 @@
 #' The trimmed mean.
 #'
 #' @examples
-#' ## Generate random sample
+#' # Generate random sample
 #' set.seed(108)
 #' x <- rnorm(10)
 #'
-#' ## Compute 20% trimmed mean
+#' # Compute 20% trimmed mean
 #' trim_mean(x, gamma = 0.2)
 #'
 #' @export
 
 trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 
-  ## Check input arguments ----
+  # Check input arguments ----
   checkmate::assert_numeric(x, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
   checkmate::assert_number(gamma, na.ok = FALSE, lower = 0, upper = 0.5, finite = TRUE, null.ok = FALSE)
   checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
 
-  ## Remove missing values in 'x' ----
-  if (!na.rm & any(is.na(x))) {
-    return(NA_real_)
-  } else if (na.rm & any(is.na(x))) {
-    x <- as.vector(stats::na.omit(x))
-  }
-
-  ## Calculate trimmed mean ----
-  return(mean(x, trim = gamma))
+  # Calculate trimmed mean ----
+  return(mean(x, trim = gamma, na.rm = na.rm))
 }
 
 #' @title Winsorized mean
@@ -51,39 +44,39 @@ trim_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' @description \code{win_mean} calculates the winsorized mean of a sample.
 #'
 #' @template x
-#' @template gamma_winsorized_mean
+#' @template gamma_winsorized
 #' @template na_rm
 #'
 #' @return
 #' The winsorized mean.
 #'
 #' @examples
-#' ## Generate random samples
+#' # Generate random samples
 #' set.seed(108)
 #' x <- rnorm(10)
 #'
-#' ## Compute 20% winsorized mean
+#' # Compute 20% winsorized mean
 #' win_mean(x, gamma = 0.2)
 #'
 #' @export
 
 win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 
-  ## Check input arguments ----
+  # Check input arguments ----
   checkmate::assert_numeric(x, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
   checkmate::assert_number(gamma, na.ok = FALSE, lower = 0, upper = 0.5, finite = TRUE, null.ok = FALSE)
   checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
 
-  ## Remove missing values in 'x' ----
+  # Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
     return(NA_real_)
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
   }
 
-  ## Calculate winsorized mean ----
+  # Calculate winsorized mean ----
 
-  # For 'gamma == 0', the winsorized mean is identical to the sample mean
+  # For 'gamma' = 0, the winsorized mean is identical to the sample mean
   if (identical(gamma, 0)) {
     return(mean(x))
   }
@@ -118,42 +111,41 @@ win_mean <- function(x, gamma = 0.2, na.rm = FALSE) {
 #' The one-sample Hodges-Lehmann estimator.
 #'
 #' @references
-#' \insertRef{HodLeh63esti}{robTests}
+#' \insertRef{HodLeh63esti}{robnptests}
 #'
 #' @examples
-#' ## Generate random sample
+#' # Generate random sample
 #' set.seed(108)
 #' x <- rnorm(10)
 #'
-#' ## Compute one-sample Hodges-Lehmann estimator
+#' # Compute one-sample Hodges-Lehmann estimator
 #' hodges_lehmann(x)
 #'
 #' @export
 
 hodges_lehmann <- function(x, na.rm = FALSE) {
 
-  ## Check input arguments ----
+  # Check input arguments ----
   checkmate::assert_numeric(x, finite = TRUE, all.missing = FALSE, null.ok = FALSE)
   checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
 
-  ## Remove missing values in 'x' ----
+  # Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
     return(NA_real_)
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
   }
 
-  ## Calculate one-sample Hodges-Lehmann estimate ----
+  # Calculate one-sample Hodges-Lehmann estimate ----
 
   # Compute pairwise means
   x.grid <- cbind(rep(seq_along(x), each = length(x)), seq_along(x))
   x.diffs <- x.grid[x.grid[, 1] < x.grid[, 2], , drop = FALSE]
   mean.pairwise.sums <- (x[x.diffs[, 1]] + x[x.diffs[, 2]])/2
 
-  ## Hodges-Lehmann estimate
+  # Hodges-Lehmann estimate
   return(stats::median(mean.pairwise.sums))
 }
-
 
 #' @title Two-sample Hodges-Lehmann estimator
 #'
@@ -175,14 +167,14 @@ hodges_lehmann <- function(x, na.rm = FALSE) {
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{HodLeh63esti}{robTests}
+#' \insertRef{HodLeh63esti}{robnptests}
 #'
 #' @examples
-#' ## Generate random samples
+#' # Generate random samples
 #' set.seed(108)
 #' x <- rnorm(10); y <- rnorm(10)
 #'
-#' ## Compute two-sample Hodges-Lehmann estimator
+#' # Compute two-sample Hodges-Lehmann estimator
 #' hodges_lehmann_2sample(x, y)
 #'
 #' @export
@@ -202,7 +194,7 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
     y <- as.vector(stats::na.omit(y))
   }
 
-  ## Calculate two-sample Hodges-Lehmann estimate ----
+  # Calculate two-sample Hodges-Lehmann estimate ----
 
   # Compute pairwise differences between the two samples
   diff <- expand.grid(x, y)
@@ -226,30 +218,30 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 #'
 #' @details
 #' To compute the M-estimate, the iterative algorithm described in
-#' \insertCite{MarMarYoh06robu;textual}{robTests} is used.
-#' The variance is estimated as in \insertCite{Hub81robu;textual}{robTests}.
+#' \insertCite{MarMarYoh06robu;textual}{robnptests} is used.
+#' The variance is estimated as in \insertCite{Hub81robu;textual}{robnptests}.
 #'
-#' If \code{max.it} contains decimal places, it is truncated.
+#' If \code{max.it} contains decimal places, it is truncated to an integer
+#' value.
 #'
-#'
-#' @return A list containing the components:
+#' @return A named list containing the components:
 #'         \item{est}{estimated mean.}
 #'         \item{var}{estimated variance.}
 #'
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{MarMarYoh06robu}{robTests}
+#' \insertRef{MarMarYoh06robu}{robnptests}
 #'
-#' \insertRef{Hub81robu}{robTests}
+#' \insertRef{Hub81robu}{robnptests}
 #'
 #' @examples
 #'
-#' ## Generate random sample
+#' # Generate random sample
 #' set.seed(108)
 #' x <- rnorm(10)
 #'
-#' ## Computer Huber's M-estimate
+#' # Computer Huber's M-estimate
 #' m_est(x, psi = "huber")
 #'
 #' @export
@@ -264,14 +256,14 @@ m_est <- function(x, psi, k = robustbase::.Mpsi.tuning.default(psi), tol = 1e-6,
   checkmate::assert_count(max.it, na.ok = FALSE, positive = TRUE, null.ok = FALSE)
   checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
 
-  ## Remove missing values in 'x' ----
+  # Remove missing values in 'x' ----
   if (!na.rm & any(is.na(x))) {
     return(NA_real_)
   } else if (na.rm & any(is.na(x))) {
     x <- as.vector(stats::na.omit(x))
   }
 
-  ## Calculate M-estimate ----
+  # Calculate M-estimate ----
 
   # Initial estimators
   est.old <- stats::median(x)
@@ -293,7 +285,7 @@ m_est <- function(x, psi, k = robustbase::.Mpsi.tuning.default(psi), tol = 1e-6,
 
   est <- est.new
 
-  ## Variance estimation, see e.g. Huber (1981, p. 150)
+  # Variance estimation, see e.g. Huber (1981, p. 150)
   n <- length(x)
   z <- (x - est)/S
 

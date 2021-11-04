@@ -6,7 +6,7 @@
 #'
 #' @description
 #' \code{wobble} makes a discrete sample with duplicated values continuous by adding uniform noise to the
-#' discrete observations
+#' discrete observations.
 #'
 #' @template x
 #' @template y
@@ -16,64 +16,64 @@
 #' If \code{check = TRUE} the function checks whether all values in the two numeric input vectors are distinct.
 #' If so, it returns the original values, otherwise the values are made continuous by adding uniform
 #' noise. If \code{check = FALSE}, it simply determines the number of digits and adds uniform noise in order to
-#' make the sample "more" continuous
+#' make the sample "more" continuous.
 #'
-#' Precisely, we determine the minimum number of digits d_min in the sample
-#' and then add random variables from the U[-0.5 10^(-d_min), 0.5 10^(-d_min)] distribution to each
-#' of the observations.
+#' More precisely, we determine the minimum number of digits \code{d_min} in the sample
+#' and then add random numbers from the U[-0.5 10^(-\code{d_min}), 0.5 10^(-\code{d_min})]
+#' distribution to each of the observations.
 #'
 #' @return
-#' A list of length two containing the modified \code{x} and \code{y}.
+#' A named list of length two containing the modified input samples \code{x} and
+#' \code{y}.
 #'
 #' @references
-#' \insertRef{FriGat07rank}{robTests}
+#' \insertRef{FriGat07rank}{robnptests}
 #'
 #' @examples
 #' x <- rnorm(20); y <- rnorm(20); x <- round(x)
 #' wobble(x, y)
 #'
-#'
 #' @export
-
 
 wobble <- function(x, y, check = TRUE) {
 
+  # Check input arguments ----
   stopifnot("'x' is missing" = !missing(x),
-    "'y' is missing" = !missing(y)
+            "'y' is missing" = !missing(y)
   )
 
-  # Check input arguments:
   checkmate::assert_double(x, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE)
   checkmate::assert_double(y, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE)
   checkmate::assert_flag(check, na.ok = FALSE, null.ok = FALSE)
 
-
-  ## Determine number of different values in both samples and in joint sample
+  # Wobbling ----
+  # Determine number of different values in both samples and in joint sample
   no.values.x <- length(unique(x))
   no.values.y <- length(unique(y))
   no.values.xy <- length(unique(c(x, y)))
 
   if (check) {
-    ## Determine number of different values in both samples and in joint sample
+    # Determine number of different values in both samples and in joint sample
     no.values.x <- length(unique(x))
     no.values.y <- length(unique(y))
     no.values.xy <- length(unique(c(x, y)))
     if (no.values.x == length(x) & no.values.y == length(y) & no.values.xy == length(c(x, y))) {
-    ## If all values are distinct, return original observations
+    # If all values are distinct, return original observations
      return(list(x = x, y = y))
     }
   }
 
   z <- c(x, y)
 
-  ## Maximal number of digits after decimal point:
-  # this expression always returns two (part before and part after the decimal
+  # Maximal number of digits after decimal point:
+  # this expression always returns two values (part before and part after the decimal
   # point)
   # max.digits <- max(sapply(strsplit(as.character(z), "\\."), length)) - 1
   # Instead:
   digits <- as.vector(sapply(as.character(z),
                              function(x) nchar(unlist(strsplit(x, "\\."))[2])))
-  digits[is.na(digits)] <- 0 # if the values are discrete we will get NA from the strsplit
+  # if the values are discrete, 'strsplit' returns NA
+  digits[is.na(digits)] <- 0
 
   z.wobble <- z + stats::runif(length(z),
                         -0.5*10^(-min(digits)), 0.5*10^(-min(digits)))

@@ -119,9 +119,7 @@ testthat::test_that("rob_perm_statistic works correctly", {
       checkmate::expect_list(rob_perm_statistic(x = x, y = y, type = types[i]),
                              types = c("numeric", "numeric", "NULL"))
     }
-  }
 
-  for (i in seq_along(types)) {
     if (!(types[i] %in% c("HL21", "HL22"))) {
       checkmate::expect_list(rob_perm_statistic(x = c(NA, x), y = c(NA, y),
                                                 type = types[i]),
@@ -209,7 +207,6 @@ testthat::test_that("m_test_statistic works correctly", {
 
     # Create and compare snapshots of test output
     # The output of the function cannot be computed manually
-
     testthat::expect_snapshot_output(m_test_statistic(x = x, y = y,
                                                       psi = psi.funs[i]))
   }

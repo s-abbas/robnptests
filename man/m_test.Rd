@@ -25,25 +25,30 @@ m_test(
 \item{y}{a (non-empty) numeric vector of data values.}
 
 \item{alternative}{a character string specifying the alternative hypothesis,
-must be one of "two.sided" (default), "greater" or "less".}
+must be one of "two.sided" (default), "greater", or "less".}
 
-\item{delta}{a numeric value indicating the true difference in the location or scale parameter, depending
-on whether the test should be performed for a difference in location or in scale.
-The default is \code{delta = 0} for location test and \code{delta = 1} for scale test.}
+\item{delta}{a numeric value indicating the true difference in the location or
+scale parameter, depending on whether the test should be performed
+for a difference in location or in scale. The default is
+\code{delta = 0} for location test and \code{delta = 1} for scale
+test. In case of \code{var.test = TRUE}, \code{delta} represents
+the ratio of the squared scale parameters.}
 
-\item{method}{a character string specifying how the p-value is computed,
-\code{"asymptotic"} for an asymptotic test based on a normal
-approximation, \code{"permutation"} for a permutation test and
-\code{"randomization"} for a randomization test.
-The permutation test uses all splits of the joint sample into two samples
-of sizes \code{m} and \code{n}, while the randomization test draws
-\code{n.rep} random splits with replacement. If not specified explicitly,
-defaults to
-\code{"permutation"},  if \code{m < 30}, \code{n < 30} and
- \code{n.rep >= choose(m+n, m)},
-\code{"randomization"}, if \code{m < 30}, \code{n < 30} and
- \code{n.rep < choose(m+n, m)}, and
- \code{"asymptotic"}, if \code{m >= 30} and \code{n >= 30}.}
+\item{method}{a character string specifying how the p-value is computed with
+possible values \code{"asymptotic"} for an asymptotic test
+based on a normal approximation, \code{"permutation"} for a
+permutation test, and \code{"randomization"} for a randomization
+test. The permutation test uses all splits of the joint sample
+into two samples of sizes \code{m} and \code{n}, while the
+randomization test draws \code{n.rep} random splits with
+replacement. The values \code{m} and \code{n} denote the
+sample sizes.
+If not specified explicitly, defaults to
+\code{"permutation"}  if \code{m < 30}, \code{n < 30} and
+ \code{n.rep >= choose(m + n, m)},
+\code{"randomization"} if \code{m < 30}, \code{n < 30} and
+ \code{n.rep < choose(m + n, m)}, and
+ \code{"asymptotic"} if \code{m >= 30} and \code{n >= 30}.}
 
 \item{psi}{kernel used for optimization.
 Must be one of \code{"bisquare"}, \code{"hampel"} and \code{"huber"}.
@@ -58,72 +63,88 @@ calculate the randomization distribution if \code{method = "randomization"}.
 This argument is ignored if \code{method = "permutation"} or \code{method = "asymptotic"}.
 The default is \code{n.rep = 10000}.}
 
-\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether NA values in \code{x} and
+\code{y} should be stripped before the computation proceeds. The
+default is \code{na.rm = FALSE}.}
 
-\item{var.test}{logical value testing whether the samples should be compared for a difference in scale.}
+\item{var.test}{a logical value to specify if the samples should be compared
+for a difference in scale. The default is \code{var.test = FALSE}.}
 
-\item{wobble.seed}{integer value used as a seed for the random number
+\item{wobble.seed}{an integer value used as a seed for the random number
 generation in case that \code{var.test = TRUE}
 and one of the vectors \code{x} and
-\code{y} contains zeros. When no seed is specified, it is
-set randomly and printed in a warning The argument is ignored if
-\code{var.test = FALSE}.}
+\code{y} contains zeros. When no seed is specified, it
+takes a random value and printed in a warning. The argument
+is ignored if \code{var.test = FALSE}.}
 
-\item{...}{further parameters \code{c1} and \code{c2} that can be passed to
-the scale estimator \code{scaleTau2()} in order to account for
-non-normal distributions; see \insertCite{MarZam02robu;textual}{robTests}.}
+\item{...}{additional arguments \code{c1} and \code{c2} that can be passed to
+the function \code{scaleTau2()}, which is used internally for
+estimating the within-sample variability, in order to account for
+non-normal distributions; see \insertCite{MarZam02robu;textual}{robnptests}.}
 }
 \value{
-A list with class "\code{htest}" containing the following components:
+A named list with class "\code{htest}" containing the following components:
 \item{statistic}{the value of the test statistic.}
 \item{parameter}{the degrees of freedom for the test statistic.}
 \item{p.value}{the p-value for the test.}
-\item{estimate}{the Huber M-estimates of \code{x} and \code{y}.}
-\item{null.value}{the specified hypothesized value of the mean difference.}
+\item{estimate}{the M-estimates of \code{x} and \code{y}
+                (if \code{var.test = FALSE}) or of \code{log(x^2)} and
+                \code{log(y^2)} (if \code{var.test = TRUE}).}
+\item{null.value}{the specified hypothesized value of the mean difference/squared
+                  scale ratio.}
 \item{alternative}{a character string describing the alternative hypothesis.}
 \item{method}{a character string indicating how the p-value was computed.}
 \item{data.name}{a character string giving the names of the data.}
 }
 \description{
-\code{m_test} performs a two-sample location test
-             based on M-estimators.
+\code{m_test} performs a two-sample location test based on an M-estimator.
 }
 \details{
 The test statistic for this test is based on the difference of the M-estimates
-of location of \code{x} and \code{y}. We implemented three different psi-functions:
-\code{huber},\code{hampel} and \code{bisquare}. The according tuning parameter(s) can
-be set in the \code{k} argument of the function.
-The estimate of the location difference is scaled by a pooled estimate for
+of location of \code{x} and \code{y}, see \code{\link[robnptests]{m_est}}.
+
+Three different psi-functions can be used: \code{huber},\code{hampel}, and
+\code{bisquare}. The corresponding tuning parameter(s) are set by the
+argument \code{k} of the function.
+
+The estimate for the location difference is scaled by a pooled estimate for
 the standard deviation. This estimate is based on the
-tau scale estimator. The tau scale estimate is computed with the default parameter settings
-of the function \code{\link[robustbase]{scaleTau2}}. These can be changed if necessary
+tau-estimate of scale and is computed with the default parameter settings
+of the function \code{\link[robustbase]{scaleTau2}}. These can be changed if
 by setting \code{c1} and \code{c2}.
-More details are given in the vignettes \code{vignette{"robTests-vignette"}}
-and \code{vignette{"mTest-vignette"}}.
 
-We offer three versions of the test: randomization, permutation and asymptotic.
+More details on the construction of the test statistic are given in the
+vignettes \code{vignette("robnptests")} and
+\code{vignette("m_tests")}.
 
-When computing the randomization distribution based on randomly drawn splits
-with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+Three versions of the test are implemented: randomization, permutation, and
+asymptotic.
+
+The randomization distribution is based on randomly drawn splits with
+replacement. The function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robnptests}
 is used to calculate the p-value. The psi function for the the M-estimate
-is computed via the implementations in the package \code{\link[=Mpsi]{robustbase}}.
+is computed with the implementations in the package
+\href{https://cran.r-project.org/package=robustbase}{robustbase}.
 
 For the asymptotic test, the distribution of the test statistic is approximated
 by a standard normal distribution.
-However, this assumption is only justified under the normality assumption. In
-case of a non-normal distribution, the test might not keep the desired significance
-level. The test keeps the level under several distributions as long as the
-variance exists. However, under skewed distributions, it tends to be anti-conservative.
-The test statistic can be corrected by a factor which has to be determined
-individually for a specific distribution.
+However, this is only justified under the normality assumption. When the
+observations do not come from a normal distribution, the tests might not keep
+the desired significance level. Simulations indicate that the level is kept
+under symmetric distributions if the variance exists. Under skewed
+distributions, it tends to be anti-conservative, see the vignette
+\code{vignette{"m_tests"}}. The test statistic can be corrected by a
+factor which has to be determined individually for a specific distribution in
+such cases.
 
-For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
-This is achieved by log-transforming the original observations so that a potential
-scale difference appears as a location difference between the transformed samples;
-see \insertCite{Fri12onli;textual}{robTests}. The sample should not contain zeros
-to prevent problems with the necessary log-transformation. If it contains zeros,
-uniform noise is added to all variables in order to remove zeros. A warning is
-printed.
+For \code{var.test = TRUE}, the test compares the two samples for a difference
+in scale. This is achieved by log-transforming the original squared observations,
+i.e. \code{x} is replaced by \code{log(x^2)} and \code{y} by \code{log(y^2)}.
+A potential scale difference then appears as a location difference between
+the transformed samples, see \insertCite{Fri12onli;textual}{robnptests}.
+The sample should not contain zeros to prevent problems with the necessary
+log-transformation. If it contains zeros, uniform noise is added to all
+variables in order to remove zeros and a message is printed.
 
 If the sample has been modified because of zeros when \code{var.test = TRUE},
 the modified samples can be retrieved using
@@ -133,25 +154,25 @@ the modified samples can be retrieved using
 Both samples need to contain at least 5 non-missing values.
 }
 \examples{
-## Generate random samples
+# Generate random samples
 set.seed(108)
 x <- rnorm(20); y <- rnorm(20)
 
-## Asymptotic test based on Huber M-estimator
+# Asymptotic test based on Huber M-estimator
 m_test(x, y, method = "asymptotic", psi = "huber")
 
 \dontrun{
-## Randomization test based on Hampel M-estimator with 1000 random permutations
-## drawn with replacement
+# Randomization test based on Hampel M-estimator with 1000 random permutations
+# drawn with replacement
 
 m_test(x, y, method = "randomization", n.rep = 1000, psi = "hampel")
 }
 
 }
 \references{
-\insertRef{Fri12onli}{robTests}
+\insertRef{Fri12onli}{robnptests}
 
-\insertRef{MarZam02robu}{robTests}
+\insertRef{MarZam02robu}{robnptests}
 
-\insertRef{PhiSmy10perm}{robTests}
+\insertRef{PhiSmy10perm}{robnptests}
 }

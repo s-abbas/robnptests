@@ -1,6 +1,6 @@
 testthat::test_that("hl1_test works correctly", {
 
-  # testthat::skip_on_cran()
+  testthat::skip_on_cran()
   # Exemplary input vectors ----
   set.seed(108)
 
@@ -82,8 +82,7 @@ testthat::test_that("hl1_test works correctly", {
                                   n.rep = 100)$method,
                          "Randomization test based on HL1-estimator (100 random permutations)")
 
-  # Permutation test if sample size is small and 'n.rep' equals the number of
-  # possible splits
+  # Permutation test for small samples
   testthat::expect_equal(hl1_test(x = x[1:5], y = y[1:5], method = "permutation")$method,
                          "Exact permutation test based on HL1-estimator")
 
@@ -155,7 +154,7 @@ testthat::test_that("hl1_test works correctly", {
   # Test for scale difference ----
 
   # One of the samples contains zeros
-  testthat::expect_warning(hl1_test(x = x[1:10], y = c(y[1:9], 0),
+  testthat::expect_message(hl1_test(x = x[1:10], y = c(y[1:9], 0),
                                     method = "asymptotic", var.test = TRUE))
 
   # Wobbling ----
@@ -171,8 +170,8 @@ testthat::test_that("hl1_test works correctly", {
     )
   )
 
-  # Setting 'wobble' = TRUE only causes a warning
-  testthat::expect_warning(hl1_test(x = x, y = y, method = "randomization",
+  # Setting 'wobble' = TRUE only causes a message
+  testthat::expect_message(hl1_test(x = x, y = y, method = "randomization",
                                     n.rep = 1000, wobble = TRUE,
                                     wobble.seed = 1234))
 

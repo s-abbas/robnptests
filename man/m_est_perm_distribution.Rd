@@ -19,11 +19,12 @@ The default is \code{"huber"}.}
 defaults to parameters implemented in \code{\link[robustbase:lmrob.control]{.Mpsi.tuning.default(psi)}}
 in the package \href{https://cran.r-project.org/package=robustbase}{robustbase}.}
 
-\item{randomization}{logical value indicating whether the p-value should be computed from a permutation (\code{FALSE}) or a randomization (\code{TRUE}) distribution.}
+\item{randomization}{a logical value indicating whether the p-value should be
+computed from a permutation (\code{FALSE}, default) or a
+randomization (\code{TRUE}) distribution.}
 
 \item{n.rep}{an integer value specifying the number of random splits used to
 calculate the randomization distribution if \code{method = "randomization"}.
-This argument is ignored if \code{method = "permutation"} or \code{method = "asymptotic"}.
 The default is \code{n.rep = 10000}.}
 }
 \value{
@@ -35,9 +36,9 @@ Vector with permutation distribution of the test statistic specified by \code{ps
              \code{m_test_statistic}.
 }
 \details{
-Missing values in either 'x' or 'y' are not allowed.
+Missing values in either \code{x} or \code{y} are not allowed.
 }
 \references{
-\insertRef{MaeRouCro20robu}{robTests}
+\insertRef{MaeRouCro20robu}{robnptests}
 }
 \keyword{internal}

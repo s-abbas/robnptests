@@ -9,7 +9,7 @@
 #'
 #' @template x
 #' @template y
-#' @template gamma_trimmed_test
+#' @template gamma_trimmed
 #' @template alternative
 #' @template delta
 #' @template method
@@ -20,23 +20,24 @@
 #'
 #' @details
 #' The function performs Yuen's t-test based on the trimmed mean and winsorized
-#' variance \insertCite{YueDix73appr}{robTests}.
+#' variance \insertCite{YueDix73appr}{robnptests}.
 #' The amount of trimming / winsorization is set in \code{gamma} and
-#' defaults to 0.2, i.e. 20\% of the values are removed / replaced.
-#' In addition to the asymptotic distribution we provide a permutation and a randomization
-#' version of the test.
+#' defaults to 0.2, i.e. 20\% of the values are removed/replaced.
+#' In addition to the asymptotic distribution a permutation and a
+#' randomization version of the test are implemented.
 #'
 #' When computing a randomization distribution based on randomly drawn splits
-#' with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robTests}
+#' with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robnptests}
 #' is used to calculate the p-value.
 #'
-#' For \code{var.test = TRUE}, the test compares the two samples for a difference in scale.
-#' This is achieved by log-transforming the original observations so that a potential
-#' scale difference appears as a location difference between the transformed samples;
-#' see \insertCite{Fri12onli;textual}{robTests}. The sample should not contain zeros
-#' to prevent problems with the necessary log-transformation. If it contains zeros,
-#' uniform noise is added to all variables in order to remove zeros. A warning is
-#' printed.
+#' For \code{var.test = TRUE}, the test compares the two samples for a difference
+#' in scale. This is achieved by log-transforming the original squared observations,
+#' i.e. \code{x} is replaced by \code{log(x^2)} and \code{y} by \code{log(y^2)}.
+#' A potential scale difference then appears as a location difference between
+#' the transformed samples, see \insertCite{Fri12onli;textual}{robnptests}.
+#' The sample should not contain zeros to prevent problems with the necessary
+#' log-transformation. If it contains zeros, uniform noise is added to all
+#' variables in order to remove zeros and a message is printed.
 #'
 #' If the sample has been modified because of zeros when \code{var.test = TRUE},
 #' the modified samples can be retrieved using
@@ -46,31 +47,34 @@
 #' Both samples need to contain at least 5 non-missing values.
 #'
 #' @return
-#' A list with class "\code{htest}" containing the following components:
+#' A named list with class "\code{htest}" containing the following components:
 #' \item{statistic}{the value of the test statistic.}
 #' \item{parameter}{the degrees of freedom for the test statistic.}
 #' \item{p.value}{the p-value for the test.}
-#' \item{estimate}{the trimmed means of \code{x} and \code{y}.}
-#' \item{null.value}{the specified hypothesized value of the mean difference.}
+#' \item{estimate}{the trimmed means of \code{x} and \code{y}
+#'                 (if \code{var.test = FALSE}) or of \code{log(x^2)} and
+#'                 \code{log(y^2)} (if \code{var.test = TRUE}).}
+#' \item{null.value}{the specified hypothesized value of the mean difference/squared
+#'                   scale ratio.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
 #' \item{method}{a character string indicating how the p-value was computed.}
 #' \item{data.name}{a character string giving the names of the data.}
 #'
 #' @examples
-#' ## Generate random samples
+#' # Generate random samples
 #' x <- rnorm(20); y <- rnorm(20)
 #'
-#' ## Trimmed t-test
+#' # Trimmed t-test
 #' trimmed_test(x, y, gamma = 0.1)
 #'
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{YueDix73appr}{robTests}
+#' \insertRef{YueDix73appr}{robnptests}
 #'
-#' \insertRef{Yue74trim}{robTests}
+#' \insertRef{Yue74trim}{robnptests}
 #'
-#' \insertRef{Fri12onli}{robTests}
+#' \insertRef{Fri12onli}{robnptests}
 #'
 #' @export
 
@@ -165,7 +169,7 @@ trimmed_test <- function(x, y, gamma = 0.2,
   # Assign names to results
   if (var.test) {
     names(estimates) <- c("Trimmed mean of log(x^2)", "Trimmed mean of log(y^2)")
-    names(delta) <- "ratio of variances"
+    names(delta) <- "ratio of squared scale parameters"
     delta <- exp(delta)
   } else {
     names(estimates) <- c("Trimmed mean of x", "Trimmed mean of y")

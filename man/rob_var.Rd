@@ -21,7 +21,9 @@ rob_var(
 \code{"S1"}, \code{"S2"}, \code{"S3"} and \code{"S4"} for;
 see details for description of the scale estimators.}
 
-\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether NA values in \code{x} and
+\code{y} should be stripped before the computation proceeds. The
+default is \code{na.rm = FALSE}.}
 
 \item{check.for.zero}{logical value indicating a warning should be triggered
 if the scale estimate is zero. The default is
@@ -31,19 +33,19 @@ if the scale estimate is zero. The default is
 An estimate of the pooled variance of the two samples.
 }
 \description{
-\code{rob_var} calculates a variance estimator for the within-sample variance
+\code{rob_var} calculates an estimator for the within-sample variability
 based on two samples.
 }
 \details{
 For definitions of the scale estimators see Fried and Dehling (2011).
 
-If \code{check.for.zero = TRUE}, a warning is printed when the scale estimate
-is zero. This argument is only included as the function is used in
-\code{\link{rob_perm_statistic}} to computed values of robust test statistics
-where the scale estimate is a standardization. A scale estimate of zero leads
-to a non-existing test statistic, so that the corresponding test cannot be
-performed.
+If \code{check.for.zero = TRUE}, an error is thrown when the scale estimate
+is zero. This argument is only included because the function is used in
+\code{\link{rob_perm_statistic}} to compute values of robust test statistics
+where the scale estimate is used for standardization. A scale estimate of zero
+leads to a non-existing test statistic, so that the corresponding test cannot
+be performed.
 }
 \references{
-\insertRef{FriDeh11robu}{robTests}
+\insertRef{FriDeh11robu}{robnptests}
 }

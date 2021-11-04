@@ -6,3 +6,6 @@ inst/doc
 doc
 Meta
 cache
+vignettes/*.html
+vignettes/*.R
+vignettes/m_tests_cache

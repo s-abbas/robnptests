@@ -1,1 +1,2 @@
-#' @param distribution numeric vector with permutation distribution.
+#' @param distribution a numeric vector with the permutation/randomization
+#'                     distribution.

@@ -2,10 +2,7 @@
 % Please edit documentation in R/permDistribution.R
 \name{perm_distribution}
 \alias{perm_distribution}
-\title{Permutation Distribution for robust statistics
-
-\code{perm_distribution()} calculates the permutation distribution for
-several test statistics.}
+\title{Permutation distribution for robust test statistics}
 \usage{
 perm_distribution(x, y, type, randomization = FALSE, n.rep = 10000)
 }
@@ -14,30 +11,31 @@ perm_distribution(x, y, type, randomization = FALSE, n.rep = 10000)
 
 \item{y}{a (non-empty) numeric vector of data values.}
 
-\item{type}{desired test statistic. It must be one of \code{"HL11"} (default),
-\code{"HL12", "HL21", "HL22", "MED1"}, and \code{"MED2"},
- where "HL1", "HL2" and "MED" specify the location estimator
- and the numbers \code{1} and \code{2} the scale estimator.
- See the vignette (\code{vignette("robTests-vignette")}) for more
- information.}
+\item{type}{a character string specifying the desired test statistic. It must
+be one of \code{"HL11"} (default),
+\code{"HL12", "HL21", "HL22", "MED1"}, and \code{"MED2"}, where
+\code{"HL1"}, \code{"HL2"} and \code{"MED"} specify the location
+estimator and the numbers \code{1} and \code{2} the scale
+estimator, see the vignette
+(\code{vignette("robnptests")}) for more information.}
 
-\item{randomization}{logical value indicating whether the p-value should be computed from a permutation (\code{FALSE}) or a randomization (\code{TRUE}) distribution.}
+\item{randomization}{a logical value indicating whether the p-value should be
+computed from a permutation (\code{FALSE}, default) or a
+randomization (\code{TRUE}) distribution.}
 
 \item{n.rep}{an integer value specifying the number of random splits used to
 calculate the randomization distribution if \code{method = "randomization"}.
-This argument is ignored if \code{method = "permutation"} or \code{method = "asymptotic"}.
 The default is \code{n.rep = 10000}.}
 }
 \value{
-Vector with permutation distribution of the test statistic specified by \code{type}.
+Vector with permutation distribution of the test statistic specified
+by \code{type}.
 }
 \description{
-Permutation Distribution for robust statistics
-
 \code{perm_distribution()} calculates the permutation distribution for
 several test statistics.
 }
 \details{
-Missing values in either 'x' or 'y' are not allowed.
+Missing values in either \code{x} or \code{y} are not allowed.
 }
 \keyword{internal}

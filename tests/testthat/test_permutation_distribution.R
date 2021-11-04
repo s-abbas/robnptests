@@ -1,16 +1,13 @@
-
-## Computation of permutation distribution ----
+# Computation of permutation distribution ----
 testthat::test_that("perm_distribution works correctly", {
 
-  # testthat::skip_on_cran()
+  testthat::skip_on_cran()
 
-  ## Generate exemplary input vectors
+  # Exemplary input vectors ----
   x <- 1:5
   y <- 6:10
   m <- length(x)
   n <- length(y)
-
-
 
   types <- c("HL11", "HL12", "HL21", "HL22", "MED1", "MED2")
 
@@ -23,9 +20,8 @@ testthat::test_that("perm_distribution works correctly", {
     # Permutation distribution
     checkmate::expect_numeric(perm_distribution(x = x, y = y, type = type), len = choose(m + n, m))
 
-    # Check that it does not accidentally calculate a randomization distribution if
-
-    # we e.g. hand over n.rep
+    # Check that it does not accidentally calculate a randomization distribution
+    # if we e.g. hand over n.rep
     testthat::expect_equal(perm_distribution(x = x, y = y, type = type, randomization = FALSE),
                            perm_distribution(x = x, y = y, type = type, n.rep = 1000))
     # Randomization distribution
@@ -40,26 +36,25 @@ testthat::test_that("perm_distribution works correctly", {
   }
 })
 
-## Computation of permutation distribution for M-test statistics ----
+# Computation of permutation distribution for M-test statistics ----
 testthat::test_that("m_est_perm_distribution works correctly", {
 
-  # testthat::skip_on_cran()
+  testthat::skip_on_cran()
 
-  ## Generate exemplary input vectors
+  # Exemplary input vectors ----
   x <- 1:5
   y <- 6:10
   m <- length(x)
   n <- length(y)
-
 
   psis <- c("huber", "hampel", "bisquare")
   ks <- list("huber" = 1.345, "hampel" = c(1, 2, 3), "bisquare" = 1.345)
 
   for (psi in psis) {
 
-    ## Check output ----
+    # Check output ----
 
-    ## The output should be a numeric vector
+    # The output should be a numeric vector
 
     # Permutation distribution
     checkmate::expect_numeric(m_est_perm_distribution(x = x, y = y, psi = psi, k = ks[[psi]]), len = choose(m + n, m))
@@ -82,17 +77,17 @@ testthat::test_that("m_est_perm_distribution works correctly", {
 
 })
 
-## Computation of permutation p-value ----
+# Computation of permutation p-value ----
 testthat::test_that("calc_perm_p_value works correctly", {
 
-  # testthat::skip_on_cran()
+  testthat::skip_on_cran()
 
-  ## Check output ----
+  # Check output ----
 
   distribution <- 1:252
   statistic <- 50
 
-  ## The output should be a numeric scalar
+  # The output should be a numeric scalar
 
   # Permutation distribution
 
@@ -153,7 +148,6 @@ testthat::test_that("calc_perm_p_value works correctly", {
 
 
   # Randomization distribution
-  # We trust the permp-function from statmod for calculation of the randomization p-values
+  # We trust the permp-function from statmod for calculation of the
+  # randomization p-values
 })
-
-

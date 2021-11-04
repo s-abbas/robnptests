@@ -28,10 +28,12 @@ in the package \href{https://cran.r-project.org/package=robustbase}{robustbase}.
 
 \item{max.it}{the maximum number of iterations. The default is 15.}
 
-\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether NA values in \code{x} and
+\code{y} should be stripped before the computation proceeds. The
+default is \code{na.rm = FALSE}.}
 }
 \value{
-A list containing the components:
+A named list containing the components:
         \item{est}{estimated mean.}
         \item{var}{estimated variance.}
 }
@@ -41,23 +43,24 @@ for different psi functions.
 }
 \details{
 To compute the M-estimate, the iterative algorithm described in
-\insertCite{MarMarYoh06robu;textual}{robTests} is used.
-The variance is estimated as in \insertCite{Hub81robu;textual}{robTests}.
+\insertCite{MarMarYoh06robu;textual}{robnptests} is used.
+The variance is estimated as in \insertCite{Hub81robu;textual}{robnptests}.
 
-If \code{max.it} contains decimal places, it is truncated.
+If \code{max.it} contains decimal places, it is truncated to an integer
+value.
 }
 \examples{
 
-## Generate random sample
+# Generate random sample
 set.seed(108)
 x <- rnorm(10)
 
-## Computer Huber's M-estimate
+# Computer Huber's M-estimate
 m_est(x, psi = "huber")
 
 }
 \references{
-\insertRef{MarMarYoh06robu}{robTests}
+\insertRef{MarMarYoh06robu}{robnptests}
 
-\insertRef{Hub81robu}{robTests}
+\insertRef{Hub81robu}{robnptests}
 }

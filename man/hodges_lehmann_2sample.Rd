@@ -11,7 +11,9 @@ hodges_lehmann_2sample(x, y, na.rm = FALSE)
 
 \item{y}{a (non-empty) numeric vector of data values.}
 
-\item{na.rm}{logical value indicating whether NA values in x and y should be stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether NA values in \code{x} and
+\code{y} should be stripped before the computation proceeds. The
+default is \code{na.rm = FALSE}.}
 }
 \value{
 The two-sample Hodges-Lehmann estimator.
@@ -27,14 +29,14 @@ The two-sample Hodges-Lehmann estimator for two samples \code{x}
 \deqn{med(|x_i - y_j|, 1 \le i \le m, 1 \le j \le n).}
 }
 \examples{
-## Generate random samples
+# Generate random samples
 set.seed(108)
 x <- rnorm(10); y <- rnorm(10)
 
-## Compute two-sample Hodges-Lehmann estimator
+# Compute two-sample Hodges-Lehmann estimator
 hodges_lehmann_2sample(x, y)
 
 }
 \references{
-\insertRef{HodLeh63esti}{robTests}
+\insertRef{HodLeh63esti}{robnptests}
 }

@@ -11,33 +11,33 @@ wobble(x, y, check = TRUE)
 
 \item{y}{a (non-empty) numeric vector of data values.}
 
-\item{check}{logical value indicating whether the samples should be checked
+\item{check}{a logical value indicating whether the samples should be checked
 for bindings prior to adding uniform noise or not, defaults to
 \code{TRUE}.}
 }
 \value{
-A list of length two containing the modified \code{x} and \code{y}.
+A named list of length two containing the modified input samples \code{x} and
+\code{y}.
 }
 \description{
 \code{wobble} makes a discrete sample with duplicated values continuous by adding uniform noise to the
-discrete observations
+discrete observations.
 }
 \details{
 If \code{check = TRUE} the function checks whether all values in the two numeric input vectors are distinct.
 If so, it returns the original values, otherwise the values are made continuous by adding uniform
 noise. If \code{check = FALSE}, it simply determines the number of digits and adds uniform noise in order to
-make the sample "more" continuous
+make the sample "more" continuous.
 
-Precisely, we determine the minimum number of digits d_min in the sample
-and then add random variables from the U[-0.5 10^(-d_min), 0.5 10^(-d_min)] distribution to each
-of the observations.
+More precisely, we determine the minimum number of digits \code{d_min} in the sample
+and then add random numbers from the U[-0.5 10^(-\code{d_min}), 0.5 10^(-\code{d_min})]
+distribution to each of the observations.
 }
 \examples{
 x <- rnorm(20); y <- rnorm(20); x <- round(x)
 wobble(x, y)
 
-
 }
 \references{
-\insertRef{FriGat07rank}{robTests}
+\insertRef{FriGat07rank}{robnptests}
 }
