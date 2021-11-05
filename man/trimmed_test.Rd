@@ -48,7 +48,7 @@ If not specified explicitly, defaults to
 \item{delta}{a numeric value indicating the true difference in the location or
 scale parameter, depending on whether the test should be performed
 for a difference in location or in scale. The default is
-\code{delta = 0} for location test and \code{delta = 1} for scale
+\code{delta = 0} for a location test and \code{delta = 1} for a scale
 test. In case of \code{var.test = TRUE}, \code{delta} represents
 the ratio of the squared scale parameters.}
 
@@ -68,8 +68,8 @@ for a difference in scale. The default is \code{var.test = FALSE}.}
 generation in case of \code{wobble = TRUE} or when
 \code{var.test = TRUE} with one of the vectors \code{x} and
 \code{y} containing zeros. When no seed is specified, it
-takes a random valueand printed in a message. The argument
-is ignored if \code{var.test = FALSE} and \code{wobble = FALSE}.}
+is chosen randomly and printed in a message. The argument
+is ignored if \code{var.test = FALSE} and/or \code{wobble = FALSE}.}
 }
 \value{
 A named list with class "\code{htest}" containing the following components:
@@ -91,7 +91,7 @@ A named list with class "\code{htest}" containing the following components:
 \details{
 The function performs Yuen's t-test based on the trimmed mean and winsorized
 variance \insertCite{YueDix73appr}{robnptests}.
-The amount of trimming / winsorization is set in \code{gamma} and
+The amount of trimming/winsorization is set in \code{gamma} and
 defaults to 0.2, i.e. 20\% of the values are removed/replaced.
 In addition to the asymptotic distribution a permutation and a
 randomization version of the test are implemented.
@@ -118,6 +118,7 @@ Both samples need to contain at least 5 non-missing values.
 }
 \examples{
 # Generate random samples
+set.seed(108)
 x <- rnorm(20); y <- rnorm(20)
 
 # Trimmed t-test

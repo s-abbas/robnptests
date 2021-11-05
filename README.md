@@ -6,7 +6,7 @@ robnptests
 [![Codecov test coverage](https://codecov.io/gh/s-abbas/robnptests/branch/develop/graph/badge.svg)](https://app.codecov.io/gh/s-abbas/robnptests?branch=develop)
 <!-- badges: end -->
 
-The R package `robnptests` contains different robust and non-parametric tests for the two-sample location problem. The tests allow for comparisons of either the location or the scale parameters of two random samples.
+The R package `robnptests` contains different robust and nonparametric tests for the two-sample location problem. The tests allow for comparisons of either the location or the scale parameters of two random samples.
 
 Installation
 ------------
@@ -32,7 +32,7 @@ library(robnptests)
 Scope and Usage
 ---------------
 
-The robust and non-parametric tests in this R package follow the construction principle of the popular t-test: A robust estimate for the location difference of the two samples is divided by a robust estimate of scale. 
+The robust and nonparametric tests in this R package follow the construction principle of the popular t-test: A robust estimate for the location difference of the two samples is divided by a robust estimate of scale. 
 The p-values can either be computed using the permutation principle, the randomization principle, or the asymptotic distribution of the estimators. 
 If the principle to compute the p-value is not specified by the user, it will be selected automatically depending on the sample size. 
 The functions used to compute the location and scale estimates are also made available to the user.

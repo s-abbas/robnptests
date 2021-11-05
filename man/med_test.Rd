@@ -29,7 +29,7 @@ must be one of "two.sided" (default), "greater", or "less".}
 \item{delta}{a numeric value indicating the true difference in the location or
 scale parameter, depending on whether the test should be performed
 for a difference in location or in scale. The default is
-\code{delta = 0} for location test and \code{delta = 1} for scale
+\code{delta = 0} for a location test and \code{delta = 1} for a scale
 test. In case of \code{var.test = TRUE}, \code{delta} represents
 the ratio of the squared scale parameters.}
 
@@ -77,8 +77,8 @@ The default is \code{wobble = FALSE}.}
 generation in case of \code{wobble = TRUE} or when
 \code{var.test = TRUE} with one of the vectors \code{x} and
 \code{y} containing zeros. When no seed is specified, it
-takes a random valueand printed in a message. The argument
-is ignored if \code{var.test = FALSE} and \code{wobble = FALSE}.}
+is chosen randomly and printed in a message. The argument
+is ignored if \code{var.test = FALSE} and/or \code{wobble = FALSE}.}
 }
 \value{
 A named list with class "\code{htest}" containing the following components:

@@ -21,7 +21,7 @@
 #' @details
 #' The function performs Yuen's t-test based on the trimmed mean and winsorized
 #' variance \insertCite{YueDix73appr}{robnptests}.
-#' The amount of trimming / winsorization is set in \code{gamma} and
+#' The amount of trimming/winsorization is set in \code{gamma} and
 #' defaults to 0.2, i.e. 20\% of the values are removed/replaced.
 #' In addition to the asymptotic distribution a permutation and a
 #' randomization version of the test are implemented.
@@ -62,6 +62,7 @@
 #'
 #' @examples
 #' # Generate random samples
+#' set.seed(108)
 #' x <- rnorm(20); y <- rnorm(20)
 #'
 #' # Trimmed t-test

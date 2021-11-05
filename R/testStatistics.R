@@ -93,7 +93,7 @@ trimmed_t <- function(x, y, gamma = 0.2, na.rm = FALSE) {
 #'          form \deqn{D_i/S_j} where the D_i, i = 1,...,3, are different
 #'          estimators of location and the S_j, j = 1,...,4, are estimates for
 #'          the mutual sample scale. See \insertCite{FriDeh11robu;textual}{robnptests}
-#'          or the vignette (\code{vignette("robnptests")}) for details.
+#'          or the vignette \code{vignette("robnptests")} for details.
 #'
 #' @return A named list containing the following components:
 #'         \item{statistic}{the selected test statistic.}
@@ -190,12 +190,13 @@ rob_perm_statistic <- function(x, y,
 #'
 #' @details
 #' For details on how the test statistic is constructed, we refer to the
-#' vignette (\code{vignette("m_tests"})
+#' vignette \code{vignette("m_tests")}
 #'
 #' @return A named list containing the following components:
 #'         \item{statistic}{standardized test statistic.}
 #'         \item{estimates}{M-estimates of location for both \code{x} and \code{y}.}
 #'
+#' @examples
 #' # Generate random samples
 #' set.seed(108)
 #' x <- rnorm(20); y <- rnorm(20)
