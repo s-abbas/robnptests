@@ -3,7 +3,7 @@ robnptests
 ========
 
 <!-- badges: start -->
-[![Codecov test coverage](https://codecov.io/gh/s-abbas/robnptests/branch/develop/graph/badge.svg)](https://codecov.io/gh/s-abbas/robnptests?branch=develop)
+[![Codecov test coverage](https://codecov.io/gh/s-abbas/robnptests/branch/develop/graph/badge.svg)](https://app.codecov.io/gh/s-abbas/robnptests?branch=develop)
 <!-- badges: end -->
 
 The R package `robnptests` contains different robust and non-parametric tests for the two-sample location problem. The tests allow for comparisons of either the location or the scale parameters of two random samples.
