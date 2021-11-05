@@ -18,7 +18,7 @@ rob_var(
 \item{y}{a (non-empty) numeric vector of data values.}
 
 \item{type}{character that specifies the estimator for the variance, can be
-\code{"S1"}, \code{"S2"}, \code{"S3"} and \code{"S4"} for;
+\code{"S1"}, \code{"S2"}, \code{"S3"} and \code{"S4"};
 see details for description of the scale estimators.}
 
 \item{na.rm}{a logical value indicating whether NA values in \code{x} and
@@ -37,7 +37,7 @@ An estimate of the pooled variance of the two samples.
 based on two samples.
 }
 \details{
-For definitions of the scale estimators see Fried and Dehling (2011).
+For definitions of the scale estimators, see Fried and Dehling (2011).
 
 If \code{check.for.zero = TRUE}, an error is thrown when the scale estimate
 is zero. This argument is only included because the function is used in

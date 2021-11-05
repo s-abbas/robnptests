@@ -24,8 +24,8 @@
 #' The test statistic for this test is based on the difference of the M-estimates
 #' of location of \code{x} and \code{y}, see \code{\link[robnptests]{m_est}}.
 #'
-#' Three different psi-functions can be used: \code{huber},\code{hampel}, and
-#' \code{bisquare}. The corresponding tuning parameter(s) are set by the
+#' Three different psi-functions can be used: \code{huber}, \code{hampel}, and
+#' \code{bisquare}. The corresponding tuning parameter(s) can be set by the
 #' argument \code{k} of the function.
 #'
 #' The estimate for the location difference is scaled by a pooled estimate for
@@ -43,7 +43,7 @@
 #'
 #' The randomization distribution is based on randomly drawn splits with
 #' replacement. The function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robnptests}
-#' is used to calculate the p-value. The psi function for the the M-estimate
+#' is used to calculate the p-value. The psi-function for the the M-estimate
 #' is computed with the implementations in the package
 #' \href{https://cran.r-project.org/package=robustbase}{robustbase}.
 #'
@@ -54,7 +54,7 @@
 #' the desired significance level. Simulations indicate that the level is kept
 #' under symmetric distributions if the variance exists. Under skewed
 #' distributions, it tends to be anti-conservative, see the vignette
-#' \code{vignette{"m_tests"}}. The test statistic can be corrected by a
+#' \code{vignette ("m_tests")}. The test statistic can be corrected by a
 #' factor which has to be determined individually for a specific distribution in
 #' such cases.
 #'

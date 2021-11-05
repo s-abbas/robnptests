@@ -30,7 +30,7 @@ must be one of "two.sided" (default), "greater", or "less".}
 \item{delta}{a numeric value indicating the true difference in the location or
 scale parameter, depending on whether the test should be performed
 for a difference in location or in scale. The default is
-\code{delta = 0} for location test and \code{delta = 1} for scale
+\code{delta = 0} for a location test and \code{delta = 1} for a scale
 test. In case of \code{var.test = TRUE}, \code{delta} represents
 the ratio of the squared scale parameters.}
 
@@ -74,7 +74,7 @@ for a difference in scale. The default is \code{var.test = FALSE}.}
 generation in case that \code{var.test = TRUE}
 and one of the vectors \code{x} and
 \code{y} contains zeros. When no seed is specified, it
-takes a random value and printed in a warning. The argument
+is chosen randomly and printed in a message. The argument
 is ignored if \code{var.test = FALSE}.}
 
 \item{...}{additional arguments \code{c1} and \code{c2} that can be passed to
@@ -103,8 +103,8 @@ A named list with class "\code{htest}" containing the following components:
 The test statistic for this test is based on the difference of the M-estimates
 of location of \code{x} and \code{y}, see \code{\link[robnptests]{m_est}}.
 
-Three different psi-functions can be used: \code{huber},\code{hampel}, and
-\code{bisquare}. The corresponding tuning parameter(s) are set by the
+Three different psi-functions can be used: \code{huber}, \code{hampel}, and
+\code{bisquare}. The corresponding tuning parameter(s) can be set by the
 argument \code{k} of the function.
 
 The estimate for the location difference is scaled by a pooled estimate for
@@ -122,7 +122,7 @@ asymptotic.
 
 The randomization distribution is based on randomly drawn splits with
 replacement. The function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robnptests}
-is used to calculate the p-value. The psi function for the the M-estimate
+is used to calculate the p-value. The psi-function for the the M-estimate
 is computed with the implementations in the package
 \href{https://cran.r-project.org/package=robustbase}{robustbase}.
 
@@ -133,7 +133,7 @@ observations do not come from a normal distribution, the tests might not keep
 the desired significance level. Simulations indicate that the level is kept
 under symmetric distributions if the variance exists. Under skewed
 distributions, it tends to be anti-conservative, see the vignette
-\code{vignette{"m_tests"}}. The test statistic can be corrected by a
+\code{vignette ("m_tests")}. The test statistic can be corrected by a
 factor which has to be determined individually for a specific distribution in
 such cases.
 

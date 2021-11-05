@@ -22,7 +22,7 @@ be one of \code{"HL11"} (default),
 \code{"HL1"}, \code{"HL2"} and \code{"MED"} specify the location
 estimator and the numbers \code{1} and \code{2} the scale
 estimator, see the vignette
-(\code{vignette("robnptests")}) for more information.}
+\code{vignette("robnptests")} for more information.}
 
 \item{na.rm}{a logical value indicating whether NA values in \code{x} and
 \code{y} should be stripped before the computation proceeds. The
@@ -43,7 +43,7 @@ The test statistics returned by \code{rob_perm_statistic} are of the
          form \deqn{D_i/S_j} where the D_i, i = 1,...,3, are different
          estimators of location and the S_j, j = 1,...,4, are estimates for
          the mutual sample scale. See \insertCite{FriDeh11robu;textual}{robnptests}
-         or the vignette (\code{vignette("robnptests")}) for details.
+         or the vignette \code{vignette("robnptests")} for details.
 }
 \examples{
 # Generate random samples

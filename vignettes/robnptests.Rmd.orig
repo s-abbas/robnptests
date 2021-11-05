@@ -306,7 +306,7 @@ Replacing $\hat{\Delta}^{(\text{HL2})}$ by $\hat{\Delta}^{(\text{HL1})}$ gives u
 @FriDeh11robu recommend the asymptotic tests for sample sizes $m, n \geq 30$ to hold the significance level $\alpha = 0.05$.
 
 #### Asymptotic M-test
-For details on the asymptotic M-test see the vignette [Construction of the M-tests](m_tests.pdf).
+For details on the asymptotic M-test see the vignette [Construction of the M-tests](m_tests.html).
 
 #### Asymptotic trimmed t-test
 For the trimmed t-test, the asymptotic distribution of the test statistic is approximated by a $t_{h_x + h_y - 2}$-distribution. Details can be found in @YueDix73appr.

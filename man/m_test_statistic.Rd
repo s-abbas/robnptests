@@ -28,13 +28,6 @@ non-normal distributions; see \insertCite{MarZam02robu;textual}{robnptests}.}
 A named list containing the following components:
         \item{statistic}{standardized test statistic.}
         \item{estimates}{M-estimates of location for both \code{x} and \code{y}.}
-
-# Generate random samples
-set.seed(108)
-x <- rnorm(20); y <- rnorm(20)
-
-# Compute Huber-M-statistic
-m_test_statistic(x, y, psi = "huber")
 }
 \description{
 \code{m_test_statistic} calculates the test statistics for
@@ -42,5 +35,14 @@ tests based on M-estimators.
 }
 \details{
 For details on how the test statistic is constructed, we refer to the
-vignette (\code{vignette("m_tests"})
+vignette \code{vignette("m_tests")}
+}
+\examples{
+# Generate random samples
+set.seed(108)
+x <- rnorm(20); y <- rnorm(20)
+
+# Compute Huber-M-statistic
+m_test_statistic(x, y, psi = "huber")
+
 }
