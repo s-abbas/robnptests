@@ -1,6 +1,6 @@
 ---
 title: "Getting started with `robnptests`"
-date: "2021-11-05"
+date: "2021-11-07"
 author: Sermad Abbas, Barbara Brune, Roland Fried
 output:
   rmarkdown::html_document:
@@ -130,7 +130,7 @@ Using the difference of the sample medians, i.e.
    \hat{\Delta}^{(\text{MED})} = \text{median}\left(x_1, \ldots, x_m\right) - \text{median}\left(y_1, \ldots, y_n\right)
 \end{align*}
 
-is an obvious cancidate to estimate the location difference $\Delta$ robustly.
+is an obvious candidate to estimate the location difference $\Delta$ robustly.
 
 Tests based on this estimator can be called with the function `med_test`.
 

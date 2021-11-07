@@ -40,7 +40,7 @@ computing the null distribution of a two-sample test.
 When the principle is specified by the user, i.e. \code{method} contains only
 one element, the selected method is returned. Otherwise, if the user
 does not specify the principle, it depends on the sample size: When both
-samples contain more than 30 observations, an asymptotic test is perfomed.
+samples contain more than 30 observations, an asymptotic test is performed.
 If one of the samples contains less than 30 observations, the null
 distribution is computed via the randomization principle. The number of
 replications \code{n.rep} for the randomization test needs to be specified

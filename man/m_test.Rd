@@ -133,7 +133,7 @@ observations do not come from a normal distribution, the tests might not keep
 the desired significance level. Simulations indicate that the level is kept
 under symmetric distributions if the variance exists. Under skewed
 distributions, it tends to be anti-conservative, see the vignette
-\code{vignette ("m_tests")}. The test statistic can be corrected by a
+\code{vignette("m_tests")}. The test statistic can be corrected by a
 factor which has to be determined individually for a specific distribution in
 such cases.
 

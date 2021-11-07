@@ -2,21 +2,22 @@
 ## Add random noise if too many values in the samples are equal
 ## ----------------------------------------------------------------------------
 
-#' @title Function that undiscretizes rounded samples
+#' @title Add random noise to remove ties
 #'
 #' @description
-#' \code{wobble} makes a discrete sample with duplicated values continuous by adding uniform noise to the
-#' discrete observations.
+#' \code{wobble} adds noise from a continuous uniform distribution to the
+#' observations to remove ties.
 #'
 #' @template x
 #' @template y
 #' @template check_wobble
 #'
 #' @details
-#' If \code{check = TRUE} the function checks whether all values in the two numeric input vectors are distinct.
-#' If so, it returns the original values, otherwise the values are made continuous by adding uniform
-#' noise. If \code{check = FALSE}, it simply determines the number of digits and adds uniform noise in order to
-#' make the sample "more" continuous.
+#' If \code{check = TRUE} the function checks whether all values in the two numeric
+#' input vectors are distinct. If so, it returns the original values, otherwise
+#' the ties are removed by adding noise from a continuous uniform distribution
+#' to all observations. If \code{check = FALSE}, it simply determines the number
+#' of digits and adds uniform noise.
 #'
 #' More precisely, we determine the minimum number of digits \code{d_min} in the sample
 #' and then add random numbers from the U[-0.5 10^(-\code{d_min}), 0.5 10^(-\code{d_min})]
