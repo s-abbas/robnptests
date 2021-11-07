@@ -8,8 +8,8 @@ Authors@R: c(person(given = "Sermad", family = "Abbas",
     person(given = "Barbara", family = "Brune", email = "bbrune@statistik.tu-dortmund.de", role = "aut", 
     comment = c(ORCID = "0000-0002-3154-8445")),
     person(given = "Roland", family = "Fried", email = "fried@statistik.tu-dortmund.de", role = "aut"))
-Author: Sermad Abbas [aut, cre],
-  Barbara Brune [aut],
+Author: Sermad Abbas [aut, cre] (<https://orcid.org/0000-0001-9162-9792>),
+  Barbara Brune [aut] (<https://orcid.org/0000-0002-3154-8445>),
   Roland Fried [aut]
 Maintainer: Sermad Abbas <abbas@statistik.tu-dortmund.de>
 BugReports: https://github.com/s-abbas/robnptests/issues
