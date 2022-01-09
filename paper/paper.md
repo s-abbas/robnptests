@@ -8,7 +8,7 @@ authors:
   name: Barbara Brune
 - affiliation: 1
   name: Roland Fried
-date: 26 September 2021
+date: 09 January 2021
 output:
   pdf_document: default
   html_document: default
@@ -24,91 +24,98 @@ affiliations:
 bibliography: REFERENCES.bib
 ---
 
-
-
 # Summary
-The package `robnptests` is a compilation of two-sample tests, which is based on two criteria: The tests are (i) robust against outliers and (ii) (approximately) distribution free. 
+The package `robnptests` is a compilation of two-sample tests  based on two criteria: The tests are (i) robust against outliers and (ii) (approximately) distribution free. 
 Regarding the latter aspect, we implemented tests that keep an intended significance level and provide a reasonably high efficiency, both  under a variety of continuous distributions.
+Robustness is achieved by using test statistics that are based on robust location and scale measures. 
+To make the tests distribution free, we implemented the permutation and the randomization principle to compute the $p$-values.
+Both are mainly suited for small to moderate sample sizes as the computation speed for the $p$-values decreases with increasing size of the samples.
+For large samples, asymptotic tests may be used to increase the computational speed.
+However, the performance in terms of test size and power under some distributional shapes may decrease.
 
+In practice, observations may be rounded to a few decimal places.
+This can cause a loss in efficiency or a violation of the significance level.
+If ties occur, it may be impossible to compute the robust test statistics as the scale measures can become zero.
+Therefore, we implemented the idea of `wobbling` [@FriGat07rank], where we add random noise to dampen the effect of the discretization due to rounding.
+
+In what follows, we give a brief description of the package's contents.
+More details can be found in the introductory vignette of the package, which can be called by `vignette("robnptests-vignette")`, and the cited papers.
+
+# Data situation
 We consider two samples of independent and identically distributed (i.i.d.) random variables $X_1, ..., X_m$ and $Y_1, ..., Y_n$, respectively. 
 The underlying distributions are assumed to be continuous with cumulative distribution functions $F_X$ and $F_Y$.
 
-The tests are designed for either one of the following cases:
+The tests are can be used for either one of the following cases:
 
-1. Under the assumption that the scale parameters of both distributions are equal, i.e. $F_X(x) = F_Y(x + \Delta)$, $\Delta \in \mathbb{R}$, the tests can be used to detect a location difference between the samples.
-2. If the location parameters are equal with unequal scale parameters, i.e. $F_X(x) = F_Y(x/\theta)$, $\theta > 0$, the tests are designed to identify a scale difference between the samples.
-
-In practice, observations may be rounded to a few decimal places.
-This may cause a loss in efficiency or a violation of the significance level.
-Therefore, we implemented the idea of `wobbling` [@FriGat07rank], which is the addition of random noise to dampen the effect of the discretization due to rounding.
-
-In what follows, we give a brief description of the package's contents.
-More details can be found in the introductory vignette of the package. It be called by `vignette("robnptests-vignette")`.
+1. Assuming that the parameters of both distributions are equal while the location parameters may be unequal, i.e. $F_X(x) = F_Y(x + \Delta)$, $\Delta \in \mathbb{R}$, the tests can be used to detect a location difference between the samples.
+2. For equal location parameters with possibly unequal scale parameters, i.e. $F_X(x) = F_Y(x/\theta)$, $\theta > 0$, transforming the observations makes it possible to identify a change in the scale parameters.
 
 # Statement of need
 A popular test for the location setting is the two-sample $t$-test.
-It is considered to be robust against deviations from the normality assumption due to the central limit theorem and holds the specified significance level.
-However, there can be much more powerful tests under non-normal distributions [@Wil03appl].
-In addition, particularly for small samples, the test is prone to outliers [@FriDeh11robu].
-Distribution-free tests, like the two-sample Wilcoxon rank-sum test, can be nearly as powerful as the $t$-test under normality and may surpass it under non-normal distributions.
-Still, they can also be vulnerable to outliers [@FriGat07rank].
-Our package contains two-sample tests which are (nearly) distribution free and robust against outliers, which makes them better suited for outlier-corrupted samples with an unknown data-generating distribution.
+It is considered to be robust against deviations from the normality assumption by keeping the specified significance level due to the central limit theorem.
+However, non-normality can result in a loss of power [@Wil03appl].
+In addition, particularly for small samples, the $t$-test is prone to outliers [@FriDeh11robu].
+Distribution-free tests, like the two-sample Wilcoxon rank-sum test, can be nearly as powerful as the $t$-test under normality and may have higher power under non-normality.
+Still, they also can be vulnerable to outliers [@FriGat07rank].
+The two-sample tests in `robnptests` combine (approximate) distribution independence and robustness against outliers.
+Thus, they are better suited for outlier-corrupted samples from unknown data-generating distributions.
 At the same time, such tests can be nearly as powerful as popular procedures like the aforementioned $t$-test or the Wilcoxon test on uncontaminated samples.
 
 Figure 1 compares the power of the $t$-test, the Wilcoxon test and two robust tests: one based on the one-sample Hodges-Lehmann estimator (HL1 test) [@HodLeh63esti], and one based on Huber's M-estimator [@Hub64robu] for a fixed location difference between the samples and a single outlier of increasing size.
-The power of the $t$-test decreases to zero, while the power drop of the Wilcoxon test and both robust tests is bounded. The robust tests provide a higher power.
-The differences between the Wilcoxon test and our robust tests may become more apparent when more outliers are involved [@FriDeh11robu].
+The power of the $t$-test decreases to zero, while the loss in power of the Wilcoxon test and both robust tests is bounded. 
+The robust tests provide a higher power than the Wilcoxon test.
+The differences between the Wilcoxon test and robust tests like those in the example can become more apparent when more outliers are involved [@FriDeh11robu].
   
-![Power of the two-sample $t$-test, the Wilcoxon rank sum test and a robust test based on the one-sample Hodges-Lehmann estimator on two samples of size $m = n = 10$ from two normal distributions with a location difference of $\Delta = 2$ and a single outlier of increasing size.](img/fig1_-_power_under_outliers.pdf){width=4in height=4in}
+![Power of the two-sample $t$-test, the Wilcoxon rank sum test, and a robust test based on the one-sample Hodges-Lehmann estimator on two samples of size $m = n = 10$ from two normal distributions with a location difference of $\Delta = 2$ and a single outlier of increasing size.](img/fig1_-_power_under_outliers.pdf){width=4in height=4in}
 
-
-When comparing variances, the tests can be more efficient under asymmetry or outliers than commonly used tests like the F-test, the Mood test, or the Ansari-Bradley tests.
-However, the efficiency may be lower under symmetric distributions.
-
-
-## Applications
-
-The package contains tests that were used in a variety of applications to identify structural breaks in outlier-contaminated time series.
-In @AbbFriGat16dete, intensity changes in image sequences generated by a virus sensor were automatically detected by applying the tests to the individual pixel time series of the sequence.
-Moreover, several of the implemented tests serve as a basis for (approximately) distribution-free, robust control charts for time series with a time-varying signal [@AbbFri17cont; @AbbFri20robu].
-Some of the tests were also applied to detect unusual sequences in time series of crack-width measurements obtained by monitoring concrete bridges [@AbbFriHei19dete].
-
-## Other packages with robust two-sample tests
-
-The CRAN Task View currently lists three packages that explicitly deal with robust hypothesis tests for the two-sample problem.
-`WRS2` [@MaiWil19wrs2] contains a large collection of robust procedures which are presented in the book *Introduction to Robust Estimation and Hypothesis Testing* by [@Wil17intr]. A different user interface for the functions can be found in the package `walrus` [@LovMai18walr]. The package `robeth` [@Mar20robe] contains some robust tests for linear hypotheses.
-
-The functions in `WRS2` concentrate on the heteroscedastic setting, whereas our focus lies on the homoscedastic case.
-The reason is that especially for small samples, estimating the within-sample variance separately for both samples, as is the case under heteroscedasticity, may lead to unreliable estimates.
-Moreover, choosing equal sample sizes $m = n$, can protect against a deteriorating test performance of our implemented tests under heteroscedasticity in terms of size and power [@StaShe90robu, p. 179]. 
-
+Like the $t$-test for the location problem, parametric tests for the location problem may deteriorate when their distributional assumption is not fulfilled.
+Moreover, nonparametric tests may be robust against violations of the distributional assumptions or outliers, but many of them cannot cope well with asymmetry [@Fri12onli].
+Applying the robust location tests to transformed observations as proposed by @Fri12onli, yields good results in terms of power and size under asymmetry and outlier corruption.
+However, the tests may be less efficient under symmetry.
 
 # Implemented two-sample tests
-
-Each test statistic consists of a robust estimator for the location difference between the two populations that should be compared, which is divided by a robust estimator for the within-sample variance. 
+Each test statistic consists of a robust estimator for the location difference between the two populations that should be compared.
+This difference is divided by a robust estimator for the within-sample variance. 
 
 To obtain a distribution-free test decision, the $p$-value can be computed by using the permutation principle, the randomization principle, or a normal approximation.
 With the permutation principle, the tests hold the desired significance level exactly at the cost of large computing times even for quite small samples such as $m = n = 10$.
 The time can be reduced by using a randomization distribution and, even more, by taking advantage of the asymptotic normality of the location-difference estimators.
 The latter approach, however, is only advisable for large sample sizes $m, n > 30$.
 
-One group of tests is taken from @FriDeh11robu. 
-The tests make use of the following three location estimators:
+The tests based on the following location estimators are described in @FriDeh11robu:
 
 * The _difference of the sample medians_ helps to achieve high robustness. However, this estimator is not very efficient under the normal distribution or distributions that do not deviate too much from it.
-* To improve the efficiency one can use the difference of the _one-sample Hodges-Lehmann estimators_ [@HodLeh63esti] at the cost of some robustness.
+* To improve the efficiency one can use the difference of the _one-sample Hodges-Lehmann estimators_ [@HodLeh63esti] at the cost of loosing some robustness due to the lower breakdown point.
 * Similarly, the _two-sample Hodges-Lehmann estimator_ leads to a robust test with a higher power under normality than the tests based on the sample median.
 
-In addition to the above, we implemented tests based on the following location estimators:
+In addition, we implemented tests based on _M-estimators_ because they are an approach to robust location estimation that allows for flexibility in how outliers are treated by specifying the parameters of the corresponding $\rho$-function. 
+We focus on Huber's $\rho$-function, the bisquare function and the Hampel $\rho$-function in a similar manner as described in @Abo92robu.
+Moreover, the package contains Yuen's $t$-test which uses the difference of _trimmed means_ to estimate the location difference [@YueDix73appr].
 
-* The class of _M-estimators_ provides an approach to robust location estimation that allows for flexibility in how outliers are treated by specification of the parameters of the $\rho$-function. We focus on Huber's $\rho$-function, the bisquare function and the Hampel $\rho$-function in a similar manner as @Abo92robu.
-* Yuen's $t$-test uses the difference of _trimmed means_ to estimate the location difference [@YueDix73appr].
-
-The within-sample variance is estimated by pooled scale estimators that are also robust and chosen so that they fit to the selected estimators for the location difference. A shortcoming of some of these scale estimators is that those may become zero due to observations with identical values.
-This happens in real-world applications when the measurements may be rounded or generated by discrete distributions. 
+Some of the robust scale estimators may become zero when ties occur in the data.
+This can happen in real-world applications when the measurements are rounded or stem from discrete distributions. 
+Discretization can also lead to a loss in power or conservative tests.
 To cope with this, we add random noise from a uniform distribution with a small variance to each observation. This procedure is called `wobbling`. 
-The goal is not to reproduce the original, unrounded values, but to enable the computation of the test statistic without distorting the observations too much.
+The objective to enable the computation of the test statistic without distorting the observations too much.
 
-A more detailed overview of the implemented tests may be found in the vignette.
+A more detailed overview of the implemented tests can be found in the vignettes of the package.
+
+## Applications
+Besides conventional two-sample problems, the tests can be used for the online detection of structural breaks in outlier-contaminated time series.
+@AbbFriGat16dete describe how intensity changes in image sequences generated by a virus sensor are automatically detected by applying the tests to the individual pixel time series of the sequence.
+Moreover, the test statistics can be used as control statistics for robust, (approximately) distribution-free control charts for time-series with a time-varying signal [@AbbFri17cont; @AbbFri20robu].
+In @AbbFriHei19dete the tests were applied to detect unusual sequences in time series of crack widths in concrete beams by searching for sudden scale changes.
+
+## Other packages with robust two-sample tests
+The CRAN Task View for robust statistical methods currently lists the three packages `WRS2` [@MaiWil19wrs2], `walrus` [@LovMai18walr], and `robeth` [@Mar20robe] that explicitly deal with robust hypothesis tests for the two-sample problem.
+`WRS2` contains a large collection of robust procedures which are presented in the book *Introduction to Robust Estimation and Hypothesis Testing* by [@Wil17intr]. `walrus` provides a different user interface for the functions in `WRS2`. 
+The package `robeth` [@Mar20robe] contains some robust tests for linear hypotheses.
+
+The functions in `WRS2` concentrate on the heteroscedastic setting, whereas our focus lies on the homoscedastic case.
+The reason is that especially for small samples, estimating the within-sample variance separately for both samples, as is the case under heteroscedasticity, may lead to unreliable estimates.
+Moreover, choosing equal sample sizes $m = n$, can protect against a deteriorating test performance of our implemented tests under heteroscedasticity in terms of size and power [@StaShe90robu, p. 179].
+
+The R package `nptest` [@Hel21npte] contains nonparametric versions of the two-sample $t$-test, which is realized by using the permutation and randomization principles described above on the $t$-statistic.
+This principle has also been studied in @AbbFri17cont, and, while achieving distribution independence, the test statistic lacks robustness against outliers.
 
 # References
