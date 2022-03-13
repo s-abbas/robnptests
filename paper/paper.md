@@ -22,6 +22,7 @@ affiliations:
 - index: 2
   name: Technical University of Vienna
 bibliography: REFERENCES.bib
+csl: ../vignettes/csda.csl
 ---
 
 # Summary
