@@ -37,7 +37,7 @@ More details can be found in the introductory vignette of the package, which can
 We consider two samples of independent and identically distributed (i.i.d.) random variables $X_1, ..., X_m$ and $Y_1, ..., Y_n$, respectively. 
 The underlying distributions are assumed to be continuous with cumulative distribution functions $F_X$ and $F_Y$.
 
-The tests are can be used for either one of the following cases:
+The tests can be used for either one of the following cases:
 
 1. Assuming that the parameters of both distributions are equal while the location parameters may be unequal, i.e. $F_X(x) = F_Y(x + \Delta)$, $\Delta \in \mathbb{R}$, the tests can be used to detect a location difference between the samples.
 2. For equal location parameters with possibly unequal scale parameters, i.e. $F_X(x) = F_Y(x/\theta)$, $\theta > 0$, a transformation of the observations enables to identify differing scale parameters.
@@ -54,15 +54,15 @@ The two-sample tests in `robnptests` combine (approximate) distribution independ
 Thus, they are better suited for outlier-corrupted samples from unknown data-generating distributions.
 At the same time, such tests can be nearly as powerful as popular procedures like the aforementioned $t$-test or the Wilcoxon test on uncontaminated samples.
 
-Figure 1 compares the power of the $t$-test, the Wilcoxon test and two robust tests: one based on the one-sample Hodges-Lehmann estimator (HL1 test) [@HodLeh63esti], and one based on Huber's M-estimator [@Hub64robu] for a fixed location difference between the samples and a single outlier of increasing size.
+Figure 1 compares the power of the $t$-test, the Wilcoxon test and two robust tests - one based on the one-sample Hodges-Lehmann estimator (HL1 test) [@HodLeh63esti] and one based on Huber's M-estimator [@Hub64robu] - for a fixed location difference between the samples and a single outlier of increasing size.
 The power of the $t$-test decreases to zero, while the loss in power of the Wilcoxon test and both robust tests is bounded. 
 The robust tests provide a higher power than the Wilcoxon test.
 The differences between the Wilcoxon test and robust tests like those in the example can become more apparent when more outliers are involved [@FriDeh11robu].
   
-![Power of the two-sample $t$-test, the Wilcoxon rank sum test, and a robust test based on the one-sample Hodges-Lehmann estimator on two samples of size $m = n = 10$ from two normal distributions with a location difference of $\Delta = 2$ and a single outlier of increasing size.](img/fig1_-_power_under_outliers.pdf){width=4in height=4in}
+![Power of the two-sample $t$-test, the Wilcoxon rank sum test, and two robust tests - one based on the one-sample Hodges-Lehmann estimator and one based on Huber's M-estimator - on two samples of size $m = n = 10$ from two normal distributions with a location difference of $\Delta = 2$ and a single outlier of increasing size.](img/fig1_-_power_under_outliers.pdf){width=4in height=4in}
 
-Like the $t$-test for the location problem, the performance of parametric tests for the location problem may deteriorate when their distributional assumption is not fulfilled.
-Moreover, nonparametric tests may be robust against violations of the distributional assumptions or outliers, but many of them cannot cope well with asymmetry [@Fri12onli].
+Like the $t$-test for the location problem, the performance of parametric tests for the scale problem may deteriorate when their distributional assumption is not fulfilled.
+Moreover, nonparametric tests may be robust against violations of the distributional assumptions or outliers, but many of them do not cope well with asymmetry [@Fri12onli].
 Applying the robust location tests to transformed observations as proposed by @Fri12onli, yields good results in terms of power and size under asymmetry and outlier corruption.
 However, the tests may be less efficient under symmetry. 
 
@@ -78,10 +78,10 @@ The latter approach, however, is only advisable for large sample sizes $m, n > 3
 The tests based on the following location estimators are described in @FriDeh11robu:
 
 * The _difference of the sample medians_ helps to achieve high robustness. However, this estimator is not very efficient under the normal distribution or distributions that do not deviate too much from it.
-* To improve the efficiency, one can use the difference of the _one-sample Hodges-Lehmann estimators_ [@HodLeh63esti] at the cost of loosing some robustness due to the lower breakdown point.
+* To improve the efficiency, one can use the difference of the _one-sample Hodges-Lehmann estimators_ [@HodLeh63esti] at the cost of losing robustness due to the lower breakdown point.
 * Similarly, the _two-sample Hodges-Lehmann estimator_ leads to a robust test with a higher power under normality than the tests based on the sample median.
 
-For scaling, we use different estimators based on medians and pairwise differences [@FriDeh11robu].
+For scaling, we use different estimators based on medians and pairwise differences, see @FriDeh11robu for a detailed description.
 
 In addition, we implemented tests based on _M-estimators_. This approach to robust location estimation allows for flexibility in how outliers are treated through the specification of the parameters of the corresponding $\rho$-function. 
 We focus on Huber's $\rho$-function, the bisquare function and the Hampel $\rho$-function in a similar manner as described in @Abo92robu.
@@ -98,8 +98,8 @@ A more detailed overview of the implemented tests and corresponding test statist
 ## Applications
 Besides conventional two-sample problems, the tests can be used for the online detection of structural breaks in outlier-contaminated time series.
 @AbbFriGat16dete describe how intensity changes in image sequences generated by a virus sensor are automatically detected by applying the tests to the individual pixel time series of the sequence.
-Moreover, the test statistics can be used as control statistics for robust, (approximately) distribution-free control charts for time-series with a time-varying signal [@AbbFri17cont; @AbbFri20robu].
-In @AbbFriHei19dete, the tests were applied to detect unusual sequences in time series of crack widths in concrete beams by searching for sudden scale changes.
+Moreover, the test statistics can be used as control statistics for robust, (approximately) distribution-free control charts for time series with a time-varying signal [@AbbFri17cont; @AbbFri20robu].
+In @AbbFriHei19dete, the tests are applied to detect unusual sequences in time series of crack widths in concrete beams by searching for sudden scale changes.
 
 ## Other packages with robust two-sample tests
 The CRAN Task View for robust statistical methods currently lists the three packages `WRS2` [@MaiWil19wrs2], `walrus` [@LovMai18walr], and `robeth` [@Mar20robe] that explicitly deal with robust hypothesis tests for the two-sample problem.
