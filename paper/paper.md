@@ -8,7 +8,7 @@ authors:
   name: Barbara Brune
 - affiliation: 1
   name: Roland Fried
-date: 09 January 2021
+date: 23 March 2022
 output:
   pdf_document: default
   html_document: default
@@ -31,7 +31,7 @@ Regarding the latter aspect, we implemented tests that keep an intended signific
 Robustness is achieved by using test statistics that are based on robust location and scale measures. 
 
 In what follows, we give a brief description of the package's contents.
-More details can be found in the introductory vignette of the package, which can be called by `vignette("robnptests-vignette")`, and the cited papers.
+More details can be found in the introductory vignette of the package, which can be called by `vignette("robnptests")`, and the cited papers.
 
 # Data situation
 We consider two samples of independent and identically distributed (i.i.d.) random variables $X_1, ..., X_m$ and $Y_1, ..., Y_n$, respectively. 
@@ -51,20 +51,21 @@ In addition, particularly for small samples, the $t$-test is prone to outliers [
 Distribution-free tests, like the two-sample Wilcoxon rank-sum test, can be nearly as powerful as the $t$-test under normality and may have higher power under non-normality.
 Still, they also can be vulnerable to outliers [@FriGat07rank].
 The two-sample tests in `robnptests` combine (approximate) distribution independence and robustness against outliers.
-Thus, they are better suited for outlier-corrupted samples from unknown data-generating distributions.
+Thus, they are well suited for outlier-corrupted samples from unknown data-generating distributions.
 At the same time, such tests can be nearly as powerful as popular procedures like the aforementioned $t$-test or the Wilcoxon test on uncontaminated samples.
 
-Figure 1 compares the power of the $t$-test, the Wilcoxon test and two robust tests - one based on the one-sample Hodges-Lehmann estimator (HL1 test) [@HodLeh63esti] and one based on Huber's M-estimator [@Hub64robu] - for a fixed location difference between the samples and a single outlier of increasing size.
+Figure 1 compares the power of the $t$-test, the Wilcoxon test and two robust tests - one based on the one-sample Hodges-Lehmann estimator (HL1-test) [@HodLeh63esti] and one based on Huber's M-estimator (Huber M-test) [@Hub64robu] - for a fixed location difference between the samples and a single outlier of increasing size.
 The power of the $t$-test decreases to zero, while the loss in power of the Wilcoxon test and both robust tests is bounded. 
 The robust tests provide a higher power than the Wilcoxon test.
 The differences between the Wilcoxon test and robust tests like those in the example can become more apparent when more outliers are involved [@FriDeh11robu].
   
-![Power of the two-sample $t$-test, the Wilcoxon rank sum test, and two robust tests - one based on the one-sample Hodges-Lehmann estimator and one based on Huber's M-estimator - on two samples of size $m = n = 10$ from two normal distributions with a location difference of $\Delta = 2$ and a single outlier of increasing size.](img/fig1_-_power_under_outliers.pdf){width=4in height=4in}
+![Power of the two-sample $t$-test, the Wilcoxon rank-sum test, and two robust tests - one based on the one-sample Hodges-Lehmann estimator and one based on Huber's M-estimator - on two samples of size $m = n = 10$ from two normal distributions with a location difference of $\Delta = 2$ and a single outlier of increasing size.](img/fig1_-_power_under_outliers.pdf){width=4in height=4in}
 
-Like the $t$-test for the location problem, the performance of parametric tests for the scale problem may deteriorate when their distributional assumption is not fulfilled.
-Moreover, nonparametric tests may be robust against violations of the distributional assumptions or outliers, but many of them do not cope well with asymmetry [@Fri12onli].
-Applying the robust location tests to transformed observations as proposed by @Fri12onli, yields good results in terms of power and size under asymmetry and outlier corruption.
-However, the tests may be less efficient under symmetry. 
+Classical parametric and non-parametric tests for scale differences have similar problems as described for the location tests.
+In addition, non-parametric tests for the scale problem may not cope well with asymmetry [@Fri12onli].
+A possible solution while retaining the robustness is to apply the robust location tests to transformed observations as proposed by @Fri12onli.
+Such tests can yield good results in terms of power and size under asymmetry and outlier corruption.
+However, the tests may be less efficient under symmetry than classical procedures, e.g. the Mood test. 
 
 # Implemented two-sample tests
 Each test statistic consists of a robust estimator for the location difference between the two populations that should be compared.
@@ -83,17 +84,17 @@ The tests based on the following location estimators are described in @FriDeh11r
 
 For scaling, we use different estimators based on medians and pairwise differences, see @FriDeh11robu for a detailed description.
 
-In addition, we implemented tests based on _M-estimators_. This approach to robust location estimation allows for flexibility in how outliers are treated through the specification of the parameters of the corresponding $\rho$-function. 
-We focus on Huber's $\rho$-function, the bisquare function and the Hampel $\rho$-function in a similar manner as described in @Abo92robu.
-Moreover, the package contains Yuen's $t$-test which uses the difference of _trimmed means_ to estimate the location difference [@YueDix73appr].
+In addition, we implemented tests based on M-estimators. This approach to robust location estimation allows for flexibility in how outliers are treated through the specification of the parameters of the corresponding $\rho$-function. 
+We focus on Huber's $\rho$-function, the bisquare function and the Hampel $\rho$-function.
+The estimator for the within-sample variance is a pooled estimator derived from the asymptotic normality of the M-estimators [@MarMarYoh06robu, p. 36ff].
+Moreover, the package contains Yuen's $t$-test which uses the difference of _trimmed means_ to estimate the location difference and a scale estimator based on the pooled winsorized variances [@YueDix73appr].
 
-Some of the robust scale estimators may become zero when ties occur in the data.
-This can happen in real-world applications when the measurements are rounded or stem from discrete distributions. 
-Discretization can also lead to a loss in power or conservative tests.
-To cope with this, we add random noise from a uniform distribution with a small variance to each observation. This procedure is called `wobbling`. 
-The objective to enable the computation of the test statistic without distorting the observations too much.
+In case of data with many ties (e.g. caused by discrete sampling), the ties may carry over to the permutation distribution.
+This can happen in real-world applications when the measurements are rounded or stem from discrete distributions and may lead to a loss in power or conservative tests.
+Additionally, the robust scale estimators may become zero, so that the test statistic cannot be calculated.
+Both issues can be addressed by adding random noise from a uniform distribution with a small variance to each observation [@FriGat07rank]. 
 
-A more detailed overview of the implemented tests and corresponding test statistics can be found in the vignettes of the package.
+A more detailed overview of the implemented tests and corresponding test statistics can be found in the vignette `vignette("robnptests")`.
 
 ## Applications
 Besides conventional two-sample problems, the tests can be used for the online detection of structural breaks in outlier-contaminated time series.
