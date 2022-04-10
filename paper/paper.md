@@ -1,75 +1,77 @@
 ---
 title: "robnptests -- An R package for robust two-sample location and variability tests"
-authors:
-- affiliation: 1
-  name: Sermad Abbas
-  orcid: 0000-0001-9162-9792
-- affiliation: 2
-  name: Barbara Brune
-- affiliation: 1
-  name: Roland Fried
-date: 23 March 2022
-output:
-  pdf_document: default
-  html_document: default
 tags:
-- R
-- robust statistics
-- nonparametric statistics
+  - R
+  - robust statistics
+  - nonparametric statistics
+authors:
+ - name: Sermad Abbas
+   orcid: 0000-0001-9162-9792
+   affiliation: 1
+ - name: Barbara Brune
+   orcid: 0000-0002-3154-8445
+   affiliation: 2
+ - name: Roland Fried
+   orcid:
+   affiliation: 1
 affiliations:
-- index: 1
-  name: TU Dortmund University
-- index: 2
-  name: Technical University of Vienna
+  - index: 1
+    name: TU Dortmund University
+  - index: 2
+    name: Technical University of Vienna
+date: 10 April 2022
 bibliography: REFERENCES.bib
+output:
+  rticles::joss_article
 csl: ../vignettes/csda.csl
+journal: JOSS
 ---
 
 # Summary
-The package `robnptests` is a compilation of two-sample tests  based on two criteria: The tests are (i) robust against outliers and (ii) (approximately) distribution free. 
+The package `robnptests` is a compilation of two-sample tests selected by two criteria: The tests are (i) robust against outliers and (ii) (approximately) distribution free. 
 Regarding the latter aspect, we implemented tests that keep an intended significance level and provide a reasonably high efficiency, both  under a variety of continuous distributions.
 Robustness is achieved by using test statistics that are based on robust location and scale measures. 
 
 In what follows, we give a brief description of the package's contents.
-More details can be found in the introductory vignette of the package, which can be called by `vignette("robnptests")`, and the cited papers.
+More details can be found in the introductory vignette of the package, which can be called by `vignette("robnptests")`, and in the cited papers.
 
 # Data situation
 We consider two samples of independent and identically distributed (i.i.d.) random variables $X_1, ..., X_m$ and $Y_1, ..., Y_n$, respectively. 
 The underlying distributions are assumed to be continuous with cumulative distribution functions $F_X$ and $F_Y$.
 
-The tests can be used for either one of the following cases:
+The tests can be used for either of the following scenarios:
 
-1. Assuming that the parameters of both distributions are equal while the location parameters may be unequal, i.e. $F_X(x) = F_Y(x + \Delta)$, $\Delta \in \mathbb{R}$, the tests can be used to detect a location difference between the samples.
-2. For equal location parameters with possibly unequal scale parameters, i.e. $F_X(x) = F_Y(x/\theta)$, $\theta > 0$, a transformation of the observations enables to identify differing scale parameters.
+1. Assuming that both distributions are equal except for their location, i.e. $F_X(x) = F_Y(x + \Delta)$ for all $x \in \mathbb{R}$ and some $\Delta \in \mathbb{R}$, the tests can be used to detect a location difference between the samples.
+2. In case of a difference only in scale, i.e. $F_X(x) = F_Y(x/\theta)$ for some $\theta > 0$, a transformation of the observations enables to identify differing scale parameters.
 
 
 # Statement of need
 A popular test for the location setting is the two-sample $t$-test.
-It is considered to be robust against deviations from the normality assumption by keeping the specified significance level due to the central limit theorem.
+It is considered to be robust against deviations from the normality assumption because it keeps the specified significance level asymptotically due to the central limit theorem in case of finite variances.
 However, non-normality can result in a loss of power [@Wil03appl].
-In addition, particularly for small samples, the $t$-test is prone to outliers [@FriDeh11robu].
+In addition, the $t$-test is vulnerable to outliers [@FriDeh11robu].
 Distribution-free tests, like the two-sample Wilcoxon rank-sum test, can be nearly as powerful as the $t$-test under normality and may have higher power under non-normality.
-Still, they also can be vulnerable to outliers [@FriGat07rank].
+Still, they also can be vulnerable to outliers, particularly for small samples [@FriGat07rank].
 The two-sample tests in `robnptests` combine (approximate) distribution independence and robustness against outliers.
 Thus, they are well suited for outlier-corrupted samples from unknown data-generating distributions.
-At the same time, such tests can be nearly as powerful as popular procedures like the aforementioned $t$-test or the Wilcoxon test on uncontaminated samples.
+At the same time, such tests can be nearly as powerful as popular procedures like the aforementioned $t$-test or the Wilcoxon test on uncontaminated samples for somewhat larger computational costs.
 
 Figure 1 compares the power of the $t$-test, the Wilcoxon test and two robust tests - one based on the one-sample Hodges-Lehmann estimator (HL1-test) [@HodLeh63esti] and one based on Huber's M-estimator (Huber M-test) [@Hub64robu] - for a fixed location difference between the samples and a single outlier of increasing size.
-The power of the $t$-test decreases to zero, while the loss in power of the Wilcoxon test and both robust tests is bounded. 
-The robust tests provide a higher power than the Wilcoxon test.
-The differences between the Wilcoxon test and robust tests like those in the example can become more apparent when more outliers are involved [@FriDeh11robu].
+The power of the $t$-test decreases to zero, while the loss in power of the Wilcoxon test and both robust tests is small. 
+The robust tests provide a somewhat higher power than the Wilcoxon test.
+The differences between the Wilcoxon test and robust tests like those in the example can become larger when more outliers are involved [@FriDeh11robu].
   
-![Power of the two-sample $t$-test, the Wilcoxon rank-sum test, and two robust tests - one based on the one-sample Hodges-Lehmann estimator and one based on Huber's M-estimator - on two samples of size $m = n = 10$ from two normal distributions with a location difference of $\Delta = 2$ and a single outlier of increasing size.](img/fig1_-_power_under_outliers.pdf){width=4in height=4in}
+![Power of the two-sample $t$-test, the Wilcoxon rank-sum test, and two robust tests - one based on the one-sample Hodges-Lehmann estimator and one based on Huber's M-estimator - on two samples of size $m = n = 10$ from two normal distributions with unit variance, a location difference of $\Delta = 2$, and an additive single outlier of increasing size.](img/fig1_-_power_under_outliers.pdf){width=4in height=4in}
 
-Classical parametric and non-parametric tests for scale differences have similar problems as described for the location tests.
-In addition, non-parametric tests for the scale problem may not cope well with asymmetry [@Fri12onli].
+Common parametric and non-parametric tests for scale differences have similar problems as described above for the location tests.
+In addition, some non-parametric tests for the scale problem do not cope well with asymmetry.
 A possible solution while retaining the robustness is to apply the robust location tests to transformed observations as proposed by @Fri12onli.
-Such tests can yield good results in terms of power and size under asymmetry and outlier corruption.
-However, the tests may be less efficient under symmetry than classical procedures, e.g. the Mood test. 
+Such tests can yield good results in terms of power and size under both asymmetry and outlier corruption.
+However, the tests may be less efficient under symmetry than classical procedures like the Mood test. 
 
 # Implemented two-sample tests
-Each test statistic consists of a robust estimator for the location difference between the two populations that should be compared.
-This difference is divided by a robust estimator for the within-sample variance. 
+Each test statistic consists of a robust estimator for the location difference between the two populations that are compared.
+This difference is divided by a robust estimator for the within-sample variability. 
 
 To obtain a distribution-free test decision, the $p$-value can be computed by using the permutation principle, the randomization principle, or a normal approximation.
 With the permutation principle, the tests hold the desired significance level exactly at the cost of large computing times even for quite small samples such as $m = n = 10$.
@@ -78,13 +80,13 @@ The latter approach, however, is only advisable for large sample sizes $m, n > 3
 
 The tests based on the following location estimators are described in @FriDeh11robu:
 
-* The _difference of the sample medians_ helps to achieve high robustness. However, this estimator is not very efficient under the normal distribution or distributions that do not deviate too much from it.
-* To improve the efficiency, one can use the difference of the _one-sample Hodges-Lehmann estimators_ [@HodLeh63esti] at the cost of losing robustness due to the lower breakdown point.
-* Similarly, the _two-sample Hodges-Lehmann estimator_ leads to a robust test with a higher power under normality than the tests based on the sample median.
+* The _difference of the sample medians_ achieves high robustness. However, this estimator is not very efficient under the normal distribution and distributions close to it.
+* To improve the efficiency, one can use the difference between the _one-sample Hodges-Lehmann estimators_ [@HodLeh63esti] at the cost of losing some robustness due to the lower breakdown point.
+* Similarly, the _two-sample Hodges-Lehmann estimator_ leads to a robust test with a higher power under normality than the tests based on the sample median and similar robustness.
 
 For scaling, we use different estimators based on medians and pairwise differences, see @FriDeh11robu for a detailed description.
 
-In addition, we implemented tests based on M-estimators. This approach to robust location estimation allows for flexibility in how outliers are treated through the specification of the parameters of the corresponding $\rho$-function. 
+In addition, we implemented tests based on M-estimators. This approach to robust location estimation allows for flexibility in how outliers are treated through the specification of the tuning constants of the corresponding $\rho$-function. 
 We focus on Huber's $\rho$-function, the bisquare function and the Hampel $\rho$-function.
 The estimator for the within-sample variance is a pooled estimator derived from the asymptotic normality of the M-estimators [@MarMarYoh06robu, p. 36ff].
 Moreover, the package contains Yuen's $t$-test which uses the difference of _trimmed means_ to estimate the location difference and a scale estimator based on the pooled winsorized variances [@YueDix73appr].
@@ -92,7 +94,7 @@ Moreover, the package contains Yuen's $t$-test which uses the difference of _tri
 In case of data with many ties (e.g. caused by discrete sampling), the ties may carry over to the permutation distribution.
 This can happen in real-world applications when the measurements are rounded or stem from discrete distributions and may lead to a loss in power or conservative tests.
 Additionally, the robust scale estimators may become zero, so that the test statistic cannot be calculated.
-Both issues can be addressed by adding random noise from a uniform distribution with a small variance to each observation [@FriGat07rank]. 
+Both issues can be addressed by adding random noise from a uniform distribution with a small variance to each observation ("wobbling", see @FriGat07rank). 
 
 A more detailed overview of the implemented tests and corresponding test statistics can be found in the vignette `vignette("robnptests")`.
 
