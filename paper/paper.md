@@ -56,7 +56,7 @@ The two-sample tests in `robnptests` combine (approximate) distribution independ
 Thus, they are well suited for outlier-corrupted samples from unknown data-generating distributions.
 At the same time, such tests can be nearly as powerful as popular procedures like the aforementioned $t$-test or the Wilcoxon test on uncontaminated samples for somewhat larger computational costs.
 
-Figure 1 compares the power of the $t$-test, the Wilcoxon test and two robust tests - one based on the one-sample Hodges-Lehmann estimator (HL1-test) [@HodLeh63esti] and one based on Huber's M-estimator (Huber M-test) [@Hub64robu] - for a fixed location difference between the samples and a single outlier of increasing size.
+Figure 1 compares the power of the $t$-test, the Wilcoxon test and two robust tests - one based on the one-sample Hodges-Lehmann estimator (HL1-test) [@HodLeh63esti] and one based on Huber's M-estimator [Huber M-test, @Hub64robu] - for a fixed location difference between the samples and a single outlier of increasing size.
 The power of the $t$-test decreases to zero, while the loss in power of the Wilcoxon test and both robust tests is small. 
 The robust tests provide a somewhat higher power than the Wilcoxon test.
 The differences between the Wilcoxon test and robust tests like those in the example can become larger when more outliers are involved [@FriDeh11robu].
