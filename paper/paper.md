@@ -58,31 +58,29 @@ At the same time, such tests can be nearly as powerful as popular procedures lik
 
 Figure 1 compares the power of the $t$-test, the Wilcoxon test and two robust tests. The HL1-test is based on the one-sample Hodges-Lehmann estimator [@HodLeh63esti] and the Huber M-test uses Huber's M-estimator [@Hub64robu]. We consider a fixed location difference between the samples and a single outlier of increasing size.
 The power of the $t$-test decreases to zero, while the loss in power of the Wilcoxon test and both robust tests is small. 
-The robust tests provide a somewhat higher power than the Wilcoxon test.
-The differences between the Wilcoxon test and robust tests like those in the example can become larger when more outliers are involved [@FriDeh11robu].
+The robust tests provide a somewhat higher power than the Wilcoxon test and this advantage can become larger when more outliers are involved [@FriDeh11robu].
   
 ![Power of the two-sample $t$-test, the Wilcoxon rank-sum test, and two robust tests - one based on the one-sample Hodges-Lehmann estimator and one based on Huber's M-estimator - on two samples of size $m = n = 10$ from two normal distributions with unit variance, a location difference of $\Delta = 2$, and an additive single outlier of increasing size.](img/fig1_-_power_under_outliers.pdf){width=4in height=4in}
 
 Common parametric and non-parametric tests for scale differences have similar problems as described above for the location tests.
 In addition, some non-parametric tests for the scale problem do not cope well with asymmetry.
-A possible solution while retaining the robustness is to apply the robust location tests to transformed observations as proposed by @Fri12onli.
+A possible solution, while retaining the robustness, is to apply the robust location tests to transformed observations as proposed by @Fri12onli.
 Such tests can yield good results in terms of power and size under both asymmetry and outlier corruption.
 However, the tests may be less efficient under symmetry than classical procedures like the Mood test. 
 
 # Implemented two-sample tests
-Each test statistic consists of a robust estimator for the location difference between the two populations that are compared.
-This difference is divided by a robust estimator for the within-sample variability. 
+Each test statistic is a simple ratio inspired by the test statistic of the two-sample $t$-test. The numerator is a robust estimator for the location difference between the two populations and the denominator is a robust estimator for the within-sample variability. 
 
 To obtain a distribution-free test decision, the $p$-value can be computed by using the permutation principle, the randomization principle, or a normal approximation.
 With the permutation principle, the tests hold the desired significance level exactly at the cost of large computing times even for quite small samples such as $m = n = 10$.
 The time can be reduced by using a randomization distribution and, even more, by taking advantage of the asymptotic normality of the location-difference estimators.
 The latter approach, however, is only advisable for large sample sizes $m, n > 30$.
 
-The tests based on the following location estimators are described in @FriDeh11robu:
+The tests based on the following estimators for the location difference are described in @FriDeh11robu:
 
-* The _difference of the sample medians_ achieves high robustness. However, this estimator is not very efficient under the normal distribution and distributions close to it.
+* The _difference of the sample medians_ achieves high robustness. However, this estimator is not very efficient under the normal distribution.
 * To improve the efficiency, one can use the difference between the _one-sample Hodges-Lehmann estimators_ [@HodLeh63esti] at the cost of losing some robustness due to the lower breakdown point.
-* Similarly, the _two-sample Hodges-Lehmann estimator_ leads to a robust test with a higher power under normality than the tests based on the sample median and similar robustness.
+* The _two-sample Hodges-Lehmann estimator_ [@HodLeh63esti] leads to a robust test with a higher power under normality than the tests based on the sample median and similar robustness.
 
 For scaling, we use different estimators based on medians and pairwise differences, see @FriDeh11robu for a detailed description.
 
@@ -110,7 +108,7 @@ The CRAN Task View for robust statistical methods currently lists the three pack
 The package `robeth` [@Mar20robe] contains some robust tests for linear hypotheses.
 
 The functions in `WRS2` concentrate on the heteroscedastic setting, whereas our focus lies on the homoscedastic case.
-The reason is that especially for small samples, estimating the within-sample variance separately for both samples, as is the case under heteroscedasticity, may lead to unreliable estimates.
+The reason of this focus is that especially for small samples, estimating the within-sample variance separately for both samples, as is the case under heteroscedasticity, may lead to unreliable estimates.
 Moreover, choosing equal sample sizes $m = n$, can protect against a deteriorating test performance of our implemented tests under heteroscedasticity in terms of size and power [@StaShe90robu, p. 179].
 
 The R package `nptest` [@Hel21npte] contains nonparametric versions of the two-sample $t$-test, which is realized by using the permutation and randomization principles described above on the $t$-statistic.
