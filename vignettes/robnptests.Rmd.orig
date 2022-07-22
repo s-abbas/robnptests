@@ -440,7 +440,7 @@ If `check = TRUE` and all values are unique, the wobbling is omitted.
 # Testing for a difference in scale
 The argument `var.test` allows to decide whether the samples should be tested for a location difference (`var.test = FALSE`), which is the default, or for different scale parameters (`var.test = TRUE`).
 
-As described in the introduction, setting `var.test = TRUE` transforms the observations so that a possible scale difference between the samples appears as a location difference between the transformed samples.
+As described in the introduction, setting `var.test = TRUE` transforms the observations so that a possible scale difference between the samples appears as a location difference between the transformed samples. For these tests, the samples need to be centred beforehand.
 
 In terms of the power, the resulting tests can outperform classical tests like the $F$-test, the Mood test, or the Ansary-Bradley test under outliers and asymmetry
 [@Fri12onli].

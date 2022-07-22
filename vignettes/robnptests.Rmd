@@ -1,6 +1,6 @@
 ---
 title: "Getting started with `robnptests`"
-date: "2021-11-07"
+date: "2022-07-22"
 author: Sermad Abbas, Barbara Brune, Roland Fried
 output:
   rmarkdown::html_document:
@@ -519,7 +519,7 @@ If `check = TRUE` and all values are unique, the wobbling is omitted.
 # Testing for a difference in scale
 The argument `var.test` allows to decide whether the samples should be tested for a location difference (`var.test = FALSE`), which is the default, or for different scale parameters (`var.test = TRUE`).
 
-As described in the introduction, setting `var.test = TRUE` transforms the observations so that a possible scale difference between the samples appears as a location difference between the transformed samples.
+As described in the introduction, setting `var.test = TRUE` transforms the observations so that a possible scale difference between the samples appears as a location difference between the transformed samples. For these tests, the samples need to be centred beforehand.
 
 In terms of the power, the resulting tests can outperform classical tests like the $F$-test, the Mood test, or the Ansary-Bradley test under outliers and asymmetry
 [@Fri12onli].
@@ -567,7 +567,7 @@ Here is the information about the R-session used for creating this vignette.
 
 ```r
 sessionInfo()
-#> R version 4.0.3 (2020-10-10)
+#> R version 4.2.0 (2022-04-22)
 #> Platform: x86_64-pc-linux-gnu (64-bit)
 #> Running under: Linux Mint 19.1
 #> 
@@ -576,21 +576,25 @@ sessionInfo()
 #> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
 #> 
 #> locale:
-#>  [1] LC_CTYPE=de_DE.UTF-8       LC_NUMERIC=C               LC_TIME=de_DE.UTF-8        LC_COLLATE=de_DE.UTF-8     LC_MONETARY=de_DE.UTF-8    LC_MESSAGES=de_DE.UTF-8   
-#>  [7] LC_PAPER=de_DE.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C             LC_MEASUREMENT=de_DE.UTF-8 LC_IDENTIFICATION=C       
+#>  [1] LC_CTYPE=de_DE.UTF-8       LC_NUMERIC=C               LC_TIME=de_DE.UTF-8        LC_COLLATE=de_DE.UTF-8     LC_MONETARY=de_DE.UTF-8   
+#>  [6] LC_MESSAGES=de_DE.UTF-8    LC_PAPER=de_DE.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C            
+#> [11] LC_MEASUREMENT=de_DE.UTF-8 LC_IDENTIFICATION=C       
 #> 
 #> attached base packages:
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] robnptests_0.1.0 testthat_3.0.2  
+#> [1] robnptests_1.0.0 testthat_3.1.4  
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] compiler_4.0.3    DEoptimR_1.0-8    prettyunits_1.1.1 remotes_2.3.0     tools_4.0.3       digest_0.6.27     packrat_0.6.0     pkgbuild_1.2.0    pkgload_1.2.1     statmod_1.4.35   
-#> [11] evaluate_0.14     memoise_2.0.0     lifecycle_1.0.0   checkmate_2.0.0   rlang_0.4.10      cli_2.4.0         rstudioapi_0.13   xfun_0.22         fastmap_1.1.0     withr_2.4.2      
-#> [21] stringr_1.4.0     knitr_1.33        desc_1.3.0        fs_1.5.0          gtools_3.8.2      devtools_2.4.0    rprojroot_2.0.2   glue_1.4.2        robustbase_0.93-7 R6_2.5.0         
-#> [31] processx_3.5.1    Rdpack_2.1.1      sessioninfo_1.1.1 callr_3.7.0       purrr_0.3.4       magrittr_2.0.1    codetools_0.2-16  backports_1.2.1   ps_1.6.0          ellipsis_0.3.1   
-#> [41] rbibutils_2.1     usethis_2.0.1     stringi_1.5.3     cachem_1.0.1      crayon_1.4.1
+#>  [1] Rcpp_1.0.9        DEoptimR_1.0-11   compiler_4.2.0    later_1.3.0       urlchecker_1.0.1  prettyunits_1.1.1 profvis_0.3.7     remotes_2.4.2    
+#>  [9] tools_4.2.0       statmod_1.4.36    digest_0.6.29     pkgbuild_1.3.1    pkgload_1.3.0     evaluate_0.15     checkmate_2.1.0   memoise_2.0.1    
+#> [17] lifecycle_1.0.1   rlang_1.0.4       shiny_1.7.2       cli_3.3.0         rstudioapi_0.13   xfun_0.31         fastmap_1.1.0     knitr_1.39       
+#> [25] withr_2.5.0       stringr_1.4.0     gtools_3.9.3      desc_1.4.1        fs_1.5.2          htmlwidgets_1.5.4 devtools_2.4.4    rprojroot_2.0.3  
+#> [33] robustbase_0.95-0 glue_1.6.2        R6_2.5.1          processx_3.7.0    Rdpack_2.4        sessioninfo_1.2.2 callr_3.7.1       purrr_0.3.4      
+#> [41] magrittr_2.0.3    codetools_0.2-18  rbibutils_2.2.8   backports_1.4.1   ps_1.7.1          promises_1.2.0.1  ellipsis_0.3.2    htmltools_0.5.2  
+#> [49] usethis_2.1.6     mime_0.12         xtable_1.8-4      httpuv_1.6.5      stringi_1.7.6     miniUI_0.1.1.1    cachem_1.0.6      crayon_1.5.1     
+#> [57] brio_1.1.3
 ```
 
 # References

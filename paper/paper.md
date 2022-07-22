@@ -42,7 +42,7 @@ The underlying distributions are assumed to be continuous with cumulative distri
 The tests can be used for either of the following scenarios:
 
 * Two-sample location problem: Assuming that both distributions are equal except that $F_Y$ may be a shifted version of $F_X$, i.e. $F_X(x) = F_Y(x + \Delta)$ for all $x \in \mathbb{R}$ and some $\Delta \in \mathbb{R}$, the tests can be used to detect such a shift.
-* Two-sample scale problem: In case of a difference only in scale, i.e. $F_X(x) = F_Y(x/\theta)$ for some $\theta > 0$, a transformation of the observations enables to identify differing scale parameters.
+* Two-sample scale problem: In case of a difference only in scale, i.e. $F_X(x) = F_Y(x/\theta)$ for some $\theta > 0$, a transformation of the observations enables to identify differing scale parameters. Note, that $F_X$ and $F_Y$ need to be centred around zero.
 
 
 # Statement of need
