@@ -29,7 +29,7 @@ License: GPL (>= 2)
 Depends: R (>= 4.0.0)
 URL: https://github.com/s-abbas/robnptests
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
 Imports: 
     Rdpack,
     gtools,
