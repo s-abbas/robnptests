@@ -81,7 +81,7 @@ perm_distribution <- function(x, y, type, randomization = FALSE, n.rep = 10000) 
 #'         and \code{k}.
 #'
 #' @references
-#' \insertRef{MaeRouCro20robu}{robnptests}
+#' \insertRef{MaeRouCro22robu}{robnptests}
 #'
 #' @keywords internal
 

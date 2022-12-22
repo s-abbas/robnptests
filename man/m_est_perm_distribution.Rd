@@ -39,6 +39,6 @@ Vector with permutation distribution of the test statistic specified by \code{ps
 Missing values in either \code{x} or \code{y} are not allowed.
 }
 \references{
-\insertRef{MaeRouCro20robu}{robnptests}
+\insertRef{MaeRouCro22robu}{robnptests}
 }
 \keyword{internal}

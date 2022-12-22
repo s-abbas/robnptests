@@ -79,7 +79,7 @@ where $\Delta = \mu_X - \mu_Y$ is the location difference between both distribut
 
 The M-tests are implemented in the function `m_test`. 
 More details on the usage of the function can be found in the vignette [Getting started with `robnptests`](robnptests.html).
-Inside `m_test`, we use the function `scaleTau2` from the `R` package [robustbase](https://cran.r-project.org/package=robustbase) [@MaeRouCro20robu] to compute the $\tau$-scale estimates for the samples.
+Inside `m_test`, we use the function `scaleTau2` from the `R` package [robustbase](https://cran.r-project.org/package=robustbase) [@MaeRouCro22robu] to compute the $\tau$-scale estimates for the samples.
 
 # Simulation results
 The following figure shows the simulated test sizes from a small simulation study with 1000 replications, where we applied the M-tests with different $\psi$-functions to samples from the $\mathcal{N}(0, 1)$-distribution, the $t_2$-distribution, and the $\chi^2_3$-distribution. 
