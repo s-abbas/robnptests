@@ -218,7 +218,7 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 #'
 #' @details
 #' To compute the M-estimate, the iterative algorithm described in
-#' \insertCite{MarMarYoh06robu;textual}{robnptests} is used.
+#' \insertCite{MarMarYoh19robu;textual}{robnptests} is used.
 #' The variance is estimated as in \insertCite{Hub81robu;textual}{robnptests}.
 #'
 #' If \code{max.it} contains decimal places, it is truncated to an integer
@@ -231,7 +231,7 @@ hodges_lehmann_2sample <- function(x, y, na.rm = FALSE) {
 #' @importFrom Rdpack reprompt
 #'
 #' @references
-#' \insertRef{MarMarYoh06robu}{robnptests}
+#' \insertRef{MarMarYoh19robu}{robnptests}
 #'
 #' \insertRef{Hub81robu}{robnptests}
 #'
