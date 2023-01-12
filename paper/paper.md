@@ -19,7 +19,7 @@ affiliations:
     name: TU Dortmund University, Faculty of Statistics, 44221 Dortmund, Germany
   - index: 2
     name: Technical University of Vienna, Institute of Statistics and Mathematical Methods in Economics, 1040 Vienna, Austria
-date: 14 October 2022
+date: 12 January 2023
 bibliography: REFERENCES.bib
 output:
   rticles::joss_article
@@ -29,11 +29,11 @@ journal: JOSS
 
 # Summary
 The `robnptests` R package [@R22lang] is a compilation of two-sample tests selected by two criteria: The tests are (i) robust against outliers and (ii) (approximately) distribution free. 
-Regarding the latter aspect, we implemented tests that keep an intended significance level and provide a reasonably high power, both  under a variety of continuous distributions.
+Criterion (ii) means that the implemented tests keep an intended significance level and provide a reasonably high power under a variety of continuous distributions.
 Robustness is achieved by using test statistics that are based on robust location and scale measures. 
 
 In what follows, we give a brief description of the package's contents.
-More details can be found in the introductory vignette of the package, which can be called by `vignette("robnptests")`, and in the cited papers.
+More details can be found in the introductory vignette of the package, which can be opened by calling `vignette("robnptests")` in the R console, and in the cited papers.
 
 # Data situation
 We consider two samples of independent and identically distributed (i.i.d.) random variables $X_1, ..., X_m$ and $Y_1, ..., Y_n$, respectively. 
@@ -64,25 +64,21 @@ The robust tests provide a somewhat higher power than the Wilcoxon test and this
 
 Common parametric and non-parametric tests for scale differences have similar problems as described above for the location tests.
 In addition, some non-parametric tests for the scale problem do not cope well with asymmetry.
-A possible solution, while retaining the robustness, is to apply the robust location tests to transformed observations as proposed by @Fri12onli.
-Such tests can yield good results in terms of power and size under both asymmetry and outlier corruption.
-However, the tests may be less powerful under symmetry than classical procedures like the Mood test.
+The package `robnptests` uses the idea of applying the robust location tests to transformed observations as proposed by @Fri12onli.
+Such tests retain the robustness of the underlying location tests and obtain good results in terms of power and size under both asymmetry and outlier corruption.
+However, these tests may be less powerful under symmetry than classical procedures like the Mood test.
 
-## Other packages with robust two-sample tests
-The CRAN Task View for robust statistical methods currently lists the three packages `WRS2` [@MaiWil20wrs2], `walrus` [@LovMai22walr], and `robeth` [@Mar20robe] that explicitly deal with robust hypothesis tests for the two-sample problem.
-`WRS2` contains a large collection of robust procedures which are presented in the book *Introduction to Robust Estimation and Hypothesis Testing* by [@Wil17intr]. `walrus` provides a different user interface for the functions in `WRS2`.
-Robust tests can also be found in the packages packages `robeth` [@Mar20robe], `robustbase` [@MaeRouCro22robu], and `RobStatTM` [@YohMarMar22robs].
-However, these tests are for linear hypothesis and thus beyond the scope of `robnptests`.
+# Other packages with robust two-sample tests
+The package `WRS2` [@MaiWil20wrs2] contains a collection of robust two-sample location tests for the heteroscedastic setting.
+In `robnptests`, we assume homoscedasticity for the location tests.
+This is because estimating the within-sample dispersion for both samples separately may be unreliable when the sample sizes are small.
+In general, equal sample sizes $m = n$ can protect against a deteriorating performance in terms of size and power [@StaShe90robu, p. 179].
 
-The functions in `WRS2` concentrate on the heteroscedastic setting, whereas our focus lies on the homoscedastic case.
-The reason of this focus is that especially for small samples, estimating the within-sample dispersion separately for both samples, as is the case under heteroscedasticity, may lead to unreliable estimates.
-Moreover, choosing equal sample sizes $m = n$, can protect against a deteriorating test performance of our implemented tests under heteroscedasticity in terms of size and power [@StaShe90robu, p. 179].
-
-The R package `nptest` [@Hel21npte] contains nonparametric versions of the two-sample $t$-test, which is realized by using the permutation and randomization principles described above on the $t$-statistic.
-This principle has also been studied in @AbbFri17cont, and, while being distribution free, the test statistic lacks robustness against outliers.
+The package package `nptest` [@Hel21npte] contains nonparametric versions of the two-sample $t$-test, realized by using the permutation and randomization principles, as described in the next section, on the $t$-statistic.
+This approach has also been studied in @AbbFri17cont, and, while being distribution free, the test statistic lacks robustness against outliers.
 
 # Implemented two-sample tests
-Each test statistic is a simple ratio inspired by the test statistic of the two-sample $t$-test. The numerator is a robust estimator for the location difference between the two populations and the denominator is a robust measure for the dispersion within the samples.
+The tests for a location difference are simple ratios inspired by the test statistic of the two-sample $t$-test. The numerator is a robust estimator for the location difference between the two populations and the denominator is a robust measure for the dispersion within the samples.
 
 To obtain a distribution-free test decision, the $p$-value can be computed by using the permutation principle, the randomization principle, or a normal approximation.
 With the permutation principle, the tests hold the desired significance level exactly at the cost of large computing times even for quite small samples such as $m = n = 10$.
@@ -91,7 +87,7 @@ The latter approach, however, is only advisable for large sample sizes $m, n > 3
 
 The tests based on the following estimators for the location difference are described in @FriDeh11robu:
 
-* The _difference of the sample medians_ leads to a highly robust test. However, the resulting test is not very powerful under normality due to the medians low efficiency.
+* The _difference of the sample medians_ leads to a highly robust test. However, the resulting test is not very powerful under normality due to the low efficiency of the median.
 * To obtain a more powerful test under normality, one can use the difference between the _one-sample Hodges-Lehmann estimators_ [@HodLeh63esti]. This may result in less robust tests due to the lower breakdown point.
 * The _two-sample Hodges-Lehmann estimator_ [@HodLeh63esti] leads to a robust test with a higher power under normality than the tests based on the sample median and can achieve similar robustness.
 
@@ -136,7 +132,6 @@ By setting `alternative = "two.sided"` and `delta = 0`, we test the null hypothe
 In the example, we use `method = "permutation"` so that the $p$-value is computed with the permutation principle.
 
 In general the functions start with the name of the underlying location-difference estimator and have several arguments to customize the test.
-For example, we can specify the dispersion estimator by the argument `scale` or perform a test for a difference in scale by setting `var.test = TRUE`.
 
 More examples on how to use the tests and a detailed overview of the the implemented tests and corresponding test statistics can be found in the vignette `vignette("robnptests")`.
 
