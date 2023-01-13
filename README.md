@@ -44,7 +44,7 @@ The following list shows the currently implemented tests in the package:
 * tests based on the Huber-, Hampel- or Bisquare-M-estimator (`m_test`).
 
 Even though the test statistics compare location estimates of the samples, they can be used to identify scale differences.
-This is achieved by setting the argument `disp.test = TRUE`, with which the observations in the samples are log-transformed so that scale differences between the original samples correspond to location differences in the transformed samples.
+This is achieved by setting the argument `scale_test = TRUE`, with which the observations in the samples are log-transformed so that scale differences between the original samples correspond to location differences in the transformed samples.
 
 Details on the tests and references can be found on the help pages of the functions and the vignette `vignette("robnptests")`.
 
@@ -70,7 +70,7 @@ hl2_test(x, y, method = "asymptotic")
 ### Example 2: Asymptotic test for scale difference using the two-sample Hodges-Lehmann estimator
 
 ``` r
-hl2_test(x, y, method = "asymptotic", disp.test = TRUE)
+hl2_test(x, y, method = "asymptotic", scale_test = TRUE)
 
 # 	Asymptotic test based on HL2-estimator
 # 

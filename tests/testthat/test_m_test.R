@@ -23,7 +23,7 @@ testthat::test_that("m_test works correctly", {
     testthat::expect_snapshot_output(m_test(x = x[1:5], y = y[1:5],
                                             method = "permutation",
                                             psi = psi,
-                                            disp.test = TRUE))
+                                            scale_test = TRUE))
 
     # Randomization test
     testthat::expect_snapshot_output(m_test(x = x[1:10], y = y[1:10],
@@ -34,7 +34,7 @@ testthat::test_that("m_test works correctly", {
     testthat::expect_snapshot_output(m_test(x = x[1:10], y = y[1:10],
                                             psi = psi,
                                             method = "randomization",
-                                            n.rep = 10000, disp.test = TRUE))
+                                            n.rep = 10000, scale_test = TRUE))
 
     # Asymptotic test
     testthat::expect_snapshot_output(m_test(x = x, y = y,
@@ -43,7 +43,7 @@ testthat::test_that("m_test works correctly", {
     testthat::expect_snapshot_output(m_test(x = x, y = y,
                                             method = "asymptotic",
                                             psi = psi,
-                                            disp.test = TRUE))
+                                            scale_test = TRUE))
 
     # Automatic selection of the method to compute the p-value ----
 
@@ -151,6 +151,6 @@ testthat::test_that("m_test works correctly", {
 
     # One of the samples contains zeros
     testthat::expect_message(m_test(x = x[1:10], y = c(y[1:9], 0),
-                                    method = "asymptotic", psi = psi, disp.test = TRUE))
+                                    method = "asymptotic", psi = psi, scale_test = TRUE))
   }
 })

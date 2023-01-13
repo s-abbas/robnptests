@@ -403,7 +403,7 @@
 #'                               delta = 0,
 #'                               method = c("asymptotic", "permutation", "randomization"),
 #'                               n.rep = 10000, na.rm = FALSE,
-#'                               disp.test = FALSE) {
+#'                               scale_test = FALSE) {
 #'
 #'   if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
 #'     return(NA)
@@ -413,7 +413,7 @@
 #'   }
 #'
 #'   ## If necessary: Transformation to test for difference in scale
-#'   if (disp.test) {
+#'   if (scale_test) {
 #'     x <- log(x^2)
 #'     y <- log(y^2)
 #'     delta <- log(delta^2)
@@ -465,7 +465,7 @@
 #'   ## Assign names to results
 #'   names(estimates) <- c("Asymmetrically trimmed mean of x", "Asymmetrically trimmed mean of y")
 #'   names(delta) <- "location shift"
-#'   names(statistic) <- ifelse(disp.test, "S", "D")
+#'   names(statistic) <- ifelse(scale_test, "S", "D")
 #'
 #'   if (method == "randomization") {
 #'     method = paste("Randomization test based on the", type, "selector statistic")

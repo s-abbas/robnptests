@@ -17,10 +17,10 @@ testthat::test_that("hl1_test works correctly", {
 
   testthat::expect_snapshot_output(hl1_test(x = x[1:5], y = y[1:5],
                                             method = "permutation", scale = "S1",
-                                            disp.test = TRUE))
+                                            scale_test = TRUE))
   testthat::expect_snapshot_output(hl1_test(x = x[1:5], y = y[1:5],
                                             method = "permutation", scale = "S2",
-                                            disp.test = TRUE))
+                                            scale_test = TRUE))
 
   # Randomization test
   testthat::expect_snapshot_output(hl1_test(x = x[1:10], y = y[1:10],
@@ -33,16 +33,16 @@ testthat::test_that("hl1_test works correctly", {
   testthat::expect_snapshot_output(hl1_test(x = x[1:10], y = y[1:10],
                                             method = "randomization",
                                             n.rep = 10000,  scale = "S1",
-                                            disp.test = TRUE))
+                                            scale_test = TRUE))
   testthat::expect_snapshot_output(hl1_test(x = x[1:10], y = y[1:10],
                                             method = "randomization",
                                             n.rep = 10000,  scale = "S2",
-                                            disp.test = TRUE))
+                                            scale_test = TRUE))
 
   # Asymptotic test
   testthat::expect_snapshot_output(hl1_test(x = x, y = y, method = "asymptotic"))
   testthat::expect_snapshot_output(hl1_test(x = x, y = y, method = "asymptotic",
-                                            disp.test = TRUE))
+                                            scale_test = TRUE))
 
   # Compare value of the test statistic to manually computed value ----
 
@@ -155,7 +155,7 @@ testthat::test_that("hl1_test works correctly", {
 
   # One of the samples contains zeros
   testthat::expect_message(hl1_test(x = x[1:10], y = c(y[1:9], 0),
-                                    method = "asymptotic", disp.test = TRUE))
+                                    method = "asymptotic", scale_test = TRUE))
 
   # Wobbling ----
 

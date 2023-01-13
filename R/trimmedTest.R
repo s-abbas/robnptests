@@ -30,7 +30,7 @@
 #' with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robnptests}
 #' is used to calculate the p-value.
 #'
-#' For \code{disp.test = TRUE}, the test compares the two samples for a difference
+#' For \code{scale_test = TRUE}, the test compares the two samples for a difference
 #' in scale. This is achieved by log-transforming the original squared observations,
 #' i.e. \code{x} is replaced by \code{log(x^2)} and \code{y} by \code{log(y^2)}.
 #' A potential scale difference then appears as a location difference between
@@ -40,7 +40,7 @@
 #' it contains zeros, uniform noise is added to all variables in order to remove
 #' zeros and a message is printed.
 #'
-#' If the sample has been modified because of zeros when \code{disp.test = TRUE},
+#' If the sample has been modified because of zeros when \code{scale_test = TRUE},
 #' the modified samples can be retrieved using
 #'
 #' \code{set.seed(wobble.seed); wobble(x, y)}
@@ -53,8 +53,8 @@
 #' \item{parameter}{the degrees of freedom for the test statistic.}
 #' \item{p.value}{the p-value for the test.}
 #' \item{estimate}{the trimmed means of \code{x} and \code{y}
-#'                 (if \code{disp.test = FALSE}) or of \code{log(x^2)} and
-#'                 \code{log(y^2)} (if \code{disp.test = TRUE}).}
+#'                 (if \code{scale_test = FALSE}) or of \code{log(x^2)} and
+#'                 \code{log(y^2)} (if \code{scale_test = TRUE}).}
 #' \item{null.value}{the specified hypothesized value of the mean difference/squared
 #'                   scale ratio.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
@@ -83,15 +83,15 @@
 trimmed_test <- function(x, y, gamma = 0.2,
                          alternative = c("two.sided", "less", "greater"),
                          method = c("asymptotic", "permutation", "randomization"),
-                         delta = ifelse(disp.test, 1, 0),
+                         delta = ifelse(scale_test, 1, 0),
                          n.rep = 1000,
-                         na.rm = FALSE, disp.test = FALSE,
+                         na.rm = FALSE, scale_test = FALSE,
                          wobble.seed = NULL) {
 
   # Check input arguments ----
   check_test_input(x = x, y = y, gamma = gamma, alternative = alternative,
                    method = method, delta = delta, n.rep = n.rep, na.rm = na.rm,
-                   disp.test = disp.test, wobble = FALSE, wobble.seed = wobble.seed,
+                   scale_test = scale_test, wobble = FALSE, wobble.seed = wobble.seed,
                    test.name = "trimmed_test")
 
   # Extract names of data sets ----
@@ -105,7 +105,7 @@ trimmed_test <- function(x, y, gamma = 0.2,
   # Data preprocessing ----
   prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
                           wobble = FALSE, wobble.seed = wobble.seed,
-                          disp.test = disp.test)
+                          scale_test = scale_test)
 
   if (!all(is.na(prep))) {
     x <- prep$x
@@ -169,7 +169,7 @@ trimmed_test <- function(x, y, gamma = 0.2,
   # Prepare output ----
 
   # Assign names to results
-  if (disp.test) {
+  if (scale_test) {
     names(estimates) <- c("Trimmed mean of log(x^2)", "Trimmed mean of log(y^2)")
     names(delta) <- "ratio of squared scale parameters"
     delta <- exp(delta)

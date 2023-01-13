@@ -16,7 +16,7 @@
 #'               If such values are present, uniform noise is added to the sample,
 #'               see \code{\link[robnptests]{wobble}}.
 #' @template wobble_seed
-#' @param disp.test a logical value to specify if the samples should be compared
+#' @param scale_test a logical value to specify if the samples should be compared
 #'                 for a difference in scale.
 #'
 #' @details
@@ -32,7 +32,7 @@
 #'
 #' @keywords internal
 
-preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, disp.test) {
+preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, scale_test) {
 
   # Remove missing values ----
   if (na.rm) {
@@ -70,7 +70,7 @@ preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, disp.test) 
   }
 
   # Transformation of observations for scale test ----
-  if (disp.test) {
+  if (scale_test) {
     if (delta == 0) {
       # 'delta' needs to be larger than zero
       stop("The logarithm of 0 is not defined. Please use a positive value for 'delta'.")
@@ -121,7 +121,7 @@ preprocess_data <- function(x, y, delta, na.rm, wobble, wobble.seed, disp.test) 
 #'        calculate the randomization distribution if \code{method = "randomization"}.
 #' @param na.rm a logical value indicating whether NA values in \code{x} and \code{y}
 #'              should be stripped before the computation proceeds.
-#' @param disp.test a logical value testing whether the samples should be compared
+#' @param scale_test a logical value testing whether the samples should be compared
 #'                 for a difference in scale.
 #' @param wobble a logical value indicating whether the sample should be checked
 #'               for duplicated values that can cause the scale estimate to be zero.
@@ -160,7 +160,7 @@ check_test_input <- function(x,
                              scale,
                              n.rep,
                              na.rm,
-                             disp.test,
+                             scale_test,
                              wobble,
                              wobble.seed,
                              gamma = NULL,
@@ -175,10 +175,10 @@ check_test_input <- function(x,
   checkmate::assert_subset(method, choices = c("asymptotic", "permutation", "randomization"), empty.ok = FALSE)
   checkmate::assert_count(n.rep, na.ok = FALSE, positive = TRUE)
   checkmate::assert_flag(na.rm, na.ok = FALSE, null.ok = FALSE)
-  checkmate::assert_flag(disp.test, na.ok = FALSE, null.ok = FALSE)
-  if (disp.test) {
+  checkmate::assert_flag(scale_test, na.ok = FALSE, null.ok = FALSE)
+  if (scale_test) {
     checkmate::assert_numeric(delta, lower = 0, finite = TRUE, any.missing = FALSE, len = 1, null.ok = FALSE)
-  } else if (!disp.test) {
+  } else if (!scale_test) {
     checkmate::assert_numeric(delta, finite = TRUE, any.missing = FALSE, len = 1, null.ok = FALSE)
   }
   checkmate::assert_numeric(wobble.seed, finite = TRUE, any.missing = FALSE, len = 1, null.ok = TRUE)
