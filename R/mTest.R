@@ -16,7 +16,7 @@
 #' @template k_mest
 #' @template n_rep
 #' @template na_rm
-#' @template var_test
+#' @template scale_test
 #' @template wobble_seed_mtest
 #' @template scaleTau2
 #'

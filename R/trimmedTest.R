@@ -15,7 +15,7 @@
 #' @template method
 #' @template n_rep
 #' @template na_rm
-#' @template var_test
+#' @template scale_test
 #' @template wobble_seed
 #'
 #' @details

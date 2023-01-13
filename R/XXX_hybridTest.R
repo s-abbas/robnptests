@@ -65,7 +65,7 @@
 #' #' @template delta
 #' #' @template k_huber
 #' #' @template alternative
-#' #' @template var_test
+#' #' @template scale_test
 #' #' @template na_rm
 #' #'
 #' #' @return
@@ -342,7 +342,7 @@
 #' #' @template alternative
 #' #' @template delta
 #' #' @template na_rm
-#' #' @template var_test
+#' #' @template scale_test
 #' #'
 #' #' @return
 #' #' A list with class "\code{htest}" containing the following components:
@@ -462,7 +462,7 @@
 #' #' @template n_rep_hybrid
 #' #' @template na_rm
 #' #' @template n_rep_hybrid
-#' #' @template var_test
+#' #' @template scale_test
 #' #'
 #' #' @return
 #' #' A list with class "\code{htest}" containing the following components:
@@ -565,7 +565,7 @@
 #' #' @template n_rep_hybrid
 #' #' @template na_rm
 #' #' @template n_rep_hybrid
-#' #' @template var_test
+#' #' @template scale_test
 #' #'
 #' #' @return
 #' #' A list with class "\code{htest}" containing the following components:
@@ -673,7 +673,7 @@
 #' #' @template n_rep_hybrid
 #' #' @template na_rm
 #' #' @template n_rep_hybrid
-#' #' @template var_test
+#' #' @template scale_test
 #' #'
 #' #' @return
 #' #' A list with class "\code{htest}" containing the following components:
@@ -779,7 +779,7 @@
 #' #' @template k_hybrid
 #' #' @template na_rm
 #' #' @template n_rep_hybrid
-#' #' @template var_test
+#' #' @template scale_test
 #' #'
 #' #' @return
 #' #' A list with class "\code{htest}" containing the following components:

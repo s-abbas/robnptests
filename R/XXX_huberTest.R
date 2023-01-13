@@ -63,7 +63,7 @@
 #' #' @template delta
 #' #' @template k_huber
 #' #' @template alternative
-#' #' @template var_test
+#' #' @template scale_test
 #' #' @template na_rm
 #' #'
 #' #' @return

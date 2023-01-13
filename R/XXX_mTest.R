@@ -16,7 +16,7 @@
 # #' @template k_mest
 # #' @template n_rep_m_test
 # #' @template na_rm
-# #' @template var_test
+# #' @template scale_test
 # #'
 # #' @return
 # #' A list with class "\code{htest}" containing the following components:
