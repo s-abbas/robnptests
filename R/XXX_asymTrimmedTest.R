@@ -222,17 +222,17 @@
 #'   estimates <- c(x.trim, y.trim)
 #'
 #'   ## Scale estimator
-#'   var.x <- asym_win_var(x, type = type, na.rm = na.rm)
-#'   var.y <- asym_win_var(y, type = type, na.rm = na.rm)
+#'   scale.x <- asym_win_var(x, type = type, na.rm = na.rm)
+#'   scale.y <- asym_win_var(y, type = type, na.rm = na.rm)
 #'
-#'   h.x <- var.x$h
-#'   h.y <- var.y$h
-#'   var.x <- var.x$var
-#'   var.y <- var.y$var
+#'   h.x <- scale.x$h
+#'   h.y <- scale.y$h
+#'   scale.x <- scale.x$var
+#'   scale.y <- scale.y$var
 #'
 #'   m <- length(x)
 #'   n <- length(y)
-#'   pool.var <- ((h.x - 1) * var.x + (h.y - 1) * var.y)/(h.x + h.y - 2)
+#'   pool.var <- ((h.x - 1) * scale.x + (h.y - 1) * scale.y)/(h.x + h.y - 2)
 #'
 #'   ## Degrees of freedom
 #'   df <- h.x + h.y - 2

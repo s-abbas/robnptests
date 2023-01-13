@@ -34,15 +34,15 @@ testthat::test_that("trimmed_test works correctly", {
 
   res <- as.numeric(trimmed_test(x = x, y = y, method = "asymptotic")$statistic)
 
-  var.x <- win_var(x, gamma = 0.2)
-  var.y <- win_var(y, gamma = 0.2)
-  h.x <- var.x$h
-  h.y <- var.y$h
-  var.x <- var.x$var
-  var.y <- var.y$var
+  scale.x <- win_var(x, gamma = 0.2)
+  scale.y <- win_var(y, gamma = 0.2)
+  h.x <- scale.x$h
+  h.y <- scale.y$h
+  scale.x <- scale.x$var
+  scale.y <- scale.y$var
   m <- length(x)
   n <- length(y)
-  pool.var <- ((m - 1) * var.x + (n - 1) * var.y)/(h.x + h.y - 2)
+  pool.var <- ((m - 1) * scale.x + (n - 1) * scale.y)/(h.x + h.y - 2)
 
   testthat::expect_equal(res, (trim_mean(x, gamma = 0.2) - trim_mean(y, gamma = 0.2))/sqrt(pool.var * (1/h.x + 1/h.y)))
 
