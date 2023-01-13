@@ -94,9 +94,9 @@
 #' #'
 #' #' @export
 #'
-#' huber_test <- function(x, y, delta = ifelse(var.test, 1, 0), k = 1.8,
+#' huber_test <- function(x, y, delta = ifelse(disp.test, 1, 0), k = 1.8,
 #'                        alternative = c("two.sided", "greater", "less"),
-#'                        var.test = FALSE, na.rm=FALSE) {
+#'                        disp.test = FALSE, na.rm=FALSE) {
 #'
 #'   dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 #'
@@ -109,7 +109,7 @@
 #'   }
 #'
 #'   ## If necessary: Transformation to test for difference in scale
-#'   if (var.test) {
+#'   if (disp.test) {
 #'     x <- log(x^2)
 #'     y <- log(y^2)
 #'     delta <- log(delta^2)
@@ -141,7 +141,7 @@
 #'   )
 #'
 #'
-#'   if (var.test) {
+#'   if (disp.test) {
 #'     names(estimates) <- c("Huber-M of log(x^2)", "Huber-M of log(y^2)")
 #'     names(delta) <- "ratio of variances"
 #'     delta <- exp(delta)
@@ -150,7 +150,7 @@
 #'     names(delta) <- "location shift"
 #'   }
 #'
-#'   names(statistic) <- ifelse(var.test, "S", "D")
+#'   names(statistic) <- ifelse(disp.test, "S", "D")
 #'   method <- "Huber-Test"
 #'   parameter <- m + n - 2
 #'   names(parameter) <- "df"

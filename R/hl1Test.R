@@ -48,7 +48,7 @@
 #' normal distribution, is used. For more details on the asymptotic test, see
 #' \insertCite{FriDeh11robu;textual}{robnptests}.
 #'
-#' For \code{var.test = TRUE}, the test compares the two samples for a difference
+#' For \code{disp.test = TRUE}, the test compares the two samples for a difference
 #' in scale. This is achieved by log-transforming the original squared observations,
 #' i.e. \code{x} is replaced by \code{log(x^2)} and \code{y} by \code{log(y^2)}.
 #' A potential scale difference then appears as a location difference between
@@ -58,7 +58,7 @@
 #' it contains zeros, uniform noise is added to all variables in order to remove
 #' zeros and a message is printed.
 #'
-#' If the sample has been modified (either because of zeros if \code{var.test = TRUE}
+#' If the sample has been modified (either because of zeros if \code{disp.test = TRUE}
 #' or \code{wobble = TRUE}), the modified samples can be retrieved using
 #'
 #' \code{set.seed(wobble.seed); wobble(x, y)}.
@@ -70,8 +70,8 @@
 #' \item{statistic}{the value of the test statistic.}
 #' \item{p.value}{the p-value for the test.}
 #' \item{estimate}{the one-sample Hodges-Lehmann estimates of \code{x} and \code{y}
-#'                 (if \code{var.test = FALSE}) or of \code{log(x^2)} and
-#'                 \code{log(y^2)} (if \code{var.test = TRUE}).}
+#'                 (if \code{disp.test = FALSE}) or of \code{log(x^2)} and
+#'                 \code{log(y^2)} (if \code{disp.test = TRUE}).}
 #' \item{null.value}{the specified hypothesized value of the mean difference/squared
 #'                   scale ratio.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
@@ -107,19 +107,19 @@
 hl1_test <- function(x,
                      y,
                      alternative = c("two.sided", "greater", "less"),
-                     delta = ifelse(var.test, 1, 0),
+                     delta = ifelse(disp.test, 1, 0),
                      method = c("asymptotic", "permutation", "randomization"),
                      scale = c("S1", "S2"),
                      n.rep = 10000,
                      na.rm = FALSE,
-                     var.test = FALSE,
+                     disp.test = FALSE,
                      wobble = FALSE,
                      wobble.seed = NULL) {
 
   # Check input arguments ----
   check_test_input(x = x, y = y, alternative = alternative, delta = delta,
                    method = method, scale = scale, n.rep = n.rep, na.rm = na.rm,
-                   var.test = var.test, wobble = wobble, wobble.seed = wobble.seed,
+                   disp.test = disp.test, wobble = wobble, wobble.seed = wobble.seed,
                    test.name = "hl1_test")
 
   # Extract names of data sets ----
@@ -134,7 +134,7 @@ hl1_test <- function(x,
   # Data preprocessing ----
   prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
                     wobble = wobble, wobble.seed = wobble.seed,
-                    var.test = var.test)
+                    disp.test = disp.test)
 
   if (!all(is.na(prep))) {
     x <- prep$x
@@ -177,7 +177,7 @@ hl1_test <- function(x,
   # Prepare output ----
 
   # Assign names to results
-  if (var.test) {
+  if (disp.test) {
     names(estimates) <- c("HL1 of log(x^2)", "HL1 of log(y^2)")
     names(delta) <- "ratio of squared scale parameters"
     delta <- exp(delta)
@@ -186,7 +186,7 @@ hl1_test <- function(x,
     names(delta) <- "location shift"
   }
 
-  names(statistic) <- ifelse(var.test, "S", "D")
+  names(statistic) <- ifelse(disp.test, "S", "D")
 
   # Information on applied test
   if (method == "randomization") {

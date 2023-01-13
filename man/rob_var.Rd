@@ -33,7 +33,7 @@ if the scale estimate is zero. The default is
 An estimate of the pooled variance of the two samples.
 }
 \description{
-\code{rob_var} calculates an estimator for the within-sample variability
+\code{rob_var} calculates an estimator for the within-sample dispersion
 based on two samples.
 }
 \details{

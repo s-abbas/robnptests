@@ -8,13 +8,13 @@ m_test(
   x,
   y,
   alternative = c("two.sided", "greater", "less"),
-  delta = ifelse(var.test, 1, 0),
+  delta = ifelse(disp.test, 1, 0),
   method = c("asymptotic", "permutation", "randomization"),
   psi = c("huber", "hampel", "bisquare"),
   k = robustbase::.Mpsi.tuning.default(psi),
   n.rep = 10000,
   na.rm = FALSE,
-  var.test = FALSE,
+  disp.test = FALSE,
   wobble.seed = NULL,
   ...
 )
@@ -31,7 +31,7 @@ must be one of "two.sided" (default), "greater", or "less".}
 scale parameter, depending on whether the test should be performed
 for a difference in location or in scale. The default is
 \code{delta = 0} for a location test and \code{delta = 1} for a scale
-test. In case of \code{var.test = TRUE}, \code{delta} represents
+test. In case of \code{disp.test = TRUE}, \code{delta} represents
 the ratio of the squared scale parameters.}
 
 \item{method}{a character string specifying how the p-value is computed with
@@ -67,19 +67,19 @@ The default is \code{n.rep = 10000}.}
 \code{y} should be stripped before the computation proceeds. The
 default is \code{na.rm = FALSE}.}
 
-\item{var.test}{a logical value to specify if the samples should be compared
-for a difference in scale. The default is \code{var.test = FALSE}.}
+\item{disp.test}{a logical value to specify if the samples should be compared
+for a difference in scale. The default is \code{disp.test = FALSE}.}
 
 \item{wobble.seed}{an integer value used as a seed for the random number
-generation in case that \code{var.test = TRUE}
+generation in case that \code{disp.test = TRUE}
 and one of the vectors \code{x} and
 \code{y} contains zeros. When no seed is specified, it
 is chosen randomly and printed in a message. The argument
-is ignored if \code{var.test = FALSE}.}
+is ignored if \code{disp.test = FALSE}.}
 
 \item{...}{additional arguments \code{c1} and \code{c2} that can be passed to
 the function \code{scaleTau2()}, which is used internally for
-estimating the within-sample variability, in order to account for
+estimating the within-sample dispersion, in order to account for
 non-normal distributions; see \insertCite{MarZam02robu;textual}{robnptests}.}
 }
 \value{
@@ -88,8 +88,8 @@ A named list with class "\code{htest}" containing the following components:
 \item{parameter}{the degrees of freedom for the test statistic.}
 \item{p.value}{the p-value for the test.}
 \item{estimate}{the M-estimates of \code{x} and \code{y}
-                (if \code{var.test = FALSE}) or of \code{log(x^2)} and
-                \code{log(y^2)} (if \code{var.test = TRUE}).}
+                (if \code{disp.test = FALSE}) or of \code{log(x^2)} and
+                \code{log(y^2)} (if \code{disp.test = TRUE}).}
 \item{null.value}{the specified hypothesized value of the mean difference/squared
                   scale ratio.}
 \item{alternative}{a character string describing the alternative hypothesis.}
@@ -137,7 +137,7 @@ distributions, it tends to be anti-conservative, see the vignette
 factor which has to be determined individually for a specific distribution in
 such cases.
 
-For \code{var.test = TRUE}, the test compares the two samples for a difference
+For \code{disp.test = TRUE}, the test compares the two samples for a difference
 in scale. This is achieved by log-transforming the original squared observations,
 i.e. \code{x} is replaced by \code{log(x^2)} and \code{y} by \code{log(y^2)}.
 A potential scale difference then appears as a location difference between
@@ -147,7 +147,7 @@ contain zeros to prevent problems with the necessary log-transformation. If
 it contains zeros, uniform noise is added to all variables in order to remove
 zeros and a message is printed.
 
-If the sample has been modified because of zeros when \code{var.test = TRUE},
+If the sample has been modified because of zeros when \code{disp.test = TRUE},
 the modified samples can be retrieved using
 
 \code{set.seed(wobble.seed); wobble(x, y)}

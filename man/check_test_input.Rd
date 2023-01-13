@@ -13,7 +13,7 @@ check_test_input(
   scale,
   n.rep,
   na.rm,
-  var.test,
+  disp.test,
   wobble,
   wobble.seed,
   gamma = NULL,
@@ -44,7 +44,7 @@ calculate the randomization distribution if \code{method = "randomization"}.}
 \item{na.rm}{a logical value indicating whether NA values in \code{x} and \code{y}
 should be stripped before the computation proceeds.}
 
-\item{var.test}{a logical value testing whether the samples should be compared
+\item{disp.test}{a logical value testing whether the samples should be compared
 for a difference in scale.}
 
 \item{wobble}{a logical value indicating whether the sample should be checked
@@ -54,10 +54,10 @@ see \code{\link[robnptests]{wobble}}.}
 
 \item{wobble.seed}{an integer value used as a seed for the random number
 generation in case of \code{wobble = TRUE} or when
-\code{var.test = TRUE} with one of the vectors \code{x} and
+\code{disp.test = TRUE} with one of the vectors \code{x} and
 \code{y} containing zeros. When no seed is specified, it
 is chosen randomly and printed in a message. The argument
-is ignored if \code{var.test = FALSE} and/or \code{wobble = FALSE}.}
+is ignored if \code{disp.test = FALSE} and/or \code{wobble = FALSE}.}
 
 \item{gamma}{a numeric value in [0, 0.5] specifying the fraction of observations
 to be trimmed/replaced from each end of the sample before

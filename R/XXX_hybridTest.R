@@ -96,9 +96,9 @@
 #' #'
 #' #' @export
 #'
-#' huber_test <- function(x, y, delta = ifelse(var.test, 1, 0), k = 1.8,
+#' huber_test <- function(x, y, delta = ifelse(disp.test, 1, 0), k = 1.8,
 #'                        alternative = c("two.sided", "greater", "less"),
-#'                        var.test = FALSE, na.rm=FALSE) {
+#'                        disp.test = FALSE, na.rm=FALSE) {
 #'
 #'   dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 #'
@@ -111,7 +111,7 @@
 #'   }
 #'
 #'   ## If necessary: Transformation to test for difference in scale
-#'   if (var.test) {
+#'   if (disp.test) {
 #'     x <- log(x^2)
 #'     y <- log(y^2)
 #'     delta <- log(delta^2)
@@ -143,7 +143,7 @@
 #'   )
 #'
 #'
-#'   if (var.test) {
+#'   if (disp.test) {
 #'     names(estimates) <- c("Huber-M of log(x^2)", "Huber-M of log(y^2)")
 #'     names(delta) <- "ratio of variances"
 #'     delta <- exp(delta)
@@ -152,7 +152,7 @@
 #'     names(delta) <- "location shift"
 #'   }
 #'
-#'   names(statistic) <- ifelse(var.test, "S", "D")
+#'   names(statistic) <- ifelse(disp.test, "S", "D")
 #'   method <- "Huber-Test"
 #'   parameter <- m + n - 2
 #'   names(parameter) <- "df"
@@ -373,8 +373,8 @@
 #'
 #' trimmed_test <- function(x, y, gamma = 0.2,
 #'                          alternative = c("two.sided", "less", "greater"),
-#'                          delta = ifelse(var.test, 1, 0),
-#'                          na.rm = FALSE, var.test = FALSE) {
+#'                          delta = ifelse(disp.test, 1, 0),
+#'                          na.rm = FALSE, disp.test = FALSE) {
 #'   ## Error handling
 #'   if (!missing(delta) && (length(delta) != 1 || is.na(delta))) {
 #'     stop ("'delta' must be a single number.")
@@ -391,7 +391,7 @@
 #'   }
 #'
 #'   ## If necessary: Transformation to test for difference in scale
-#'   if (var.test) {
+#'   if (disp.test) {
 #'     x <- log(x^2)
 #'     y <- log(y^2)
 #'     delta <- log(delta^2)
@@ -415,7 +415,7 @@
 #'
 #'   ## Assign names to results
 #'
-#'   if (var.test) {
+#'   if (disp.test) {
 #'     names(estimates) <- c("Trimmed mean of log(x^2)", "Trimmed mean of log(y^2)")
 #'     names(delta) <- "ratio of variances"
 #'     delta <- exp(delta)
@@ -493,12 +493,12 @@
 #'
 #' min_c_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delta = 0,
 #'                        k = 1.8,
-#'                        na.rm = FALSE, n.rep = 1000, var.test = FALSE) {
+#'                        na.rm = FALSE, n.rep = 1000, disp.test = FALSE) {
 #'
 #'   alternative <- match.arg(alternative)
 #'
 #'   ## If necessary: Transformation to test for difference in scale
-#'   if (var.test) {
+#'   if (disp.test) {
 #'     x <- log(x^2)
 #'     y <- log(y^2)
 #'     delta <- log(delta^2)
@@ -600,12 +600,12 @@
 #'
 #' min_tc_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delta = 0,
 #'                         k = 1.8,
-#'                         na.rm = FALSE, n.rep = 1000, var.test = FALSE) {
+#'                         na.rm = FALSE, n.rep = 1000, disp.test = FALSE) {
 #'
 #'   alternative <- match.arg(alternative)
 #'
 #'   ## If necessary: Transformation to test for difference in scale
-#'   if (var.test) {
+#'   if (disp.test) {
 #'     x <- log(x^2)
 #'     y <- log(y^2)
 #'     delta <- log(delta^2)
@@ -705,12 +705,12 @@
 #' #' @export
 #'
 #' min_t_test <- function(x, y, alternative = c("two.sided", "greater", "less"), delta = 0,
-#'                        na.rm = FALSE, n.rep = 1000, var.test = FALSE) {
+#'                        na.rm = FALSE, n.rep = 1000, disp.test = FALSE) {
 #'
 #'   alternative <- match.arg(alternative)
 #'
 #'   ## If necessary: Transformation to test for difference in scale
-#'   if (var.test) {
+#'   if (disp.test) {
 #'     x <- log(x^2)
 #'     y <- log(y^2)
 #'     delta <- log(delta^2)
@@ -822,7 +822,7 @@
 #'
 #' hybrid_test <- function(x, y, type = c("min1", "min2", "min3"),
 #'                         alternative = c("two.sided", "greater", "less"), delta = 0,
-#'                         k = 1.8, na.rm = FALSE, n.rep = 1000, var.test = FALSE) {
+#'                         k = 1.8, na.rm = FALSE, n.rep = 1000, disp.test = FALSE) {
 #'
 #'   if (!na.rm & (any(is.na(x)) | any(is.na(y)))) {
 #'     return(NA)
@@ -836,7 +836,7 @@
 #'   }
 #'
 #'   ## If necessary: Transformation to test for difference in scale
-#'   if (var.test) {
+#'   if (disp.test) {
 #'     x <- log(x^2)
 #'     y <- log(y^2)
 #'     delta <- log(delta^2)

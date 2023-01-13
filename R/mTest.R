@@ -58,7 +58,7 @@
 #' factor which has to be determined individually for a specific distribution in
 #' such cases.
 #'
-#' For \code{var.test = TRUE}, the test compares the two samples for a difference
+#' For \code{disp.test = TRUE}, the test compares the two samples for a difference
 #' in scale. This is achieved by log-transforming the original squared observations,
 #' i.e. \code{x} is replaced by \code{log(x^2)} and \code{y} by \code{log(y^2)}.
 #' A potential scale difference then appears as a location difference between
@@ -68,7 +68,7 @@
 #' it contains zeros, uniform noise is added to all variables in order to remove
 #' zeros and a message is printed.
 #'
-#' If the sample has been modified because of zeros when \code{var.test = TRUE},
+#' If the sample has been modified because of zeros when \code{disp.test = TRUE},
 #' the modified samples can be retrieved using
 #'
 #' \code{set.seed(wobble.seed); wobble(x, y)}
@@ -81,8 +81,8 @@
 #' \item{parameter}{the degrees of freedom for the test statistic.}
 #' \item{p.value}{the p-value for the test.}
 #' \item{estimate}{the M-estimates of \code{x} and \code{y}
-#'                 (if \code{var.test = FALSE}) or of \code{log(x^2)} and
-#'                 \code{log(y^2)} (if \code{var.test = TRUE}).}
+#'                 (if \code{disp.test = FALSE}) or of \code{log(x^2)} and
+#'                 \code{log(y^2)} (if \code{disp.test = TRUE}).}
 #' \item{null.value}{the specified hypothesized value of the mean difference/squared
 #'                   scale ratio.}
 #' \item{alternative}{a character string describing the alternative hypothesis.}
@@ -115,18 +115,18 @@
 #' @export
 
 m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
-                   delta = ifelse(var.test, 1, 0),
+                   delta = ifelse(disp.test, 1, 0),
                    method = c("asymptotic", "permutation", "randomization"),
                    psi = c("huber", "hampel", "bisquare"),
                    k = robustbase::.Mpsi.tuning.default(psi),
                    n.rep = 10000, na.rm = FALSE,
-                   var.test = FALSE, wobble.seed = NULL, ...) {
+                   disp.test = FALSE, wobble.seed = NULL, ...) {
 
   # Check input arguments ----
   psi <- match.arg(psi)
   check_test_input(x = x, y = y, alternative = alternative, delta = delta,
                    method = method, psi = psi, k = k, n.rep = n.rep,
-                   na.rm = na.rm, var.test = var.test,
+                   na.rm = na.rm, disp.test = disp.test,
                    wobble.seed = wobble.seed, wobble = FALSE,
                    test.name = "m_test")
 
@@ -141,7 +141,7 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   # Data preprocessing ----
   prep <- preprocess_data(x = x, y = y, delta = delta, na.rm = na.rm,
                           wobble = FALSE, wobble.seed = wobble.seed,
-                          var.test = var.test)
+                          disp.test = disp.test)
 
   if (!all(is.na(prep))) {
     x <- prep$x
@@ -182,7 +182,7 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
   # Prepare output ----
 
   # Assign names to results
-  if (var.test) {
+  if (disp.test) {
     names(estimates) <- c("M-est. of log(x^2)", "M-est. of log(y^2)")
     names(delta) <- "ratio of squared scale parameters"
     delta <- exp(delta)
@@ -191,7 +191,7 @@ m_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
     names(delta) <- "location shift"
   }
 
-  names(statistic) <- ifelse(var.test, "S", "D")
+  names(statistic) <- ifelse(disp.test, "S", "D")
 
   # Information on applied test
   if (method == "randomization") {

@@ -67,7 +67,7 @@ win_var <- function(x, gamma = 0, na.rm = FALSE) {
 #' @title Robust scale estimators based on median absolute deviation
 #'
 #' @description
-#' \code{rob_var} calculates an estimator for the within-sample variability
+#' \code{rob_var} calculates an estimator for the within-sample dispersion
 #' based on two samples.
 #'
 #' @template x

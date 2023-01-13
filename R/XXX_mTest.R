@@ -44,10 +44,10 @@
 
 
 # m_estimator_test <- function(x, y, alternative = c("two.sided", "greater", "less"),
-#                              delta = ifelse(var.test, 1, 0),
+#                              delta = ifelse(disp.test, 1, 0),
 #                              method = c("randomization", "permutation"),
 #                              psi = c("huber", "hampel", "bisquare"), k = .Mpsi.tuning.default(psi),
-#                              n.rep = 10000, na.rm = FALSE, var.test = FALSE) {
+#                              n.rep = 10000, na.rm = FALSE, disp.test = FALSE) {
 #
 #   dname <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 #
@@ -59,7 +59,7 @@
 #   }
 #
 #   ## If necessary: Transformation to test for difference in scale
-#   if (var.test) {
+#   if (disp.test) {
 #     x <- log(x^2)
 #     y <- log(y^2)
 #     delta <- log(delta^2)
@@ -93,7 +93,7 @@
 #   p.value <- calc_perm_p_value(statistic, distribution, m = length(x), n = length(y),
 #                                randomization = randomization, n.rep = n.rep, alternative = alternative)
 #
-#   if (var.test) {
+#   if (disp.test) {
 #     names(estimates) <- c("M-est. of log(x^2)", "M-est. of log(y^2)")
 #     names(delta) <- "ratio of variances"
 #     delta <- exp(delta)
@@ -101,7 +101,7 @@
 #     names(estimates) <- c("M-est. of x", "M-est. of y")
 #     names(delta) <- "location shift"
 #   }
-#   names(statistic) <- ifelse(var.test, "S", "D")
+#   names(statistic) <- ifelse(disp.test, "S", "D")
 #
 #   if (method == "randomization") {
 #     method = paste("Randomization test based on the ", paste0(toupper(substring(psi, 1, 1)), substring(psi, 2, nchar(psi))), "M-estimator")

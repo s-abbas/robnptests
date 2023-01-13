@@ -10,10 +10,10 @@ trimmed_test(
   gamma = 0.2,
   alternative = c("two.sided", "less", "greater"),
   method = c("asymptotic", "permutation", "randomization"),
-  delta = ifelse(var.test, 1, 0),
+  delta = ifelse(disp.test, 1, 0),
   n.rep = 1000,
   na.rm = FALSE,
-  var.test = FALSE,
+  disp.test = FALSE,
   wobble.seed = NULL
 )
 }
@@ -49,7 +49,7 @@ If not specified explicitly, defaults to
 scale parameter, depending on whether the test should be performed
 for a difference in location or in scale. The default is
 \code{delta = 0} for a location test and \code{delta = 1} for a scale
-test. In case of \code{var.test = TRUE}, \code{delta} represents
+test. In case of \code{disp.test = TRUE}, \code{delta} represents
 the ratio of the squared scale parameters.}
 
 \item{n.rep}{an integer value specifying the number of random splits used to
@@ -61,15 +61,15 @@ The default is \code{n.rep = 10000}.}
 \code{y} should be stripped before the computation proceeds. The
 default is \code{na.rm = FALSE}.}
 
-\item{var.test}{a logical value to specify if the samples should be compared
-for a difference in scale. The default is \code{var.test = FALSE}.}
+\item{disp.test}{a logical value to specify if the samples should be compared
+for a difference in scale. The default is \code{disp.test = FALSE}.}
 
 \item{wobble.seed}{an integer value used as a seed for the random number
 generation in case of \code{wobble = TRUE} or when
-\code{var.test = TRUE} with one of the vectors \code{x} and
+\code{disp.test = TRUE} with one of the vectors \code{x} and
 \code{y} containing zeros. When no seed is specified, it
 is chosen randomly and printed in a message. The argument
-is ignored if \code{var.test = FALSE} and/or \code{wobble = FALSE}.}
+is ignored if \code{disp.test = FALSE} and/or \code{wobble = FALSE}.}
 }
 \value{
 A named list with class "\code{htest}" containing the following components:
@@ -77,8 +77,8 @@ A named list with class "\code{htest}" containing the following components:
 \item{parameter}{the degrees of freedom for the test statistic.}
 \item{p.value}{the p-value for the test.}
 \item{estimate}{the trimmed means of \code{x} and \code{y}
-                (if \code{var.test = FALSE}) or of \code{log(x^2)} and
-                \code{log(y^2)} (if \code{var.test = TRUE}).}
+                (if \code{disp.test = FALSE}) or of \code{log(x^2)} and
+                \code{log(y^2)} (if \code{disp.test = TRUE}).}
 \item{null.value}{the specified hypothesized value of the mean difference/squared
                   scale ratio.}
 \item{alternative}{a character string describing the alternative hypothesis.}
@@ -100,7 +100,7 @@ When computing a randomization distribution based on randomly drawn splits
 with replacement, the function \code{\link[statmod]{permp}} \insertCite{PhiSmy10perm}{robnptests}
 is used to calculate the p-value.
 
-For \code{var.test = TRUE}, the test compares the two samples for a difference
+For \code{disp.test = TRUE}, the test compares the two samples for a difference
 in scale. This is achieved by log-transforming the original squared observations,
 i.e. \code{x} is replaced by \code{log(x^2)} and \code{y} by \code{log(y^2)}.
 A potential scale difference then appears as a location difference between
@@ -110,7 +110,7 @@ contain zeros to prevent problems with the necessary log-transformation. If
 it contains zeros, uniform noise is added to all variables in order to remove
 zeros and a message is printed.
 
-If the sample has been modified because of zeros when \code{var.test = TRUE},
+If the sample has been modified because of zeros when \code{disp.test = TRUE},
 the modified samples can be retrieved using
 
 \code{set.seed(wobble.seed); wobble(x, y)}
