@@ -66,16 +66,16 @@ testthat::test_that("rob_perm_statistic works correctly", {
   # hodges_lehmann_2sample(x, y) = 18.5
   #
   # Variance for 'S1':
-  # rob_var(x, y, type = "S1") = 22
+  # rob_scale(x, y, type = "S1") = 22
   #
   # Variance for 'S2':
-  # rob_var(x, y, type = "S2") = 20.5
+  # rob_scale(x, y, type = "S2") = 20.5
   #
   # Variance for 'S3':
-  # rob_var(x, y, type = "S3") = 19
+  # rob_scale(x, y, type = "S3") = 19
   #
   # Variance for 'S4':
-  # rob_var(x, y, type = "S3") = 18.5
+  # rob_scale(x, y, type = "S3") = 18.5
   #
   # Test statistic for 'type = HL11': 1.477273
   # Test statistic for 'type = HL12': 1.585366

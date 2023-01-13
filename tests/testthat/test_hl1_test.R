@@ -52,9 +52,9 @@ testthat::test_that("hl1_test works correctly", {
                                 scale = "S2")$statistic)
 
   testthat::expect_equal(res.s1,
-                         (hodges_lehmann(x) - hodges_lehmann(y))/rob_var(x, y, type = "S1"))
+                         (hodges_lehmann(x) - hodges_lehmann(y))/rob_scale(x, y, type = "S1"))
   testthat::expect_equal(res.s2,
-                         (hodges_lehmann(x) - hodges_lehmann(y))/rob_var(x, y, type = "S2"))
+                         (hodges_lehmann(x) - hodges_lehmann(y))/rob_scale(x, y, type = "S2"))
 
   # Automatic selection of the method to compute the p-value ----
 

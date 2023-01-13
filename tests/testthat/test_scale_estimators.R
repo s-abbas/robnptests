@@ -75,33 +75,33 @@ testthat::test_that("win_var works correctly", {
 })
 
 # Robust variance for 'hl1_test', 'hl2_test', and 'med_test' ----
-testthat::test_that("rob_var works correctly", {
+testthat::test_that("rob_scale works correctly", {
 
   # Exemplary input vectors ----
   x <- c(7, 2, 1, 6, 8)
   y <- c(5, 9, 6, 7, 8)
 
   # Removing missing values ----
-  testthat::expect_equal(rob_var(x = c(x, NA), y = c(y, NA), na.rm = TRUE),
-                         rob_var(x = x, y = y))
+  testthat::expect_equal(rob_scale(x = c(x, NA), y = c(y, NA), na.rm = TRUE),
+                         rob_scale(x = x, y = y))
 
-  testthat::expect_equal(rob_var(x = c(x, NA), y = c(y, NA)), NA_real_)
+  testthat::expect_equal(rob_scale(x = c(x, NA), y = c(y, NA)), NA_real_)
 
-  testthat::expect_equal(rob_var(x = c(x, NA), y = c(y, NA)),
-                         rob_var(x = c(x, NA), y = c(y, NA), na.rm = FALSE))
+  testthat::expect_equal(rob_scale(x = c(x, NA), y = c(y, NA)),
+                         rob_scale(x = c(x, NA), y = c(y, NA), na.rm = FALSE))
 
   # All values in 'x' and 'y' are equal ----
 
   # No NAs in 'x' and 'y'
-  testthat::expect_equal(rob_var(x = rep(0, 5), y = rep(0, 5)), 0)
-  testthat::expect_error(rob_var(x = rep(0, 5), y = rep(0, 5),
+  testthat::expect_equal(rob_scale(x = rep(0, 5), y = rep(0, 5)), 0)
+  testthat::expect_error(rob_scale(x = rep(0, 5), y = rep(0, 5),
                                    check.for.zero = TRUE))
 
   # NAs in 'x' and 'y'
-  testthat::expect_equal(rob_var(x = c(NA, rep(0, 5)), y = c(NA, rep(0, 5)),
+  testthat::expect_equal(rob_scale(x = c(NA, rep(0, 5)), y = c(NA, rep(0, 5)),
                                  na.rm = TRUE), 0)
 
-  testthat::expect_error(rob_var(x = c(NA, rep(0, 5)), y = c(NA, rep(0, 5)),
+  testthat::expect_error(rob_scale(x = c(NA, rep(0, 5)), y = c(NA, rep(0, 5)),
                                  na.rm = TRUE, check.for.zero = TRUE))
 
   # Location invariance, scale equivariance, and permutation invariance ----
@@ -109,41 +109,41 @@ testthat::test_that("rob_var works correctly", {
 
   for (i in seq_along(types)) {
     # Location invariance
-    testthat::expect_equal(rob_var(x = x + 2, y = y + 3, type = types[i]),
-                           rob_var(x = x, y = y, type = types[i]))
+    testthat::expect_equal(rob_scale(x = x + 2, y = y + 3, type = types[i]),
+                           rob_scale(x = x, y = y, type = types[i]))
 
     # Scale equivariance
-    testthat::expect_equal(rob_var(x = 2 * x, y = 2 * y, type = types[i]),
-                           2 * rob_var(x = x, y = y, type = types[i]))
+    testthat::expect_equal(rob_scale(x = 2 * x, y = 2 * y, type = types[i]),
+                           2 * rob_scale(x = x, y = y, type = types[i]))
 
     # Permutation invariance
-    testthat::expect_equal(rob_var(x = sort(x), y = sort(y), type = types[i]),
-                           rob_var(x = x, y = y, type = types[i]))
+    testthat::expect_equal(rob_scale(x = sort(x), y = sort(y), type = types[i]),
+                           rob_scale(x = x, y = y, type = types[i]))
 
     # Switch 'x' and 'y'
-    testthat::expect_equal(rob_var(x = y, y = x, type = types[i]),
-                           rob_var(x = x, y = y, type = types[i]))
+    testthat::expect_equal(rob_scale(x = y, y = x, type = types[i]),
+                           rob_scale(x = x, y = y, type = types[i]))
   }
 
   # Check output ----
 
   # For 'type' = 'S1', the output should be 2
-  testthat::expect_equal(rob_var(x = x, y = y, type = "S1"), 2)
+  testthat::expect_equal(rob_scale(x = x, y = y, type = "S1"), 2)
 
   # For 'type' = 'S2', the output should be 2
-  testthat::expect_equal(rob_var(x = x, y = y, type = "S2"), 2)
+  testthat::expect_equal(rob_scale(x = x, y = y, type = "S2"), 2)
 
   # For 'type' = 'S3', the output should be 3
-  testthat::expect_equal(rob_var(x = x, y = y, type = "S3"), 3)
+  testthat::expect_equal(rob_scale(x = x, y = y, type = "S3"), 3)
 
   # For 'type' = 'S4', the output should be 3
-  testthat::expect_equal(rob_var(x = x, y = y, type = "S4"), 3)
+  testthat::expect_equal(rob_scale(x = x, y = y, type = "S4"), 3)
 
   for (i in seq_along(types)) {
     # The output should be a numeric scalar
-    checkmate::expect_numeric(rob_var(x = x, y = y, type = types[i]), len = 1)
+    checkmate::expect_numeric(rob_scale(x = x, y = y, type = types[i]), len = 1)
 
-    checkmate::expect_numeric(rob_var(x = c(x, NA_real_), y = y,
+    checkmate::expect_numeric(rob_scale(x = c(x, NA_real_), y = y,
                                       type = types[i]),
                               len = 1)
   }
@@ -152,5 +152,5 @@ testthat::test_that("rob_var works correctly", {
   # are not constant
   x1 <- c(7, 2, 1, 2, 2)
   y1 <- c(5, 9, 2, 2, 2)
-  testthat::expect_error(rob_var(x = x1, y = y1, type = "S3", check.for.zero = TRUE))
+  testthat::expect_error(rob_scale(x = x1, y = y1, type = "S3", check.for.zero = TRUE))
 })

@@ -137,40 +137,40 @@ rob_perm_statistic <- function(x, y,
             est.x <- hodges_lehmann(x)
             est.y <- hodges_lehmann(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, type = "S1", check.for.zero = TRUE)
+            sd <- rob_scale(x, y, type = "S1", check.for.zero = TRUE)
             res <- loc/sd
          },
          HL12 = {
             est.x <- hodges_lehmann(x)
             est.y <- hodges_lehmann(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, type = "S2", check.for.zero = TRUE)
+            sd <- rob_scale(x, y, type = "S2", check.for.zero = TRUE)
             res <- loc/sd
          },
          HL21 = {
             est.x <- est.y <- NULL
             loc <- hodges_lehmann_2sample(x, y)
-            sd <- rob_var(x, y, type = "S1", check.for.zero = TRUE)
+            sd <- rob_scale(x, y, type = "S1", check.for.zero = TRUE)
             res <- loc/sd
          },
          HL22 = {
             est.x <- est.y <- NULL
             loc <- hodges_lehmann_2sample(x, y)
-            sd <- rob_var(x, y, type = "S2", check.for.zero = TRUE)
+            sd <- rob_scale(x, y, type = "S2", check.for.zero = TRUE)
             res <- loc/sd
          },
          MED1 = {
             est.x <- stats::median(x)
             est.y <- stats::median(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, type = "S3", check.for.zero = TRUE)
+            sd <- rob_scale(x, y, type = "S3", check.for.zero = TRUE)
             res <- loc/sd
         },
          MED2 = {
             est.x <- stats::median(x)
             est.y <- stats::median(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, type = "S4", check.for.zero = TRUE)
+            sd <- rob_scale(x, y, type = "S4", check.for.zero = TRUE)
             res <- loc/sd
       })
 

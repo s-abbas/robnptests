@@ -52,8 +52,8 @@ testthat::test_that("hl2_test works correctly", {
   res.s2 <- as.numeric(hl2_test(x = x, y = y, method = "randomization", n.rep = 100,
                                 scale = "S2")$statistic)
 
-  testthat::expect_equal(res.s1, hodges_lehmann_2sample(x, y)/rob_var(x, y, type = "S1"))
-  testthat::expect_equal(res.s2, hodges_lehmann_2sample(x, y)/rob_var(x, y, type = "S2"))
+  testthat::expect_equal(res.s1, hodges_lehmann_2sample(x, y)/rob_scale(x, y, type = "S1"))
+  testthat::expect_equal(res.s2, hodges_lehmann_2sample(x, y)/rob_scale(x, y, type = "S2"))
 
   # Automatic selection of the method to compute the p-value ----
 

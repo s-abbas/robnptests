@@ -400,7 +400,7 @@ set.seed(47)
 hl1_test(x1, y1, alternative = "two.sided", method = "randomization", scale = "S2")
 ```
 
-Although the value of the scale estimator in the original sample is `r robnptests:::rob_var(x1, y1, type = "S2")`, there exists at least one split used to compute the randomization distribution, which leads to the estimated scale `0`.
+Although the value of the scale estimator in the original sample is `r robnptests:::rob_scale(x1, y1, type = "S2")`, there exists at least one split used to compute the randomization distribution, which leads to the estimated scale `0`.
 We follow the advice in the error message and set `wobble = TRUE`. To enable the reproducibility of the results, the argument `wobble.seed` can be set, otherwise a random seed is chosen.
 
 ```{r, cache = TRUE}

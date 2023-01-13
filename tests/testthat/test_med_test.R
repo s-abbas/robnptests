@@ -52,8 +52,8 @@ testthat::test_that("med_test works correctly", {
   res.s4 <- as.numeric(med_test(x = x, y = y, method = "randomization", n.rep = 100,
                                 scale = "S4")$statistic)
 
-  testthat::expect_equal(res.s3, (stats::median(x) - stats::median(y))/rob_var(x, y, type = "S3"))
-  testthat::expect_equal(res.s4, (stats::median(x) - stats::median(y))/rob_var(x, y, type = "S4"))
+  testthat::expect_equal(res.s3, (stats::median(x) - stats::median(y))/rob_scale(x, y, type = "S3"))
+  testthat::expect_equal(res.s4, (stats::median(x) - stats::median(y))/rob_scale(x, y, type = "S4"))
 
   # Automatic selection of the method to compute the p-value ----
 
