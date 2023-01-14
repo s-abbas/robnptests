@@ -72,7 +72,7 @@ However, these tests may be less powerful under symmetry than classical procedur
 The package `WRS2` [@MaiWil20wrs2] contains a collection of robust two-sample location tests for the heteroscedastic setting.
 In `robnptests`, we assume homoscedasticity for the location tests.
 This is because estimating the within-sample dispersion for both samples separately may be unreliable when the sample sizes are small.
-In general, equal sample sizes $m = n$ can protect against a deteriorating performance in terms of size and power [@StaShe90robu, p. 179].
+In general, equal sample sizes $m = n$ can protect against a deteriorating performance in terms of size and power, even if we were in the heteroscedastic setting [@StaShe90robu, p. 179].
 
 The package package `nptest` [@Hel21npte] contains nonparametric versions of the two-sample $t$-test, realized by using the permutation and randomization principles, as described in the next section, on the $t$-statistic.
 This approach has also been studied in @AbbFri17cont, and, while being distribution free, the test statistic lacks robustness against outliers.
