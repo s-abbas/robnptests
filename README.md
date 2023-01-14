@@ -84,4 +84,5 @@ hl2_test(x, y, method = "asymptotic", scale.test = TRUE)
 
 # Contributions
 
-We are grateful for any contribution to the further development of the R package. If you experience any problems using the package or have suggestions for new features, please open an issue in the [issue tracker](https://github.com/s-abbas/robnptests/issues). 
+We are grateful for any contribution to the further development of the R package. If you experience any problems using the package or have suggestions for new features, please open an issue in the [issue tracker](https://github.com/s-abbas/robnptests/issues).
+Please consult our [contribution guidelines](https://github.com/s-abbas/robnptests/blob/master/CONTRIBUTIONS.md) before submitting a pull request.
