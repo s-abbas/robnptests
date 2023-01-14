@@ -11,5 +11,4 @@ cache
 paper
 ^LICENSE\.md$
 ^CONTRIBUTING\.md$
-^NEWS\.md$
 .github
