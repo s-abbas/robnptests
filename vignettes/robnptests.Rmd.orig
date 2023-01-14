@@ -55,7 +55,7 @@ where $\Delta_0 \in \mathbb{R}$ represents the assumed location difference under
 
 ### Differences in scale
 When setting $\mu_X = \mu_Y = 0$, both data-generating distributions have the location parameter zero but the values of the scale parameter might be unequal.
-We address the following hypothesis pairs:
+We address the following hypotheses:
 \begin{align*}
   &H_0^{(=)}\colon\ \frac{\theta^2_X}{\theta^2_Y} = \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\theta^2_X}{\theta^2_Y} \neq \tilde{\Delta}_0 \\
   &H_0^{(>)}\colon\ \frac{\theta^2_X}{\theta^2_Y} \leq \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(>)}\colon\ \frac{\theta^2_X}{\theta^2_Y} > \tilde{\Delta}_0 \\
@@ -90,7 +90,7 @@ The package contains tests for the outlined situation that have been proposed in
 Those were selected with the following objectives in mind:
 
 * robustness against outliers,
-* (approximate) distribution independence, i.e. keep $\alpha$ under $H_0$ over a large class of continuous distributions,
+* (approximately) distribution-free, i.e. they keep $\alpha$ under $H_0$ over a large class of continuous distributions,
 * and a large power over many distributions.
 
 In this vignette, we describe the test statistics and how they can be applied using the package's functions.
@@ -442,7 +442,7 @@ If `check = TRUE` and all values are unique, the wobbling is omitted.
 # Testing for a difference in scale
 The argument `scale.test` allows to decide whether the samples should be tested for a location difference (`scale.test = FALSE`), which is the default, or for different scale parameters (`scale.test = TRUE`).
 
-As described in the introduction, setting `scale.test = TRUE` transforms the observations so that a possible scale difference between the samples appears as a location difference between the transformed samples. For these tests, the samples need to be centred beforehand.
+As described in the Introduction, setting `scale.test = TRUE` transforms the observations so that a possible scale difference between the samples appears as a location difference between the transformed samples. For these tests, the samples need to be centred beforehand.
 
 In terms of the power, the resulting tests can outperform classical tests like the $F$-test, the Mood test, or the Ansary-Bradley test under outliers and asymmetry
 [@Fri12onli].
@@ -477,7 +477,7 @@ y <- rnorm(30, mean = 5)
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", scale.test = TRUE)
 ```
 
-By centring the samples using a suitable mean estimator, we can avoid this behavior.
+By centring the samples using a suitable location estimator, we can avoid this behavior.
 
 ```{r, cache=TRUE}
 set.seed(108)
@@ -493,11 +493,7 @@ y_centred <- y - hodges_lehmann(y)
 hl1_test(x = x_centred, y = y_centred, alternative = "two.sided", delta = 1, method = "asymptotic", scale.test = TRUE)
 ```
 
-The choice of the location estimator depends on the distribution of the variables, and also on the desired robustness.
-
-
-
-
+The adequate choice of the location estimator depends on the distribution of the variables, and also on the desired robustness.
 
 # Session info
 
