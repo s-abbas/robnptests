@@ -1,11 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 man-roxygen
-^R/XXX_asymTrimmedTest\.R$
-^R/XXX_huberTest\.R$
-^R/XXX_hybridTest\.R$
-^R/XXX_mTest\.R$
-^R/XXX_performTest\.R$
 ^doc$
 ^Meta$
 ^codecov\.yml$
@@ -16,4 +11,5 @@ cache
 paper
 ^LICENSE\.md$
 ^CONTRIBUTING\.md$
+^NEWS\.md$
 .github
