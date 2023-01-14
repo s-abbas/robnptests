@@ -70,6 +70,8 @@ By log-transforming the random variables, we obtain
 
 With these transformed samples, we are in the setting of the location problem described in the previous section with $\log\left(\theta_X^2\right)$ instead of $\mu_X$ and $\log\left(\theta_Y^2\right)$ instead of $\mu_Y$ [see @Fri12onli].
 
+
+
 ### Tests for the location problem
 In the following, we describe the location tests implemented in the package.
 We show an example of how use them to test for scale differences at the end of this vignette.
@@ -460,6 +462,42 @@ Including a squared scale ratio of 5 yields
 ## Asymptotic two-sided test assuming a scale ratio of 5 between both samples
 hl1_test(x = x * sqrt(5), y = y, alternative = "two.sided", delta = 5, method = "asymptotic", scale_test = TRUE)
 ```
+
+If $\mu_X \neq 0$ or $\mu_Y \neq 0$, we need to estimate these parameters from the samples. They can then be subtracted from the respective sample to achieve the required centring.
+
+In the following example, the second sample is centred around 5 instead of 0. The test erroneously rejects the null hypothesis.
+
+```{r, cache=TRUE}
+set.seed(108)
+
+x <- rnorm(30)
+y <- rnorm(30, mean = 5)
+
+## Asymptotic two-sided test with non-centred variables
+hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", scale_test = TRUE)
+```
+
+By centring the samples using a suitable mean estimator, we can avoid this behavior.
+
+```{r, cache=TRUE}
+set.seed(108)
+
+x <- rnorm(30)
+y <- rnorm(30, mean = 5)
+
+x_centred <- x - hodges_lehmann(x)
+y_centred <- y - hodges_lehmann(y)
+
+
+## Asymptotic two-sided test with non-centred variables
+hl1_test(x = x_centred, y = y_centred, alternative = "two.sided", delta = 1, method = "asymptotic", scale_test = TRUE)
+```
+
+The choice of the location estimator depends on the distribution of the variables, and also on the desired robustness.
+
+
+
+
 
 # Session info
 
