@@ -8,12 +8,12 @@ med_test(
   x,
   y,
   alternative = c("two.sided", "greater", "less"),
-  delta = ifelse(scale_test, 1, 0),
+  delta = ifelse(scale.test, 1, 0),
   method = c("asymptotic", "permutation", "randomization"),
   scale = c("S3", "S4"),
   n.rep = 10000,
   na.rm = FALSE,
-  scale_test = FALSE,
+  scale.test = FALSE,
   wobble = FALSE,
   wobble.seed = NULL
 )
@@ -30,7 +30,7 @@ must be one of "two.sided" (default), "greater", or "less".}
 scale parameter, depending on whether the test should be performed
 for a difference in location or in scale. The default is
 \code{delta = 0} for a location test and \code{delta = 1} for a scale
-test. In case of \code{scale_test = TRUE}, \code{delta} represents
+test. In case of \code{scale.test = TRUE}, \code{delta} represents
 the ratio of the squared scale parameters.}
 
 \item{method}{a character string specifying how the p-value is computed with
@@ -63,8 +63,8 @@ The default is \code{n.rep = 10000}.}
 \code{y} should be stripped before the computation proceeds. The
 default is \code{na.rm = FALSE}.}
 
-\item{scale_test}{a logical value to specify if the samples should be compared
-for a difference in scale. The default is \code{scale_test = FALSE}.}
+\item{scale.test}{a logical value to specify if the samples should be compared
+for a difference in scale. The default is \code{scale.test = FALSE}.}
 
 \item{wobble}{a logical value indicating whether the sample should be checked for
 duplicated values that can cause the scale estimate to be zero.
@@ -75,18 +75,18 @@ The default is \code{wobble = FALSE}.}
 
 \item{wobble.seed}{an integer value used as a seed for the random number
 generation in case of \code{wobble = TRUE} or when
-\code{scale_test = TRUE} with one of the vectors \code{x} and
+\code{scale.test = TRUE} with one of the vectors \code{x} and
 \code{y} containing zeros. When no seed is specified, it
 is chosen randomly and printed in a message. The argument
-is ignored if \code{scale_test = FALSE} and/or \code{wobble = FALSE}.}
+is ignored if \code{scale.test = FALSE} and/or \code{wobble = FALSE}.}
 }
 \value{
 A named list with class "\code{htest}" containing the following components:
 \item{statistic}{the value of the test statistic.}
 \item{p.value}{the p-value for the test.}
 \item{estimate}{the sample medians of \code{x} and \code{y}
-                (if \code{scale_test = FALSE}) or of \code{log(x^2)} and
-                \code{log(y^2)} (if \code{scale_test = TRUE}).}
+                (if \code{scale.test = FALSE}) or of \code{log(x^2)} and
+                \code{log(y^2)} (if \code{scale.test = TRUE}).}
 \item{null.value}{the specified hypothesized value of the mean difference/squared
                   scale ratio.}
 \item{alternative}{a character string describing the alternative hypothesis.}
@@ -121,7 +121,7 @@ of the difference of the sample medians, which asymptotically follows a normal
 distribution, is used. For more details on the asymptotic test, see
 \insertCite{FriDeh11robu;textual}{robnptests}.
 
-For \code{scale_test = TRUE}, the test compares the two samples for a difference
+For \code{scale.test = TRUE}, the test compares the two samples for a difference
 in scale. This is achieved by log-transforming the original squared observations,
 i.e. \code{x} is replaced by \code{log(x^2)} and \code{y} by \code{log(y^2)}.
 A potential scale difference then appears as a location difference between
@@ -131,7 +131,7 @@ contain zeros to prevent problems with the necessary log-transformation. If
 it contains zeros, uniform noise is added to all variables in order to remove
 zeros and a message is printed.
 
-If the sample has been modified (either because of zeros for \code{scale_test = TRUE},
+If the sample has been modified (either because of zeros for \code{scale.test = TRUE},
 or \code{wobble = TRUE}), the modified samples can be retrieved using
 
 \code{set.seed(wobble.seed); wobble(x, y)}

@@ -440,9 +440,9 @@ The argument `check` is used to inspect the samples for duplicated values.
 If `check = TRUE` and all values are unique, the wobbling is omitted.
 
 # Testing for a difference in scale
-The argument `scale_test` allows to decide whether the samples should be tested for a location difference (`scale_test = FALSE`), which is the default, or for different scale parameters (`scale_test = TRUE`).
+The argument `scale.test` allows to decide whether the samples should be tested for a location difference (`scale.test = FALSE`), which is the default, or for different scale parameters (`scale.test = TRUE`).
 
-As described in the introduction, setting `scale_test = TRUE` transforms the observations so that a possible scale difference between the samples appears as a location difference between the transformed samples. For these tests, the samples need to be centred beforehand.
+As described in the introduction, setting `scale.test = TRUE` transforms the observations so that a possible scale difference between the samples appears as a location difference between the transformed samples. For these tests, the samples need to be centred beforehand.
 
 In terms of the power, the resulting tests can outperform classical tests like the $F$-test, the Mood test, or the Ansary-Bradley test under outliers and asymmetry
 [@Fri12onli].
@@ -454,13 +454,13 @@ x <- rnorm(30)
 y <- rnorm(30)
 
 ## Asymptotic two-sided test assuming equal scales for both samples
-hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", scale_test = TRUE)
+hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", scale.test = TRUE)
 ```
 
 Including a squared scale ratio of 5 yields
 ```{r, cache = TRUE}
 ## Asymptotic two-sided test assuming a scale ratio of 5 between both samples
-hl1_test(x = x * sqrt(5), y = y, alternative = "two.sided", delta = 5, method = "asymptotic", scale_test = TRUE)
+hl1_test(x = x * sqrt(5), y = y, alternative = "two.sided", delta = 5, method = "asymptotic", scale.test = TRUE)
 ```
 
 If $\mu_X \neq 0$ or $\mu_Y \neq 0$, we need to estimate these parameters from the samples. They can then be subtracted from the respective sample to achieve the required centring.
@@ -474,7 +474,7 @@ x <- rnorm(30)
 y <- rnorm(30, mean = 5)
 
 ## Asymptotic two-sided test with non-centred variables
-hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", scale_test = TRUE)
+hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", scale.test = TRUE)
 ```
 
 By centring the samples using a suitable mean estimator, we can avoid this behavior.
@@ -490,7 +490,7 @@ y_centred <- y - hodges_lehmann(y)
 
 
 ## Asymptotic two-sided test with non-centred variables
-hl1_test(x = x_centred, y = y_centred, alternative = "two.sided", delta = 1, method = "asymptotic", scale_test = TRUE)
+hl1_test(x = x_centred, y = y_centred, alternative = "two.sided", delta = 1, method = "asymptotic", scale.test = TRUE)
 ```
 
 The choice of the location estimator depends on the distribution of the variables, and also on the desired robustness.

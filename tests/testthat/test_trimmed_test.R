@@ -15,20 +15,20 @@ testthat::test_that("trimmed_test works correctly", {
                                                 method = "permutation"))
 
   testthat::expect_snapshot_output(trimmed_test(x = x[1:5], y = y[1:5],
-                                                method = "permutation", scale_test = TRUE))
+                                                method = "permutation", scale.test = TRUE))
 
   # Randomization test
   testthat::expect_snapshot_output(trimmed_test(x = x[1:10], y = y[1:10],
-                                                method = "randomization", scale_test = TRUE))
+                                                method = "randomization", scale.test = TRUE))
 
   testthat::expect_snapshot_output(trimmed_test(x = x[1:10], y = y[1:10],
                                                 method = "randomization",
-                                                n.rep = 10000, scale_test = TRUE))
+                                                n.rep = 10000, scale.test = TRUE))
 
   # Asymptotic test
   testthat::expect_snapshot_output(trimmed_test(x = x, y = y, method = "asymptotic"))
   testthat::expect_snapshot_output(trimmed_test(x = x, y = y, method = "asymptotic",
-                                                scale_test = TRUE))
+                                                scale.test = TRUE))
 
   # Compare value of the test statistic to manually computed value ----
 
@@ -152,5 +152,5 @@ testthat::test_that("trimmed_test works correctly", {
 
   # One of the samples contains zeros
   testthat::expect_message(trimmed_test(x = x[1:10], y = c(y[1:9], 0),
-                                        method = "asymptotic", scale_test = TRUE))
+                                        method = "asymptotic", scale.test = TRUE))
 })
