@@ -15,4 +15,5 @@ data-raw
 cache
 paper
 ^LICENSE\.md$
+^CONTRIBUTING\.md$
 .github
