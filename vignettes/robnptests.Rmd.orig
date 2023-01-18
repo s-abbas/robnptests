@@ -32,7 +32,7 @@ We assume the $X_i$ and $Y_j$ can be written as
 \end{align*}
 Here, $\mu_X$ and $\mu_Y$ denote the location parameters, and $\theta_X$ and $\theta_Y$ the scale parameters of the first and the second sample.
 The random variables $\varepsilon_{1}, \ldots, \varepsilon_{m+n}$ are i.i.d. random variables.
-Thus, $\boldsymbol{X}_i$ and $\boldsymbol{Y}_j$ are from the same location-scale family.
+Thus, we assume $\boldsymbol{X}_i$ and $\boldsymbol{Y}_j$ are from the same location-scale family.
 
 ### Differences in location
 Assuming $\theta_X = \theta_Y$, the data-generating distributions differ at most in location.
@@ -54,7 +54,7 @@ Using the tests implemented in `robnptests`, the following hypotheses can be tes
 where $\Delta_0 \in \mathbb{R}$ represents the assumed location difference under $H_0$.
 
 ### Differences in scale
-When setting $\mu_X = \mu_Y = 0$, both data-generating distributions have the location parameter zero but the values of the scale parameter might be unequal.
+When setting $\mu_X = \mu_Y = 0$, both data-generating distributions have location zero, but the values of the scale parameter might be different.
 We address the following hypotheses:
 \begin{align*}
   &H_0^{(=)}\colon\ \frac{\theta^2_X}{\theta^2_Y} = \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\theta^2_X}{\theta^2_Y} \neq \tilde{\Delta}_0 \\
@@ -74,7 +74,7 @@ With these transformed samples, we are in the setting of the location problem de
 
 ### Tests for the location problem
 In the following, we describe the location tests implemented in the package.
-We show an example of how use them to test for scale differences at the end of this vignette.
+We show an example of how to use them to test for scale differences at the end of this vignette.
 
 A popular test for the two-sample location problem is the ordinary two-sample $t$-test.
 For small samples, it assumes normality of the data-generating distributions.
@@ -453,19 +453,19 @@ set.seed(108)
 x <- rnorm(30)
 y <- rnorm(30)
 
-## Asymptotic two-sided test assuming equal scales for both samples
+## Asymptotic two-sided test for the hypothesis of equal scales for both samples
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", scale.test = TRUE)
 ```
 
 Including a squared scale ratio of 5 yields
 ```{r, cache = TRUE}
-## Asymptotic two-sided test assuming a scale ratio of 5 between both samples
+## Asymptotic two-sided test for the hypothesis of a scale ratio of 5 between both samples
 hl1_test(x = x * sqrt(5), y = y, alternative = "two.sided", delta = 5, method = "asymptotic", scale.test = TRUE)
 ```
 
-If $\mu_X \neq 0$ or $\mu_Y \neq 0$, we need to estimate these parameters from the samples. They can then be subtracted from the respective sample to achieve the required centring.
+If $\mu_X \neq 0$ or $\mu_Y \neq 0$, we need to estimate these parameters from the samples. They can then be subtracted from the respective sample to accomodate the difference in location.
 
-In the following example, the second sample is centred around 5 instead of 0. The test erroneously rejects the null hypothesis.
+In the following example, the second sample is centred around 5 instead of 0. The test rejects the null hypothesis as the samples have different locations, but the same scale.
 
 ```{r, cache=TRUE}
 set.seed(108)
@@ -477,7 +477,7 @@ y <- rnorm(30, mean = 5)
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", scale.test = TRUE)
 ```
 
-By centring the samples using a suitable location estimator, we can avoid this behavior.
+This behaviour is not desirable if we are only interested in a scale difference and can be avoided by subtracting a suitable location estimator:
 
 ```{r, cache=TRUE}
 set.seed(108)
@@ -494,6 +494,8 @@ hl1_test(x = x_centred, y = y_centred, alternative = "two.sided", delta = 1, met
 ```
 
 The adequate choice of the location estimator depends on the distribution of the variables, and also on the desired robustness.
+
+If $\varepsilon_1,\ldots,\varepsilon_{m+n}$ are i.i.d. exponentially distributed random variables, for example, meaning that we compare the scale parameters of two possibly shifted exponential distributions, the assumption of identical locations $\mu_X=\mu_Y=0$ corresponds to the support of both distributions starting at 0.
 
 # Session info
 
