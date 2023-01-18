@@ -41,8 +41,8 @@ The underlying distributions are assumed to be continuous with cumulative distri
 
 The tests can be used for either of the following scenarios:
 
-* Two-sample location problem: Assuming that both distributions are equal except that $F_Y$ may be a shifted version of $F_X$, i.e. $F_X(x) = F_Y(x + \Delta)$ for all $x \in \mathbb{R}$ and some $\Delta \in \mathbb{R}$, the tests can be used to detect such a shift.
-* Two-sample scale problem: In case of a difference only in scale, i.e. $F_X(x) = F_Y(x/\theta)$ for some $\theta > 0$, a transformation of the observations enables to identify differing scale parameters. Note that $F_X$ and $F_Y$ need to be centred around zero then.
+* Two-sample location problem: Assuming that both distributions are equal except that $F_Y$ may be a shifted version of $F_X$, i.e. $F_X(x) = F_Y(x + \Delta)$ for all $x \in \mathbb{R}$ and some $\Delta \in \mathbb{R}$, or equivalently $X \overset{d}{=} Y-\Delta$, the tests can be used to detect such a shift.
+* Two-sample scale problem: In case of a difference only in scale, i.e. $F_X(x) = F_Y(x/\theta)$ for some $\theta > 0$, or equivalently $X \overset{d}{=} Y\cdot\theta$, a transformation of the observations enables to identify differing scale parameters. For more information see the `vignette("robnptests")`.
 
 
 # Statement of need
@@ -74,7 +74,7 @@ In `robnptests`, we assume homoscedasticity for the location tests.
 This is because estimating the within-sample dispersion for both samples separately may be unreliable when the sample sizes are small.
 In general, equal sample sizes $m = n$ can protect against a deteriorating performance in terms of size and power, even if we were in the heteroscedastic setting [@StaShe90robu, p. 179].
 
-The package package `nptest` [@Hel21npte] contains nonparametric versions of the two-sample $t$-test, realized by using the permutation and randomization principles, as described in the next section, on the $t$-statistic.
+The package `nptest` [@Hel21npte] contains nonparametric versions of the two-sample $t$-test, realized by using the permutation and randomization principles, as described in the next section, on the $t$-statistic.
 This approach has also been studied in @AbbFri17cont, and, while being distribution free, the test statistic lacks robustness against outliers.
 
 # Implemented two-sample tests
@@ -133,7 +133,7 @@ In the example, we use `method = "permutation"` so that the $p$-value is compute
 
 In general the functions start with the name of the underlying location-difference estimator and have several arguments to customize the test.
 
-More examples on how to use the tests and a detailed overview of the the implemented tests and corresponding test statistics can be found in the vignette `vignette("robnptests")`.
+More examples on how to use the tests and a detailed overview of the implemented tests and corresponding test statistics can be found in the `vignette("robnptests")`.
 
 ## Applications
 Besides conventional two-sample problems, the tests can be applied in a moving time window for the online detection of structural breaks in outlier-contaminated time series.
