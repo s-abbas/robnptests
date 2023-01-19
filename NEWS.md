@@ -1,4 +1,4 @@
-# robnptests (development version)
+# robnptests 1.1.0
 
 * Renamed the `var.test` argument to `scale.test` in all test functions (`hl1_test()`, `hl2_test()`, `med_test()`, `m_test()`).
 * Renamed the `rob_var()` function to `rob_scale()`.
