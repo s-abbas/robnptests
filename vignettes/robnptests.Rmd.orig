@@ -132,10 +132,10 @@ Value of argument `alternative` | Alternative hypothesis | Meaning of the altern
 `less`                          | $H_1^{(\geq)}\colon\ \Delta < 0$ | $X$ is stochastically smaller than $Y$
 
 ### MED-tests
-Using the difference of the sample medians, i.e.
+The difference of the sample medians,
 
 \begin{align*}
-   \hat{\Delta}^{(\text{MED})} = \text{median}\left(x_1, \ldots, x_m\right) - \text{median}\left(y_1, \ldots, y_n\right)
+   \hat{\Delta}^{(\text{MED})} = \text{median}\left(x_1, \ldots, x_m\right) - \text{median}\left(y_1, \ldots, y_n\right),
 \end{align*}
 
 is an obvious candidate to estimate the location difference $\Delta$ robustly.
@@ -266,7 +266,7 @@ Let $A$ be the number of theses values, $t_i$ the value of the test statistic fo
 
 and $p$-value $= \frac{A}{B}$.
 
-$B$ increases rapidly in $m$ and $n$, so using the permutation principle can lead to memory and computation time issues. For example, the sample sizes $m = n = 10$ already lead to $\binom{20}{10} = 184\,754$ possible splits.
+$B$ increases rapidly in $m$ and $n$, so using the permutation principle can lead to memory and computation-time issues. For example, the sample sizes $m = n = 10$ already lead to $\binom{20}{10} = 184\,754$ possible splits.
 Thus, we recommend this approach only for small sample sizes or when sufficient computational resources are available.
 
 ### Randomization test
@@ -465,7 +465,7 @@ hl1_test(x = x * sqrt(5), y = y, alternative = "two.sided", delta = 5, method = 
 
 If $\mu_X \neq 0$ or $\mu_Y \neq 0$, we need to estimate these parameters from the samples. They can then be subtracted from the respective sample to accomodate the difference in location.
 
-In the following example, the second sample is centred around 5 instead of 0. The test rejects the null hypothesis as the samples have different locations, but the same scale.
+In the following example, the second sample is centred around 5 instead of 0. The test rejects the null hypothesis as the samples have different locations but the same scale.
 
 ```{r, cache=TRUE}
 set.seed(108)
@@ -496,6 +496,7 @@ hl1_test(x = x_centred, y = y_centred, alternative = "two.sided", delta = 1, met
 The adequate choice of the location estimator depends on the distribution of the variables, and also on the desired robustness.
 
 If $\varepsilon_1,\ldots,\varepsilon_{m+n}$ are i.i.d. exponentially distributed random variables, for example, meaning that we compare the scale parameters of two possibly shifted exponential distributions, the assumption of identical locations $\mu_X=\mu_Y=0$ corresponds to the support of both distributions starting at 0.
+Thus, for unequal locations, it would be reasonable to subtract a value from each observation, which is slightly smaller than the minimum of the corresponding sample.
 
 # Session info
 

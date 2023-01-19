@@ -1,6 +1,6 @@
 ---
 title: "Getting started with `robnptests`"
-date: "2023-01-18"
+date: "2023-01-19"
 author: Sermad Abbas, Barbara Brune, Roland Fried
 output:
   rmarkdown::html_document:
@@ -126,10 +126,10 @@ Value of argument `alternative` | Alternative hypothesis | Meaning of the altern
 `less`                          | $H_1^{(\geq)}\colon\ \Delta < 0$ | $X$ is stochastically smaller than $Y$
 
 ### MED-tests
-Using the difference of the sample medians, i.e.
+The difference of the sample medians,
 
 \begin{align*}
-   \hat{\Delta}^{(\text{MED})} = \text{median}\left(x_1, \ldots, x_m\right) - \text{median}\left(y_1, \ldots, y_n\right)
+   \hat{\Delta}^{(\text{MED})} = \text{median}\left(x_1, \ldots, x_m\right) - \text{median}\left(y_1, \ldots, y_n\right),
 \end{align*}
 
 is an obvious candidate to estimate the location difference $\Delta$ robustly.
@@ -260,7 +260,7 @@ Let $A$ be the number of theses values, $t_i$ the value of the test statistic fo
 
 and $p$-value $= \frac{A}{B}$.
 
-$B$ increases rapidly in $m$ and $n$, so using the permutation principle can lead to memory and computation time issues. For example, the sample sizes $m = n = 10$ already lead to $\binom{20}{10} = 184\,754$ possible splits.
+$B$ increases rapidly in $m$ and $n$, so using the permutation principle can lead to memory and computation-time issues. For example, the sample sizes $m = n = 10$ already lead to $\binom{20}{10} = 184\,754$ possible splits.
 Thus, we recommend this approach only for small sample sizes or when sufficient computational resources are available.
 
 ### Randomization test
@@ -325,11 +325,9 @@ x <- rnorm(10)
 y <- rnorm(10)
 
 x
-#>  [1] -0.112892122 -0.381819373 -0.091691759  0.036045206  0.002060011
-#>  [6]  1.254923407  0.589883973  0.302208595  0.905741048  0.054724887
+#>  [1] -0.112892122 -0.381819373 -0.091691759  0.036045206  0.002060011  1.254923407  0.589883973  0.302208595  0.905741048  0.054724887
 y
-#>  [1] -0.8130825  1.3807136 -0.4387136 -1.2788213 -0.6058519  0.9234760
-#>  [7]  0.5656956 -0.0586360  0.1578270 -0.3858708
+#>  [1] -0.8130825  1.3807136 -0.4387136 -1.2788213 -0.6058519  0.9234760  0.5656956 -0.0586360  0.1578270 -0.3858708
 ```
 
 ### Permutation test
@@ -511,12 +509,10 @@ The wobbled samples can be retrieved using the seed printed in the output and th
 set.seed(2187)
 wobble(x1, y1, check = FALSE)
 #> $x
-#>  [1] -0.44559409  0.25924234  0.18034432 -0.42507561 -0.07607574  0.68780214
-#>  [7]  0.17812437 -0.22174378  0.19595295 -0.14095250
+#>  [1] -0.44559409  0.25924234  0.18034432 -0.42507561 -0.07607574  0.68780214  0.17812437 -0.22174378  0.19595295 -0.14095250
 #> 
 #> $y
-#>  [1] -0.04372255  2.22220106  1.23878909  0.16253680 -0.13902692  2.43266503
-#>  [7]  1.86621893  1.41821762  0.71976748  1.36813320
+#>  [1] -0.04372255  2.22220106  1.23878909  0.16253680 -0.13902692  2.43266503  1.86621893  1.41821762  0.71976748  1.36813320
 ```
 
 The argument `check` is used to inspect the samples for duplicated values.
@@ -568,7 +564,7 @@ hl1_test(x = x * sqrt(5), y = y, alternative = "two.sided", delta = 5, method = 
 
 If $\mu_X \neq 0$ or $\mu_Y \neq 0$, we need to estimate these parameters from the samples. They can then be subtracted from the respective sample to accomodate the difference in location.
 
-In the following example, the second sample is centred around 5 instead of 0. The test rejects the null hypothesis as the samples have different locations, but the same scale.
+In the following example, the second sample is centred around 5 instead of 0. The test rejects the null hypothesis as the samples have different locations but the same scale.
 
 
 ```r
@@ -619,6 +615,7 @@ hl1_test(x = x_centred, y = y_centred, alternative = "two.sided", delta = 1, met
 The adequate choice of the location estimator depends on the distribution of the variables, and also on the desired robustness.
 
 If $\varepsilon_1,\ldots,\varepsilon_{m+n}$ are i.i.d. exponentially distributed random variables, for example, meaning that we compare the scale parameters of two possibly shifted exponential distributions, the assumption of identical locations $\mu_X=\mu_Y=0$ corresponds to the support of both distributions starting at 0.
+Thus, for unequal locations, it would be reasonable to subtract a value from each observation, which is slightly smaller than the minimum of the corresponding sample.
 
 # Session info
 
@@ -627,40 +624,34 @@ Here is the information about the R-session used for creating this vignette.
 
 ```r
 sessionInfo()
-#> R version 4.2.2 (2022-10-31 ucrt)
-#> Platform: x86_64-w64-mingw32/x64 (64-bit)
-#> Running under: Windows 10 x64 (build 19045)
+#> R version 4.2.2 Patched (2022-11-10 r83330)
+#> Platform: x86_64-pc-linux-gnu (64-bit)
+#> Running under: Linux Mint 19.1
 #> 
 #> Matrix products: default
+#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
+#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
 #> 
 #> locale:
-#> [1] LC_COLLATE=English_Austria.utf8  LC_CTYPE=English_Austria.utf8   
-#> [3] LC_MONETARY=English_Austria.utf8 LC_NUMERIC=C                    
-#> [5] LC_TIME=English_Austria.utf8    
+#>  [1] LC_CTYPE=de_DE.UTF-8       LC_NUMERIC=C               LC_TIME=de_DE.UTF-8        LC_COLLATE=de_DE.UTF-8     LC_MONETARY=de_DE.UTF-8   
+#>  [6] LC_MESSAGES=de_DE.UTF-8    LC_PAPER=de_DE.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C            
+#> [11] LC_MEASUREMENT=de_DE.UTF-8 LC_IDENTIFICATION=C       
 #> 
 #> attached base packages:
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] robnptests_1.0.0
+#> [1] robnptests_1.0.0 testthat_3.1.4  
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] statmod_1.4.37    gtools_3.9.3      xfun_0.31         remotes_2.4.2    
-#>  [5] purrr_0.3.4       vctrs_0.4.1       testthat_3.1.4    miniUI_0.1.1.1   
-#>  [9] htmltools_0.5.3   usethis_2.1.6     utf8_1.2.2        rlang_1.0.5      
-#> [13] pkgbuild_1.3.1    urlchecker_1.0.1  later_1.3.0       pillar_1.8.1     
-#> [17] glue_1.6.2        withr_2.5.0       sessioninfo_1.2.2 lifecycle_1.0.2  
-#> [21] robustbase_0.95-0 stringr_1.4.0     devtools_2.4.4    htmlwidgets_1.5.4
-#> [25] codetools_0.2-18  memoise_2.0.1     evaluate_0.15     knitr_1.39       
-#> [29] callr_3.7.1       fastmap_1.1.0     httpuv_1.6.6      ps_1.7.1         
-#> [33] fansi_1.0.3       DEoptimR_1.0-11   Rcpp_1.0.9        xtable_1.8-4     
-#> [37] promises_1.2.0.1  backports_1.4.1   checkmate_2.1.0   cachem_1.0.6     
-#> [41] desc_1.4.1        pkgload_1.3.0     mime_0.12         fs_1.5.2         
-#> [45] brio_1.1.3        digest_0.6.29     stringi_1.7.8     processx_3.7.0   
-#> [49] shiny_1.7.2       rbibutils_2.2.10  rprojroot_2.0.3   Rdpack_2.4       
-#> [53] cli_3.3.0         tools_4.2.2       magrittr_2.0.3    tibble_3.1.8     
-#> [57] profvis_0.3.7     crayon_1.5.1      pkgconfig_2.0.3   ellipsis_0.3.2   
-#> [61] prettyunits_1.1.1 rstudioapi_0.13   R6_2.5.1          compiler_4.2.2
+#>  [1] Rcpp_1.0.9        highr_0.9         DEoptimR_1.0-11   compiler_4.2.2    later_1.3.0       urlchecker_1.0.1  prettyunits_1.1.1 profvis_0.3.7    
+#>  [9] remotes_2.4.2     tools_4.2.2       statmod_1.4.36    digest_0.6.29     pkgbuild_1.3.1    pkgload_1.3.0     evaluate_0.15     checkmate_2.1.0  
+#> [17] memoise_2.0.1     lifecycle_1.0.1   rlang_1.0.4       shiny_1.7.2       cli_3.3.0         rstudioapi_0.13   xfun_0.31         fastmap_1.1.0    
+#> [25] knitr_1.39        withr_2.5.0       stringr_1.4.0     gtools_3.9.3      desc_1.4.1        fs_1.5.2          htmlwidgets_1.5.4 devtools_2.4.4   
+#> [33] rprojroot_2.0.3   robustbase_0.95-0 glue_1.6.2        R6_2.5.1          processx_3.7.0    Rdpack_2.4        sessioninfo_1.2.2 callr_3.7.1      
+#> [41] purrr_0.3.4       magrittr_2.0.3    codetools_0.2-18  backports_1.4.1   rbibutils_2.2.8   ps_1.7.1          promises_1.2.0.1  ellipsis_0.3.2   
+#> [49] htmltools_0.5.2   usethis_2.1.6     mime_0.12         xtable_1.8-4      httpuv_1.6.5      stringi_1.7.6     miniUI_0.1.1.1    cachem_1.0.6     
+#> [57] crayon_1.5.1      brio_1.1.3
 ```
 
 # References
