@@ -453,13 +453,13 @@ set.seed(108)
 x <- rnorm(30)
 y <- rnorm(30)
 
-## Asymptotic two-sided test for the hypothesis of equal scales for both samples
+## Asymptotic two-sided test for the null hypothesis of equal scales for both samples
 hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", scale.test = TRUE)
 ```
 
 Including a squared scale ratio of 5 yields
 ```{r, cache = TRUE}
-## Asymptotic two-sided test for the hypothesis of a scale ratio of 5 between both samples
+## Asymptotic two-sided test for the null hypothesis of a scale ratio of 5 between both samples
 hl1_test(x = x * sqrt(5), y = y, alternative = "two.sided", delta = 5, method = "asymptotic", scale.test = TRUE)
 ```
 
