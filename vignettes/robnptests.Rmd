@@ -137,7 +137,7 @@ is an obvious candidate to estimate the location difference $\Delta$ robustly.
 Tests based on this estimator can be called with the function `med_test`.
 
 Two different options for estimating the within-sample dispersion are available.
-When setting the argument `scale = S3`, it is estimated by the median of the absolute deviations of each observation from its corresponding sample median, namely
+When setting the argument `scale = "S3"`, it is estimated by the median of the absolute deviations of each observation from its corresponding sample median, namely
 
 \begin{align*}
   \hat{S}^{(3)} = 2 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|, |y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\},
@@ -145,7 +145,7 @@ When setting the argument `scale = S3`, it is estimated by the median of the abs
 
 where $\tilde{x}$ and $\tilde{y}$ are the medians of the two samples.
 
-Another possibility is `scale = S4` to estimate the scale by the sum of the median absolute deviations from the sample median (MAD) of each sample, i.e.
+Another possibility is `scale = "S4"` to estimate the scale by the sum of the median absolute deviations from the sample median (MAD) of each sample, i.e.
 
 \begin{align*}
   \hat{S}^{(4)} = \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|\right\} + \text{median}\left\{|y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\}.
@@ -169,13 +169,13 @@ An estimator for the location difference based on the one-sample Hodges-Lehmann 
 
 The test is performed by the function `hl1_test`.
 
-By setting `scale = S1`, the within-sample dispersion is estimated by the median of the absolute pairwise differences within both samples:
+By setting `scale = "S1"`, the within-sample dispersion is estimated by the median of the absolute pairwise differences within both samples:
 
 \begin{align*}
   \hat{S}^{(1)} = \text{median}\left\{|x_i - x_j|\colon\ 1 \leq i < j \leq m,\ |y_i - y_j|\colon\ 1 \leq i < j \leq n\right\}.
 \end{align*}
 
-Using `scale = S2` computes the absolute pairwise differences within the joint sample, where every observation is centred by its corresponding sample median:
+Using `scale = "S2"` computes the absolute pairwise differences within the joint sample, where every observation is centred by its corresponding sample median:
 
 \begin{align*}
   \hat{S}^{(2)} = \text{median}\left\{|z_i - z_j|\colon\ 1 \leq i < j \leq m + n\right\},
