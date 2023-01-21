@@ -35,7 +35,7 @@
 #' i.e. \code{x} is replaced by \code{log(x^2)} and \code{y} by \code{log(y^2)}.
 #' A potential scale difference then appears as a location difference between
 #' the transformed samples, see \insertCite{Fri12onli;textual}{robnptests}.
-#' Note that the samples need to be centred around zero. The sample should not
+#' Note that the samples need to have equal locations. The sample should not
 #' contain zeros to prevent problems with the necessary log-transformation. If
 #' it contains zeros, uniform noise is added to all variables in order to remove
 #' zeros and a message is printed.

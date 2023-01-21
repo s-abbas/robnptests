@@ -9,5 +9,8 @@ cache
 vignettes/*.html
 vignettes/*.R
 vignettes/m_tests_cache
+vignettes/m_tests_files
 /doc/
 /Meta/
+paper/paper.log
+paper/paper.pdf

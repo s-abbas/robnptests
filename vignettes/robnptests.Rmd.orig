@@ -465,7 +465,7 @@ hl1_test(x = x * sqrt(5), y = y, alternative = "two.sided", delta = 5, method = 
 
 If $\mu_X \neq 0$ or $\mu_Y \neq 0$, we need to estimate these parameters from the samples. They can then be subtracted from the respective sample to accomodate the difference in location.
 
-In the following example, the second sample is centred around 5 instead of 0. The test rejects the null hypothesis as the samples have different locations but the same scale.
+In the following example, the second sample is centred around 5 instead of 0. The test rejects the null hypothesis as the samples have the same scales but different locations.
 
 ```{r, cache=TRUE}
 set.seed(108)
