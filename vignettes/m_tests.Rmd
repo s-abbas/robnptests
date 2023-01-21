@@ -25,7 +25,7 @@ comment = "#>"
 In this vignette, we will briefly describe and motivate how we constructed the test statistics used by the function `m_test` and how it derives a test decision.
 
 # Asymptotic distribution of the M-test statistics
-For a more detailed description of the asymptotic behaviour of M-estimators, we refer to @MarMarYoh06robu[p. 36ff.], which is the main reference for the following motivation.
+For a more detailed description of the asymptotic behaviour of M-estimators, we refer to @MarMarYoh19robu[p. 36ff.], which is the main reference for the following motivation.
 
 We consider two independent samples $X_1, \ldots, X_m$ and $Y_1, \ldots, Y_n$ of i.i.d. random variables which are symmetrically distributed with variances $\sigma^2_X$ and $\sigma^2_Y$.
 
@@ -79,7 +79,7 @@ where $\Delta = \mu_X - \mu_Y$ is the location difference between both distribut
 
 The M-tests are implemented in the function `m_test`. 
 More details on the usage of the function can be found in the vignette [Getting started with `robnptests`](robnptests.html).
-Inside `m_test`, we use the function `scaleTau2` from the `R` package [robustbase](https://cran.r-project.org/package=robustbase) [@MaeRouCro20robu] to compute the $\tau$-scale estimates for the samples.
+Inside `m_test`, we use the function `scaleTau2` from the `R` package [robustbase](https://cran.r-project.org/package=robustbase) [@MaeRouCro22robu] to compute the $\tau$-scale estimates for the samples.
 
 # Simulation results
 The following figure shows the simulated test sizes from a small simulation study with 1000 replications, where we applied the M-tests with different $\psi$-functions to samples from the $\mathcal{N}(0, 1)$-distribution, the $t_2$-distribution, and the $\chi^2_3$-distribution. 
@@ -93,7 +93,7 @@ In general, the three test statistics lead to similar results for the considered
 
 Under the $\chi^2_3$-distribution, all tests are anti-conservative. 
 While there seems to be some improvement when the sample sizes become larger, the estimated sizes are still rather far away from 0.05. 
-A reason might be that the asymptotic variance we use is only a good approximation for symmetric distributions [@MarMarYoh06robu, p. 37].
+A reason might be that the asymptotic variance we use is only a good approximation for symmetric distributions [@MarMarYoh19robu, p. 37].
 
 ```{r, echo = FALSE, fig.height = 10, fig.width = 8}
 load(file.path("..", "R", "sysdata.rda"))

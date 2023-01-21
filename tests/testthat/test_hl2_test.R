@@ -18,10 +18,10 @@ testthat::test_that("hl2_test works correctly", {
 
   testthat::expect_snapshot_output(hl2_test(x = x[1:5], y = y[1:5],
                                             method = "permutation", scale = "S1",
-                                            var.test = TRUE))
+                                            scale.test = TRUE))
   testthat::expect_snapshot_output(hl2_test(x = x[1:5], y = y[1:5],
                                             method = "permutation", scale = "S2",
-                                            var.test = TRUE))
+                                            scale.test = TRUE))
 
   # Randomization test
   testthat::expect_snapshot_output(hl2_test(x = x[1:10], y = y[1:10],
@@ -34,16 +34,16 @@ testthat::test_that("hl2_test works correctly", {
   testthat::expect_snapshot_output(hl2_test(x = x[1:10], y = y[1:10],
                                             method = "randomization",
                                             n.rep = 10000,  scale = "S1",
-                                            var.test = TRUE))
+                                            scale.test = TRUE))
   testthat::expect_snapshot_output(hl2_test(x = x[1:10], y = y[1:10],
                                             method = "randomization",
                                             n.rep = 10000,  scale = "S2",
-                                            var.test = TRUE))
+                                            scale.test = TRUE))
 
   # Asymptotic test
   testthat::expect_snapshot_output(hl2_test(x = x, y = y, method = "asymptotic"))
   testthat::expect_snapshot_output(hl2_test(x = x, y = y, method = "asymptotic",
-                                            var.test = TRUE))
+                                            scale.test = TRUE))
 
   # Compare value of the test statistic to manually computed value ----
 
@@ -52,8 +52,8 @@ testthat::test_that("hl2_test works correctly", {
   res.s2 <- as.numeric(hl2_test(x = x, y = y, method = "randomization", n.rep = 100,
                                 scale = "S2")$statistic)
 
-  testthat::expect_equal(res.s1, hodges_lehmann_2sample(x, y)/rob_var(x, y, type = "S1"))
-  testthat::expect_equal(res.s2, hodges_lehmann_2sample(x, y)/rob_var(x, y, type = "S2"))
+  testthat::expect_equal(res.s1, hodges_lehmann_2sample(x, y)/rob_scale(x, y, type = "S1"))
+  testthat::expect_equal(res.s2, hodges_lehmann_2sample(x, y)/rob_scale(x, y, type = "S2"))
 
   # Automatic selection of the method to compute the p-value ----
 
@@ -154,7 +154,7 @@ testthat::test_that("hl2_test works correctly", {
 
   # One of the samples contains zeros
   testthat::expect_message(hl2_test(x = x[1:10], y = c(y[1:9], 0),
-                                    method = "asymptotic", var.test = TRUE))
+                                    method = "asymptotic", scale.test = TRUE))
 
   # Wobbling ----
 

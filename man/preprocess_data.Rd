@@ -4,7 +4,7 @@
 \alias{preprocess_data}
 \title{Preprocess data for the robust two sample tests}
 \usage{
-preprocess_data(x, y, delta, na.rm, wobble, wobble.seed, var.test)
+preprocess_data(x, y, delta, na.rm, wobble, wobble.seed, scale.test)
 }
 \arguments{
 \item{x}{a (non-empty) numeric vector of data values.}
@@ -25,12 +25,12 @@ see \code{\link[robnptests]{wobble}}.}
 
 \item{wobble.seed}{an integer value used as a seed for the random number
 generation in case of \code{wobble = TRUE} or when
-\code{var.test = TRUE} with one of the vectors \code{x} and
+\code{scale.test = TRUE} with one of the vectors \code{x} and
 \code{y} containing zeros. When no seed is specified, it
 is chosen randomly and printed in a message. The argument
-is ignored if \code{var.test = FALSE} and/or \code{wobble = FALSE}.}
+is ignored if \code{scale.test = FALSE} and/or \code{wobble = FALSE}.}
 
-\item{var.test}{a logical value to specify if the samples should be compared
+\item{scale.test}{a logical value to specify if the samples should be compared
 for a difference in scale.}
 }
 \value{

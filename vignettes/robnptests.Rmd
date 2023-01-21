@@ -1,6 +1,6 @@
 ---
 title: "Getting started with `robnptests`"
-date: "2021-11-07"
+date: "2023-01-20"
 author: Sermad Abbas, Barbara Brune, Roland Fried
 output:
   rmarkdown::html_document:
@@ -26,7 +26,7 @@ We assume the $X_i$ and $Y_j$ can be written as
 \end{align*}
 Here, $\mu_X$ and $\mu_Y$ denote the location parameters, and $\theta_X$ and $\theta_Y$ the scale parameters of the first and the second sample.
 The random variables $\varepsilon_{1}, \ldots, \varepsilon_{m+n}$ are i.i.d. random variables.
-Thus, $\boldsymbol{X}_i$ and $\boldsymbol{Y}_j$ are from the same location-scale family.
+Thus, we assume $\boldsymbol{X}_i$ and $\boldsymbol{Y}_j$ are from the same location-scale family.
 
 ### Differences in location
 Assuming $\theta_X = \theta_Y$, the data-generating distributions differ at most in location.
@@ -48,8 +48,8 @@ Using the tests implemented in `robnptests`, the following hypotheses can be tes
 where $\Delta_0 \in \mathbb{R}$ represents the assumed location difference under $H_0$.
 
 ### Differences in scale
-When setting $\mu_X = \mu_Y = 0$, both data-generating distributions have the location parameter zero but the values of the scale parameter might be unequal.
-We address the following hypothesis pairs:
+When setting $\mu_X = \mu_Y = 0$, both data-generating distributions have location zero, but the values of the scale parameter might be different.
+We address the following hypotheses:
 \begin{align*}
   &H_0^{(=)}\colon\ \frac{\theta^2_X}{\theta^2_Y} = \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(\neq)}\colon\ \frac{\theta^2_X}{\theta^2_Y} \neq \tilde{\Delta}_0 \\
   &H_0^{(>)}\colon\ \frac{\theta^2_X}{\theta^2_Y} \leq \tilde{\Delta}_0 \quad \text{vs.} \quad H_1^{(>)}\colon\ \frac{\theta^2_X}{\theta^2_Y} > \tilde{\Delta}_0 \\
@@ -64,9 +64,11 @@ By log-transforming the random variables, we obtain
 
 With these transformed samples, we are in the setting of the location problem described in the previous section with $\log\left(\theta_X^2\right)$ instead of $\mu_X$ and $\log\left(\theta_Y^2\right)$ instead of $\mu_Y$ [see @Fri12onli].
 
+
+
 ### Tests for the location problem
 In the following, we describe the location tests implemented in the package.
-We show an example of how use them to test for scale differences at the end of this vignette.
+We show an example of how to use them to test for scale differences at the end of this vignette.
 
 A popular test for the two-sample location problem is the ordinary two-sample $t$-test.
 For small samples, it assumes normality of the data-generating distributions.
@@ -82,7 +84,7 @@ The package contains tests for the outlined situation that have been proposed in
 Those were selected with the following objectives in mind:
 
 * robustness against outliers,
-* (approximate) distribution independence, i.e. keep $\alpha$ under $H_0$ over a large class of continuous distributions,
+* (approximately) distribution-free, i.e. they keep $\alpha$ under $H_0$ over a large class of continuous distributions,
 * and a large power over many distributions.
 
 In this vignette, we describe the test statistics and how they can be applied using the package's functions.
@@ -103,7 +105,7 @@ We describe the test statistics in detail in the next subsection.
 The implemented functions share a similar structure and contain arguments for adjustment to certain data situations and objectives.
 
 ## Test statistics
-The implemented test statistics follow the construction principle of the $t$-statistic, i.e. an estimator $\hat{\Delta}$ for the true location difference $\Delta$ between both samples is divided by a pooled estimate $\hat{S}$ of the variability of the two samples, leading to test
+The implemented test statistics follow the construction principle of the $t$-statistic, i.e. an estimator $\hat{\Delta}$ for the true location difference $\Delta$ between both samples is divided by a pooled estimate $\hat{S}$ of the dispersion of the two samples, leading to test
 statistics of the form
 
 \begin{align*}
@@ -124,18 +126,18 @@ Value of argument `alternative` | Alternative hypothesis | Meaning of the altern
 `less`                          | $H_1^{(\geq)}\colon\ \Delta < 0$ | $X$ is stochastically smaller than $Y$
 
 ### MED-tests
-Using the difference of the sample medians, i.e.
+The difference of the sample medians,
 
 \begin{align*}
-   \hat{\Delta}^{(\text{MED})} = \text{median}\left(x_1, \ldots, x_m\right) - \text{median}\left(y_1, \ldots, y_n\right)
+   \hat{\Delta}^{(\text{MED})} = \text{median}\left(x_1, \ldots, x_m\right) - \text{median}\left(y_1, \ldots, y_n\right),
 \end{align*}
 
 is an obvious candidate to estimate the location difference $\Delta$ robustly.
 
 Tests based on this estimator can be called with the function `med_test`.
 
-Two different options for estimating the within-sample variability are available.
-When setting the argument `scale = S3`, it is estimated by the median of the absolute deviations of each observation from its corresponding sample median, namely
+Two different options for estimating the within-sample dispersion are available.
+When setting the argument `scale = "S3"`, it is estimated by the median of the absolute deviations of each observation from its corresponding sample median, namely
 
 \begin{align*}
   \hat{S}^{(3)} = 2 \cdot \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|, |y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\},
@@ -143,7 +145,7 @@ When setting the argument `scale = S3`, it is estimated by the median of the abs
 
 where $\tilde{x}$ and $\tilde{y}$ are the medians of the two samples.
 
-Another possibility is `scale = S4` to estimate the scale by the sum of the median absolute deviations from the sample median (MAD) of each sample, i.e.
+Another possibility is `scale = "S4"` to estimate the scale by the sum of the median absolute deviations from the sample median (MAD) of each sample, i.e.
 
 \begin{align*}
   \hat{S}^{(4)} = \text{median}\left\{|x_1 - \tilde{x}|, \ldots, |x_m - \tilde{x}|\right\} + \text{median}\left\{|y_1 - \tilde{y}|, \ldots, |y_n - \tilde{y}|\right\}.
@@ -167,13 +169,13 @@ An estimator for the location difference based on the one-sample Hodges-Lehmann 
 
 The test is performed by the function `hl1_test`.
 
-By setting `scale = S1`, the within-sample variability is estimated by the median of the absolute pairwise differences within both samples:
+By setting `scale = "S1"`, the within-sample dispersion is estimated by the median of the absolute pairwise differences within both samples:
 
 \begin{align*}
   \hat{S}^{(1)} = \text{median}\left\{|x_i - x_j|\colon\ 1 \leq i < j \leq m,\ |y_i - y_j|\colon\ 1 \leq i < j \leq n\right\}.
 \end{align*}
 
-Using `scale = S2` computes the absolute pairwise differences within the joint sample, where every observation is centred by its corresponding sample median:
+Using `scale = "S2"` computes the absolute pairwise differences within the joint sample, where every observation is centred by its corresponding sample median:
 
 \begin{align*}
   \hat{S}^{(2)} = \text{median}\left\{|z_i - z_j|\colon\ 1 \leq i < j \leq m + n\right\},
@@ -202,7 +204,7 @@ An M-estimator $\hat{\mu}^{(M)}_X$ for the location parameter of the $x$-sample 
   \hat{\mu}^{(M)}_X = \arg\underset{\mu_X}{\min} \sum_{i = 1}^m \rho\left(\frac{x_i - \mu_X}{\theta_X}\right),
 \end{equation*}
 
-where $\rho:\ \mathbb{R} \to \mathbb{R}$ is a function chosen to achieve a "nearly optimal" location estimate when the $X_i$ are normally or approximately normally distributed [@MarMarYoh06robu, p. 22].
+where $\rho:\ \mathbb{R} \to \mathbb{R}$ is a function chosen to achieve a "nearly optimal" location estimate when the $X_i$ are normally or approximately normally distributed [@MarMarYoh19robu, p. 22].
 For differentiable functions $\rho$ with $\rho' = \psi$, the optimization problem can be translated to finding the value of $\mu_X$, for which
 
 \begin{equation*}
@@ -258,7 +260,7 @@ Let $A$ be the number of theses values, $t_i$ the value of the test statistic fo
 
 and $p$-value $= \frac{A}{B}$.
 
-$B$ increases rapidly in $m$ and $n$, so using the permutation principle can lead to memory and computation time issues. For example, the sample sizes $m = n = 10$ already lead to $\binom{20}{10} = 184\,754$ possible splits.
+$B$ increases rapidly in $m$ and $n$, so using the permutation principle can lead to memory and computation-time issues. For example, the sample sizes $m = n = 10$ already lead to $\binom{20}{10} = 184\,754$ possible splits.
 Thus, we recommend this approach only for small sample sizes or when sufficient computational resources are available.
 
 ### Randomization test
@@ -517,9 +519,9 @@ The argument `check` is used to inspect the samples for duplicated values.
 If `check = TRUE` and all values are unique, the wobbling is omitted.
 
 # Testing for a difference in scale
-The argument `var.test` allows to decide whether the samples should be tested for a location difference (`var.test = FALSE`), which is the default, or for different scale parameters (`var.test = TRUE`).
+The argument `scale.test` allows to decide whether the samples should be tested for a location difference (`scale.test = FALSE`), which is the default, or for different scale parameters (`scale.test = TRUE`).
 
-As described in the introduction, setting `var.test = TRUE` transforms the observations so that a possible scale difference between the samples appears as a location difference between the transformed samples.
+As described in the Introduction, setting `scale.test = TRUE` transforms the observations so that a possible scale difference between the samples appears as a location difference between the transformed samples. For these tests, the samples need to be centred beforehand.
 
 In terms of the power, the resulting tests can outperform classical tests like the $F$-test, the Mood test, or the Ansary-Bradley test under outliers and asymmetry
 [@Fri12onli].
@@ -531,8 +533,8 @@ set.seed(108)
 x <- rnorm(30)
 y <- rnorm(30)
 
-## Asymptotic two-sided test assuming equal scales for both samples
-hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", var.test = TRUE)
+## Asymptotic two-sided test for the null hypothesis of equal scales for both samples
+hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", scale.test = TRUE)
 #> 
 #> 	Asymptotic test based on HL1-estimator
 #> 
@@ -547,8 +549,8 @@ hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptoti
 Including a squared scale ratio of 5 yields
 
 ```r
-## Asymptotic two-sided test assuming a scale ratio of 5 between both samples
-hl1_test(x = x * sqrt(5), y = y, alternative = "two.sided", delta = 5, method = "asymptotic", var.test = TRUE)
+## Asymptotic two-sided test for the null hypothesis of a scale ratio of 5 between both samples
+hl1_test(x = x * sqrt(5), y = y, alternative = "two.sided", delta = 5, method = "asymptotic", scale.test = TRUE)
 #> 
 #> 	Asymptotic test based on HL1-estimator
 #> 
@@ -560,6 +562,61 @@ hl1_test(x = x * sqrt(5), y = y, alternative = "two.sided", delta = 5, method = 
 #>        -0.12240        -1.21528
 ```
 
+If $\mu_X \neq 0$ or $\mu_Y \neq 0$, we need to estimate these parameters from the samples. They can then be subtracted from the respective sample to accomodate the difference in location.
+
+In the following example, the second sample is centred around 5 instead of 0. The test rejects the null hypothesis as the samples have different locations but the same scale.
+
+
+```r
+set.seed(108)
+
+x <- rnorm(30)
+y <- rnorm(30, mean = 5)
+
+## Asymptotic two-sided test with non-centred variables
+hl1_test(x = x, y = y, alternative = "two.sided", delta = 1, method = "asymptotic", scale.test = TRUE)
+#> 
+#> 	Asymptotic test based on HL1-estimator
+#> 
+#> data:  x and y
+#> S = -24.761, p-value < 2.2e-16
+#> alternative hypothesis: true ratio of squared scale parameters is not equal to 1
+#> sample estimates:
+#> HL1 of log(x^2) HL1 of log(y^2) 
+#>       -1.731838        3.094306
+```
+
+This behaviour is not desirable if we are only interested in a scale difference and can be avoided by subtracting a suitable location estimator:
+
+
+```r
+set.seed(108)
+
+x <- rnorm(30)
+y <- rnorm(30, mean = 5)
+
+x_centred <- x - hodges_lehmann(x)
+y_centred <- y - hodges_lehmann(y)
+
+
+## Asymptotic two-sided test with non-centred variables
+hl1_test(x = x_centred, y = y_centred, alternative = "two.sided", delta = 1, method = "asymptotic", scale.test = TRUE)
+#> 
+#> 	Asymptotic test based on HL1-estimator
+#> 
+#> data:  x_centred and y_centred
+#> S = -0.41299, p-value = 0.6796
+#> alternative hypothesis: true ratio of squared scale parameters is not equal to 1
+#> sample estimates:
+#> HL1 of log(x^2) HL1 of log(y^2) 
+#>       -1.841886       -1.603076
+```
+
+The adequate choice of the location estimator depends on the distribution of the variables, and also on the desired robustness.
+
+If $\varepsilon_1,\ldots,\varepsilon_{m+n}$ are i.i.d. exponentially distributed random variables, for example, meaning that we compare the scale parameters of two possibly shifted exponential distributions, the assumption of identical locations $\mu_X=\mu_Y=0$ corresponds to the support of both distributions starting at 0.
+Thus, for unequal locations, it would be reasonable to subtract a value from each observation, which is slightly smaller than the minimum of the corresponding sample.
+
 # Session info
 
 Here is the information about the R-session used for creating this vignette.
@@ -567,7 +624,7 @@ Here is the information about the R-session used for creating this vignette.
 
 ```r
 sessionInfo()
-#> R version 4.0.3 (2020-10-10)
+#> R version 4.2.2 Patched (2022-11-10 r83330)
 #> Platform: x86_64-pc-linux-gnu (64-bit)
 #> Running under: Linux Mint 19.1
 #> 
@@ -576,21 +633,25 @@ sessionInfo()
 #> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
 #> 
 #> locale:
-#>  [1] LC_CTYPE=de_DE.UTF-8       LC_NUMERIC=C               LC_TIME=de_DE.UTF-8        LC_COLLATE=de_DE.UTF-8     LC_MONETARY=de_DE.UTF-8    LC_MESSAGES=de_DE.UTF-8   
-#>  [7] LC_PAPER=de_DE.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C             LC_MEASUREMENT=de_DE.UTF-8 LC_IDENTIFICATION=C       
+#>  [1] LC_CTYPE=de_DE.UTF-8       LC_NUMERIC=C               LC_TIME=de_DE.UTF-8        LC_COLLATE=de_DE.UTF-8     LC_MONETARY=de_DE.UTF-8   
+#>  [6] LC_MESSAGES=de_DE.UTF-8    LC_PAPER=de_DE.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C            
+#> [11] LC_MEASUREMENT=de_DE.UTF-8 LC_IDENTIFICATION=C       
 #> 
 #> attached base packages:
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] robnptests_0.1.0 testthat_3.0.2  
+#> [1] robnptests_1.0.0 testthat_3.1.4  
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] compiler_4.0.3    DEoptimR_1.0-8    prettyunits_1.1.1 remotes_2.3.0     tools_4.0.3       digest_0.6.27     packrat_0.6.0     pkgbuild_1.2.0    pkgload_1.2.1     statmod_1.4.35   
-#> [11] evaluate_0.14     memoise_2.0.0     lifecycle_1.0.0   checkmate_2.0.0   rlang_0.4.10      cli_2.4.0         rstudioapi_0.13   xfun_0.22         fastmap_1.1.0     withr_2.4.2      
-#> [21] stringr_1.4.0     knitr_1.33        desc_1.3.0        fs_1.5.0          gtools_3.8.2      devtools_2.4.0    rprojroot_2.0.2   glue_1.4.2        robustbase_0.93-7 R6_2.5.0         
-#> [31] processx_3.5.1    Rdpack_2.1.1      sessioninfo_1.1.1 callr_3.7.0       purrr_0.3.4       magrittr_2.0.1    codetools_0.2-16  backports_1.2.1   ps_1.6.0          ellipsis_0.3.1   
-#> [41] rbibutils_2.1     usethis_2.0.1     stringi_1.5.3     cachem_1.0.1      crayon_1.4.1
+#>  [1] Rcpp_1.0.9        highr_0.9         DEoptimR_1.0-11   compiler_4.2.2    later_1.3.0       urlchecker_1.0.1  prettyunits_1.1.1 profvis_0.3.7    
+#>  [9] remotes_2.4.2     tools_4.2.2       statmod_1.4.36    digest_0.6.29     pkgbuild_1.3.1    pkgload_1.3.0     evaluate_0.15     checkmate_2.1.0  
+#> [17] memoise_2.0.1     lifecycle_1.0.1   rlang_1.0.4       shiny_1.7.2       cli_3.3.0         rstudioapi_0.13   xfun_0.31         fastmap_1.1.0    
+#> [25] knitr_1.39        withr_2.5.0       stringr_1.4.0     gtools_3.9.3      desc_1.4.1        fs_1.5.2          htmlwidgets_1.5.4 devtools_2.4.4   
+#> [33] rprojroot_2.0.3   robustbase_0.95-0 glue_1.6.2        R6_2.5.1          processx_3.7.0    Rdpack_2.4        sessioninfo_1.2.2 callr_3.7.1      
+#> [41] purrr_0.3.4       magrittr_2.0.3    codetools_0.2-18  backports_1.4.1   rbibutils_2.2.8   ps_1.7.1          promises_1.2.0.1  ellipsis_0.3.2   
+#> [49] htmltools_0.5.2   usethis_2.1.6     mime_0.12         xtable_1.8-4      httpuv_1.6.5      stringi_1.7.6     miniUI_0.1.1.1    cachem_1.0.6     
+#> [57] crayon_1.5.1      brio_1.1.3
 ```
 
 # References

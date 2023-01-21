@@ -10,21 +10,21 @@ testthat::test_that("preprocess_data works correctly", {
 
   # No missing values and na.rm = TRUE
   testthat::expect_equal(preprocess_data(x = x, y = y, delta = 0, na.rm = TRUE,
-                                         wobble = FALSE, var.test = FALSE),
+                                         wobble = FALSE, scale.test = FALSE),
                          list(x = x, y = y, delta = 0)
   )
 
   # Missing values and na.rm = TRUE
   testthat::expect_equal(preprocess_data(x = c(x, NA_real_), y = c(y, NA_real_),
                                          delta = 0, na.rm = TRUE, wobble = FALSE,
-                                         var.test = FALSE),
+                                         scale.test = FALSE),
                          list(x = x, y = y, delta = 0)
   )
 
   # Missing values and na.rm = FALSE
   testthat::expect_equal(preprocess_data(x = c(x, NA_real_), y = c(y, NA_real_),
                                          delta = 0, na.rm = FALSE, wobble = FALSE,
-                                         var.test = FALSE),
+                                         scale.test = FALSE),
                          list(x = c(x, NA_real_), y = c(y, NA_real_), delta = 0)
   )
 
@@ -32,13 +32,13 @@ testthat::test_that("preprocess_data works correctly", {
 
   # No missing values
   testthat::expect_error(preprocess_data(x = x[1:4], y = y, delta = 0, na.rm = TRUE,
-                                         wobble = FALSE, var.test = FALSE)
+                                         wobble = FALSE, scale.test = FALSE)
   )
 
   # Too few observations after removing missing values
   testthat::expect_error(preprocess_data(x = c(x[1:4], rep(NA_real_, 2)), y = y,
                                          delta = 0, na.rm = TRUE,
-                                         wobble = FALSE, var.test = FALSE)
+                                         wobble = FALSE, scale.test = FALSE)
   )
 
   # Wobbling ----
@@ -46,7 +46,7 @@ testthat::test_that("preprocess_data works correctly", {
   # No duplicated values in input vectors -> no wobbling
   testthat::expect_equal(preprocess_data(x = x, y = y,
                                          delta = 0, na.rm = TRUE, wobble = TRUE,
-                                         var.test = FALSE),
+                                         scale.test = FALSE),
                          list(x = x, y = y, delta = 0)
   )
 
@@ -55,32 +55,32 @@ testthat::test_that("preprocess_data works correctly", {
   y1 <- round(y, digits = 2)
   testthat::expect_message(preprocess_data(x = c(x1, x1[10]), y = c(y1, y1[10]),
                                            delta = 0, na.rm = TRUE, wobble = TRUE,
-                                           wobble.seed = 123, var.test = FALSE)
+                                           wobble.seed = 123, scale.test = FALSE)
   )
 
   # Duplicated values between the samples
   testthat::expect_message(preprocess_data(x = c(x1, x1[10]), y = c(y1, x1[10]),
                                            delta = 0, na.rm = TRUE, wobble = TRUE,
-                                           wobble.seed = 123, var.test = FALSE)
+                                           wobble.seed = 123, scale.test = FALSE)
   )
 
   # Transformation to test for difference in scale ----
 
   # No zeros in samples
   testthat::expect_equal(preprocess_data(x = x, y = y, delta = 1, na.rm = TRUE,
-                                         wobble = FALSE, var.test = TRUE),
+                                         wobble = FALSE, scale.test = TRUE),
                          list(x = log(x^2), y = log(y^2), delta = 0)
   )
 
   # No zeros in samples but 'delta' = 0
   testthat::expect_error(preprocess_data(x = x, y = y, delta = 0, na.rm = TRUE,
-                                         wobble = FALSE, var.test = TRUE)
+                                         wobble = FALSE, scale.test = TRUE)
   )
 
   # Zeros in samples and 'delta' != 0
   testthat::expect_message(preprocess_data(x = c(x, 0), y = c(y, 0), delta = 1,
                                            na.rm = TRUE, wobble = FALSE,
-                                           wobble.seed = 123, var.test = TRUE)
+                                           wobble.seed = 123, scale.test = TRUE)
   )
 })
 

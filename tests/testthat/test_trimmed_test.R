@@ -15,34 +15,34 @@ testthat::test_that("trimmed_test works correctly", {
                                                 method = "permutation"))
 
   testthat::expect_snapshot_output(trimmed_test(x = x[1:5], y = y[1:5],
-                                                method = "permutation", var.test = TRUE))
+                                                method = "permutation", scale.test = TRUE))
 
   # Randomization test
   testthat::expect_snapshot_output(trimmed_test(x = x[1:10], y = y[1:10],
-                                                method = "randomization", var.test = TRUE))
+                                                method = "randomization", scale.test = TRUE))
 
   testthat::expect_snapshot_output(trimmed_test(x = x[1:10], y = y[1:10],
                                                 method = "randomization",
-                                                n.rep = 10000, var.test = TRUE))
+                                                n.rep = 10000, scale.test = TRUE))
 
   # Asymptotic test
   testthat::expect_snapshot_output(trimmed_test(x = x, y = y, method = "asymptotic"))
   testthat::expect_snapshot_output(trimmed_test(x = x, y = y, method = "asymptotic",
-                                                var.test = TRUE))
+                                                scale.test = TRUE))
 
   # Compare value of the test statistic to manually computed value ----
 
   res <- as.numeric(trimmed_test(x = x, y = y, method = "asymptotic")$statistic)
 
-  var.x <- win_var(x, gamma = 0.2)
-  var.y <- win_var(y, gamma = 0.2)
-  h.x <- var.x$h
-  h.y <- var.y$h
-  var.x <- var.x$var
-  var.y <- var.y$var
+  scale.x <- win_var(x, gamma = 0.2)
+  scale.y <- win_var(y, gamma = 0.2)
+  h.x <- scale.x$h
+  h.y <- scale.y$h
+  scale.x <- scale.x$var
+  scale.y <- scale.y$var
   m <- length(x)
   n <- length(y)
-  pool.var <- ((m - 1) * var.x + (n - 1) * var.y)/(h.x + h.y - 2)
+  pool.var <- ((m - 1) * scale.x + (n - 1) * scale.y)/(h.x + h.y - 2)
 
   testthat::expect_equal(res, (trim_mean(x, gamma = 0.2) - trim_mean(y, gamma = 0.2))/sqrt(pool.var * (1/h.x + 1/h.y)))
 
@@ -152,5 +152,5 @@ testthat::test_that("trimmed_test works correctly", {
 
   # One of the samples contains zeros
   testthat::expect_message(trimmed_test(x = x[1:10], y = c(y[1:9], 0),
-                                        method = "asymptotic", var.test = TRUE))
+                                        method = "asymptotic", scale.test = TRUE))
 })

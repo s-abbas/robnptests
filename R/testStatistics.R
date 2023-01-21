@@ -55,17 +55,17 @@ trimmed_t <- function(x, y, gamma = 0.2, na.rm = FALSE) {
   estimates <- c(x.trim, y.trim)
 
   # Scale estimator ----
-  var.x <- win_var(x, gamma = gamma, na.rm = na.rm)
-  var.y <- win_var(y, gamma = gamma, na.rm = na.rm)
+  scale.x <- win_var(x, gamma = gamma, na.rm = na.rm)
+  scale.y <- win_var(y, gamma = gamma, na.rm = na.rm)
 
-  h.x <- var.x$h
-  h.y <- var.y$h
-  var.x <- var.x$var
-  var.y <- var.y$var
+  h.x <- scale.x$h
+  h.y <- scale.y$h
+  scale.x <- scale.x$var
+  scale.y <- scale.y$var
 
   m <- length(x)
   n <- length(y)
-  pool.var <- ((m - 1) * var.x + (n - 1) * var.y)/(h.x + h.y - 2)
+  pool.var <- ((m - 1) * scale.x + (n - 1) * scale.y)/(h.x + h.y - 2)
 
   # Degrees of freedom ----
   df <- h.x + h.y - 2
@@ -137,40 +137,40 @@ rob_perm_statistic <- function(x, y,
             est.x <- hodges_lehmann(x)
             est.y <- hodges_lehmann(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, type = "S1", check.for.zero = TRUE)
+            sd <- rob_scale(x, y, type = "S1", check.for.zero = TRUE)
             res <- loc/sd
          },
          HL12 = {
             est.x <- hodges_lehmann(x)
             est.y <- hodges_lehmann(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, type = "S2", check.for.zero = TRUE)
+            sd <- rob_scale(x, y, type = "S2", check.for.zero = TRUE)
             res <- loc/sd
          },
          HL21 = {
             est.x <- est.y <- NULL
             loc <- hodges_lehmann_2sample(x, y)
-            sd <- rob_var(x, y, type = "S1", check.for.zero = TRUE)
+            sd <- rob_scale(x, y, type = "S1", check.for.zero = TRUE)
             res <- loc/sd
          },
          HL22 = {
             est.x <- est.y <- NULL
             loc <- hodges_lehmann_2sample(x, y)
-            sd <- rob_var(x, y, type = "S2", check.for.zero = TRUE)
+            sd <- rob_scale(x, y, type = "S2", check.for.zero = TRUE)
             res <- loc/sd
          },
          MED1 = {
             est.x <- stats::median(x)
             est.y <- stats::median(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, type = "S3", check.for.zero = TRUE)
+            sd <- rob_scale(x, y, type = "S3", check.for.zero = TRUE)
             res <- loc/sd
         },
          MED2 = {
             est.x <- stats::median(x)
             est.y <- stats::median(y)
             loc <- est.x - est.y
-            sd <- rob_var(x, y, type = "S4", check.for.zero = TRUE)
+            sd <- rob_scale(x, y, type = "S4", check.for.zero = TRUE)
             res <- loc/sd
       })
 
