@@ -42,7 +42,7 @@ The underlying distributions are assumed to be continuous with cumulative distri
 The tests can be used for either of the following scenarios:
 
 * Two-sample location problem: Assuming that both distributions are equal except that $F_Y$ may be a shifted version of $F_X$, i.e. $F_X(x) = F_Y(x + \Delta)$ for all $x \in \mathbb{R}$ and some $\Delta \in \mathbb{R}$, or equivalently $X \overset{d}{=} Y-\Delta$, the tests can be used to detect such a shift.
-* Two-sample scale problem: In case of a difference only in scale, i.e. $F_X(x) = F_Y(x/\theta)$ for some $\theta > 0$, or equivalently $X \overset{d}{=} Y\cdot\theta$, a transformation of the observations enables to identify differing scale parameters. For more information see the `vignette("robnptests")`.
+* Two-sample scale problem: In case of a difference only in scale, i.e. $F_X(x) = F_Y(x/\theta)$ for some $\theta > 0$, or equivalently $X \overset{d}{=} Y\cdot\theta$, a transformation of the observations enables to identify differing scale parameters. For more information see `vignette("robnptests")`.
 
 
 # Statement of need
@@ -72,7 +72,7 @@ However, these tests may be less powerful under symmetry than classical procedur
 The package `WRS2` [@MaiWil20wrs2] contains a collection of robust two-sample location tests for the heteroscedastic setting.
 In `robnptests`, we assume homoscedasticity for the location tests.
 This is because estimating the within-sample dispersion for both samples separately may be unreliable when the sample sizes are small.
-In general, equal sample sizes $m = n$ can protect against a deteriorating performance in terms of size and power, even if we were in the heteroscedastic setting [@StaShe90robu, p. 179].
+Equal sample sizes $m = n$ can protect against a deteriorating performance in terms of size and power if we are actually in the heteroscedastic setting [@StaShe90robu, p. 179].
 
 The package `nptest` [@Hel21npte] contains nonparametric versions of the two-sample $t$-test, realized by using the permutation and randomization principles, as described in the next section, on the $t$-statistic.
 This approach has also been studied in @AbbFri17cont, and, while being distribution free, the test statistic lacks robustness against outliers.
@@ -80,7 +80,7 @@ This approach has also been studied in @AbbFri17cont, and, while being distribut
 # Implemented two-sample tests
 The tests for a location difference are simple ratios inspired by the test statistic of the two-sample $t$-test. The numerator is a robust estimator for the location difference between the two populations and the denominator is a robust measure for the dispersion within the samples.
 
-To obtain a distribution-free test decision, the $p$-value can be computed by using the permutation principle, the randomization principle, or a normal approximation.
+The $p$-value can be computed by using the permutation principle, the randomization principle, or a normal approximation.
 With the permutation principle, the tests hold the desired significance level exactly at the cost of large computing times even for quite small samples such as $m = n = 10$.
 The time can be reduced by using a randomization distribution and, even more, by taking advantage of the asymptotic normality of the location-difference estimators.
 The latter approach, however, is only advisable for large sample sizes $m, n > 30$.
