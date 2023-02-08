@@ -12,7 +12,7 @@ authors:
    orcid: 0000-0002-3154-8445
    affiliation: 2
  - name: Roland Fried
-   orcid:
+   orcid: 0000-0002-9830-9713
    affiliation: 1
 affiliations:
   - index: 1
@@ -94,7 +94,7 @@ The tests based on the following estimators for the location difference are desc
 For scaling, we use different estimators based on medians and pairwise differences, see @FriDeh11robu for a detailed description.
 
 In addition, we implemented tests based on M-estimators. This approach to robust location estimation allows for flexibility in how outliers are treated through the specification of the tuning constants of the corresponding $\rho$-function. 
-We focus on Huber's $\rho$-function, the bisquare function and the Hampel's $\rho$-function.
+We focus on Huber's $\rho$-function, the bisquare function and Hampel's $\rho$-function.
 The measure for the dispersion within the samples is a pooled statistic derived from the asymptotic normality of the M-estimators [@MarMarYoh19robu, p. 36ff].
 Moreover, the package contains Yuen's $t$-test which uses the difference of _trimmed means_ to estimate the location difference and a scale estimator based on the pooled winsorized variances [@YueDix73appr].
 
