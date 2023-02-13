@@ -28,7 +28,7 @@ journal: JOSS
 ---
 
 # Summary
-The `robnptests` R package [@R22lang] is a compilation of two-sample tests selected by two criteria: The tests are (i) robust against outliers and (ii) (approximately) distribution free. 
+The R [@R22lang] package `robnptests` is a compilation of two-sample tests selected by two criteria: The tests are (i) robust against outliers and (ii) (approximately) distribution free. 
 Criterion (ii) means that the implemented tests keep an intended significance level and provide a reasonably high power under a variety of continuous distributions.
 Robustness is achieved by using test statistics that are based on robust location and scale measures. 
 
@@ -65,7 +65,7 @@ The robust tests provide a somewhat higher power than the Wilcoxon test and this
 Common parametric and nonparametric tests for scale differences have similar problems as described above for the location tests.
 In addition, some nonparametric tests for the scale problem do not cope well with asymmetry.
 The package `robnptests` uses the idea of applying the robust location tests to transformed observations as proposed by @Fri12onli.
-Such tests retain the robustness of the underlying location tests and obtain good results in terms of power and size under both asymmetry and outlier corruption.
+Such tests are also robust and can obtain good results in terms of power and size under both asymmetry and outlier corruption.
 However, these tests may be less powerful under symmetry than classical procedures like the Mood test.
 
 # Other packages with robust two-sample tests
