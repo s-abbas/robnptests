@@ -12,7 +12,7 @@ authors:
    orcid: 0000-0002-3154-8445
    affiliation: 2
  - name: Roland Fried
-   orcid: 0000-0002-9830-9713
+   orcid:
    affiliation: 1
 affiliations:
   - index: 1
@@ -28,7 +28,7 @@ journal: JOSS
 ---
 
 # Summary
-The R [@R22lang] package `robnptests` is a compilation of two-sample tests selected by two criteria: The tests are (i) robust against outliers and (ii) (approximately) distribution free. 
+The `robnptests` R package [@R22lang] is a compilation of two-sample tests selected by two criteria: The tests are (i) robust against outliers and (ii) (approximately) distribution free. 
 Criterion (ii) means that the implemented tests keep an intended significance level and provide a reasonably high power under a variety of continuous distributions.
 Robustness is achieved by using test statistics that are based on robust location and scale measures. 
 
@@ -62,10 +62,10 @@ The robust tests provide a somewhat higher power than the Wilcoxon test and this
   
 ![Power of the two-sample $t$-test, the Wilcoxon rank-sum test, and two robust tests - one based on the one-sample Hodges-Lehmann estimator and one based on Huber's M-estimator - on two samples of size $m = n = 10$ from two normal distributions with unit variance, a location difference of $\Delta = 2$, and an additive single outlier of increasing size.](img/fig1_-_power_under_outliers.pdf){width=4in height=4in}
 
-Common parametric and nonparametric tests for scale differences have similar problems as described above for the location tests.
-In addition, some nonparametric tests for the scale problem do not cope well with asymmetry.
+Common parametric and non-parametric tests for scale differences have similar problems as described above for the location tests.
+In addition, some non-parametric tests for the scale problem do not cope well with asymmetry.
 The package `robnptests` uses the idea of applying the robust location tests to transformed observations as proposed by @Fri12onli.
-Such tests are also robust and can obtain good results in terms of power and size under both asymmetry and outlier corruption.
+Such tests retain the robustness of the underlying location tests and obtain good results in terms of power and size under both asymmetry and outlier corruption.
 However, these tests may be less powerful under symmetry than classical procedures like the Mood test.
 
 # Other packages with robust two-sample tests
@@ -94,7 +94,7 @@ The tests based on the following estimators for the location difference are desc
 For scaling, we use different estimators based on medians and pairwise differences, see @FriDeh11robu for a detailed description.
 
 In addition, we implemented tests based on M-estimators. This approach to robust location estimation allows for flexibility in how outliers are treated through the specification of the tuning constants of the corresponding $\rho$-function. 
-We focus on Huber's $\rho$-function, the bisquare function and Hampel's $\rho$-function.
+We focus on Huber's $\rho$-function, the bisquare function and the Hampel $\rho$-function.
 The measure for the dispersion within the samples is a pooled statistic derived from the asymptotic normality of the M-estimators [@MarMarYoh19robu, p. 36ff].
 Moreover, the package contains Yuen's $t$-test which uses the difference of _trimmed means_ to estimate the location difference and a scale estimator based on the pooled winsorized variances [@YueDix73appr].
 
@@ -129,9 +129,9 @@ hl1_test(x = x, y = y, alternative = "two.sided", delta = 0,
 
 Here, we use a test based on the one-sample Hodges-Lehmann estimator.
 By setting `alternative = "two.sided"` and `delta = 0`, we test the null hypothesis $H_0: \Delta = 0$, i.e. there is no location difference between the populations.
-In the example above, we use `method = "permutation"` so that the $p$-value is computed with the permutation principle.
+In the example, we use `method = "permutation"` so that the $p$-value is computed with the permutation principle.
 
-In general, the functions start with the name of the underlying location-difference estimator and have several arguments to customize the test.
+In general the functions start with the name of the underlying location-difference estimator and have several arguments to customize the test.
 
 More examples on how to use the tests and a detailed overview of the implemented tests and corresponding test statistics can be found in the `vignette("robnptests")`.
 
