@@ -131,7 +131,7 @@ Here, we use a test based on the one-sample Hodges-Lehmann estimator.
 By setting `alternative = "two.sided"` and `delta = 0`, we test the null hypothesis $H_0: \Delta = 0$, i.e. there is no location difference between the populations.
 In the example above, we use `method = "permutation"` so that the $p$-value is computed with the permutation principle.
 
-In general the functions start with the name of the underlying location-difference estimator and have several arguments to customize the test.
+In general, the functions start with the name of the underlying location-difference estimator and have several arguments to customize the test.
 
 More examples on how to use the tests and a detailed overview of the implemented tests and corresponding test statistics can be found in the `vignette("robnptests")`.
 
