@@ -210,7 +210,7 @@ An M-estimator $\hat{\mu}^{(M)}_X$ for the location parameter of the $x$-sample 
   \hat{\mu}^{(M)}_X = \arg\underset{\mu_X}{\min} \sum_{i = 1}^m \rho\left(\frac{x_i - \mu_X}{\theta_X}\right),
 \end{equation*}
 
-where $\rho:\ \mathbb{R} \to \mathbb{R}$ is a function chosen to achieve a "nearly optimal" location estimate when the $X_i$ are normally or approximately normally distributed [@MarMarYoh19robu, p. 22].
+where $\rho:\ \mathbb{R} \to \mathbb{R}$ is a function chosen to achieve a "nearly optimal" location estimate when the $X_i$ are normally or approximately normally distributed [@MarMarYoh19robu, p. 23].
 For differentiable functions $\rho$ with $\rho' = \psi$, the optimization problem can be translated to finding the value of $\mu_X$, for which
 
 \begin{equation*}

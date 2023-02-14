@@ -87,15 +87,15 @@ The latter approach, however, is only advisable for large sample sizes $m, n > 3
 
 The tests based on the following estimators for the location difference are described in @FriDeh11robu:
 
-* The _difference of the sample medians_ leads to a highly robust test. However, the resulting test is not very powerful under normality due to the low efficiency of the median.
-* To obtain a more powerful test under normality, one can use the difference between the _one-sample Hodges-Lehmann estimators_ [@HodLeh63esti]. This may result in less robust tests due to the lower breakdown point.
-* The _two-sample Hodges-Lehmann estimator_ [@HodLeh63esti] leads to a robust test with a higher power under normality than the tests based on the sample median and can achieve similar robustness.
+* The _difference of the sample medians_ leads to highly robust tests. However, they are not very powerful under normality due to the low efficiency of the median.
+* To obtain more powerful tests under normality, one can use the difference between the _one-sample Hodges-Lehmann estimators_ [@HodLeh63esti]. This may result in less robust tests due to the lower breakdown point.
+* The _two-sample Hodges-Lehmann estimator_ [@HodLeh63esti] leads to robust tests with a higher power under normality than the tests based on the sample median and can achieve similar robustness.
 
 For scaling, we use different estimators based on medians and pairwise differences, see @FriDeh11robu for a detailed description.
 
 In addition, we implemented tests based on M-estimators. This approach to robust location estimation allows for flexibility in how outliers are treated through the specification of the tuning constants of the corresponding $\rho$-function. 
 We focus on Huber's $\rho$-function, the bisquare function and Hampel's $\rho$-function.
-The measure for the dispersion within the samples is a pooled statistic derived from the asymptotic normality of the M-estimators [@MarMarYoh19robu, p. 36ff].
+The measure for the dispersion within the samples is a pooled statistic derived from the asymptotic normality of the M-estimators [@MarMarYoh19robu, p. 37ff].
 Moreover, the package contains Yuen's $t$-test which uses the difference of _trimmed means_ to estimate the location difference and a scale estimator based on the pooled winsorized variances [@YueDix73appr].
 
 In case of data with many ties (e.g. caused by discrete sampling), the ties may carry over to the permutation distribution.
